@@ -1,6 +1,6 @@
 SDCC=sdcc
 SDLD=sdld
-OBJECTS=blinky.bin uart.bin
+OBJECTS=blinky.bin uart.bin sp_test.bin
 HEX2BIN=hex2bin
 
 .PHONY: all clean flash
@@ -14,7 +14,7 @@ flash: $(OBJECT).bin
 	stm8flash -cstlink -pstm8l150 -wf $(OBJECT).bin
 
 %.ihx: %.c
-	$(SDCC) -mstm8 --out-fmt-ihx $(CFLAGS) $(LDFLAGS) $<
+	$(SDCC) -lstm8 -mstm8 --out-fmt-ihx $(CFLAGS) $(LDFLAGS) $<
 
 %.bin: %.ihx
 	$(HEX2BIN) -p 00 $<
