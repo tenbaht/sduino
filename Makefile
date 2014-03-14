@@ -11,7 +11,7 @@ clean:
 	rm -f $(OBJECTS)
 
 flash: $(OBJECT).bin
-	stm8flash -cstlink -pstm8l150 -wf $(OBJECT).bin
+	stm8flash -cstlink -pstm8l150 -w $(OBJECT).bin
 
 %.ihx: %.c
 	$(SDCC) -lstm8 -mstm8 --out-fmt-ihx $(CFLAGS) $(LDFLAGS) $<
