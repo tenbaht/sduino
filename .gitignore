@@ -1,2 +1,8 @@
 *~
+.*.swp
 *.o
+*.bin
+*.ihx
+*.hex
+*.exe
+tags
