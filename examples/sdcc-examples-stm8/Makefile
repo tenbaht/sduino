@@ -1,6 +1,6 @@
 SDCC=sdcc
 SDLD=sdld
-OBJECTS=blinky.ihx uart.ihx sp_test.ihx
+OBJECTS=blinky.ihx uart.ihx #sp_test.ihx
 
 .PHONY: all clean flash
 

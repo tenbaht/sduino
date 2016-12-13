@@ -3,11 +3,11 @@
 int main() {
 	int d;
 	// Configure pins
-	PE_DDR = 0x80;
-	PE_CR1 = 0x80;
+	PB_DDR = 0x20;
+	PB_CR1 = 0x20;
 	// Loop
 	do {
-		PE_ODR ^= 0x80;
+		PB_ODR ^= 0x20;
 		for(d = 0; d < 29000; d++) { }
 	} while(1);
 }
