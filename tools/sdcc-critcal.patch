@@ -1,0 +1,19 @@
+--- sdcc/src/stm8/gen.c.orig	2016-10-23 19:12:25.000000000 +0200
++++ sdcc/src/stm8/gen.c	2016-12-13 15:27:19.756097765 +0100
+@@ -2980,6 +2980,7 @@
+ static void
+ genCritical (iCode * ic)
+ {
++  emit2("push cc", "");
+   emit2("sim", "");
+   cost (1, 1);
+ }
+@@ -2987,7 +2988,7 @@
+ static void
+ genEndCritical (iCode * ic)
+ {
+-  emit2("rim", "");
++  emit2("pop cc", "");
+   cost (1, 1);
+ }
+ 

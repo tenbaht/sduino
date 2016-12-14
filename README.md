@@ -59,6 +59,15 @@ libboost-graph1.54.0 - generic graph components and algorithms in C++
 libboost-graph1.55-dev - generic graph components and algorithms in C++
 libboost-graph1.55.0 - generic graph components and algorithms in C++
 
+Es fehlen selbst elementare peephole-Optimierungen:
+aufeinander folgende addw x,# und subw x,# werden nicht zusammengefasst
+Multiplikation mit zwei wird nicht durch bitshift ersetzt (besonders beim
+Arrayzugriff absurd)
+
+
+
+
+
 ## ST Standard Library
 
 	git clone https://github.com/g-gabber/STM8S_StdPeriph_Driver.git
@@ -330,4 +339,20 @@ SPI: 6,11,12,13 (gleiche Nummern, aber andere Reichenfolge -> fehlerträchtig)
 I2C: 7,8
 Seriell: 2,3
 Analog: 2,3,10,15,16
- 
+
+
+## Anmerkungen zur Arduino-Portierung
+
+Die ganze Pin->Portadressen-Arithmetik könnte komlett entrümpelt werden. Statt
+Tabellen fest im Code enthalten.
+
+digitalWrite wird spektakulär umständlich übersetzt. Hier lohnt sich
+Handassembler. 
+
+### Besondere Features, die von Arduino nicht unterstützt werden
+
+Input-Capture-Mode: min. für Timer1 auf allen vier Kanälen möglich.
+
+Encoder interface mode: Kann von Haus aus mit Quadratur-Encodern umgehen und
+in Hardware zählen -> perfekt für die Druckerschlitten-Motorsteuerung.
+
