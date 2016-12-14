@@ -1,9 +1,13 @@
 SDCC=sdcc
 SDLD=sdld
 OBJECT=blink
-OBJECTS=blink_spl.rel stm8s_gpio.rel
+OBJECTS=blink_spl.rel
 
-CFLAGS=-DSTM8S103 -I. -I../STM8S_StdPeriph_Lib/Libraries/STM8S_StdPeriph_Driver/inc/
+LIBDIR=../../STM8S_StdPeriph_Driver/src
+#LIBFILES=$(LIBDIR)/stm8s_gpio.rel
+LIBFILES=$(LIBDIR)/stm8s.lib
+
+CFLAGS=-DSTM8S103 -I. -I../../STM8S_StdPeriph_Driver/inc
 
 
 .PHONY: all clean flash
@@ -14,9 +18,9 @@ clean:
 	rm -f *.asm *.ihx *.rel *.sym *.map *.cdb *.lk *.lst *.rst *~
 
 flash: $(OBJECT).ihx
-	stm8flash -cstlink -pstm8l150 -w $(OBJECT).ihx
+	stm8flash -cstlinkv2 -pstm8s103?3 -w $(OBJECT).ihx
 
-$(OBJECT).ihx: $(OBJECTS)
+$(OBJECT).ihx: $(OBJECTS) $(LIBFILES)
 	$(SDCC) -lstm8 -mstm8 --out-fmt-ihx $(LDFLAGS) $^ -o $@
 
 %.rel: %.c
