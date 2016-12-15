@@ -36,10 +36,10 @@ int main(void)
 
 	initVariant();
 
-//	setup();
+	setup();
     
 	for (;;) {
-//		loop();
+		loop();
 //FIXME		if (serialEventRun) serialEventRun();
 	}
         

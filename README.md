@@ -47,19 +47,59 @@ muss entsprechend angepasst werden. Am Ende hochladen:
 	stm8flash -c stlinkv2 -p stm8s103?3 -w blinky.ihx 
 
 
-## Infos und Application Notes
+## current status and todo list
+
+tested and working:
+pinMode()
+
+implemented and partly working:
+digitalWrite(): simple write ok, PWM handling untested
+
+tested, but not working:
+delay (probl. the timer4 initialisation)
+
+not tested
+all time functions
+ShiftIn()
+ShiftOut()
+
+
+not implemented:
+yield()
+analogRead
+analogWrite
+HardwareSerial
+SPI
+
+
+## Differences to the original Arduino environment
+
+Additinal output pin modes:
+OUTPUT		outpur, push-pull, slow mode (default)
+OUTPUT_OD	output, open drain, fast mode
+OUTPUT_FAST	output, push-pull, fast mode
+OUTPUT_OD_FAST	output, open drain, fast mode
+
+Timer: millis() uses timer4.
+
+
+
+## Further reading and application notes
 
 STM8AF Flash programming manual (PM0051)
 STM8 SWIM protocol and debug manual (UM0470)
 
-RS-232-Beispiel:
+example for RS-232 handling with SPL:
 https://sourceforge.net/p/oggstreamer/oggs-stm8-firmware-001/ci/master/tree/rx_ringbuffer.c
+
 
 
 ### Anmerkungen zu SDCC
 
 Befehl '_ _ critical{..}' sollte eigentlich den vorherigen Interrupt-Zustand
 wiederherstellen, es wird aber einfach ein festes Paar sim/rim produziert.
+Mit "push cc; sim" und "pop cc" klappt es im Simulator, aber nicht in der
+Realität.
 
 Für jeden benutzten Interrupt __muss__ ein Prototyp in der Datei stehen, in
 der auch main() definiert ist. Aber für jeden Prototypen, für den es keine
@@ -178,7 +218,7 @@ generell freigegeben werden, also hier:
 	UART1_ITConfig(UART1_IT_TXE, ENABLE);
 	enableInterrupts();
 
-Unklar ist, was die ITC-Priritäten bewirken. Es geht jedenfalls auch ohne:
+Unklar ist, was die ITC-Prioritäten bewirken. Es geht jedenfalls auch ohne:
 
 	ITC_DeInit();
 	ITC_SetSoftwarePriority(ITC_IRQ_UART1_TX, ITC_PRIORITYLEVEL_2);

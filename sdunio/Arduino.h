@@ -44,6 +44,9 @@ void yield(void);
 #define INPUT 0x0
 #define OUTPUT 0x1
 #define INPUT_PULLUP 0x2
+#define	OUTPUT_OD 0x03
+#define OUTPUT_FAST 0x05
+#define OUTPUT_OD_FAST 0x07
 
 // undefine mathlib's pi if encountered
 #ifdef PI

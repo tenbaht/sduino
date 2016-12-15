@@ -98,7 +98,7 @@ void delay(unsigned long ms)
 	uint32_t start = micros();
 
 	while (ms > 0) {
-//		yield();
+		yield();
 		while ( ms > 0 && (micros() - start) >= 1000) {
 			ms--;
 			start += 1000;
@@ -249,6 +249,11 @@ void delayMicroseconds(unsigned int us)
 
 void init()
 {
+	GPIO_DeInit(GPIOA);
+	GPIO_DeInit(GPIOB);
+	GPIO_DeInit(GPIOC);
+	GPIO_DeInit(GPIOD);
+	GPIO_DeInit(GPIOE);
 	// set timer 0 prescale factor to 64, period 0 (=256)
 	TIM4_DeInit();
 	TIM4_TimeBaseInit(TIM4_PRESCALER_64, 0);

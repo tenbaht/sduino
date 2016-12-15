@@ -13,9 +13,9 @@ LIBBASE=../STM8S_StdPeriph_Driver
 LDFLAGS=-L$(LIBBASE)/src -L/opt/sdcc/share/sdcc/lib/stm8 -lstm8s
 
 OBJECTS=main.rel wiring.rel wiring_digital.rel wiring_shift.rel \
-	wiring_pulse.rel
+	wiring_pulse.rel sketch.rel
 
-.PHONY: all clean
+.PHONY: all clean flash
 
 #all: $(OBJECTS)
 
@@ -31,6 +31,10 @@ $(OBJECTS) : %.rel : %.c
 
 .c.rel:
 	$(CC) -c $(CFLAGS) $^
+
+flash: $(EXECUTABLE)
+	stm8flash -cstlinkv2 -pstm8s103?3 -w $^
+
 
 clean: 
 	rm -f *.lib *.rst *.rel *.lst *.ihx *.sym *.asm *.lk *.map \
