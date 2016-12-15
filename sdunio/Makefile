@@ -12,7 +12,8 @@ CFLAGS= --debug -mstm8 -DF_CPU=16000000L -DSTM8S103 \
 LIBBASE=../STM8S_StdPeriph_Driver
 LDFLAGS=-L$(LIBBASE)/src -L/opt/sdcc/share/sdcc/lib/stm8 -lstm8s
 
-OBJECTS=main.rel wiring.rel wiring_digital.rel
+OBJECTS=main.rel wiring.rel wiring_digital.rel wiring_shift.rel \
+	wiring_pulse.rel
 
 .PHONY: all clean
 
