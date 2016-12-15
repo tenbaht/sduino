@@ -1,5 +1,8 @@
-SDCC=sdcc
-SDLD=sdld
+SDCCBASE=/opt/sdcc
+BINDIR=$(SDCCBASE)/bin
+SDCC=$(BINDIR)/sdcc
+SDLD=$(BINDIR)/sdld
+
 OBJECT=uart
 OBJECTS=uart_spl.rel
 
@@ -7,7 +10,7 @@ LIBDIR=../../STM8S_StdPeriph_Driver/src
 #LIBFILES=$(LIBDIR)/stm8s_gpio.rel
 LIBFILES=$(LIBDIR)/stm8s.lib
 
-CFLAGS=-DSTM8S103 -I. -I../../STM8S_StdPeriph_Driver/inc
+CFLAGS=-DSTM8S103 -I. -I../../STM8S_StdPeriph_Driver/inc --debug
 
 
 .PHONY: all clean flash

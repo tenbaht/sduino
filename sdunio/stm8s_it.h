@@ -116,6 +116,81 @@
  INTERRUPT void EEPROM_EEC_IRQHandler(void); /* EEPROM ECC CORRECTION */
 #endif /* _RAISONANCE_ */
 
+#if defined(_SDCC_)  // SDCC patch: interrupt keyword required after function
+//FIXME void TRAP_IRQHandler(void) __interrupt(); /* TRAP */
+// void TLI_IRQHandler(void) __interrupt(ITC_IRQ_TLI); /* TLI */
+// void AWU_IRQHandler(void) __interrupt(ITC_IRQ_AWU); /* AWU */
+// void CLK_IRQHandler(void) __interrupt(ITC_IRQ_CLK); /* CLOCK */
+// void EXTI_PORTA_IRQHandler(void) __interrupt(ITC_IRQ_PORTA); /* EXTI PORTA */
+// void EXTI_PORTB_IRQHandler(void) __interrupt(ITC_IRQ_PORTB); /* EXTI PORTB */
+// void EXTI_PORTC_IRQHandler(void) __interrupt(ITC_IRQ_PORTC); /* EXTI PORTC */
+// void EXTI_PORTD_IRQHandler(void) __interrupt(ITC_IRQ_PORTD); /* EXTI PORTD */
+// void EXTI_PORTE_IRQHandler(void) __interrupt(ITC_IRQ_PORTE); /* EXTI PORTE */
+
+#if defined(STM8S903) || defined(STM8AF622x)
+// void EXTI_PORTF_IRQHandler(void) __interrupt(ITC_IRQ_PORTF); /* EXTI PORTF */
+#endif /* (STM8S903) || (STM8AF622x) */
+
+#if defined (STM8S208) || defined (STM8AF52Ax)
+// void CAN_RX_IRQHandler(void) __interrupt(ITC_IRQ_CAN_RX); /* CAN RX */
+// void CAN_TX_IRQHandler(void) __interrupt(ITC_IRQ_CAN_TX); /* CAN TX/ER/SC */
+#endif /* (STM8S208) || (STM8AF52Ax) */
+
+// void SPI_IRQHandler(void) __interrupt(ITC_IRQ_SPI); /* SPI */
+// void TIM1_CAP_COM_IRQHandler(void) __interrupt(ITC_IRQ_TIM1_CAPCOM); /* TIM1 CAP/COM */
+// void TIM1_UPD_OVF_TRG_BRK_IRQHandler(void) __interrupt(ITC_IRQ_TIM1_OVF); /* TIM1 UPD/OVF/TRG/BRK */
+
+#if defined(STM8S903) || defined(STM8AF622x)
+// void TIM5_UPD_OVF_BRK_TRG_IRQHandler(void) __interrupt(ITC_IRQ_TIM5_OVFTRI); /* TIM5 UPD/OVF/BRK/TRG */
+// void TIM5_CAP_COM_IRQHandler(void) __interrupt(ITC_IRQ_TIM5_CAPCOM); /* TIM5 CAP/COM */
+#else /* (STM8S208) || (STM8S207) || (STM8S105) || (STM8S103) || (STM8AF52Ax) || (STM8AF62Ax) || (STM8A626x) */
+// void TIM2_UPD_OVF_BRK_IRQHandler(void) __interrupt(ITC_IRQ_TIM2_OVF); /* TIM2 UPD/OVF/BRK */
+// void TIM2_CAP_COM_IRQHandler(void) __interrupt(ITC_IRQ_TIM2_CAPCOM); /* TIM2 CAP/COM */
+#endif /* (STM8S903) || (STM8AF622x) */
+
+#if defined (STM8S208) || defined(STM8S207) || defined(STM8S007) || defined(STM8S105) || \
+    defined(STM8S005) ||  defined (STM8AF52Ax) || defined (STM8AF62Ax) || defined (STM8AF626x)
+// void TIM3_UPD_OVF_BRK_IRQHandler(void) __interrupt(ITC_IRQ_TIM3_OVF); /* TIM3 UPD/OVF/BRK */
+// void TIM3_CAP_COM_IRQHandler(void) __interrupt(ITC_IRQ_TIM3_CAPCOM); /* TIM3 CAP/COM */
+#endif /* (STM8S208) || (STM8S207) || (STM8S105) || (STM8AF52Ax) || (STM8AF62Ax) || (STM8A626x) */
+
+#if defined (STM8S208) || defined(STM8S207) || defined(STM8S007) || defined(STM8S103) || \
+    defined(STM8S003) ||  defined (STM8AF52Ax) || defined (STM8AF62Ax) || defined (STM8S903)
+// void UART1_TX_IRQHandler(void) __interrupt(ITC_IRQ_UART1_TX); /* UART1 TX */
+// void UART1_RX_IRQHandler(void) __interrupt(ITC_IRQ_UART1_RX); /* UART1 RX */
+#endif /* (STM8S208) || (STM8S207) || (STM8S903) || (STM8S103) || (STM8AF52Ax) || (STM8AF62Ax) */
+
+#if defined (STM8AF622x)
+// void UART4_TX_IRQHandler(void) __interrupt(ITC_IRQ_UART4_TX); /* UART4 TX */
+// void UART4_RX_IRQHandler(void) __interrupt(ITC_IRQ_UART4_RX); /* UART4 RX */
+#endif /* (STM8AF622x) */
+ 
+// void I2C_IRQHandler(void) __interrupt(ITC_IRQ_I2C); /* I2C */
+
+#if defined(STM8S105) || defined(STM8S005) ||  defined (STM8AF626x)
+// void UART2_RX_IRQHandler(void) __interrupt(ITC_IRQ_UART2_RX); /* UART2 RX */
+// void UART2_TX_IRQHandler(void) __interrupt(ITC_IRQ_UART2_TX); /* UART2 TX */
+#endif /* (STM8S105) || (STM8AF626x) */
+
+#if defined(STM8S207) || defined(STM8S007) || defined(STM8S208) || defined (STM8AF52Ax) || defined (STM8AF62Ax)
+// void UART3_RX_IRQHandler(void) __interrupt(ITC_IRQ_UART3_RX); /* UART3 RX */
+// void UART3_TX_IRQHandler(void) __interrupt(ITC_IRQ_UART3_TX); /* UART3 TX */
+#endif /* (STM8S207) || (STM8S208) || (STM8AF62Ax) || (STM8AF52Ax) */
+
+#if defined(STM8S207) || defined(STM8S007) || defined(STM8S208) || defined (STM8AF52Ax) || defined (STM8AF62Ax)
+// void ADC2_IRQHandler(void) __interrupt(ITC_IRQ_ADC2); /* ADC2 */
+#else /* (STM8S105) || (STM8S103) || (STM8S903) || (STM8AF622x) */
+// void ADC1_IRQHandler(void) __interrupt(ITC_IRQ_ADC1); /* ADC1 */
+#endif /* (STM8S207) || (STM8S208) || (STM8AF62Ax) || (STM8AF52Ax) */
+
+#if defined(STM8S903) || defined(STM8AF622x)
+// void TIM6_UPD_OVF_TRG_IRQHandler(void) __interrupt(ITC_IRQ_TIM6_OVFTRI); /* TIM6 UPD/OVF/TRG */
+#else /* (STM8S208) || (STM8S207) || (STM8S105) || (STM8S103) || (STM8AF62Ax) || (STM8AF52Ax) || (STM8AF626x) */
+ void TIM4_UPD_OVF_IRQHandler(void) __interrupt(ITC_IRQ_TIM4_OVF); /* TIM4 UPD/OVF */
+#endif /* (STM8S903) || (STM8AF622x) */
+// void EEPROM_EEC_IRQHandler(void) __interrupt(ITC_IRQ_EEPROM_EEC); /* EEPROM ECC CORRECTION */
+#endif /* _SDCC_ */
+
 #endif /* __STM8S_IT_H */
 
 

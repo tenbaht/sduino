@@ -1,14 +1,18 @@
 EXECUTABLE=alles.ihx
 
-CC=/usr/bin/sdcc
-CFLAGS= -mstm8 -DF_CPU=16000000L -DSTM8S103 --no-peep \
+#SDCCBASE=/usr/local
+SDCCBASE=/opt/sdcc
+BINDIR=$(SDCCBASE)/bin
+CC=$(BINDIR)/sdcc
+LD=$(BINDIR)/sdld
+
+CFLAGS= --debug -mstm8 -DF_CPU=16000000L -DSTM8S103 \
 	-I/usr/share/sdcc/include/ -I$(LIBBASE)/inc -I.
 
 LIBBASE=../STM8S_StdPeriph_Driver
-LIBFILES=$(LIBBASE)/src/stm8s.lib
-LDFLAGS=-L../STM8S_StdPeriph_Driver/src -lstm8s
+LDFLAGS=-L$(LIBBASE)/src -L/opt/sdcc/share/sdcc/lib/stm8 -lstm8s
 
-OBJECTS=wiring.rel wiring_digital.rel test.rel
+OBJECTS=main.rel wiring.rel wiring_digital.rel
 
 .PHONY: all clean
 
@@ -28,6 +32,6 @@ $(OBJECTS) : %.rel : %.c
 	$(CC) -c $(CFLAGS) $^
 
 clean: 
-	rm -f *.lib *.rst *.rel *.lst *.ihx *.sym *.asm *.lk *.map *.cdb \
-		*~ *.bak
+	rm -f *.lib *.rst *.rel *.lst *.ihx *.sym *.asm *.lk *.map \
+		*.cdb *.adb *~ *.bak
 	rm -f $(EXECUTABLE)

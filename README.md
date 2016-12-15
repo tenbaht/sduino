@@ -23,6 +23,14 @@ STM8-Support erst ab Version 3.4 in Ubuntu 14.10. Für 14.4:
 	apt-get update
 	apt-get install sdcc
 
+Besser einen aktuellen snapshot-build direkt von http://sdcc.sourceforge.net/
+besorgen. Das braucht aber eine neue Version der libstdc++6. Deshalb:
+
+	add-apt-repository ppa:ubuntu-toolchain-r/test
+	apt-get update
+	apt-get install libstdc++6
+
+
 	git clone https://github.com/vdudouyt/stm8flash.git
 	cd stm8flash
 	make
@@ -53,6 +61,17 @@ https://sourceforge.net/p/oggstreamer/oggs-stm8-firmware-001/ci/master/tree/rx_r
 Befehl '_ _ critical{..}' sollte eigentlich den vorherigen Interrupt-Zustand
 wiederherstellen, es wird aber einfach ein festes Paar sim/rim produziert.
 
+Für jeden benutzten Interrupt __muss__ ein Prototyp in der Datei stehen, in
+der auch main() definiert ist. Aber für jeden Prototypen, für den es keine
+Funktion gibt, ergibt einen Linkerfehler. Das erklärt den Sinn von stm8s_it.h
+im Projektverzeichniss. Eine Arduino-ähnliche Umgebung muss diese Datei also
+nach Analyse aller Sourcen selber erzeugen.
+
+sstm8: does not account for different cpu models.
+base address for UART1 is 0x5240, not 0x5230
+TX and RX interrupt vectors 0x804C and 0x8050.
+
+
 Compilieren: braucht libboost-graph:
 libboost-graph1.54-dev - generic graph components and algorithms in C++
 libboost-graph1.54.0 - generic graph components and algorithms in C++
@@ -64,7 +83,11 @@ aufeinander folgende addw x,# und subw x,# werden nicht zusammengefasst
 Multiplikation mit zwei wird nicht durch bitshift ersetzt (besonders beim
 Arrayzugriff absurd)
 
-
+Fehlende Features:
+  - _ _attribute_ _((weak))
+  - _ _critical{} erzeugt sim/rim statt push cc,sim/pop cc
+  - dead code elemination: Verbietet es, const-Tabellen anzulegen und fordert
+"#define" für alles.
 
 
 

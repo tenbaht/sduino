@@ -19,6 +19,9 @@
 
 #include <Arduino.h>
 
+// make sure to define prototypes for all used interrupts
+//#include "stm8s_it.h"
+
 // Declared weak in Arduino.h to allow user redefinitions.
 int atexit(void (*func)()) { return 0; }
 
@@ -33,13 +36,13 @@ int main(void)
 
 	initVariant();
 
-	setup();
+//	setup();
     
 	for (;;) {
-		loop();
-		if (serialEventRun) serialEventRun();
+//		loop();
+//FIXME		if (serialEventRun) serialEventRun();
 	}
         
-	return 0;
+//	return 0;
 }
 
