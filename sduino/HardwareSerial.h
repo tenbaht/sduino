@@ -25,6 +25,7 @@
   Modified 15 December 2016 by Michael Mayer
 */
 
+#include <stdlib.h>
 
 
 // Define config for Serial.begin(baud, config);

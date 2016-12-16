@@ -33,10 +33,13 @@
 
 #include "binary.h"
 
+// FIXME: workarounds for missing features or unimplemented functions
 // cancel out the PROGMEM attribute - used only for atmel CPUs
 #define PROGMEM
-
 void yield(void);
+
+
+
 
 #define HIGH 0x1
 #define LOW  0x0

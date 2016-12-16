@@ -7,14 +7,14 @@ CC=$(BINDIR)/sdcc
 LD=$(BINDIR)/sdld
 
 CFLAGS= --debug -mstm8 -DF_CPU=16000000L -DSTM8S103 \
-	-I/usr/share/sdcc/include/ -I$(LIBBASE)/inc -I.
+	-I. -I$(SDCCBASE)/share/sdcc/include/ -I$(LIBBASE)/inc
 
 LIBBASE=../STM8S_StdPeriph_Driver
-LDFLAGS=-L$(LIBBASE)/src -L/opt/sdcc/share/sdcc/lib/stm8 -lstm8s
+LDFLAGS=-L$(LIBBASE)/src -L$(SDCCBASE)/share/sdcc/lib/stm8 -lstm8s
 
 OBJECTS=main.rel wiring.rel wiring_digital.rel \
 	wiring_shift.rel wiring_pulse.rel \
-	HardwareSerial.rel \
+	HardwareSerial.rel Print.rel \
 	sketch.rel
 
 .PHONY: all clean flash
