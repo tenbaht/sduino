@@ -156,8 +156,8 @@
 
 #if defined (STM8S208) || defined(STM8S207) || defined(STM8S007) || defined(STM8S103) || \
     defined(STM8S003) ||  defined (STM8AF52Ax) || defined (STM8AF62Ax) || defined (STM8S903)
-// void UART1_TX_IRQHandler(void) __interrupt(ITC_IRQ_UART1_TX); /* UART1 TX */
-// void UART1_RX_IRQHandler(void) __interrupt(ITC_IRQ_UART1_RX); /* UART1 RX */
+ void UART1_TX_IRQHandler(void) __interrupt(ITC_IRQ_UART1_TX); /* UART1 TX */
+ void UART1_RX_IRQHandler(void) __interrupt(ITC_IRQ_UART1_RX); /* UART1 RX */
 #endif /* (STM8S208) || (STM8S207) || (STM8S903) || (STM8S103) || (STM8AF52Ax) || (STM8AF62Ax) */
 
 #if defined (STM8AF622x)
