@@ -1,5 +1,5 @@
 /*
-  HardwareSerial.c - Hardware serial library for plainduino
+  HardwareSerial.c - Hardware serial library for sduino
   Copyright (c) 2016 Michael Mayer
 
   Plain C version of HardwareSerial.cpp of the Arduino project.
@@ -22,12 +22,13 @@
   Modified 23 November 2006 by David A. Mellis
   Modified 28 September 2010 by Mark Sproul
   Modified 14 August 2012 by Alarus
+  Modified 15 December 2016 by Michael Mayer
 */
 
 
 #include"stm8s.h"
 
-//#include "c-HardwareSerial.h"
+#include "HardwareSerial.h"
 
 
 #define SERIAL_BUFFER_SIZE 16
@@ -38,10 +39,14 @@ typedef struct ring_buffer
   volatile unsigned int tail;
 } ring_buffer;
 
-ring_buffer rx_buffer = { { 0 }, 0, 0};
-ring_buffer tx_buffer = { { 0 }, 0, 0};
+static ring_buffer rx_buffer = { { 0 }, 0, 0};
+static ring_buffer tx_buffer = { { 0 }, 0, 0};
 
-void store_char(unsigned char c, ring_buffer *buffer)
+static volatile char	transmitting=0;
+
+// private functions  //////////////////////////////////////////////////////////
+
+static void store_char(unsigned char c, ring_buffer *buffer)
 //inline void store_char(unsigned char c, ring_buffer *buffer)
 {
   int i = (unsigned int)(buffer->head + 1) % SERIAL_BUFFER_SIZE;
@@ -55,8 +60,6 @@ void store_char(unsigned char c, ring_buffer *buffer)
     buffer->head = i;
   }
 }
-
-volatile char	transmitting=0;
 
 // Interrupt handler ///////////////////////////////////////////////////////////
 
@@ -194,35 +197,4 @@ int HardwareSerial_write(uint8_t c)
 //  sbi(*_ucsra, TXC0);
   
   return 1;
-}
-
-
-void send_string(char *str)
-{
-    char c;
-
-    if (!str) return;
-
-    while ( c=*str++ ) HardwareSerial_write(c);	// assignment intented
-}
-
-
-void main (void)
-{
-    uint32_t i;
-
-    UART1_DeInit();
-    enableInterrupts();
-
-    HardwareSerial_begin(9600);
-
-    while (1) {
-        send_string("Hello World!\r\n");
-        for (i=15000; i; i--);
-        while(HardwareSerial_available()) {
-            HardwareSerial_write('.');
-            HardwareSerial_write(HardwareSerial_read());
-        };
-        for (i=15000; i; i--);
-    }
 }

@@ -1,5 +1,8 @@
+/*
+ * test functions for digitalWrite using the sduino environment
+ */
+
 #include "Arduino.h"
-//#include "wiring.h"
 
 void setup (void)
 {

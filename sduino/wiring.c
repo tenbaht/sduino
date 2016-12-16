@@ -254,6 +254,9 @@ void init()
 	GPIO_DeInit(GPIOC);
 	GPIO_DeInit(GPIOD);
 	GPIO_DeInit(GPIOE);
+
+	UART1_DeInit();
+
 	// set timer 0 prescale factor to 64, period 0 (=256)
 	TIM4_DeInit();
 	TIM4_TimeBaseInit(TIM4_PRESCALER_64, 0);
