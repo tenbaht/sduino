@@ -16,7 +16,7 @@ CFLAGS= --debug -mstm8 -DF_CPU=2000000L -DSTM8S103 \
 LDFLAGS=-L$(LIBBASE)/src -L/opt/sdcc/share/sdcc/lib/stm8 -lstm8s
 
 OBJECTS=$(BASENAME).rel
-SDOBJECTS=main.rel wiring.rel wiring_digital.rel HardwareSerial.rel
+SDOBJECTS=main.rel wiring.rel HardwareSerial.rel
 
 .PHONY: all clean flash
 

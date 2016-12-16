@@ -61,7 +61,7 @@ size_t Print_print_i(long n);
 // print signed integer values (char, short, int, long) to base B
 #define Print_print_ib(I,B)	printInt(I,B)
 
-
+size_t Print_println_s(char *str);
 size_t Print_println_u(unsigned long n);
 size_t Print_println_i(long n);
 

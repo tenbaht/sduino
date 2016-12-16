@@ -79,6 +79,16 @@ size_t Print_print_i(long n)
 	return printInt(n,10);
 }
 
+size_t Print_println_s(char *str)
+{
+	size_t r;
+
+	r = printStr(str);
+	return r + println();
+}
+
+
+
 size_t Print_println_u(unsigned long n)
 {
 	size_t r;
@@ -257,7 +267,7 @@ size_t printInt(long n, uint8_t base)
   }
 }
 
-
+/*
 size_t Print_printFloat(double number, uint8_t digits) 
 { 
   size_t n = 0;
@@ -306,3 +316,4 @@ size_t Print_printFloat(double number, uint8_t digits)
   
   return n;
 }
+*/

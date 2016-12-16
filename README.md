@@ -51,6 +51,8 @@ muss entsprechend angepasst werden. Am Ende hochladen:
 
 tested and working:
 pinMode()
+HardwareSerial
+Print (without float)
 
 implemented and partly working:
 digitalWrite(): simple write ok, PWM handling untested
@@ -68,7 +70,6 @@ not implemented:
 yield()
 analogRead
 analogWrite
-HardwareSerial
 SPI
 
 
@@ -88,6 +89,11 @@ Timer: millis() uses timer4.
 
 STM8AF Flash programming manual (PM0051)
 STM8 SWIM protocol and debug manual (UM0470)
+
+Many examples and presentations about the STM8S:
+https://github.com/VincentYChen/STM8teach
+https://github.com/VincentYChen/STM8teach/tree/master/code/Project/STM8S_StdPeriph_Examples
+
 
 example for RS-232 handling with SPL:
 https://sourceforge.net/p/oggstreamer/oggs-stm8-firmware-001/ci/master/tree/rx_ringbuffer.c

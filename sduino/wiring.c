@@ -23,8 +23,8 @@
 #include "wiring_private.h"
 
 // the prescaler is set so that timer4 ticks every 64 clock cycles, and the
-// the overflow handler is called every 256 ticks.
-#define MICROSECONDS_PER_TIMER0_OVERFLOW (clockCyclesToMicroseconds(64 * 256))
+// the overflow handler is called every 250 ticks.
+#define MICROSECONDS_PER_TIMER0_OVERFLOW (clockCyclesToMicroseconds(64 * 250))
 
 // the whole number of milliseconds per timer4 overflow
 #define MILLIS_INC (MICROSECONDS_PER_TIMER0_OVERFLOW / 1000)
@@ -46,9 +46,12 @@ INTERRUPT_HANDLER(TIM4_UPD_OVF_IRQHandler, ITC_IRQ_TIM4_OVF) /* TIM4 UPD/OVF */
 	// copy these to local variables so they can be stored in registers
 	// (volatile variables must be read from memory on every access)
 	unsigned long m = timer4_millis;
+#if (FRACT_INC != 0)
 	unsigned char f = timer4_fract;
+#endif
 
 	m += MILLIS_INC;
+#if (FRACT_INC != 0)
 	f += FRACT_INC;
 	if (f >= FRACT_MAX) {
 		f -= FRACT_MAX;
@@ -56,8 +59,12 @@ INTERRUPT_HANDLER(TIM4_UPD_OVF_IRQHandler, ITC_IRQ_TIM4_OVF) /* TIM4 UPD/OVF */
 	}
 
 	timer4_fract  = f;
+#endif
 	timer4_millis = m;
 	timer4_overflow_count++;
+
+	/* Clear Interrupt Pending bit */
+	TIM4_ClearITPendingBit(TIM4_IT_UPDATE);	// TIM4->SR1 = (uint8_t)(~0x01);
 }
 
 unsigned long millis()
@@ -249,6 +256,9 @@ void delayMicroseconds(unsigned int us)
 
 void init()
 {
+	// set the clock to 16 MHz
+	CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);
+	
 	GPIO_DeInit(GPIOA);
 	GPIO_DeInit(GPIOB);
 	GPIO_DeInit(GPIOC);
@@ -259,10 +269,14 @@ void init()
 
 	// set timer 0 prescale factor to 64, period 0 (=256)
 	TIM4_DeInit();
-	TIM4_TimeBaseInit(TIM4_PRESCALER_64, 0);
-
-	// enable timer 0 overflow interrupt
-	TIM4_ITConfig(TIM4_IT_UPDATE, ENABLE);
+	TIM4_TimeBaseInit(TIM4_PRESCALER_64, 249);
+	/* Clear TIM4 update flag */
+	TIM4_ClearFlag(TIM4_FLAG_UPDATE);	// TIM4->SR1 = (uint8_t)(~0x01);
+	/* Enable update interrupt */
+	TIM4_ITConfig(TIM4_IT_UPDATE, ENABLE);	// TIM4->IER |= (uint8_t)TIM4_IT;
+	/* Enable TIM4 */
+	TIM4_Cmd(ENABLE);	// TIM4->CR1 |= TIM4_CR1_CEN;
+	
 
 #if 0	//FIXME
 	// timers 1 and 2 are used for phase-correct hardware pwm

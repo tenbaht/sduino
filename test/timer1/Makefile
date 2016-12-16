@@ -10,20 +10,20 @@ LD=$(BINDIR)/sdld
 LIBBASE=../../STM8S_StdPeriph_Driver
 SDUINO=../../sduino
 
-CFLAGS= --debug -mstm8 -DF_CPU=2000000L -DSTM8S103 \
-	-I. -I$(SDUINO) -I$(LIBBASE)/inc -I$(SDCCBASE)/share/sdcc/include/
+CFLAGS= --debug -mstm8 -DF_CPU=16000000L -DSTM8S103 \
+	-I. -I$(SDUINO) -I$(LIBBASE)/inc -I/usr/share/sdcc/include/
 
-LDFLAGS=-L$(LIBBASE)/src -L$(SDCCBASE)/share/sdcc/lib/stm8 -lstm8s
+LDFLAGS=-L$(LIBBASE)/src -L/opt/sdcc/share/sdcc/lib/stm8 -lstm8s
 
 OBJECTS=$(BASENAME).rel
-SDOBJECTS=main.rel wiring.rel \
-	HardwareSerial.rel Print.rel
+SDOBJECTS=main.rel wiring.rel HardwareSerial.rel Print.rel
 
 .PHONY: all clean flash
 
 #all: $(OBJECTS)
 
 $(EXECUTABLE): $(OBJECTS) $(SDOBJECTS)
+#test.rel wiring_digital.rel
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 
 $(OBJECTS) : %.rel : %.c
