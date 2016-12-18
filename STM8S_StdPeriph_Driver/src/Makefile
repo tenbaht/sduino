@@ -1,9 +1,10 @@
 CC=sdcc
 AR=sdar
-CFLAGS=-c -mstm8 -DSTM8S103 -I ../inc --opt-code-size -I.
+CFLAGS=-c -mstm8 -DSTM8S103 -I ../../inc -I../../src --opt-code-size -I.
 LDFLAGS=-rc 
-#SOURCES=$(wildcard stm8*.c)
-SOURCES= \
+SOURCES=$(wildcard stm*.c)
+
+LIBSOURCES= \
 stm8s_adc1.c \
 stm8s_awu.c \
 stm8s_beep.c \
@@ -33,7 +34,7 @@ stm8s_wwdg.c
 
 OBJECTS=$(SOURCES:.c=.o)
 OBJECTS_LINK=$(SOURCES:.c=.rel)
-EXECUTABLE=stm8s.lib
+EXECUTABLE=stm8s103.lib
 
 all: $(SOURCES) $(EXECUTABLE)
 	

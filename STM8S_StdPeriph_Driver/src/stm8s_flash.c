@@ -31,7 +31,7 @@
 /** @addtogroup STM8S_StdPeriph_Driver
   * @{
   */
-/**
+/***
 @code
  This driver provides functions to configure and program the Flash memory of all
  STM8S devices.
@@ -88,12 +88,13 @@
 
 /* Private Constants ---------------------------------------------------------*/
 
-/** @addtogroup FLASH_Private_functions
+/**
+  * @addtogroup FLASH_Private_functions
   * @{
   */
 
 #if defined (_SDCC_)    
-/**
+/***
   * @brief  write single byte to address
   * @note   is required for SDCC, which doesn't yet support far pointers.
   *         For simplicity 16- and 24-bit pointers are treated identically.
@@ -116,7 +117,7 @@ __endasm;
 }
 
 
-/**
+/***
   * @brief  Reads any byte from flash memory
   * @note   is required for SDCC, which doesn't yet support far pointers.
   *         For simplicity 16- and 24-bit pointers are treated identically.
