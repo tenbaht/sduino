@@ -96,7 +96,12 @@ unsigned long micros()
 */
 	END_CRITICAL
 
-	return ((m << 8) + t) * (64 / clockCyclesPerMicrosecond());
+//	return ((m << 8) + t) * (64 / clockCyclesPerMicrosecond());
+//	return ((m*250+t) * (64/16) );	// FIXME: use calculated value
+	m *= 250;
+	m += t;
+	m <<= 2;
+	return m;
 }
 
 
@@ -278,49 +283,84 @@ void init()
 	TIM4_Cmd(ENABLE);	// TIM4->CR1 |= TIM4_CR1_CEN;
 	
 
-#if 0	//FIXME
 	// timers 1 and 2 are used for phase-correct hardware pwm
 	// this is better for motors as it ensures an even waveform
 	// note, however, that fast pwm mode can achieve a frequency of up
 	// 8 MHz (with a 16 MHz clock) at 50% duty cycle
 
-#if defined(TCCR1B) && defined(CS11) && defined(CS10)
-	TCCR1B = 0;
+	TIM1_DeInit();
+	TIM1_TimeBaseInit(64, TIM1_COUNTERMODE_UP, 255, 0);
+	TIM1_Cmd(ENABLE);
 
-	// set timer 1 prescale factor to 64
-	sbi(TCCR1B, CS11);
-#if F_CPU >= 8000000L
-	sbi(TCCR1B, CS10);
-#endif
-#elif defined(TCCR1) && defined(CS11) && defined(CS10)
-	sbi(TCCR1, CS11);
-#if F_CPU >= 8000000L
-	sbi(TCCR1, CS10);
-#endif
-#endif
-	// put timer 1 in 8-bit phase correct pwm mode
-#if defined(TCCR1A) && defined(WGM10)
-	sbi(TCCR1A, WGM10);
-#endif
+	TIM1_OC1Init(
+		TIM1_OCMODE_PWM2,
+		TIM1_OUTPUTSTATE_DISABLE,
+		TIM1_OUTPUTNSTATE_DISABLE,
+		0,
+		TIM1_OCPOLARITY_HIGH,
+		TIM1_OCNPOLARITY_HIGH,
+		TIM1_OCIDLESTATE_SET,
+		TIM1_OCNIDLESTATE_SET
+	);
+	TIM1_OC2Init(
+		TIM1_OCMODE_PWM2,
+		TIM1_OUTPUTSTATE_DISABLE,
+		TIM1_OUTPUTNSTATE_DISABLE,
+		0,
+		TIM1_OCPOLARITY_HIGH,
+		TIM1_OCNPOLARITY_HIGH,
+		TIM1_OCIDLESTATE_SET,
+		TIM1_OCNIDLESTATE_SET
+	);
+	TIM1_OC3Init(
+		TIM1_OCMODE_PWM2,
+		TIM1_OUTPUTSTATE_DISABLE,
+		TIM1_OUTPUTNSTATE_DISABLE,
+		0,
+		TIM1_OCPOLARITY_HIGH,
+		TIM1_OCNPOLARITY_HIGH,
+		TIM1_OCIDLESTATE_SET,
+		TIM1_OCNIDLESTATE_SET
+	);
+	TIM1_OC4Init(
+		TIM1_OCMODE_PWM2,
+		TIM1_OUTPUTSTATE_DISABLE,
+		0,
+		TIM1_OCPOLARITY_HIGH,
+		TIM1_OCIDLESTATE_SET
+	);
+	TIM1_Cmd(ENABLE);
+	TIM1_CtrlPWMOutputs(ENABLE);
 
-	// set timer 2 prescale factor to 64
-#if defined(TCCR2) && defined(CS22)
-	sbi(TCCR2, CS22);
-#elif defined(TCCR2B) && defined(CS22)
-	sbi(TCCR2B, CS22);
-//#else
-	// Timer 2 not finished (may not be present on this CPU)
-#endif
 
-	// configure timer 2 for phase correct pwm (8-bit)
-#if defined(TCCR2) && defined(WGM20)
-	sbi(TCCR2, WGM20);
-#elif defined(TCCR2A) && defined(WGM20)
-	sbi(TCCR2A, WGM20);
-//#else
-	// Timer 2 not finished (may not be present on this CPU)
-#endif
+	TIM2_DeInit();
+	TIM2_TimeBaseInit(TIM2_PRESCALER_64, 255);
 
+	TIM2_OC1Init(
+		TIM2_OCMODE_PWM1,
+		TIM2_OUTPUTSTATE_DISABLE,
+		0,
+		TIM2_OCPOLARITY_HIGH
+	);
+
+	TIM2_OC2Init(
+		TIM2_OCMODE_PWM1,
+		TIM2_OUTPUTSTATE_DISABLE,
+		0,
+		TIM2_OCPOLARITY_HIGH
+	);
+
+	TIM2_OC3Init(
+		TIM2_OCMODE_PWM1,
+		TIM2_OUTPUTSTATE_DISABLE,
+		0,
+		TIM2_OCPOLARITY_HIGH
+	);
+	TIM2_OC1PreloadConfig(ENABLE); // TIM2->CCMR1 |= (uint8_t)TIM2_CCMR_OCxPE;
+	TIM2_OC2PreloadConfig(ENABLE); // TIM2->CCMR2 |= (uint8_t)TIM2_CCMR_OCxPE;
+	TIM2_OC3PreloadConfig(ENABLE); // TIM2->CCMR3 |= (uint8_t)TIM2_CCMR_OCxPE;
+	TIM2_Cmd(ENABLE);	// TIM2->CR1 |= (uint8_t)TIM2_CR1_CEN;
+#if 0
 #if defined(TCCR3B) && defined(CS31) && defined(WGM30)
 	sbi(TCCR3B, CS31);		// set timer 3 prescale factor to 64
 	sbi(TCCR3B, CS30);

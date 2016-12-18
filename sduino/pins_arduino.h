@@ -100,6 +100,29 @@ static const uint8_t A4 = PIN_A4;
 #define	A3	PIN_A3
 #define	A4	PIN_A4
 
+/* on the STM8S the logical pin numbers are really confusing instead
+ * of beeing helpful. So maybe it is better to use these Portpin-Names
+ * instead?
+ */
+enum portpin {
+	PA1, /* 0 */
+	PA2,
+	PA3,
+	PB5, /* 3 */
+	PB4,
+	PC3, /* 5 */
+	PC4,
+	PC5,
+	PC6,
+	PC7,
+	PD1, /* 10 */
+	PD2,
+	PD3,
+	PD4,
+	PD5,
+	PD6  /* 15 */
+};
+
 
 /*FIXME
 #define digitalPinToPCICR(p)    (((p) >= 0 && (p) <= 21) ? (&PCICR) : ((uint8_t *)0))
@@ -238,18 +261,18 @@ const uint8_t PROGMEM digital_pin_to_bit_mask_PGM[] = {
 const uint8_t PROGMEM digital_pin_to_timer_PGM[] = {
 	NOT_ON_TIMER,
 	NOT_ON_TIMER,
-	TIMER23,
+	TIMER23,	// 2
 	NOT_ON_TIMER,
 	NOT_ON_TIMER,
-	TIMER13,
-	TIMER14,
-	TIMER21,
-	TIMER11,
-	TIMER12,
+	TIMER13,	// 5
+	TIMER14,	// 6
+	TIMER21,	// 7
+	TIMER11,	// 8
+	TIMER12,	// 9
 	NOT_ON_TIMER,
-	TIMER23,	/* only alternate function */
-	TIMER22,
-	TIMER21,	/* only alternate function */
+	TIMER23,	/* 11, only alternate function */
+	TIMER22,	// 12
+	TIMER21,	/* 13, only alternate function */
 	NOT_ON_TIMER,
 	NOT_ON_TIMER,
 };
