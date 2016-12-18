@@ -41,4 +41,4 @@ echo "using $TMPDIR"
 for i in $LIBSOURCES; do splitit $i; done
 cp Makefile $TMPDIR
 make -C $TMPDIR
-mv $TMPDIR/stm8s.lib .
+mv $TMPDIR/stm8s103.lib .

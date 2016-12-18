@@ -105,7 +105,8 @@ int analogRead(uint8_t pin)
 // hardware support.  These are defined in the appropriate
 // pins_*.c file.  For the rest of the pins, we default
 // to digital output.
-int HardwareSerial_write(uint8_t c);
+
+//int HardwareSerial_write(uint8_t c);
 void analogWrite(uint8_t pin, int val)
 {
 	// We need to make sure the PWM output is enabled for those pins
@@ -126,10 +127,10 @@ void analogWrite(uint8_t pin, int val)
 	{
 		switch(digitalPinToTimer(pin))
 		{
-
+#ifdef SUPPORT_ALTERNATE_MAPPINGS
 			case TIMER11:
 				// connect pwm to pin on timer 1, channel 1
-HardwareSerial_write('-');
+				alternateFunction(1);
 				TIM1_OC1Init(
 					TIM1_OCMODE_PWM2,
 					TIM1_OUTPUTSTATE_ENABLE,
@@ -146,7 +147,7 @@ HardwareSerial_write('-');
 				break;
 			case TIMER12:
 				// connect pwm to pin on timer 1, channel 2
-HardwareSerial_write('\\');
+				alternateFunction(1);
 				TIM1_OC2Init(
 					TIM1_OCMODE_PWM2,
 					TIM1_OUTPUTSTATE_ENABLE,
@@ -161,9 +162,9 @@ HardwareSerial_write('\\');
 //				TIM1_Cmd(ENABLE);
 //				TIM1_CtrlPWMOutputs(ENABLE);
 				break;
+#endif
 			case TIMER13:
 				// connect pwm to pin on timer 1, channel 3
-HardwareSerial_write('|');
 				TIM1_OC3Init(
 					TIM1_OCMODE_PWM2,
 					TIM1_OUTPUTSTATE_ENABLE,
@@ -180,7 +181,6 @@ HardwareSerial_write('|');
 				break;
 			case TIMER14:
 				// connect pwm to pin on timer 1, channel 4
-HardwareSerial_write('/');
 				TIM1_OC4Init(
 					TIM1_OCMODE_PWM2,
 					TIM1_OUTPUTSTATE_ENABLE,
@@ -192,12 +192,11 @@ HardwareSerial_write('/');
 //				TIM1_Cmd(ENABLE);
 //				TIM1_CtrlPWMOutputs(ENABLE);
 				break;
-
+#ifdef SUPPORT_ALTERNATE_MAPPINGS
 			case TIMER21:
-//FIX: this channel still does not work. No idea why it is different.
 				// connect pwm to pin on timer 2, channel 1
-HardwareSerial_write('.');
-#if 1
+				alternateFunction(1);
+#if 0
 				TIM2_OC1Init(
 					TIM2_OCMODE_PWM1,
 					TIM2_OUTPUTSTATE_ENABLE,
@@ -214,6 +213,7 @@ HardwareSerial_write('.');
 				TIM2->CCR1L = (uint8_t)(val);
 #endif
 				break;
+#endif
 			case TIMER22:
 				// connect pwm to pin on timer 2, channel 2
 #if 0
@@ -232,7 +232,7 @@ HardwareSerial_write('.');
 				break;
 			case TIMER23:
 				// connect pwm to pin on timer 2, channel 3
-#if 1
+#if 0
 				TIM2_OC3Init(
 					TIM2_OCMODE_PWM1,
 					TIM2_OUTPUTSTATE_ENABLE,
@@ -245,24 +245,6 @@ HardwareSerial_write('.');
 				TIM2->CCR3L = (uint8_t)(val);
 #endif
 				break;
-/*
-			// XXX fix needed for atmega8
-			#if defined(TCCR0) && defined(COM00) && !defined(__AVR_ATmega8__)
-			case TIMER0A:
-				// connect pwm to pin on timer 0
-				sbi(TCCR0, COM00);
-				OCR0 = val; // set pwm duty
-				break;
-			#endif
-
-			#if defined(TCCR0A) && defined(COM0A1)
-			case TIMER0A:
-				// connect pwm to pin on timer 0, channel A
-				sbi(TCCR0A, COM0A1);
-				OCR0A = val; // set pwm duty
-				break;
-			#endif
-*/
 			case NOT_ON_TIMER:
 			default:
 				if (val < 128) {

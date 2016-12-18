@@ -10,7 +10,7 @@ LD=$(BINDIR)/sdld
 LIBBASE=../../STM8S_StdPeriph_Driver
 SDUINO=../../sduino
 
-CFLAGS= --debug -mstm8 -DF_CPU=16000000L -DSTM8S103 \
+CFLAGS= --debug -mstm8 -DF_CPU=16000000L -DSTM8S103 -DSUPPORT_ALTERNATE_MAPPINGS \
 	-I. -I$(SDUINO) -I$(LIBBASE)/inc -I/usr/share/sdcc/include/
 
 LDFLAGS=-L$(LIBBASE)/src -L/opt/sdcc/share/sdcc/lib/stm8 -lstm8s103
@@ -35,6 +35,9 @@ $(SDOBJECTS) : %.rel : $(SDUINO)/%.c
 
 flash: $(EXECUTABLE)
 	stm8flash -cstlinkv2 -pstm8s103?3 -w $^
+
+readopt:
+	stm8flash -c stlinkv2 -p stm8s103?3 -s opt -r opt.bin
 
 
 clean: 

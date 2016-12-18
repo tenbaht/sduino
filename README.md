@@ -98,6 +98,9 @@ https://github.com/VincentYChen/STM8teach/tree/master/code/Project/STM8S_StdPeri
 example for RS-232 handling with SPL:
 https://sourceforge.net/p/oggstreamer/oggs-stm8-firmware-001/ci/master/tree/rx_ringbuffer.c
 
+AN3139 Migration guideline within the STM8L familiy
+http://www.st.com/content/ccc/resource/technical/document/application_note/07/d7/59/69/74/8b/48/8a/CD00262293.pdf/files/CD00262293.pdf/jcr:content/translations/en.CD00262293.pdf
+
 
 
 ### Anmerkungen zu SDCC
@@ -387,13 +390,13 @@ Pin	Name	Funktionen		Funkt.	streng	ab PA1
 10	PA3	SS/T2-3			10	6~	2~
 11	PB5	SDA	LED		18	7	3
 12	PB4	SCL			19	8	4
-13	PC3	T1-3/[T1-n1]		 9	9~	5~
-14	PC4	T1-4/Ain2/[T1-n2]	4	10~	6~/A0
-15	PC5	SCK/[T2-1]		13	11~	7~
-16	PC6	MOSI/[T1-1]		11	12~	8~
-17	PC7	MISO/[T1-2]		12	13~	9~
+13	PC3	T1-3/[T1-n1]		 9	9~	5(n~)
+14	PC4	T1-4/Ain2/[T1-n2]	4	10~	6(n~)/A0
+15	PC5	SCK/[T2-1]		13	11~	7(~)
+16	PC6	MOSI/[T1-1]		11	12~	8(~)
+17	PC7	MISO/[T1-2]		12	13~	9(~)
 18	PD1	(SWIM)			 8	14	10
-19	PD2	Ain3/[T2-3]		3	15~	11~/A1
+19	PD2	Ain3/[T2-3]		3	15(~)	11(~~)/A1
 20	PD3	Ain4/T2-2		2	16~	12~/A2
 
 Pinmapping nach Funktion:
@@ -408,6 +411,22 @@ SPI: 6,11,12,13 (gleiche Nummern, aber andere Reichenfolge -> fehlerträchtig)
 I2C: 7,8
 Seriell: 2,3
 Analog: 2,3,10,15,16
+PWM regulär: 2,12,13
+PWM alternate: 7,8,9
+PWM alternate negativ: 5,6
+PWM alternate doppelt: 11
+
+Pin remapping: Alternate function remapping register (AFR), EEPROM 0x4803
+(OPT2) und 0x4804 (NOPT2, invertiert).  Programmierbar per SWIM (UM0470) und
+im IAP-Mode (PM0051)
+val	pin	0		1
+AFR7	C3,C4	default		TIM1_CH1N, TIM1_CH2N
+AFR4	B4,B5	default		ADC_ETR, TIM1_BKIN
+AFR3	C3	default		TLI
+AFR1	A3,D2	default		SPI_NSS, TIM2_CH3
+AFR0	C5-C7	GPIO/SPI	TIM2_CH1, TIM1_CH1, TIM1_CH2
+
+
 
 
 ## Anmerkungen zur Arduino-Portierung
@@ -417,6 +436,11 @@ Tabellen fest im Code enthalten.
 
 digitalWrite wird spektakulär umständlich übersetzt. Hier lohnt sich
 Handassembler. 
+
+added alternateFunction() to allow switching some pins to their alternate
+functions. This allows for three more PWM pins, but maybe it adds to much
+complexity for the Arduino API. Not sure if it should stay.
+
 
 ### Besondere Features, die von Arduino nicht unterstützt werden
 

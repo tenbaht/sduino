@@ -74,8 +74,8 @@
 
 // SDCC patch: for passing args to inline ASM (SDCC doesn't support far pointers yet)
 #if defined (_SDCC_)    
-  uint32_t    asm_addr;      // 16b/24b address
-  uint8_t     asm_val;       // 1B data for r/w data
+  extern uint32_t    asm_addr;      // 16b/24b address
+  extern uint8_t     asm_val;       // 1B data for r/w data
 #endif // _SDCC_
 
 /* Private function prototypes -----------------------------------------------*/
@@ -94,6 +94,8 @@
   */
 
 #if defined (_SDCC_)    
+  uint32_t    asm_addr;      // 16b/24b address
+  uint8_t     asm_val;       // 1B data for r/w data
 /***
   * @brief  write single byte to address
   * @note   is required for SDCC, which doesn't yet support far pointers.

@@ -190,6 +190,11 @@ extern const uint8_t PROGMEM digital_pin_to_port_PGM[];
 extern const uint8_t PROGMEM digital_pin_to_bit_mask_PGM[];
 extern const uint8_t PROGMEM digital_pin_to_timer_PGM[];
 
+#ifdef SUPPORT_ALTERNATE_MAPPINGS
+// helper function for STM8S: switch to the alternate pin functions
+void alternateFunction(uint8_t val);
+#endif
+
 // Get the bit location within the hardware port of the given virtual pin.
 // This comes from the pins_*.c file for the active board configuration.
 // 

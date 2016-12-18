@@ -266,9 +266,15 @@ const uint8_t PROGMEM digital_pin_to_timer_PGM[] = {
 	NOT_ON_TIMER,
 	TIMER13,	// 5
 	TIMER14,	// 6
+#ifdef SUPPORT_ALTERNATE_MAPPINGS
 	TIMER21,	// 7
 	TIMER11,	// 8
 	TIMER12,	// 9
+#else
+	NOT_ON_TIMER,	// 7
+	NOT_ON_TIMER,	// 8
+	NOT_ON_TIMER,	// 9
+#endif
 	NOT_ON_TIMER,
 	TIMER23,	/* 11, only alternate function */
 	TIMER22,	// 12
