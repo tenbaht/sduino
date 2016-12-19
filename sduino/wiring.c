@@ -22,9 +22,46 @@
 
 #include "wiring_private.h"
 
+
+/* calculate the best prescaler and timer period for TIM4 for millis()
+ *
+ * The precaler factor could be calculated from the prescaler enum by
+ * bit shifting, but we want to be independent from possible irregular
+ * definitions for the chose CPU type.
+ */
+#if (clockCyclesPerMillisecond() < 256)
+# define T4PRESCALER	TIM4_PRESCALER_1
+# define T4PRESCALER_FACTOR	1
+#elif (clockCyclesPerMillisecond() < 512)
+# define T4PRESCALER	TIM4_PRESCALER_2
+# define T4PRESCALER_FACTOR	2
+#elif (clockCyclesPerMillisecond() < 1024)
+# define T4PRESCALER	TIM4_PRESCALER_4
+# define T4PRESCALER_FACTOR	4
+#elif (clockCyclesPerMillisecond() < 2048)
+# define T4PRESCALER	TIM4_PRESCALER_8
+# define T4PRESCALER_FACTOR	8
+#elif (clockCyclesPerMillisecond() < 4096)
+# define T4PRESCALER	TIM4_PRESCALER_16
+# define T4PRESCALER_FACTOR	16
+#elif (clockCyclesPerMillisecond() < 8192)
+# define T4PRESCALER	TIM4_PRESCALER_32
+# define T4PRESCALER_FACTOR	32
+#elif (clockCyclesPerMillisecond() < 16384)
+# define T4PRESCALER	TIM4_PRESCALER_64
+# define T4PRESCALER_FACTOR	64
+#elif (clockCyclesPerMillisecond() < 32768)
+# define T4PRESCALER	TIM4_PRESCALER_128
+# define T4PRESCALER_FACTOR	128
+#else
+#error "could not calculate a valid prescaler für TIM4"
+#endif
+#define T4PERIOD	(clockCyclesPerMillisecond()/T4PRESCALER_FACTOR)
+
 // the prescaler is set so that timer4 ticks every 64 clock cycles, and the
 // the overflow handler is called every 250 ticks.
-#define MICROSECONDS_PER_TIMER0_OVERFLOW (clockCyclesToMicroseconds(64 * 250))
+# define MICROSECONDS_PER_TIMER0_OVERFLOW (F_CPU/(T4PRESCALER_FACTOR*T4PERIOD))
+//#define MICROSECONDS_PER_TIMER0_OVERFLOW (clockCyclesToMicroseconds(64 * 250))
 
 // the whole number of milliseconds per timer4 overflow
 #define MILLIS_INC (MICROSECONDS_PER_TIMER0_OVERFLOW / 1000)
@@ -90,17 +127,18 @@ unsigned long micros()
 	m = timer4_overflow_count;
 	t = TIM4->CNTR;		// spl: TIM4_GetCounter()
 
-/*FIXME: not sure if this is needed for STM8
-	if ((TIFR0 & _BV(TOV0)) && (t < 255))
+	// check if a fresh update event is still pending
+	// if (TIM4->SR1 & 0x01)
+	if ((TIM4_GetFlagStatus(TIM4_IT_UPDATE)==SET) && (t < 255))
 		m++;
-*/
 	END_CRITICAL
 
 //	return ((m << 8) + t) * (64 / clockCyclesPerMicrosecond());
 //	return ((m*250+t) * (64/16) );	// FIXME: use calculated value
-	m *= 250;
+	m *= T4PERIOD;
 	m += t;
-	m <<= 2;
+//	m <<= 2;
+	m *= ((T4PRESCALER_FACTOR*1000000L)/(F_CPU));
 	return m;
 }
 
@@ -326,7 +364,8 @@ void init()
 
 	// set timer 0 prescale factor to 64, period 0 (=256)
 	TIM4_DeInit();
-	TIM4_TimeBaseInit(TIM4_PRESCALER_64, 249);
+//	TIM4_TimeBaseInit(TIM4_PRESCALER_64, 249);
+	TIM4_TimeBaseInit(T4PRESCALER, (uint8_t) T4PERIOD-1);
 	/* Clear TIM4 update flag */
 	TIM4_ClearFlag(TIM4_FLAG_UPDATE);	// TIM4->SR1 = (uint8_t)(~0x01);
 	/* Enable update interrupt */
@@ -384,7 +423,6 @@ void init()
 	TIM1_Cmd(ENABLE);
 	TIM1_CtrlPWMOutputs(ENABLE);
 
-
 	TIM2_DeInit();
 	TIM2_TimeBaseInit(TIM2_PRESCALER_64, 255);
 
@@ -412,65 +450,31 @@ void init()
 	TIM2_OC2PreloadConfig(ENABLE); // TIM2->CCMR2 |= (uint8_t)TIM2_CCMR_OCxPE;
 	TIM2_OC3PreloadConfig(ENABLE); // TIM2->CCMR3 |= (uint8_t)TIM2_CCMR_OCxPE;
 	TIM2_Cmd(ENABLE);	// TIM2->CR1 |= (uint8_t)TIM2_CR1_CEN;
-#if 0
-#if defined(TCCR3B) && defined(CS31) && defined(WGM30)
-	sbi(TCCR3B, CS31);		// set timer 3 prescale factor to 64
-	sbi(TCCR3B, CS30);
-	sbi(TCCR3A, WGM30);		// put timer 3 in 8-bit phase correct pwm mode
-#endif
 
-#if defined(TCCR4A) && defined(TCCR4B) && defined(TCCR4D) /* beginning of timer4 block for 32U4 and similar */
-	sbi(TCCR4B, CS42);		// set timer4 prescale factor to 64
-	sbi(TCCR4B, CS41);
-	sbi(TCCR4B, CS40);
-	sbi(TCCR4D, WGM40);		// put timer 4 in phase- and frequency-correct PWM mode	
-	sbi(TCCR4A, PWM4A);		// enable PWM mode for comparator OCR4A
-	sbi(TCCR4C, PWM4D);		// enable PWM mode for comparator OCR4D
-#else /* beginning of timer4 block for ATMEGA1280 and ATMEGA2560 */
-#if defined(TCCR4B) && defined(CS41) && defined(WGM40)
-	sbi(TCCR4B, CS41);		// set timer 4 prescale factor to 64
-	sbi(TCCR4B, CS40);
-	sbi(TCCR4A, WGM40);		// put timer 4 in 8-bit phase correct pwm mode
-#endif
-#endif /* end timer4 block for ATMEGA1280/2560 and similar */	
+	/* De-Init ADC peripheral, sets prescaler to 2 */
+	ADC1_DeInit();
 
-#if defined(TCCR5B) && defined(CS51) && defined(WGM50)
-	sbi(TCCR5B, CS51);		// set timer 5 prescale factor to 64
-	sbi(TCCR5B, CS50);
-	sbi(TCCR5A, WGM50);		// put timer 5 in 8-bit phase correct pwm mode
-#endif
-
-#if defined(ADCSRA)
-	// set a2d prescaler so we are inside the desired 50-200 KHz range.
-	#if F_CPU >= 16000000 // 16 MHz / 128 = 125 KHz
-		sbi(ADCSRA, ADPS2);
-		sbi(ADCSRA, ADPS1);
-		sbi(ADCSRA, ADPS0);
-	#elif F_CPU >= 8000000 // 8 MHz / 64 = 125 KHz
-		sbi(ADCSRA, ADPS2);
-		sbi(ADCSRA, ADPS1);
-		cbi(ADCSRA, ADPS0);
-	#elif F_CPU >= 4000000 // 4 MHz / 32 = 125 KHz
-		sbi(ADCSRA, ADPS2);
-		cbi(ADCSRA, ADPS1);
-		sbi(ADCSRA, ADPS0);
-	#elif F_CPU >= 2000000 // 2 MHz / 16 = 125 KHz
-		sbi(ADCSRA, ADPS2);
-		cbi(ADCSRA, ADPS1);
-		cbi(ADCSRA, ADPS0);
-	#elif F_CPU >= 1000000 // 1 MHz / 8 = 125 KHz
-		cbi(ADCSRA, ADPS2);
-		sbi(ADCSRA, ADPS1);
-		sbi(ADCSRA, ADPS0);
-	#else // 128 kHz / 2 = 64 KHz -> This is the closest you can get, the prescaler is 2
-		cbi(ADCSRA, ADPS2);
-		cbi(ADCSRA, ADPS1);
-		sbi(ADCSRA, ADPS0);
+	// set a2d prescaler so we are inside a range of 1-2 MHz
+	#if F_CPU >= 18000000 // 18 MHz / 18 = 1000 KHz
+		ADC1->CR1 = 7 <<4;
+	#elif F_CPU >= 12000000 // 12 MHz / 12 = 1000 kHz
+		ADC1->CR1 = 6 <<4;
+	#elif F_CPU >= 10000000 // 10 MHz / 10 = 1000 kHz
+		ADC1->CR1 = 5 <<4;
+	#elif F_CPU >= 8000000 // 8 MHz / 8 = 1000 kHz
+		ADC1->CR1 = 4 <<4;
+	#elif F_CPU >= 6000000 // 6 MHz / 6 = 1000 kHz
+		ADC1->CR1 = 4 <<4;
+	#elif F_CPU >= 4000000 // 4 MHz / 4 = 1000 kHz
+		ADC1->CR1 = 3 <<4;
+	#elif F_CPU >= 3000000 // 3 MHz / 3 = 1000 kHz
+		ADC1->CR1 = 2 <<4;
+	#elif F_CPU >= 2000000 // 2 MHz / 2 = 1000 kHz
+		ADC1->CR1 = 1 <<4;
+	#else // minimum prescaler is 2
+		ADC1->CR1 = 0 <<4;
 	#endif
-	// enable a2d conversions
-	sbi(ADCSRA, ADEN);
-#endif
-
+#if 0
 	// the bootloader connects pins 0 and 1 to the USART; disconnect them
 	// here so they can be used as normal digital i/o; they will be
 	// reconnected in Serial.begin()

@@ -122,12 +122,15 @@ void yield(void);
 #define noInterrupts() cli()
 
 #define clockCyclesPerMicrosecond() ( F_CPU / 1000000L )
+#define clockCyclesPerMillisecond() ( F_CPU / 1000L )
 #define clockCyclesToMicroseconds(a) ( (a) / clockCyclesPerMicrosecond() )
 #define microsecondsToClockCycles(a) ( (a) * clockCyclesPerMicrosecond() )
 
 #define lowByte(w) ((uint8_t) ((w) & 0xff))
 #define highByte(w) ((uint8_t) ((w) >> 8))
 
+//#define bitSet(value, bit) (__asm__("bset\t"))
+//#define bitClear(value, bit) (__asm__("bres\t"))
 #define bitRead(value, bit) (((value) >> (bit)) & 0x01)
 #define bitSet(value, bit) ((value) |= (1UL << (bit)))
 #define bitClear(value, bit) ((value) &= ~(1UL << (bit)))
