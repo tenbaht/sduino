@@ -144,6 +144,14 @@ unsigned long micros()
 
 
 void delay(unsigned long ms)
+#if 1
+#warning "using the crappy version of delay()"
+{
+	uint32_t ziel = millis()+ms;
+
+	while(millis()<ziel);	
+}
+#else
 {
 	uint32_t start = micros();
 
@@ -155,7 +163,7 @@ void delay(unsigned long ms)
 		}
 	}
 }
-
+#endif
 /* Delay for the given number of microseconds.  Assumes a 1, 8, 12, 16, 20 or 24 MHz clock. */
 void delayMicroseconds(unsigned int us)
 {

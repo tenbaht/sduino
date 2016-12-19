@@ -3,14 +3,14 @@
  */
 
 #include "Arduino.h"
-#include "HardwareSerial.h"
-#include "Print.h"
+#include "Serial.h"
 
 #include "stm8s_flash.h"
 
 void setup(void)
 {
-	HardwareSerial_begin(115200);
+	Serial_begin(115200);
+	Serial_println_s("ADC test");
 
 	// configure analog pins for input
 	pinMode(A0, INPUT);
@@ -27,7 +27,7 @@ void loop (void)
 
 	for (i=0; i<5; ++i) {
 		// use channel numbers for reading the inputs
-		Print_print_u(analogRead(i));
+		Serial_print_u(analogRead(i));
 		printStr("\t");
 	};
 	println();
