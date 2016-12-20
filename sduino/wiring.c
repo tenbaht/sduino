@@ -472,7 +472,7 @@ void init()
 
 	/* De-Init ADC peripheral, sets prescaler to 2 */
 	ADC1_DeInit();
-
+	// optional:
 	// set a2d prescaler so we are inside a range of 1-2 MHz
 	#if F_CPU >= 18000000 // 18 MHz / 18 = 1000 KHz
 		ADC1->CR1 = 7 <<4;
@@ -490,8 +490,8 @@ void init()
 		ADC1->CR1 = 2 <<4;
 	#elif F_CPU >= 2000000 // 2 MHz / 2 = 1000 kHz
 		ADC1->CR1 = 1 <<4;
-	#else // minimum prescaler is 2
-		ADC1->CR1 = 0 <<4;
+//	#else // minimum prescaler is 2, already set by ADC1_DeInit();
+//		ADC1->CR1 = 0 <<4;
 	#endif
 #if 0
 	// the bootloader connects pins 0 and 1 to the USART; disconnect them

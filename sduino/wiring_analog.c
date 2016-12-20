@@ -61,23 +61,29 @@ int analogRead(uint8_t pin)
 	if (pin>=NUM_ANALOG_INPUTS)
 		pin = digitalPinToAnalogChannelMap[pin-NUM_ANALOG_INPUTS];
 	if (pin>=NUM_ANALOG_INPUTS) return 0;	// illegal pin number
-//ADC1_ConversionConfig(ADC1_CONVERSIONMODE_SINGLE, pin, ADC1_ALIGN_RIGHT);
-ADC1_ConversionConfig(ADC1_CONVERSIONMODE_CONTINUOUS, pin, ADC1_ALIGN_RIGHT);
-ADC1_PrescalerConfig(ADC1_PRESSEL_FCPU_D18);
-ADC1_ExternalTriggerConfig(ADC1_EXTTRIG_TIM, DISABLE);
-ADC1_SchmittTriggerConfig(pin, DISABLE);
-/*
+#if 0
+	// using spl functions:
+	ADC1_ConversionConfig(ADC1_CONVERSIONMODE_SINGLE, pin+2, ADC1_ALIGN_RIGHT);
+	ADC1_PrescalerConfig(ADC1_PRESSEL_FCPU_D18);
+	ADC1_ExternalTriggerConfig(ADC1_EXTTRIG_TIM, DISABLE);
+	ADC1_SchmittTriggerConfig(pin+2, DISABLE);
+#else
+	// direct register access:
 	// select channel
 	ADC1->CSR = pin+2;	// arduino channel 0 is Ain2 on STM8S103
 	bitSet(ADC1->CR2, 3);	// right align
-*/
-	// start the conversion
+#endif
+	// first write turns on the ADC
+//	bitSet(ADC1->CR1, 0);
+	ADC1->CR1 |= ADC1_CR1_ADON;
+
+	// second write starts the conversion
 //	bitSet(ADC1->CR1, 0);
 	ADC1->CR1 |= ADC1_CR1_ADON;
 
 	// EOC is set when the conversion finishes
-//	while (! (ADC1->CSR & ADC1_IT_EOC));
-delay(2);
+	while (! (ADC1->CSR & ADC1_FLAG_EOC));
+	ADC1->CSR &= ~(ADC1_FLAG_EOC);	// important! clear the flag
 
 	// in right align mode we have to read DRL first
 	low  = ADC1->DRL;
