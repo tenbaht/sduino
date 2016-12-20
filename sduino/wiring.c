@@ -143,28 +143,39 @@ unsigned long micros()
 }
 
 
+/**
+ * Delay for the given number of milliseconds.
+ *
+ * Do a busy wait. Using the lower 16 bits of micros() is enough, as the
+ * difference between the start time and the current time will never be much
+ * higher than 1000.
+ *
+ * Using unsigned values is helpful here. This way value wrap-arounds between
+ * start and now do not result in negative values but in the wanted absolute
+ * difference. The magic of modulo-arithmethics.
+ */
 void delay(unsigned long ms)
-#if 1
-#warning "using the crappy version of delay()"
 {
-	uint32_t ziel = millis()+ms;
+	uint16_t start, now;
 
-	while(millis()<ziel);	
-}
-#else
-{
-	uint32_t start = micros();
+	start = (uint16_t) micros();	// use the lower 16 bits
 
 	while (ms > 0) {
 		yield();
-		while ( ms > 0 && (micros() - start) >= 1000) {
+		now = (uint16_t) micros();	// use the lower 16 bits
+		while ( (ms > 0) && ((uint16_t)(now-start) >= 1000) ) {
 			ms--;
 			start += 1000;
 		}
 	}
 }
-#endif
-/* Delay for the given number of microseconds.  Assumes a 1, 8, 12, 16, 20 or 24 MHz clock. */
+
+
+/**
+ *  Delay for the given number of microseconds.
+ *
+ *  Assumes a 1, 8, 12, 16, 20 or 24 MHz clock.
+ */
 void delayMicroseconds(unsigned int us)
 {
 	// call = 4 cycles, return = 4 cycles, arg access = ? cycles
