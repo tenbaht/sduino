@@ -129,7 +129,7 @@ unsigned long micros()
 
 	// check if a fresh update event is still pending
 	// if (TIM4->SR1 & 0x01)
-	if ((TIM4_GetFlagStatus(TIM4_IT_UPDATE)==SET) && (t < 255))
+	if ((TIM4_GetFlagStatus(TIM4_IT_UPDATE)==SET) && (t < (T4PERIOD-1)))
 		m++;
 	END_CRITICAL
 
