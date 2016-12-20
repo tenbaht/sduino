@@ -179,7 +179,51 @@ void delay(unsigned long ms)
 void delayMicroseconds(unsigned int us)
 {
 	// call = 4 cycles, return = 4 cycles, arg access = ? cycles
-	while (us--);
+//	while (us--);
+
+#if F_CPU <= 1000000UL
+#warning "1m"
+	us <<= 3;	// adjust loop counter for low clock rates
+# define LOG_CLOCK (F_CPU*8)
+#elsif F_CPU <= 2000000UL
+#warning "2m"
+	us <<= 2;	// adjust loop counter for low clock rates
+# define LOG_CLOCK 8000000UL	//(F_CPU*4)
+#elsif F_CPU <= 4000000UL
+#warning "3m"
+	us <<= 1;	// adjust loop counter for low clock rates
+# define LOG_CLOCK (F_CPU*2)
+#else
+#warning "else"
+# define LOG_CLOCK (F_CPU * 1)
+# define LOG_CLOCK 16000000UL
+#endif
+
+	// 13 + (7+nop)*us
+	unsigned int i;
+	for (i=us; i; i--) {
+#if LOG_CLOCK >=7500000UL
+		__asm__("nop");	// 7.5..8.5MHz -> 8 cyc/loop
+#endif
+#if LOG_CLOCK >=8500000UL
+		__asm__("nop");	// 8.5..9.5MHz -> 9 cyc/loop
+#endif
+#if LOG_CLOCK >=9500000UL
+		__asm__("nop");	// 9.5..10.5MHz -> 10 cyc/loop
+#endif
+#if LOG_CLOCK >=10500000UL
+		__asm__("nop");	// 10.5..11.5MHz -> 11 cyc/loop
+#endif
+#if LOG_CLOCK >=11500000UL
+		__asm__("nop");	// 11.5..12.5MHz -> 12 cyc/loop
+#endif
+	}
+
+	// 25 Grundbedarf incl. call/ret, 7 pro einfachen Schleifendurchlauf
+	// => t= 25 + 7*us bzs. 25 + 14*us
+#if F_CPU >=10000000UL
+//	for (i=us; i; i--);
+#endif
 /*FIXME: Zeitdauer nicht ausgezählt. Das kommt raus:
 
                                     283 ;	wiring.c: 124: while (us--);// __asm__ ("nop");

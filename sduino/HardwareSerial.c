@@ -39,10 +39,10 @@ typedef struct ring_buffer
   volatile unsigned int tail;
 } ring_buffer;
 
-static ring_buffer rx_buffer = { { 0 }, 0, 0};
-static ring_buffer tx_buffer = { { 0 }, 0, 0};
+static ring_buffer rx_buffer;// = { { 0 }, 0, 0};
+static ring_buffer tx_buffer;// = { { 0 }, 0, 0};
 
-static volatile char	transmitting=0;
+static volatile char	transmitting;//=0;
 
 // private functions  //////////////////////////////////////////////////////////
 

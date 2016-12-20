@@ -53,23 +53,22 @@ tested and working:
 pinMode()
 HardwareSerial
 Print (without float)
+digitalWrite()
+analogRead
+analogWrite
+delay
 
 implemented and partly working:
-digitalWrite(): simple write ok, PWM handling untested
 
 tested, but not working:
-delay (probl. the timer4 initialisation)
 
 not tested
-all time functions
 ShiftIn()
 ShiftOut()
 
 
 not implemented:
 yield()
-analogRead
-analogWrite
 SPI
 
 
@@ -89,11 +88,14 @@ Timer: millis() uses timer4.
 
 STM8AF Flash programming manual (PM0051)
 STM8 SWIM protocol and debug manual (UM0470)
+Using the analog to digital converter of the STM8S microcontroller (AN2658)
 
 Many examples and presentations about the STM8S:
 https://github.com/VincentYChen/STM8teach
 https://github.com/VincentYChen/STM8teach/tree/master/code/Project/STM8S_StdPeriph_Examples
 
+Using the ADC:
+http://blog.mark-stevens.co.uk/2012/09/single-scan-adc-on-the-stm8s/
 
 example for RS-232 handling with SPL:
 https://sourceforge.net/p/oggstreamer/oggs-stm8-firmware-001/ci/master/tree/rx_ringbuffer.c
@@ -390,8 +392,8 @@ Pin	Name	Funktionen		Funkt.	streng	ab PA1
 10	PA3	SS/T2-3			10	6~	2~
 11	PB5	SDA	LED		18	7	3
 12	PB4	SCL			19	8	4
-13	PC3	T1-3/[T1-n1]		 9	9~	5(n~)
-14	PC4	T1-4/Ain2/[T1-n2]	4	10~	6(n~)/A0
+13	PC3	T1-3/[T1-n1]		 9	9~	5~(n~)
+14	PC4	T1-4/Ain2/[T1-n2]	4	10~	6~(n~)/A0
 15	PC5	SCK/[T2-1]		13	11~	7(~)
 16	PC6	MOSI/[T1-1]		11	12~	8(~)
 17	PC7	MISO/[T1-2]		12	13~	9(~)
@@ -430,6 +432,17 @@ AFR0	C5-C7	GPIO/SPI	TIM2_CH1, TIM1_CH1, TIM1_CH2
 
 
 ## Anmerkungen zur Arduino-Portierung
+
+use of the timers:
+timer1: PWM for PC6, PC7 (8,9), could be used for ADC
+timer2: PWM for PA3 (2)
+timer4: millis()
+
+ADC:
+the prescaler is initialised for an ADC clock in the range of 1..2 MHz. The
+minimum prescaler value is 2, so for a clock speed of less than 2 MHz the
+required minimum ADC clock frequency can not be reached anymore.
+
 
 Die ganze Pin->Portadressen-Arithmetik könnte komlett entrümpelt werden. Statt
 Tabellen fest im Code enthalten.
