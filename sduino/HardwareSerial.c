@@ -67,9 +67,15 @@ void UART1_RX_IRQHandler(void) __interrupt(ITC_IRQ_UART1_RX) /* UART1 RX */
 {
     unsigned char c;
 
+#ifdef USE_SPL
     c = UART1_ReceiveData8();
     // check for parity error
     if (!UART1_GetFlagStatus(UART1_FLAG_PE)) {
+#else
+    c = UART1->DR;
+    // check for parity error
+    if (!(UART1->SR & UART1_FLAG_PE)) {
+#endif
         // no parity error, so store the data
         store_char(c, &rx_buffer);
     };
@@ -78,6 +84,7 @@ void UART1_RX_IRQHandler(void) __interrupt(ITC_IRQ_UART1_RX) /* UART1 RX */
 
 void UART1_TX_IRQHandler(void) __interrupt(ITC_IRQ_UART1_TX) /* UART1 TX */
 {
+#ifdef USE_SPL
   if (tx_buffer.head == tx_buffer.tail) {
 	// Buffer empty, so disable interrupts
         transmitting = 0;
@@ -90,39 +97,89 @@ void UART1_TX_IRQHandler(void) __interrupt(ITC_IRQ_UART1_TX) /* UART1 TX */
 	
     UART1_SendData8(c);
   }
+#else
+  if (tx_buffer.head == tx_buffer.tail) {
+	// Buffer empty, so disable interrupts
+        transmitting = 0;
+	UART1->CR2 &= ~UART1_CR2_TIEN;
+  }
+  else {
+    // There is more data in the output buffer. Send the next byte
+    unsigned char c = tx_buffer.buffer[tx_buffer.tail];
+    tx_buffer.tail = (tx_buffer.tail + 1) % SERIAL_BUFFER_SIZE;
+
+    UART1->DR = c;
+  }
+#endif
 }
 
 // Public Methods //////////////////////////////////////////////////////////////
 
 void HardwareSerial_begin(unsigned long baud)
 {
+#ifdef USE_SPL
   //set the data bits, parity, and stop bits
   UART1_Init(baud,
       UART1_WORDLENGTH_8D, UART1_STOPBITS_1, UART1_PARITY_NO,
       UART1_SYNCMODE_CLOCK_DISABLE, UART1_MODE_TXRX_ENABLE);
 
   UART1_ITConfig(UART1_IT_RXNE, ENABLE);	// enable RXNE interrupt
+#else
+	uint16_t divider;
+
+	/* Set the UART1 BaudRates in BRR1 and BRR2 registers according to UART1_BaudRate value */
+	divider = (uint16_t) ((uint32_t)CLK_GetClockFreq() / (uint32_t) baud);
+
+	UART1->BRR2 = divider & 0x0f;
+	divider >>= 4;
+	UART1->BRR1 = divider & 0xff;
+	divider >> 4;
+	UART1->BRR2 |= (uint8_t) divider & 0xf0;
+
+	UART1->CR1 = 0;			// 8 Bit, no parity
+	UART1->CR3 = 0;			// one stop bit
+	// enable RXNE interrupt, enable transmitter, enable receiver
+	UART1->CR2 = UART1_CR2_RIEN | UART1_CR2_TEN | UART1_CR2_REN;
+#endif
 }
 
 
 void HardwareSerial_begin_config(unsigned long baud, uint8_t config)
 {
+#ifdef USE_SPL
   UART1_StopBits_TypeDef	stopbits;
   UART1_Parity_TypeDef		parity;
   UART1_WordLength_TypeDef	wordlength;
 
   wordlength = (config & 0x10) ? UART1_WORDLENGTH_9D : UART1_WORDLENGTH_8D;
-  stopbits   = (config & 0x03) ? UART1_STOPBITS_2   : UART1_STOPBITS_1;
+  stopbits   = (config & 0x20) ? UART1_STOPBITS_2   : UART1_STOPBITS_1;
   parity=UART1_PARITY_NO;	// default
-  config &= 0xc;
-  if      (config == 0x8) parity=UART1_PARITY_EVEN;
-  else if (config == 0xc) parity=UART1_PARITY_ODD;
+  config &= 0x6;
+  if      (config == 0x4) parity=UART1_PARITY_EVEN;
+  else if (config == 0x6) parity=UART1_PARITY_ODD;
   
   //set the data bits, parity, and stop bits
   UART1_Init(baud, wordlength, stopbits, parity, 
       UART1_SYNCMODE_CLOCK_DISABLE, UART1_MODE_TXRX_ENABLE);
 
   UART1_ITConfig(UART1_IT_RXNE, ENABLE);	// enable RXNE interrupt
+#else
+	uint16_t divider;
+
+	/* Set the UART1 BaudRates in BRR1 and BRR2 registers according to UART1_BaudRate value */
+	divider = (uint16_t) ((uint32_t)CLK_GetClockFreq() / (uint32_t) baud);
+
+	UART1->BRR2 = divider & 0x0f;
+	divider >>= 4;
+	UART1->BRR1 = divider & 0xff;
+	divider >> 4;
+	UART1->BRR2 |= (uint8_t) divider & 0xf0;
+
+	UART1->CR1 = config & (MASK_DATABITS | MASK_PARITY);
+	UART1->CR3 = config & (MASK_STOPBITS);
+	// enable RXNE interrupt, enable transmitter, enable receiver
+	UART1->CR2 = UART1_CR2_RIEN | UART1_CR2_TEN | UART1_CR2_REN;
+#endif
 }
 
 
@@ -171,7 +228,11 @@ void HardwareSerial_flush(void)
 
 //  while (transmitting && ! (*_ucsra & _BV(TXC0)));
 //  while (transmitting && ! (UART1_SR & UART1_SR_TC));
+#ifdef USE_SPL
   while (transmitting && ! UART1_GetFlagStatus(UART1_FLAG_TC));
+#else
+  while (transmitting && !(UART1->SR & UART1_FLAG_TC));
+#endif
   transmitting = 0;
 }
 
@@ -189,7 +250,11 @@ int HardwareSerial_write(uint8_t c)
   tx_buffer.buffer[tx_buffer.head] = c;
   tx_buffer.head = i;
 
+#ifdef USE_SPL
   UART1_ITConfig(UART1_IT_TXE, ENABLE);		// enable TXE interrupt
+#else
+  UART1->CR2 |= UART1_CR2_TIEN;			// enable TXE interrupt
+#endif
   transmitting = 1;
   //FIXME: unklar, ob das auf dem STM8 wirklich nötig ist.
   // Das TXE-Bit in UART_SR ist jedenfalls nur lesbar.

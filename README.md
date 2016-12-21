@@ -47,6 +47,27 @@ muss entsprechend angepasst werden. Am Ende hochladen:
 	stm8flash -c stlinkv2 -p stm8s103?3 -w blinky.ihx 
 
 
+### mixing with assembler
+
+c-code:
+	stacktest(0x1234, 0x5678);
+
+assember:
+	push    #0x78
+	push    #0x56
+	push    #0x34
+	push    #0x12
+	call    _stacktest
+
+resulting stack content (starting at [SP]):
+	0> dch 0x17f9
+	0x017f9 c0 80 ab 12 34 56 78 5b ....4Vx[
+
+=> first paramter starts at [SP+3], HSB first.
+
+
+
+
 ## current status and todo list
 
 tested and working:

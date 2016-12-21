@@ -29,11 +29,11 @@ void loop (void)
 
 	send_string("Hello World!\r\n");
 
-	for (i=15000; i; i--);
+	for (i=60000; i; i--);
 	while(HardwareSerial_available()) {
 		HardwareSerial_write('.');
 		HardwareSerial_write(HardwareSerial_read());
 	};
 
-	for (i=15000; i; i--);
+	for (i=60000; i; i--);
 }
