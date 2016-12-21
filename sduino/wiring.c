@@ -442,8 +442,9 @@ void init()
 	// note, however, that fast pwm mode can achieve a frequency of up
 	// 8 MHz (with a 16 MHz clock) at 50% duty cycle
 
-	TIM1_DeInit();
-	TIM1_TimeBaseInit(64, TIM1_COUNTERMODE_UP, 255, 0);
+	TIM1_DeInit();	// keep this
+	TIM1_TimeBaseInit(64, TIM1_COUNTERMODE_UP, 255, 0);	// keep this
+#ifdef USE_SPL
 	TIM1_Cmd(ENABLE);
 
 	TIM1_OC1Init(
@@ -485,10 +486,32 @@ void init()
 	);
 	TIM1_Cmd(ENABLE);
 	TIM1_CtrlPWMOutputs(ENABLE);
+#else
+//	TIM1->CCER1 = 0;	// channel 1 and 2 disabled
+//	TIM1->CCER2 = 0;	// channel 3 and 4 disabled
+
+	TIM1->CCMR1 = TIM1_OCMODE_PWM2 | TIM1_CCMR_OCxPE;
+	TIM1->CCMR2 = TIM1_OCMODE_PWM2 | TIM1_CCMR_OCxPE;
+	TIM1->CCMR3 = TIM1_OCMODE_PWM2 | TIM1_CCMR_OCxPE;
+	TIM1->CCMR4 = TIM1_OCMODE_PWM2 | TIM1_CCMR_OCxPE;
+/* already done by TIM1_DeInit()
+	TIM1->CCR1H = 0;	// write MSB first, DO NOT USE ldw instruction!
+	TIM1->CCR1L = 0;
+	TIM1->CCR2H = 0;	// write MSB first, DO NOT USE ldw instruction!
+	TIM1->CCR2L = 0;
+	TIM1->CCR3H = 0;	// write MSB first, DO NOT USE ldw instruction!
+	TIM1->CCR3L = 0;
+	TIM1->CCR4H = 0;	// write MSB first, DO NOT USE ldw instruction!
+	TIM1->CCR4L = 0;
+*/
+	TIM1->CR1 = TIM1_CR1_CEN;	// TIM1_Cmd(ENABLE);
+	TIM1->BKR = TIM1_BKR_MOE;	// TIM1_CtrlPWMOutputs(ENABLE);
+#endif
 
 	TIM2_DeInit();
 	TIM2_TimeBaseInit(TIM2_PRESCALER_64, 255);
 
+#ifdef USE_SPL
 	TIM2_OC1Init(
 		TIM2_OCMODE_PWM1,
 		TIM2_OUTPUTSTATE_DISABLE,
@@ -513,6 +536,16 @@ void init()
 	TIM2_OC2PreloadConfig(ENABLE); // TIM2->CCMR2 |= (uint8_t)TIM2_CCMR_OCxPE;
 	TIM2_OC3PreloadConfig(ENABLE); // TIM2->CCMR3 |= (uint8_t)TIM2_CCMR_OCxPE;
 	TIM2_Cmd(ENABLE);	// TIM2->CR1 |= (uint8_t)TIM2_CR1_CEN;
+#else
+//	TIM2->CCER1 = 0;	// channel 1 and 2 disabled
+//	TIM2->CCER2 = 0;	// channel 3 and 4 disabled
+
+	TIM2->CCMR1 = TIM2_OCMODE_PWM1 | TIM2_CCMR_OCxPE;
+	TIM2->CCMR2 = TIM2_OCMODE_PWM1 | TIM2_CCMR_OCxPE;
+	TIM2->CCMR3 = TIM2_OCMODE_PWM1 | TIM2_CCMR_OCxPE;
+
+	TIM2->CR1 = TIM2_CR1_CEN;	// TIM1_Cmd(ENABLE);
+#endif
 
 	/* De-Init ADC peripheral, sets prescaler to 2 */
 	ADC1_DeInit();

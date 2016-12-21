@@ -127,6 +127,7 @@ void analogWrite(uint8_t pin, int val)
 			case TIMER11:
 				// connect pwm to pin on timer 1, channel 1
 				alternateFunction(1);
+#ifdef USE_SPL
 				TIM1_OC1Init(
 					TIM1_OCMODE_PWM2,
 					TIM1_OUTPUTSTATE_ENABLE,
@@ -140,10 +141,19 @@ void analogWrite(uint8_t pin, int val)
 //				TIM1_OC1PreloadConfig(ENABLE);
 //				TIM1_Cmd(ENABLE);
 //				TIM1_CtrlPWMOutputs(ENABLE);
+#else
+				// write MSB first, DO NOT USE ldw instruction!
+				tmp = TIM1->CCER1 & (uint8_t)(~(TIM1_CCER2_CC1E | TIM1_CCER2_CC1P));
+				TIM1->CCER1 = tmp | TIM2_CCER1_CC1E;
+				TIM1->CCMR1 = TIM1_OCMODE_PWM2 | TIM1_CCMR_OCxPE;
+				TIM1->CCR1H = 0;
+				TIM1->CCR1L = (uint8_t)(val);
+#endif
 				break;
 			case TIMER12:
 				// connect pwm to pin on timer 1, channel 2
 				alternateFunction(1);
+#ifdef USE_SPL
 				TIM1_OC2Init(
 					TIM1_OCMODE_PWM2,
 					TIM1_OUTPUTSTATE_ENABLE,
@@ -157,10 +167,19 @@ void analogWrite(uint8_t pin, int val)
 //				TIM1_OC2PreloadConfig(ENABLE);
 //				TIM1_Cmd(ENABLE);
 //				TIM1_CtrlPWMOutputs(ENABLE);
+#else
+				// write MSB first, DO NOT USE ldw instruction!
+				tmp = TIM1->CCER1 & (uint8_t)(~(TIM1_CCER2_CC2E | TIM1_CCER2_CC2P));
+				TIM1->CCER1 = tmp | TIM2_CCER1_CC2E;
+				TIM1->CCMR2 = TIM1_OCMODE_PWM2 | TIM1_CCMR_OCxPE;
+				TIM1->CCR2H = 0;
+				TIM1->CCR2L = (uint8_t)(val);
+#endif // if use_spl
 				break;
-#endif
+#endif // if alternate_mappings
 			case TIMER13:
 				// connect pwm to pin on timer 1, channel 3
+#ifdef USE_SPL
 				TIM1_OC3Init(
 					TIM1_OCMODE_PWM2,
 					TIM1_OUTPUTSTATE_ENABLE,
@@ -174,9 +193,18 @@ void analogWrite(uint8_t pin, int val)
 //				TIM1_OC3PreloadConfig(ENABLE);
 //				TIM1_Cmd(ENABLE);
 //				TIM1_CtrlPWMOutputs(ENABLE);
+#else
+				// write MSB first, DO NOT USE ldw instruction!
+				tmp = TIM1->CCER2 & (uint8_t)(~(TIM1_CCER2_CC3E | TIM1_CCER2_CC3P));
+				TIM1->CCER2 = tmp | TIM2_CCER2_CC3E;
+				TIM1->CCMR3 = TIM1_OCMODE_PWM2 | TIM1_CCMR_OCxPE;
+				TIM1->CCR3H = 0;
+				TIM1->CCR3L = (uint8_t)(val);
+#endif
 				break;
 			case TIMER14:
 				// connect pwm to pin on timer 1, channel 4
+#ifdef USE_SPL
 				TIM1_OC4Init(
 					TIM1_OCMODE_PWM2,
 					TIM1_OUTPUTSTATE_ENABLE,
@@ -184,15 +212,20 @@ void analogWrite(uint8_t pin, int val)
 					TIM1_OCPOLARITY_HIGH,
 					TIM1_OCIDLESTATE_SET
 				);
-//				TIM1_OC4PreloadConfig(ENABLE);
-//				TIM1_Cmd(ENABLE);
-//				TIM1_CtrlPWMOutputs(ENABLE);
+#else
+				// write MSB first, DO NOT USE ldw instruction!
+				tmp = TIM1->CCER2 & (uint8_t)(~(TIM1_CCER2_CC4E | TIM1_CCER2_CC4P));
+				TIM1->CCER2 = tmp | TIM2_CCER1_CC4E;
+				TIM1->CCMR4 = TIM1_OCMODE_PWM2 | TIM1_CCMR_OCxPE;
+				TIM1->CCR4H = 0;
+				TIM1->CCR4L = (uint8_t)(val);
+#endif
 				break;
 #ifdef SUPPORT_ALTERNATE_MAPPINGS
 			case TIMER21:
 				// connect pwm to pin on timer 2, channel 1
 				alternateFunction(1);
-#if 0
+#ifdef USE_SPL
 				TIM2_OC1Init(
 					TIM2_OCMODE_PWM1,
 					TIM2_OUTPUTSTATE_ENABLE,
@@ -212,7 +245,7 @@ void analogWrite(uint8_t pin, int val)
 #endif
 			case TIMER22:
 				// connect pwm to pin on timer 2, channel 2
-#if 0
+#ifdef USE_SPL
 				TIM2_OC2Init(
 					TIM2_OCMODE_PWM1,
 					TIM2_OUTPUTSTATE_ENABLE,
@@ -228,7 +261,7 @@ void analogWrite(uint8_t pin, int val)
 				break;
 			case TIMER23:
 				// connect pwm to pin on timer 2, channel 3
-#if 0
+#ifdef USE_SPL
 				TIM2_OC3Init(
 					TIM2_OCMODE_PWM1,
 					TIM2_OUTPUTSTATE_ENABLE,
@@ -237,6 +270,7 @@ void analogWrite(uint8_t pin, int val)
 				);
 #else
 				TIM2->CCER2 |= TIM2_CCER2_CC3E;
+				TIM2->CCMR3 = TIM2_OCMODE_PWM1 | TIM2_CCMR_OCxPE;
 				TIM2->CCR3H = 0;
 				TIM2->CCR3L = (uint8_t)(val);
 #endif
