@@ -105,6 +105,8 @@ int analogRead(uint8_t pin)
 //int HardwareSerial_write(uint8_t c);
 void analogWrite(uint8_t pin, int val)
 {
+	unsigned char tmp;	// only to help SDCC to keep it in a register
+
 	// We need to make sure the PWM output is enabled for those pins
 	// that support it, as we turn it off when digitally reading or
 	// writing with them.  Also, make sure the pin is in output mode
@@ -143,7 +145,7 @@ void analogWrite(uint8_t pin, int val)
 //				TIM1_CtrlPWMOutputs(ENABLE);
 #else
 				// write MSB first, DO NOT USE ldw instruction!
-				tmp = TIM1->CCER1 & (uint8_t)(~(TIM1_CCER2_CC1E | TIM1_CCER2_CC1P));
+				tmp = TIM1->CCER1 & (uint8_t)(~(TIM1_CCER1_CC1E | TIM1_CCER1_CC1P));
 				TIM1->CCER1 = tmp | TIM2_CCER1_CC1E;
 				TIM1->CCMR1 = TIM1_OCMODE_PWM2 | TIM1_CCMR_OCxPE;
 				TIM1->CCR1H = 0;
@@ -169,7 +171,7 @@ void analogWrite(uint8_t pin, int val)
 //				TIM1_CtrlPWMOutputs(ENABLE);
 #else
 				// write MSB first, DO NOT USE ldw instruction!
-				tmp = TIM1->CCER1 & (uint8_t)(~(TIM1_CCER2_CC2E | TIM1_CCER2_CC2P));
+				tmp = TIM1->CCER1 & (uint8_t)(~(TIM1_CCER1_CC2E | TIM1_CCER1_CC2P));
 				TIM1->CCER1 = tmp | TIM2_CCER1_CC2E;
 				TIM1->CCMR2 = TIM1_OCMODE_PWM2 | TIM1_CCMR_OCxPE;
 				TIM1->CCR2H = 0;
@@ -195,8 +197,9 @@ void analogWrite(uint8_t pin, int val)
 //				TIM1_CtrlPWMOutputs(ENABLE);
 #else
 				// write MSB first, DO NOT USE ldw instruction!
-				tmp = TIM1->CCER2 & (uint8_t)(~(TIM1_CCER2_CC3E | TIM1_CCER2_CC3P));
-				TIM1->CCER2 = tmp | TIM2_CCER2_CC3E;
+//				tmp = TIM1->CCER2 & (uint8_t)(~(TIM1_CCER2_CC3E | TIM1_CCER2_CC3P));
+//				TIM1->CCER2 = tmp | TIM2_CCER2_CC3E;
+				TIM1->CCER2 |= TIM2_CCER2_CC3E;
 				TIM1->CCMR3 = TIM1_OCMODE_PWM2 | TIM1_CCMR_OCxPE;
 				TIM1->CCR3H = 0;
 				TIM1->CCR3L = (uint8_t)(val);
@@ -215,7 +218,7 @@ void analogWrite(uint8_t pin, int val)
 #else
 				// write MSB first, DO NOT USE ldw instruction!
 				tmp = TIM1->CCER2 & (uint8_t)(~(TIM1_CCER2_CC4E | TIM1_CCER2_CC4P));
-				TIM1->CCER2 = tmp | TIM2_CCER1_CC4E;
+				TIM1->CCER2 = tmp | TIM1_CCER2_CC4E;
 				TIM1->CCMR4 = TIM1_OCMODE_PWM2 | TIM1_CCMR_OCxPE;
 				TIM1->CCR4H = 0;
 				TIM1->CCR4L = (uint8_t)(val);
@@ -253,12 +256,15 @@ void analogWrite(uint8_t pin, int val)
 					TIM2_OCPOLARITY_HIGH
 				);
 #else
-				TIM2->CCER1 |= TIM2_CCER1_CC2E;
+//				tmp = TIM2->CCER1 & (uint8_t)(~(TIM2_CCER1_CC2E | TIM2_CCER1_CC2P));
+//				TIM2->CCER1 = tmp | TIM2_CCER1_CC2E;
 				TIM2->CCMR2 = TIM2_OCMODE_PWM1 | TIM2_CCMR_OCxPE;
+				TIM2->CCER1 |= TIM2_CCER1_CC2E;
 				TIM2->CCR2H = 0;
 				TIM2->CCR2L = (uint8_t)(val);
 #endif
 				break;
+#ifdef SUPPORT_ALTERNATE_MAPPINGS
 			case TIMER23:
 				// connect pwm to pin on timer 2, channel 3
 #ifdef USE_SPL
@@ -269,12 +275,16 @@ void analogWrite(uint8_t pin, int val)
 					TIM2_OCPOLARITY_HIGH
 				);
 #else
-				TIM2->CCER2 |= TIM2_CCER2_CC3E;
+				// write MSB first, DO NOT USE ldw instruction!
+				tmp = TIM2->CCER2 & (uint8_t)(~(TIM2_CCER2_CC3E | TIM2_CCER2_CC3P));
+				TIM2->CCER2 = tmp | TIM2_CCER2_CC3E;
+//				TIM2->CCER2 |= TIM2_CCER2_CC3E;
 				TIM2->CCMR3 = TIM2_OCMODE_PWM1 | TIM2_CCMR_OCxPE;
 				TIM2->CCR3H = 0;
 				TIM2->CCR3L = (uint8_t)(val);
 #endif
 				break;
+#endif
 			case NOT_ON_TIMER:
 			default:
 				if (val < 128) {

@@ -10,15 +10,15 @@ LD=$(BINDIR)/sdld
 LIBBASE=../../STM8S_StdPeriph_Driver
 SDUINO=../../sduino
 
-CFLAGS= --debug -mstm8 -DF_CPU=16000000L -DSTM8S103 \
+CFLAGS= --debug -mstm8 -DF_CPU=16000000L -DSTM8S103 -DSUPPORT_ALTERNATE_MAPPINGS \
 	-I. -I$(SDUINO) -I$(LIBBASE)/inc -I/usr/share/sdcc/include/
-# -DSUPPORT_ALTERNATE_MAPPINGS 
 
 LDFLAGS=-L$(LIBBASE)/src -L/opt/sdcc/share/sdcc/lib/stm8 -lstm8s103
 
 OBJECTS=$(BASENAME).rel
-SDOBJECTS=main.rel wiring.rel wiring_digital.rel wiring_analog.rel \
-	HardwareSerial.rel Print.rel
+SDOBJECTS=
+#	main.rel wiring.rel wiring_digital.rel wiring_analog.rel \
+#	HardwareSerial.rel Print.rel
 
 .PHONY: all clean flash
 

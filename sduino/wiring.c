@@ -487,8 +487,8 @@ void init()
 	TIM1_Cmd(ENABLE);
 	TIM1_CtrlPWMOutputs(ENABLE);
 #else
-//	TIM1->CCER1 = 0;	// channel 1 and 2 disabled
-//	TIM1->CCER2 = 0;	// channel 3 and 4 disabled
+	TIM1->CCER1 = 0;	// channel 1 and 2 disabled
+	TIM1->CCER2 = 0;	// channel 3 and 4 disabled
 
 	TIM1->CCMR1 = TIM1_OCMODE_PWM2 | TIM1_CCMR_OCxPE;
 	TIM1->CCMR2 = TIM1_OCMODE_PWM2 | TIM1_CCMR_OCxPE;
@@ -537,8 +537,8 @@ void init()
 	TIM2_OC3PreloadConfig(ENABLE); // TIM2->CCMR3 |= (uint8_t)TIM2_CCMR_OCxPE;
 	TIM2_Cmd(ENABLE);	// TIM2->CR1 |= (uint8_t)TIM2_CR1_CEN;
 #else
-//	TIM2->CCER1 = 0;	// channel 1 and 2 disabled
-//	TIM2->CCER2 = 0;	// channel 3 and 4 disabled
+	TIM2->CCER1 = 0;	// channel 1 and 2 disabled
+	TIM2->CCER2 = 0;	// channel 3 and 4 disabled
 
 	TIM2->CCMR1 = TIM2_OCMODE_PWM1 | TIM2_CCMR_OCxPE;
 	TIM2->CCMR2 = TIM2_OCMODE_PWM1 | TIM2_CCMR_OCxPE;
