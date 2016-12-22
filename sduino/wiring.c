@@ -101,7 +101,11 @@ INTERRUPT_HANDLER(TIM4_UPD_OVF_IRQHandler, ITC_IRQ_TIM4_OVF) /* TIM4 UPD/OVF */
 	timer4_overflow_count++;
 
 	/* Clear Interrupt Pending bit */
-	TIM4_ClearITPendingBit(TIM4_IT_UPDATE);	// TIM4->SR1 = (uint8_t)(~0x01);
+#ifdef USE_SPL
+	TIM4_ClearITPendingBit(TIM4_IT_UPDATE);
+#else
+	TIM4->SR1 = (uint8_t)(~TIM4_IT_UPDATE);
+#endif
 }
 
 unsigned long millis()
@@ -120,12 +124,13 @@ unsigned long millis()
 
 unsigned long micros()
 {
+#ifdef USE_SPL
 	unsigned long m;
 	uint8_t t;
 
 	BEGIN_CRITICAL
 	m = timer4_overflow_count;
-	t = TIM4->CNTR;		// spl: TIM4_GetCounter()
+	t = TIM4_GetCounter();
 
 	// check if a fresh update event is still pending
 	// if (TIM4->SR1 & 0x01)
@@ -140,6 +145,28 @@ unsigned long micros()
 //	m <<= 2;
 	m *= ((T4PRESCALER_FACTOR*1000000L)/(F_CPU));
 	return m;
+#else
+	unsigned long m;
+	uint8_t t;
+
+	BEGIN_CRITICAL
+	m = timer4_overflow_count;
+	t = TIM4->CNTR;
+
+	// check if a fresh update event is still pending
+	// if (TIM4->SR1 & 0x01)
+	if ((TIM4->SR1 & (uint8_t)TIM4_IT_UPDATE) && (t < (T4PERIOD-1)))
+		m++;
+	END_CRITICAL
+
+//	return ((m << 8) + t) * (64 / clockCyclesPerMicrosecond());
+//	return ((m*250+t) * (64/16) );	// FIXME: use calculated value
+	m *= T4PERIOD;
+	m += t;
+//	m <<= 2;
+	m *= ((T4PRESCALER_FACTOR*1000000L)/(F_CPU));
+	return m;
+#endif
 }
 
 
@@ -425,9 +452,10 @@ void init()
 
 	UART1_DeInit();
 
-	// set timer 0 prescale factor to 64, period 0 (=256)
+	// set timer 4 prescale factor and period (typ. @16MHz: 64*250=1ms)
 	TIM4_DeInit();
-//	TIM4_TimeBaseInit(TIM4_PRESCALER_64, 249);
+#ifdef USE_SPL
+	// set timer 4 prescale factor and period (typ. @16MHz: 64*250=1ms)
 	TIM4_TimeBaseInit(T4PRESCALER, (uint8_t) T4PERIOD-1);
 	/* Clear TIM4 update flag */
 	TIM4_ClearFlag(TIM4_FLAG_UPDATE);	// TIM4->SR1 = (uint8_t)(~0x01);
@@ -435,7 +463,19 @@ void init()
 	TIM4_ITConfig(TIM4_IT_UPDATE, ENABLE);	// TIM4->IER |= (uint8_t)TIM4_IT;
 	/* Enable TIM4 */
 	TIM4_Cmd(ENABLE);	// TIM4->CR1 |= TIM4_CR1_CEN;
-	
+#else
+	// set timer 4 prescale factor (typ. @16MHz: 64)
+	TIM4->PSCR = (uint8_t)(T4PRESCALER);
+	// set timer 4 autoreload value/period (typ. @16MHz: 250-1)
+	TIM4->ARR = (uint8_t)(T4PERIOD-1);
+	/* Clear TIM4 update flag by writing 0. Writing ones has no effect */
+	TIM4->SR1 = ~TIM4_FLAG_UPDATE;
+	/* Enable update interrupt */
+	TIM4->IER |= TIM4_IT_UPDATE;
+	/* Enable TIM4 */
+	TIM4->CR1 |= TIM4_CR1_CEN;
+#endif
+
 
 	// timers 1 and 2 are used for phase-correct hardware pwm
 	// this is better for motors as it ensures an even waveform
