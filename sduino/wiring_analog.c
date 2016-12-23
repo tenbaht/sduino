@@ -61,7 +61,7 @@ int analogRead(uint8_t pin)
 	if (pin>=NUM_ANALOG_INPUTS)
 		pin = digitalPinToAnalogChannelMap[pin-NUM_ANALOG_INPUTS];
 	if (pin>=NUM_ANALOG_INPUTS) return 0;	// illegal pin number
-#if 0
+#ifdef USE_SPL
 	// using spl functions:
 	ADC1_ConversionConfig(ADC1_CONVERSIONMODE_SINGLE, pin+2, ADC1_ALIGN_RIGHT);
 	ADC1_PrescalerConfig(ADC1_PRESSEL_FCPU_D18);

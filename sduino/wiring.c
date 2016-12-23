@@ -72,9 +72,9 @@
 #define FRACT_INC ((MICROSECONDS_PER_TIMER0_OVERFLOW % 1000) >> 3)
 #define FRACT_MAX (1000 >> 3)
 
-volatile unsigned long timer4_overflow_count = 0;
-volatile unsigned long timer4_millis = 0;
-static unsigned char timer4_fract = 0;
+volatile unsigned long timer4_overflow_count;// = 0;
+volatile unsigned long timer4_millis;// = 0;
+static unsigned char timer4_fract;// = 0;
 
 //void TIM4_UPD_OVF_IRQHandler(void) __interrupt(ITC_IRQ_TIM4_OVF) /* TIM4 UPD/OVF */
 //void TIM4_UPD_OVF_IRQHandler(void) __interrupt(5)//FIXME

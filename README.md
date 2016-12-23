@@ -30,7 +30,6 @@ besorgen. Das braucht aber eine neue Version der libstdc++6. Deshalb:
 	apt-get update
 	apt-get install libstdc++6
 
-
 	git clone https://github.com/vdudouyt/stm8flash.git
 	cd stm8flash
 	make
@@ -76,12 +75,13 @@ HardwareSerial
 Print (without float)
 digitalWrite()
 analogRead
-analogWrite
 delay
 
 implemented and partly working:
+analogWrite
 
 tested, but not working:
+alternateFunctions()
 
 not tested
 ShiftIn()
@@ -91,6 +91,7 @@ ShiftOut()
 not implemented:
 yield()
 SPI
+Wire/I2C
 
 
 ## Differences to the original Arduino environment
@@ -474,6 +475,25 @@ Handassembler.
 added alternateFunction() to allow switching some pins to their alternate
 functions. This allows for three more PWM pins, but maybe it adds to much
 complexity for the Arduino API. Not sure if it should stay.
+
+
+### Performance compared with the original Arduino environment
+
+Benchmarking the original Arduino examples from Arduino 1.0.5. The simple
+Blinky cmopiles to 57 bytes of code, the total binary including the sduino
+libraries is 1868 Bytes (0x74c).
+
+So far, wiring_analog depends on wiring_digital, even when analogWrite is not
+used. This could be solved by compiling the sduino functions separately into
+a library.
+
+name			code	total	linked files other than main and wiring
+BareMinimum		2	1238	-
+Blink			57	1870	wiring_digital
+AnalogReadSerial	205	3452	digital, analog, serial, print
+DigitalReadSerial	57	3160	digital, serial, print
+Fade			226	2189	digital, analog
+ReadAnalogVoltage			float not yet implemented
 
 
 ### Besondere Features, die von Arduino nicht unterstützt werden
