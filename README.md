@@ -488,12 +488,15 @@ used. This could be solved by compiling the sduino functions separately into
 a library.
 
 name			code	total	linked files other than main and wiring
+01. Basics/
 BareMinimum		2	1238	-
 Blink			57	1870	wiring_digital
 AnalogReadSerial	205	3452	digital, analog, serial, print
 DigitalReadSerial	57	3160	digital, serial, print
 Fade			226	2189	digital, analog
 ReadAnalogVoltage			float not yet implemented
+02. Digital/
+Debounce		192	2016	digital
 
 
 ### Besondere Features, die von Arduino nicht unterstützt werden
