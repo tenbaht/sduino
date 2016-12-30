@@ -15,7 +15,8 @@
 #ifndef _SPI_H_INCLUDED
 #define _SPI_H_INCLUDED
 
-#include <Arduino.h>
+#include <wiring_private.h>
+//#include <Arduino.h>
 
 // SPI_HAS_TRANSACTION means SPI has beginTransaction(), endTransaction(),
 // usingInterrupt(), and SPISetting(clock, bitOrder, dataMode)
@@ -58,19 +59,20 @@
 #define SPI_MODE2 0x02
 #define SPI_MODE3 0x03
 
-#define SPI_MODE_MASK	0x03	// CPOL = bit 1, CPHA = bit 0 on SPI_CR1
+#define SPI_MODE_MASK	(3<<0)	// CPOL = bit 1, CPHA = bit 0 on SPI_CR1
 #define SPI_CLOCK_MASK	(7<<3)	// BR[2:0] is bit [5:3] on SPI_CR1
+#define SPI_BITORDER_MASK (1<<7)
 
 // instead of a SPISettings class object just use a 8 bit integer value.
-// bit 0:    bitOrder
-// bit 1..2: dataMode
+// bit 0..1: dataMode
 // bit 3..5: clock divider
+// bit 7:    bitOrder
 //FIXME: it would be more efficient to change the definitions for bitOrder to
-// values 0x00 and 0x80 to encode it in bit 7 and dataMode in bit 0/1. But it
+// values 0x00 and 0x80 to avoid shifting here. But it
 // is not clear if different values for MSBFIRST would influence other code.
 //FIXME: this is always inline. Efficient for constant values, terrible for
 // variables.
-#define SPISettings(C,O,M) ((O)|(M<<1)|( \
+#define SPISettings(C,O,M) ((((O==LSBFIRST)?0x80:0)|M)|( \
     F_CPU/2<=C ? SPI_CLOCK_DIV2 : (\
     F_CPU/4<=C ? SPI_CLOCK_DIV4 : (\
     F_CPU/8<=C ? SPI_CLOCK_DIV8 : (\
@@ -78,7 +80,7 @@
     F_CPU/32<=C ? SPI_CLOCK_DIV32 : (\
     F_CPU/64<=C ? SPI_CLOCK_DIV64 : (\
     F_CPU/128<=C ? SPI_CLOCK_DIV128 : (\
-    SPI_CLOCK_DIV_256 )))))))))
+    SPI_CLOCK_DIV256 )))))))))
 
 
   // Initialize the SPI library
@@ -101,8 +103,8 @@ void SPI_notUsingInterrupt(uint8_t interruptNumber);
   // Before using SPI.transfer() or asserting chip select pins,
   // this function is used to gain exclusive access to the SPI bus
   // and configure the correct settings.
+inline void SPI_beginTransaction(uint8_t settings) {
 /*
-  inline static void beginTransaction(SPISettings settings) {
     if (interruptMode > 0) {
       uint8_t sreg = SREG;
       noInterrupts();
@@ -118,19 +120,17 @@ void SPI_notUsingInterrupt(uint8_t interruptNumber);
         interruptSave = sreg;
       }
     }
-
+*/
     #ifdef SPI_TRANSACTION_MISMATCH_LED
-    if (inTransactionFlag) {
+    if (SPI_inTransactionFlag) {
       pinMode(SPI_TRANSACTION_MISMATCH_LED, OUTPUT);
       digitalWrite(SPI_TRANSACTION_MISMATCH_LED, HIGH);
     }
-    inTransactionFlag = 1;
+    SPI_inTransactionFlag = 1;
     #endif
 
-    SPCR = settings.spcr;
-    SPSR = settings.spsr;
+    SPI->CR1 = settings | SPI_CR1_MSTR | SPI_CR1_SPE;
   }
-*/
 
 // Write to the SPI bus (MOSI pin) and also receive (MISO pin)
 inline uint8_t SPI_transfer(uint8_t data)
@@ -173,26 +173,62 @@ inline uint8_t SPI_transfer(uint8_t data)
     return out.val;
   }
 */
+
+#define SPIv ((volatile SPI_TypeDef *) SPI_BaseAddress)
+// transmit a data block over SPI bus
+void SPI_transfer_s(void *buf, size_t count);
+void SPI_transfer_asm(void *buf, size_t count);
 /*
-  inline static void transfer(void *buf, size_t count) {
+inline void SPI_transfer_asm(void *buf, size_t count) {
+	__asm
+	tnzw	y			; if (count==0) return
+	jreq	$00001
+	ld		a,(x)		; SPI->DR = *p
+	ld		0x5204,a
+$00002:
+	decw	y			; while (--count>0) {
+	jreq	$00003
+	ld		a,(1,x)		; out = *(p+1)
+$00004:
+	btjf	0x5203,#1,$00004	; while (!(SPI->SR & SPI_SR_TXE));
+	ld		0x5204,a	; SPI->DR = out
+$00005:
+	btjf	0x5203,#0,$00005	; while (!(SPI->SR & SPI_SR_RXNE));
+	ld		a,0x5204	; in = SPI->DR
+	ld		(x),a		; *p++ = in
+	incw	x
+$00003:					; } // while
+	btjf	0x5203,#0,$00003	; while (!(SPI->SR & SPI_SR_RXNE));
+	ld		a,0x5204	; *p = SPI->DR
+	ld		(x),a
+$00001:
+	__endasm;
+}
+*/
+inline void SPI_transfer_n(void *buf, size_t count) {
+    uint8_t *p;
+    uint8_t in,out;
+
     if (count == 0) return;
-    uint8_t *p = (uint8_t *)buf;
-    SPDR = *p;
+    p = (uint8_t *)buf;
+    SPIv->DR = *p;			// start sending the first byte
     while (--count > 0) {
-      uint8_t out = *(p + 1);
-      while (!(SPSR & _BV(SPIF))) ;
-      uint8_t in = SPDR;
-      SPDR = out;
+      out = *(p + 1);
+//      while (!(SPIv->SR & SPI_SR_TXE)) ; // wait for transmit buffer empty
+      while (!(*((volatile uint8_t *)0x5203) & SPI_SR_TXE)) ; // wait for transmit buffer empty
+	  SPI->DR = out;		// second byte into transmit buffer
+      while ((SPIv->SR & SPI_SR_RXNE)==0) ; // wait for first received byte
+      in = SPI->DR;
       *p++ = in;
     }
-    while (!(SPSR & _BV(SPIF))) ;
-    *p = SPDR;
+    while ((SPIv->SR & SPI_SR_RXNE)==0) ; // wait for last received byte
+    *p = SPIv->DR;
   }
-*/
+
   // After performing a group of transfers and releasing the chip select
   // signal, this function allows others to access the SPI bus
-/*
-  inline static void endTransaction(void) {
+
+inline void SPI_endTransaction(void) {
     #ifdef SPI_TRANSACTION_MISMATCH_LED
     if (!inTransactionFlag) {
       pinMode(SPI_TRANSACTION_MISMATCH_LED, OUTPUT);
@@ -200,7 +236,7 @@ inline uint8_t SPI_transfer(uint8_t data)
     }
     inTransactionFlag = 0;
     #endif
-
+/*
     if (interruptMode > 0) {
       #ifdef SPI_AVR_EIMSK
       uint8_t sreg = SREG;
@@ -216,8 +252,9 @@ inline uint8_t SPI_transfer(uint8_t data)
         SREG = interruptSave;
       }
     }
-  }
 */
+  }
+
 
 // Disable the SPI bus
 void SPI_end(void);

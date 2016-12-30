@@ -19,7 +19,7 @@ static uint8_t SPI_interruptMode;// = 0;
 static uint8_t SPI_interruptMask;// = 0;
 static uint8_t SPI_interruptSave;// = 0;
 #ifdef SPI_TRANSACTION_MISMATCH_LED
-static uint8_t SPI_inTransactionFlag;// = 0;
+uint8_t SPI_inTransactionFlag;// = 0;
 #endif
 
 
@@ -31,11 +31,11 @@ void SPI_begin(void)
   volatile uint8_t *reg;
 
   BEGIN_CRITICAL	// Protect from a scheduler and prevent transactionBegin
-  if (!initialized) {
+  if (!SPI_initialized) {
     // Set SS to high so a connected chip will be "deselected" by default
-    uint8_t port = digitalPinToPort(SS);
-    uint8_t bit = digitalPinToBitMask(SS);
-    volatile uint8_t *reg = portModeRegister(port);
+    port = digitalPinToPort(SS);
+    bit = digitalPinToBitMask(SS);
+    reg = portModeRegister(port);
 
     // if the SS pin is not already configured as an output
     // then set it high (to enable the internal pull-up resistor)
@@ -50,7 +50,7 @@ void SPI_begin(void)
 
     // using software slave select frees the SS pins to be used as a general
     // IO pin without interfering with the SPI logic.
-    SPI->CR2 |= SPI_CR2_SSI | SPI_CR2_SSM;
+    SPI->CR2 = SPI_CR2_SSI | SPI_CR2_SSM;
 
     // Warning: if the SS pin ever becomes a LOW INPUT then SPI
     // automatically switches to Slave, so the data direction of
@@ -66,22 +66,166 @@ void SPI_begin(void)
     pinMode(SCK, OUTPUT);
     pinMode(MOSI, OUTPUT);
   }
-  initialized++; // reference count
+  SPI_initialized++; // reference count
   END_CRITICAL
 }
+
+
+#ifdef DONT_USE_ASSEMBLER
+void SPI_transfer_s(void *buf, size_t count) {
+    uint8_t *p;
+    uint8_t in,out;
+
+    if (count == 0) return;
+    p = (uint8_t *)buf;
+    SPI->DR = *p;			// start sending the first byte
+    while (--count > 0) {
+      out = *(p + 1);
+      while ((SPI->SR & SPI_SR_TXE)==0) ; // wait for transmit buffer empty
+	  SPI->DR = out;		// second byte into transmit buffer
+      while ((SPI->SR & SPI_SR_RXNE)==0) ; // wait for first received byte
+      in = SPI->DR;
+      *p++ = in;
+    }
+    while ((SPI->SR & SPI_SR_RXNE)==0) ; // wait for last received byte
+    *p = SPI->DR;
+  }
+#else
+/*
+ * to allow for an (almost) continues transfer the the following data byte
+ * is written to TX before the received byte is read. So we have to make
+ * sure to read the RX buffer within less than 16 clock cycles from the
+ * moment of writing the TX data. This requires an interrupt block.
+ *
+ * pseudocode:
+
+        init x,y
+        dr = *x
+        while (--y)
+        {
+                wait for txe, dr=x[1]
+                wait for rxne, *x = dr
+                x++
+        }
+        wait for rxne, *x = dr
+
+ */
+#if 0
+void SPI_transfer_asm(void *buf, size_t count) {
+	(void) buf;		// dummy code to avoid unreferenced
+	(void) count;		// function argument warning
+__asm
+	ldw	y,(5,SP)
+	jreq	$00001
+	ldw	x,(3,SP)
+	ld	a,(x)		; SPI->DR = *p
+	ld	0x5204,a
+$00002:
+	decw	y		; while (--count>0) {
+	jreq	$00003
+	ld	a,(1,x)		;   out = *(p+1)
+	btjf	0x5203,#1,.	;   while (!(SPI->SR & SPI_SR_TXE));
+	sim			;   make sure to avoid a possible
+				;   race condition to not miss the
+				;   received data
+	ld	0x5204,a	;   SPI->DR = out
+	btjf	0x5203,#0,.	;   while (!(SPI->SR & SPI_SR_RXNE));
+	ld	a,0x5204	;   in = SPI->DR
+	rim
+	ld	(x),a		;   *p++ = in
+	incw	x
+	jra	$00002		; } // while
+$00003:
+	btjf	0x5203,#0,.	; while (!(SPI->SR & SPI_SR_RXNE));
+	ld	a,0x5204	; *p = SPI->DR
+	ld	(x),a
+$00001:
+__endasm;
+}
+#endif
+
+#if 1
+void SPI_transfer_asm(void *buf, size_t count) {
+	(void) buf;		// dummy code to avoid unreferenced
+	(void) count;		// function argument warning
+__asm
+	ldw	y,(5,SP)
+	jreq	$00001
+	ldw	x,(3,SP)
+	ld	a,(x)		; SPI->DR = *p
+	ld	0x5204,a
+	jra	$00003		; start the while loop
+$00002:
+	ld	a,(1,x)		;   out = *(p+1)
+	btjf	0x5203,#1,.	;   while (!(SPI->SR & SPI_SR_TXE));
+	sim			;   make sure to avoid a possible
+				;   race condition to not miss the
+				;   received data
+	ld	0x5204,a	;   SPI->DR = out
+	btjf	0x5203,#0,.	;   while (!(SPI->SR & SPI_SR_RXNE));
+	ld	a,0x5204	;   in = SPI->DR
+	rim
+	ld	(x),a		;   *p++ = in
+	incw	x
+$00003:
+	decw	y
+	jrne	$00002		; } // while
+	btjf	0x5203,#0,.	; while (!(SPI->SR & SPI_SR_RXNE));
+	ld	a,0x5204	; *p = SPI->DR
+	ld	(x),a
+$00001:
+__endasm;
+}
+#endif
+
+#endif
+
+#if 0
+// slightly simplyfied functon:
+__asm
+        ldw     y,#8
+        ldw     x,#_buf
+        ld      a,(x)           ; dr = *x
+        ld      0x5204,a
+$00030:                         ; while (--y) {
+        decw    y
+        jreq    $00031
+        btjf    0x5203,#1,.     ;   while (!(SPI->SR & SPI_SR_TXE));
+        ld      a,(1,x)
+        ld      0x5204,a
+        btjf    0x5203,#0,.     ;   while (!(SPI->SR & SPI_SR_RXNE));
+        ld      a,0x5204        ;   *x = dr
+        ld      (x),a
+        incw    x               ;   x++
+        jra     $00030          ; }
+$00031:
+        btjf    0x5203,#0,.     ; while (!(SPI->SR & SPI_SR_RXNE));
+        ld      a,0x5204        ; *x = dr
+        ld      (x),a
+__endasm;
+#endif
+
 
 
 void SPI_end(void) {
   BEGIN_CRITICAL
   // Decrease the reference counter
-  if (initialized)
-    initialized--;
+  if (SPI_initialized)
+    SPI_initialized--;
   // If there are no more references disable SPI
-  if (!initialized) {
+  if (!SPI_initialized) {
+    // follow the procedure recommended in RM0016, section 20.3.8:
+    // Wait until RXNE = 1 to receive the last data
+//    while ((SPI->SR&SPI_SR_RXNE)==0);
+    // Wait until TXE = 1
+    while ((SPI->SR&SPI_SR_TXE)==0);
+    // Then wait until BSY = 0
+    while (SPI->SR&SPI_SR_BSY);
+    // Disable the SPI
     SPI->CR1 &= ~SPI_CR1_SPE;
-    interruptMode = 0;
+    SPI_interruptMode = 0;
     #ifdef SPI_TRANSACTION_MISMATCH_LED
-    inTransactionFlag = 0;
+    SPI_inTransactionFlag = 0;
     #endif
   }
   END_CRITICAL
