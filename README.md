@@ -1,20 +1,141 @@
-# STM8 breakout board
+# sdunino
 
-CPU STM8S103F3P6
-Pins 1:1 vom STM8S103F3P6 auf die Pinleisten rausgeführt.
-LED Test (rot) an PB5 (Pin 11)
+Getting started on the STM8 CPU the easy way by using an Arduino-like
+programming API.
 
-Anschluss an mein Flashtool:
+The SPL (standard peripheral library) offered by ST is very powerful and
+very similar to the one used for the STM32 CPU series offering an relatively
+easy upgrade path in case a project outgrows the capabilities of the 8 bit
+STM8 series. But using that library is not very intuitive and still
+requires a fairly detailed knowledge of the CPU internals.
 
-3V3	1	2
-SWIM	2	5
-GND	3	7
-NRST	4	9
+The Arduino project was very successful in offering a simplified API hiding
+most of the complexity of embedded system programming while still allowing
+for advanced programming technics.
+
+This project wants to offer the most important features of the Arduino API
+for the STM8S. I needed to port an existing project from an ATmega to a
+better suited (read: cheaper) platform. As the project is based on some
+Arduino libraries porting parts of the Arduino environment was a logical
+first step. After doing that porting the whole software was finished in a
+couple of days.
+
+
+
+## Used tools
+
+This project is based on free tools that are available for Linux, MacOS and
+Windows. It uses the small devices C compiler (SDCC) for compiling, stm8flash
+for uploading the binary to the CPU and simple Makefiles for the build
+process.
+
+SDCC support for the STM8 is still quite fresh and not very mature. It
+improves significantly from version to version. Make sure to use the latest
+nightly build from the project site on sourceforge, not the older versions
+included in your distribution. v3.5.0 as included with ubuntu 16.04 is
+definitly too old and compilation will fail due to some compiler errors.
+
+Support for the Cosmic compiler under Windows and integration into the ST
+visual developer IDE might be possible, but is not done (yet?).
+
+
+
+## Supported hardware
+
+The simple STM8S103F breakout board as sold on aliexpress.com for well below
+one dollar. Adding a ST-Link V2 compatible flash programmer and you are set
+for the STM8S world for less than five dollar (3 breakout boards and one
+flash tool)
+
+*Amazing!*
+
+The breakout boards are build around a CPU STM8S103F3P6 with 16MHz internal
+oszillator, 8kB flash, 1kB RAM and 640 byte EEPROM. The CPU includes a
+UART, SPI, I2C, PWM, 10 bit ADC, 3 timer and up to 14 I/O pins. So not
+unalike an Atmel ATmega8.
+
+One (red) LED is connected to GPIO PB5 (cpu pin 11). The push button is for
+reset. The CPU runs on 3.3V, a linear regulator is integrated on the
+board. The micro USB connector is only for (5V) power supply, the data lines
+are not connected.
+
+All CPU pins are easily accessible on (optional) pin headers
+(pitch 2.54mm, perfect for breadboards). 
+
+
+I am using the ST-Link V2 compatible flash tool in the green plastic
+housing. The one in the metal housing uses a different pinout.
+
+Connection to the green flashtool:
+
+	signal	CPU	flash-
+	name	board	tool
+	------	------	------
+	3V3	1	2
+	SWIM	2	5
+	GND	3	7
+	NRST	4	9
+
+
+
+
+## Compatibility with the Arduino world
+
+I adopted the Arduino core functionality for the STM8S to set up a simple
+programming environment. But unfortunatly there is no free C++ compiler
+for these CPUs. This makes it impossible to do a full port of the whole
+enviroment and integrate it with the Arduino IDE and build system as is
+has been done for the STM32 and the ESP8266.
+
+This is not a drop in replacement for an AVR, but the programming API is
+still very, very similar. Adopting existing libraries from C++ to C and for
+the use with the simplified C API is often easy and can be a matter of
+minutes, depending on the degree of dependency on specific hardware
+features.
+
+The whole Arduino build system is deeply based on the assumption of C++
+source files. I am not sure if it would be even possible to configure a
+build process based only on C files. This leaves a full IDE integration
+being very unlikely.
+
+Using a converter/compiler to translate from C++ to C like cfront might be
+an option.
+
+
+
+## why use a STM8 instead of an ATmega?
+
+The community support and the mere number of existing libraries for all kind
+of sensors and hardware is outstanding in the Arduino world. If you just
+want to get something done, go for an Arduino board. Nothing will show
+faster and easier results.
+
+The fairly new ESP-14 modules includes a STM8S003F3P6. Wifi and a
+programmable I/O-CPU for just over two dollar - that might be the most
+compelling reason to get started on the STM8S series. Apart from pure
+curiosity and eagerness to learn something new, of course.
+
+For commercial use the STM8S offers some interesting advantages:
+
+Motor control: The STM8 has a strong focus on motor and position control
+systems. Things you need to handle yourself on an ATmega are implemented in
+hardware and work independently of the state of the software. There is even
+hardware support for quadrature encoders as used in position sensors and
+rotary encoders.
+
+low power modes: The numbers in the datasheets don't look that different,
+but in real life the STM8 can be powered two or three times longer using the
+same battery capacity due to the finer control on the power modes (very,
+very careful programming required)
+
+Value for the money: 40 to 60 cents for a STM8 with 14 I/O pins compared to
+1.60 to 3.00$ for an ATmega8. 
+
 
 
 ## Compiler
 
-Anleitungen:
+Tutorials:
 http://www.cnx-software.com/2015/04/13/how-to-program-stm8s-1-board-in-linux/
 
 STM8-Support erst ab Version 3.4 in Ubuntu 14.10. Für 14.4:
@@ -79,6 +200,7 @@ delay
 
 implemented and partly working:
 analogWrite
+SPI: usable, only interrupt support is missing
 
 tested, but not working:
 alternateFunctions()
@@ -90,8 +212,8 @@ ShiftOut()
 
 not implemented:
 yield()
-SPI
 Wire/I2C
+
 
 
 ## Differences to the original Arduino environment
@@ -102,7 +224,10 @@ OUTPUT_OD	output, open drain, fast mode
 OUTPUT_FAST	output, push-pull, fast mode
 OUTPUT_OD_FAST	output, open drain, fast mode
 
-Timer: millis() uses timer4.
+Timer: millis() uses timer4. The prescaler and end value is calculated at
+compile time for a cycle time as close to 1ms as possible. (default @16Mhz:
+prescaler=64, counter cycle=250 (end value=249), resulting in exaclty 1ms
+intervals.
 
 
 
@@ -166,6 +291,9 @@ Fehlende Features:
 
 ## ST Standard Library
 
+Can be downloaded from ST website (Free registration required). For use with
+SDCC it needs to be patched:
+
 	git clone https://github.com/g-gabber/STM8S_StdPeriph_Driver.git
 	git clone https://github.com/gicking/SPL_2.2.0_SDCC_patch.git
 	cp ../STM8S_SPL_2.2.0/Libraries/STM8S_StdPeriph_Driver/inc/stm8s.h .
@@ -173,9 +301,9 @@ Fehlende Features:
 	 cp -av  ../STM8S_StdPeriph_Lib/Project/STM8S_StdPeriph_Template/stm8s_conf.h .
 	cp -av  ../STM8S_StdPeriph_Lib/Project/STM8S_StdPeriph_Template/stm8s_it.h .
 
-.rel-Files sind die Objekt-Files .o
+.rel-files are the object files .o
 
-Zusätzlich nötiger Patch in stm8s_itc.c:
+Needed additional patch for stm8s_itc.c:
 
 	--- stm8s_itc.c~	2014-10-21 17:32:20.000000000 +0200
 	+++ stm8s_itc.c	2016-12-11 21:56:41.786048494 +0100
@@ -193,7 +321,7 @@ Zusätzlich nötiger Patch in stm8s_itc.c:
 	 #endif /* _COSMIC_*/
 	 }
 
-Dann klappt es mit diesem Makefile für den stm8s103:
+Now the library can be compiled for the STM8S103 using this Makefile:
 
 	CC=sdcc
 	AR=sdar
@@ -222,13 +350,17 @@ Dann klappt es mit diesem Makefile für den stm8s103:
 		rm -f *.lib *.rst *.rel *.lst *.ihx *.sym *.asm *.lk *.map
 		rm -f $(EXECUTABLE)
 
-Diese Library kann dann in blink_spl oder uart_spl verwendet werden.
-Leider werden weiterhin stm8s_conf.h und stm8s_it.h benötigt.
+This library can now be used for linking with blink_spl or uart_spl. The
+files stm8s_conf.h and stm8s_it.h are still needed for compilation.
 
-Der Linker entfernt aber keine unbenutzten Funktionen, sondern nur
-ungenutzte Module (=Sammlungen, die aus einer Quell-Datei entstanden sind).
-Wird eine Funktion benötigt, kommt das ganze Modul mit
-**=> In einer Library besser jede Funktion in eine eigene Datei **
+The linker does not remove individual unused functions from an object file,
+only complete object files can be skipped.
+**=> for building a library it is better to separate all functions into
+individual source files **
+
+The STP library folder contains a script to do this separation before
+compilation.
+FIXME: description needed
 
 Erklärung wie zumindest die Interrupt-Vektoren in die eigene Datei kommen
 können:
