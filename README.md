@@ -116,30 +116,30 @@ No real documentation yet. Have a look in the `test` directory and use one of th
 
 ## Why use a STM8 instead of an ATmega?
 
+The fairly new ESP-14 module includes a STM8S003F3P6. Wifi and a
+programmable I/O-CPU for just over two dollars - that might be the most
+compelling reason to get started on the STM8S series. Apart from pure
+curiosity and eagerness to learn something new, of course.
+
 The community support and the sheer number of existing libraries for all kinds
 of sensors and hardware is outstanding in the Arduino world. If you just
 want to get something done, go for an Arduino board. Nothing will give you
 faster and easier results.
 
-The fairly new ESP-14 modules include a STM8S003F3P6. Wifi and a
-programmable I/O-CPU for just over two dollars - that might be the most
-compelling reason to get started on the STM8S series. Apart from pure
-curiosity and eagerness to learn something new, of course.
-
 For commercial use the STM8S offers some interesting advantages:
 
-Motor control: The STM8 has a strong focus on motor and position control
+**Motor control**: The STM8 has a strong focus on motor and position control
 systems. Things you need to handle yourself on an ATmega are implemented in
 hardware and work independently of the state of the software. There is even
 hardware support for quadrature encoders as used in position sensors and
 rotary encoders.
 
-Low power modes: The numbers in the datasheets don't look that different,
+**Low power modes**: The numbers in the datasheets don't look that different,
 but in real life the STM8 can be powered two or three times longer using the
 same battery capacity due to the finer control on the power modes (very,
 very careful programming required).
 
-Value for the money: 40 to 60 cents for a STM8 with 14 I/O pins compared to
+**Value for the money**: 40 to 60 cents for a STM8 with 14 I/O pins compared to
 $1.60-$3.00 for an ATmega8.
 
 
@@ -149,52 +149,61 @@ $1.60-$3.00 for an ATmega8.
 Tutorials:
 http://www.cnx-software.com/2015/04/13/how-to-program-stm8s-1-board-in-linux/
 
-STM8-Support erst ab Version 3.4 in Ubuntu 14.10. Für 14.4:
+STM8-Support only started with Version 3.4 in Ubuntu 14.10. For Ubuntu 14.4:
 
 	add-apt-repository ppa:laczik/ppa
 	apt-get update
 	apt-get install sdcc
 
-Besser einen aktuellen snapshot-build direkt von http://sdcc.sourceforge.net/
-besorgen. Das braucht aber eine neue Version der libstdc++6. Deshalb:
+But even this version is fairly old and contains some known bugs. Better
+download a current snapshot build from http://sdcc.sourceforge.net/ and
+unpack it to `/opt/sdcc`. This requires a current version of libstdc++6:
 
 	add-apt-repository ppa:ubuntu-toolchain-r/test
 	apt-get update
 	apt-get install libstdc++6
+
+If you prefer to compile stm8flash yourself instead of using the Linux
+binaries in the `tools` directory:
 
 	git clone https://github.com/vdudouyt/stm8flash.git
 	cd stm8flash
 	make
 	sudo make install
 
-Beispiele besorgen:
+Download some example code:
 
 	git clone https://github.com/vdudouyt/sdcc-examples-stm8.git
 	cd sdcc-examples-stm8
 
-Sind eigentlich für STM8L gedacht, da ist die Pinbelegung etwas anders und
-muss entsprechend angepasst werden. Am Ende hochladen:
+The examples are meant for the STM8L, not the STM8S. This requires some
+changes to account for the different pinout and register addresses (see below).
+Finally upload the binary to the CPU:
 
 	stm8flash -c stlinkv2 -p stm8s103?3 -w blinky.ihx
 
 
-### Mixing with assembler
+
+### Mixing assembler code with C code
 
 c-code:
+
 	stacktest(0x1234, 0x5678);
 
 assember:
+
 	push    #0x78
 	push    #0x56
 	push    #0x34
 	push    #0x12
 	call    _stacktest
 
-resulting stack content (starting at [SP]):
+resulting stack content (starting at [SP], using simulator sstm8):
+
 	0> dch 0x17f9
 	0x017f9 c0 80 ab 12 34 56 78 5b ....4Vx[
 
-=> first paramter starts at [SP+3], HSB first.
+=> first paramter starts at [SP+3], MSB first.
 
 
 
@@ -202,34 +211,34 @@ resulting stack content (starting at [SP]):
 ## Current status and to-do list
 
 #### tested and working
-pinMode()  
+`pinMode()`  
+`digitalWrite()`  
+`analogRead()`  
+`delay()`  
 HardwareSerial  
 Print (without float)  
-digitalWrite()  
-analogRead  
-delay  
+SPI: working, no interrupt support
 
 #### implemented and partly working
-analogWrite()  
-SPI: usable, only interrupt support is missing  
+`analogWrite()`  
 
 #### tested, but not working
-alternateFunctions()  
+`alternateFunctions()`  
 
 #### not tested
-ShiftIn()  
-ShiftOut()  
+`ShiftIn()`  
+`ShiftOut()`  
 
 
 #### not implemented
-yield()  
+`yield()`  
 Wire/I2C  
 
 
 
 ## Differences from the original Arduino environment
 
-Additional output pin modes:
+#### Additional output pin modes
 
 |Pin mode		|Pin properties
 |---------------------	|------------------------------------
@@ -238,8 +247,11 @@ Additional output pin modes:
 |`OUTPUT_FAST`		|output, push-pull, fast mode  
 |`OUTPUT_OD_FAST`	|output, open drain, fast mode  
 
-Timer: millis() uses timer4. The prescaler and end value is calculated at
-compile time for a cycle time as close to 1ms as possible. Default values @16Mhz:
+
+#### Timer
+
+`millis()` uses timer4. The prescaler and end value is calculated at compile
+time for a cycle time as close to 1ms as possible. Default values @16Mhz:
 prescaler=64, counter cycle=250 (end value=249), resulting in exactly 1ms
 intervals.
 
@@ -247,9 +259,12 @@ intervals.
 
 ## Further reading and application notes
 
-STM8AF Flash programming manual (PM0051)  
-STM8 SWIM protocol and debug manual (UM0470)  
-Using the analog-to-digital converter of the STM8S microcontroller (AN2658)  
+[PM0051](http://www.st.com/resource/en/programming_manual/cd00191343.pdf):
+STM8AF Flash programming manual  
+[UM0470](http://www.st.com/resource/en/user_manual/cd00173911.pdf):
+STM8 SWIM protocol and debug manual  
+[AN2658](http://www.st.com/resource/en/application_note/cd00176594.pdf):
+Using the analog-to-digital converter of the STM8S microcontroller  
 
 Many examples and presentations about the STM8S:  
 https://github.com/VincentYChen/STM8teach  
@@ -261,8 +276,8 @@ http://blog.mark-stevens.co.uk/2012/09/single-scan-adc-on-the-stm8s/
 Example for RS-232 handling with SPL:  
 https://sourceforge.net/p/oggstreamer/oggs-stm8-firmware-001/ci/master/tree/rx_ringbuffer.c  
 
-AN3139 Migration guideline within the STM8L familiy  
-http://www.st.com/content/ccc/resource/technical/document/application_note/07/d7/59/69/74/8b/48/8a/CD00262293.pdf/files/CD00262293.pdf/jcr:content/translations/en.CD00262293.pdf  
+[AN3139](http://www.st.com/resource/en/application_note/cd00262293.pdf):
+Migration guideline within the STM8L familiy  
 
 
 
@@ -305,64 +320,75 @@ Fehlende Features:
 
 ## ST Standard Library
 
-Can be downloaded from the ST website (free registration required). For use with
-SDCC it needs to be patched:
+Can be [downloaded from the ST website]
+(http://www.st.com/en/embedded-software/stsw-stm8069.html)
+(free registration required). Don't miss the Examples folder within the
+downloaded zip file. This is the most useful reference on using this library
+and programming the STM8 in general.
+
+For use with SDCC the library needs to be patched:
 
 	git clone https://github.com/g-gabber/STM8S_StdPeriph_Driver.git
 	git clone https://github.com/gicking/SPL_2.2.0_SDCC_patch.git
 	cp ../STM8S_SPL_2.2.0/Libraries/STM8S_StdPeriph_Driver/inc/stm8s.h .
 	patch -p1 < ../SPL_2.2.0_SDCC_patch/STM8_SPL_v2.2.0_SDCC.patch
-	 cp -av  ../STM8S_StdPeriph_Lib/Project/STM8S_StdPeriph_Template/stm8s_conf.h .
+	cp -av  ../STM8S_StdPeriph_Lib/Project/STM8S_StdPeriph_Template/stm8s_conf.h .
 	cp -av  ../STM8S_StdPeriph_Lib/Project/STM8S_StdPeriph_Template/stm8s_it.h .
 
-.rel-files are the object files .o
+SDCC uses .rel as the file extension for its object files.
 
 Additional patch required for stm8s_itc.c:
 
-	--- stm8s_itc.c~	2014-10-21 17:32:20.000000000 +0200
-	+++ stm8s_itc.c	2016-12-11 21:56:41.786048494 +0100
-	@@ -55,9 +55,12 @@
-	   return; /* Ignore compiler warning, the returned value is in A register */
-	 #elif defined _RAISONANCE_ /* _RAISONANCE_ */
-	   return _getCC_();
-	-#else /* _IAR_ */
-	+#elif defined _IAR_ /* _IAR_ */
-	   asm("push cc");
-	   asm("pop a"); /* Ignore compiler warning, the returned value is in A register */
-	+#else /* _SDCC_ */
-	+  __asm__("push cc");
-	+  __asm__("pop a"); /* Ignore compiler warning, the returned value is in A register */
-	 #endif /* _COSMIC_*/
-	 }
+```diff
+--- stm8s_itc.c~	2014-10-21 17:32:20.000000000 +0200
++++ stm8s_itc.c	2016-12-11 21:56:41.786048494 +0100
+@@ -55,9 +55,12 @@
+   return; /* Ignore compiler warning, the returned value is in A register */
+ #elif defined _RAISONANCE_ /* _RAISONANCE_ */
+   return _getCC_();
+-#else /* _IAR_ */
++#elif defined _IAR_ /* _IAR_ */
+   asm("push cc");
+   asm("pop a"); /* Ignore compiler warning, the returned value is in A register */
++#else /* _SDCC_ */
++  __asm__("push cc");
++  __asm__("pop a"); /* Ignore compiler warning, the returned value is in A register */
+ #endif /* _COSMIC_*/
+ }
+```
+
+
 
 Now the library can be compiled for the STM8S103 using this Makefile:
 
-	CC=sdcc
-	AR=sdar
-	CFLAGS=-c -mstm8 -DSTM8S103 -I ../inc --opt-code-size -I.
-	LDFLAGS=-rc
-	SOURCES= \
-		stm8s_adc1.c	stm8s_awu.c	stm8s_beep.c	stm8s_clk.c \
-		stm8s_exti.c	stm8s_flash.c	stm8s_gpio.c	stm8s_i2c.c \
-		stm8s_itc.c	stm8s_iwdg.c	stm8s_rst.c	stm8s_spi.c \
-		stm8s_tim1.c	stm8s_tim2.c	stm8s_tim4.c	stm8s_uart1.c \
-		stm8s_wwdg.c
+```make
+CC=sdcc
+AR=sdar
+CFLAGS=-c -mstm8 -DSTM8S103 -I ../inc --opt-code-size -I.
+LDFLAGS=-rc
+SOURCES= \
+	stm8s_adc1.c	stm8s_awu.c	stm8s_beep.c	stm8s_clk.c \
+	stm8s_exti.c	stm8s_flash.c	stm8s_gpio.c	stm8s_i2c.c \
+	stm8s_itc.c	stm8s_iwdg.c	stm8s_rst.c	stm8s_spi.c \
+	stm8s_tim1.c	stm8s_tim2.c	stm8s_tim4.c	stm8s_uart1.c \
+	stm8s_wwdg.c
 
-	OBJECTS=$(SOURCES:.c=.o)
-	OBJECTS_LINK=$(SOURCES:.c=.rel)
-	EXECUTABLE=stm8s.lib
+OBJECTS=$(SOURCES:.c=.o)
+OBJECTS_LINK=$(SOURCES:.c=.rel)
+EXECUTABLE=stm8s.lib
 
-	all: $(SOURCES) $(EXECUTABLE)
+all: $(SOURCES) $(EXECUTABLE)
 
-	$(EXECUTABLE): $(OBJECTS)
-		$(AR) $(LDFLAGS) $(EXECUTABLE) $(OBJECTS_LINK)
+$(EXECUTABLE): $(OBJECTS)
+$(AR) $(LDFLAGS) $(EXECUTABLE) $(OBJECTS_LINK)
 
-	.c.o:
-		$(CC) $(CFLAGS) $< -o $@
+.c.o:
+	$(CC) $(CFLAGS) $< -o $@
 
-	clean:
-		rm -f *.lib *.rst *.rel *.lst *.ihx *.sym *.asm *.lk *.map
-		rm -f $(EXECUTABLE)
+clean:
+	rm -f *.lib *.rst *.rel *.lst *.ihx *.sym *.asm *.lk *.map
+	rm -f $(EXECUTABLE)
+```
 
 This library can now be used for linking with blink_spl or uart_spl. The
 files stm8s_conf.h and stm8s_it.h are still needed for compilation.
@@ -372,8 +398,8 @@ only complete object files can be skipped.
 **=> for building a library it is better to separate all functions into
 individual source files **
 
-The SPL folder contains a script to separate the functions before
-compilation.  
+The SPL folder in this archive contains a script `doit` to separate the
+functions before compilation.
 FIXME: description needed
 
 Erklärung wie zumindest die Interrupt-Vektoren in die eigene Datei kommen
@@ -381,26 +407,33 @@ können:
 http://richs-words.blogspot.de/2010/09/stm8s-interrupt-handling.html
 
 
+
 ### Interrupts
 
 Namen definiert in stm8s_itc.h
 Interrupt-Routine definieren:
 
-	/* UART1 TX */
-	void UART1_TX_IRQHandler(void) __interrupt(ITC_IRQ_UART1_TX)
-	{
-	}
+```c
+/* UART1 TX */
+void UART1_TX_IRQHandler(void) __interrupt(ITC_IRQ_UART1_TX)
+{
+}
+```
 
 Jetzt muss noch das passende IRQ-Enable-Flag gesetzt werden und Interrupt
 generell freigegeben werden, also hier:
 
-	UART1_ITConfig(UART1_IT_TXE, ENABLE);
-	enableInterrupts();
+```c
+UART1_ITConfig(UART1_IT_TXE, ENABLE);
+enableInterrupts();
+```
 
 Unklar ist, was die ITC-Prioritäten bewirken. Es geht jedenfalls auch ohne:
 
-	ITC_DeInit();
-	ITC_SetSoftwarePriority(ITC_IRQ_UART1_TX, ITC_PRIORITYLEVEL_2);
+```c
+ITC_DeInit();
+ITC_SetSoftwarePriority(ITC_IRQ_UART1_TX, ITC_PRIORITYLEVEL_2);
+```
 
 
 
@@ -419,7 +452,7 @@ STM8 uses the SWIM protocol, STM32 uses SWD protocol.
 | 4		| NRST
 
 
-Discovery STM32F0308 als ST-Link/V2 (SWD only):
+Discovery STM32F0308 as ST-Link/V2 (SWD only, not usable for the STM8):
 
 |Pin out CN3	| SWD
 |-----------	| --------------
@@ -451,7 +484,7 @@ Pinout of Chinese ST-Link V2-clone with metal housing:
 	5V	| 9 10|	5V
 		+-----+
 
-For Linux users: required lines in /etc/udev/rules.d/99-stlink.rules:
+For Linux: required lines in /etc/udev/rules.d/99-stlink.rules:
 
 	# ST-Link/V2 programming adapter
 
@@ -466,12 +499,15 @@ For Linux users: required lines in /etc/udev/rules.d/99-stlink.rules:
 
 
 
-## Anpassung der Beispielprogramme
+## Modifications for the sdcc example programs
 
-blinky.c: Pinbelegung
+blinky.c: LED pin assignment
 
-uart.c: Pinbelegung (TX auf D5), RX ist dann D6.
-Es wird mit 1200 Baud gesendet => nur 2MHz statt 16MHz
+**uart.c**:  pin assignment (TX is at PD5, RX is at PD6).  
+The UART is sending at 1200 Baud => CPU clock only 2MHz instead of 16MHz.
+The clock divider needs to be configured or a different baud rate prescale value
+has to be used. Pitfall: The register address for the clock divider is
+different for the STM8S and the STM8L.
 
 
 
