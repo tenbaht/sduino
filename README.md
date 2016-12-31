@@ -1,4 +1,4 @@
-# sdunino
+# sduino
 
 Getting started on the STM8 CPU the easy way by using an Arduino-like
 programming API.
@@ -19,6 +19,11 @@ better suited (read: cheaper) platform. As the project is based on some
 Arduino libraries porting parts of the Arduino environment was a logical
 first step. After doing that porting the whole software was finished in a
 couple of days.
+
+This whole thing is far from being a finished product. It is in alpha stage,
+but still already useful. It solved its purpose for me, it might me useful
+for others as well. The documentation is incomplete and written in a wild
+mix of English and German, but hopefully you can still figure it out.
 
 
 
@@ -110,7 +115,7 @@ of sensors and hardware is outstanding in the Arduino world. If you just
 want to get something done, go for an Arduino board. Nothing will show
 faster and easier results.
 
-The fairly new ESP-14 modules includes a STM8S003F3P6. Wifi and a
+The fairly new ESP-14 modules include a STM8S003F3P6. Wifi and a
 programmable I/O-CPU for just over two dollar - that might be the most
 compelling reason to get started on the STM8S series. Apart from pure
 curiosity and eagerness to learn something new, of course.
@@ -395,44 +400,45 @@ Unklar ist, was die ITC-Prioritäten bewirken. Es geht jedenfalls auch ohne:
 
 ## Programmer
 
-STM8 verwendet SWIM, STM32 aber SWD
+STM8 uses the SWIM protocol, STM32 uses SWD protocol.
 
-STM8-Board: SWIM-Verbinder P3
-1	3V3
-2	SWIM (PD1)
-3	GND
-4	NRST
+	STM8-Board: SWIM-Verbinder P3
+	1	3V3
+	2	SWIM (PD1)
+	3	GND
+	4	NRST
 
-Discovery STM32F0308 als ST-Link/V2:
-Belegung CN3 SWD:
-1	? detect oder so?
-2	JTCK/SWCLK
-3	GND
-4	JTMS/SWDIO
-5	NRST
-6	SWO (=SWIM?)
+Discovery STM32F0308 als ST-Link/V2 (SWD only):
 
-Pinbelegung der Version im grünen Plastikgehäuse:
+	Pin out CN3 SWD:
+	1	? detect oder so?
+	2	JTCK/SWCLK
+	3	GND
+	4	JTMS/SWDIO
+	5	NRST
+	6	SWO
 
--	+-----+
-T_JRST	| 1  2|	3V3
-5V	| 3  4|	T_JTCK/T_SWCLK
-SWIM	  5  6|	T_JTMS/T_SWDIO
-GND	| 7  8|	T_JTDO
-SWIM RST| 9 10|	T_JTDI
--	+-----+
+Pinout of chinese ST-Link V2-clone with green plasic housing:
 
-Pinbelegung der Version im Metallgehäuse
+		+-----+
+	T_JRST	| 1  2|	3V3
+	5V	| 3  4|	T_JTCK/T_SWCLK
+	SWIM	  5  6|	T_JTMS/T_SWDIO
+	GND	| 7  8|	T_JTDO
+	SWIM RST| 9 10|	T_JTDI
+		+-----+
 
--	+-----+
-RST	| 1  2|	SWDIO
-GND	| 3  4|	GND
-SWIM	  5  6|	SWCLK
-3V3	| 7  8|	3V3
-5V	| 9 10|	5V
--	+-----+
+Pinout of chinese ST-Link V2-clone with metal housing:
 
-Notwendiger Eintrag in /etc/udev/rules.d/99-stlink.rules:
+		+-----+
+	RST	| 1  2|	SWDIO
+	GND	| 3  4|	GND
+	SWIM	  5  6|	SWCLK
+	3V3	| 7  8|	3V3
+	5V	| 9 10|	5V
+		+-----+
+
+For Linux users: Needed lines in /etc/udev/rules.d/99-stlink.rules:
 
 	# ST-Link/V2 programming adapter
 
@@ -454,115 +460,145 @@ blinky.c: Pinbelegung
 uart.c: Pinbelegung (TX auf D5), RX ist dann D6.
 Es wird mit 1200 Baud gesendet => nur 2MHz statt 16MHz
 
-## denkbare Arduino-Zuordnung
-
-a) feste Kommunikationspins:
-STM8			Arduino
-Pin	Name	Alt	Pin		Alt
-D6	RX	Ain6	0	D0
-D5	TX	Ain5	1	D1
-A3	SS		10	B2	PWM
-C6	MOSI		11	B3	PWM
-C7	MISO		12	B4
-C5	SCK		13	B5	LED
-B5	SDA	LED	18	C4	Ain4
-B4	SCL		19	C5	Ain5
-
-b) analog:
-STM8			Arduino
-Pin	Name	Alt	Pin		Alt
-C4	Ain2
-D2	Ain3
-D3	Ain4
-(D5	Ain5	TX)
-(D6	Ain6	RX)
-
-c) PWM:
-STM8			Arduino
-Pin	Name	Alt	Pin		Alt
-			3
-			5
-			6
-			9
-(			10	)
-(			11	)
-
-d) LED: (Kollision)
-STM8			Arduino
-Pin	Name	Alt	Pin		Alt
-(B5	SDA		13	SCK)
 
 
-e) direkte Durchnummerierung nach Gehäusepins: (ab 1)
+## possible logical pin number mappings
 
- 1-3  -> PD4-PD6
- 4-6  -> PA1-PA3
- 7-8  -> PB5-PB4 (rev.)
- 9-13 -> PC3-PC7
-14-16 -> PD1-PD3
+Many Arduino-sketches and libraries contain hard-codes assumptions about the
+numbers of pins with special functions. Ideally, all these numbers would be
+the same and all programs could be compiled without changes. This is not
+possible, but lets check how close we could get.
 
-SPI: 6,11,12,13 (gleiche Nummern, aber andere Reichenfolge -> fehlerträchtig)
+a) match the communication pins:
+
+	STM8			Arduino
+	Pin	Name	Alt	Pin		Alt
+	D6	RX	Ain6	0	D0
+	D5	TX	Ain5	1	D1
+	A3	SS		10	B2	PWM
+	C6	MOSI		11	B3	PWM
+	C7	MISO		12	B4
+	C5	SCK		13	B5	LED
+	B5	SDA	LED	18	C4	Ain4
+	B4	SCL		19	C5	Ain5
+
+
+b) match the analog inputs:
+
+	STM8			Arduino
+	Pin	Name	Alt	Pin		Alt
+	C4	Ain2
+	D2	Ain3
+	D3	Ain4
+	(D5	Ain5	TX)
+	(D6	Ain6	RX)
+
+c) match the PWM-capable pins:
+
+	STM8			Arduino
+	Pin	Name	Alt	Pin		Alt
+				3
+				5
+				6
+				9
+	(			10	)
+	(			11	)
+
+d) match the LED: (collision)
+
+	STM8			Arduino
+	Pin	Name	Alt	Pin		Alt
+	(B5	SDA		13	SCK)
+
+
+e) simple serial numbering according to the CPU housing, starting at pin 1
+(pin numbers start at 1)
+
+	 1-3  -> PD4-PD6
+	 4-6  -> PA1-PA3
+	 7-8  -> PB5-PB4 (rev.)
+	 9-13 -> PC3-PC7
+	14-16 -> PD1-PD3
+
+SPI: 6,11,12,13 (same numbers as Arduino, but with different meanings ->
+error prone)
+
 I2C: 7,8
-Seriell: 2,3
-Analog: 2,3,10,15,16 (in Datenblattreihenfolge: 10,15,16,2,3)
 
- + gut beim Aufbau dem Steckbrett
- + logische Portzuordnung
- - analog wild verteilt
- - alle Funktionen auf total anderen Pinnummern
+serial: 2,3
 
-f) geometische Durchnummerierung, angefangen bei Pin 5/PA1 (ab 0)
+Analog: 2,3,10,15,16 (data sheet order would be: 10,15,16,2,3)
 
- 0-2  -> PA1-PA3
- 3-4  -> PB5-PB4 (rev.)
- 5-9 -> PC3-PC7
-10-15 -> PD1-PD6
+ + easy and logical for use on a breadboard
+ + logical port pin ordering
+ - analog pins are scattered
+ - all functions use totally different pin numbers than Arduino
 
-Seriell: 14,15
+f) simple serial numbering according to the CPU housing, starting at pin
+5/PA1 (pin numbers start at 0)
+
+	 0-2  -> PA1-PA3
+	 3-4  -> PB5-PB4 (rev.)
+	 5-9 -> PC3-PC7
+	10-15 -> PD1-PD6
+
+serial: 14,15
+
 SPI: 2,7,8,9
+
 I2C: 3,4
-Analog: 6,11,12,14,15 (evtl. mit Lücke nummerieren: A0, A1, A2, A4, A5)
-PWM: 2,5-9,11-13 (alles ausser 0,1,3,4,10,14-15)
+
+Analog: 6,11,12,14,15 (for an easier structure maybe use non-continous
+numbers for the Arduino-like Ax-numbers: A0, A1, A2, A4, A5)
+
+PWM: 2,5-9,11-13 (all except 0,1,3,4,10,14-15)
 
 PWM Bitmap pin 15-0: 0011 1011 1110 0100 = 0x3be4
 
- + auch gut beim Steckbrett
- + sehr logische Portzuordnung
- - analog noch immer verteilt
- + TX und RX sind die selten verwendeten analogen Pins A3/A4 oder A4/A5
- + analoge Pins wenigstens in Datenblattreihenfolge
- - alle Funktionen auf total anderen Pinnummern
+ + easy and logical for use on a breadboard
+ + very clear and logical port pin ordering
+ - analog pins are still scattered around
+ + TX and RX would be the rarely used analog pin numbers A3/A4 or A4/A5 at
+   the end of the analog pin number list
+ + at least the analog pins are in data sheet order
+ - all functions use totally different pin numbers than Arduino
 
 
 Vergleich der Ergebnisse: logische gegenüber geometrischer Pinnummerierung
 
-phys. STM8				nach	geometrische
-Pin	Name	Funktionen		Funkt.	streng	ab PA1
-1	PD4	UART_CLK/T2-1/beep	 5	1~	13~
-2	PD5	TX/Ain5			1	2	14/A3
-3	PD6	RX/Ain6			0	3	15/A4
-5	PA1	(OscIn, kein HS)	 6	4	0
-6	PA2	(OscIn, kein HS)	 7	5	1
-10	PA3	SS/T2-3			10	6~	2~
-11	PB5	SDA	LED		18	7	3
-12	PB4	SCL			19	8	4
-13	PC3	T1-3/[T1-n1]		 9	9~	5~(n~)
-14	PC4	T1-4/Ain2/[T1-n2]	4	10~	6~(n~)/A0
-15	PC5	SCK/[T2-1]		13	11~	7(~)
-16	PC6	MOSI/[T1-1]		11	12~	8(~)
-17	PC7	MISO/[T1-2]		12	13~	9(~)
-18	PD1	(SWIM)			 8	14	10
-19	PD2	Ain3/[T2-3]		3	15(~)	11(~~)/A1
-20	PD3	Ain4/T2-2		2	16~	12~/A2
+	phys. STM8				funct.	geometrical mapping
+	Pin	Name	Funktionen		mapping	strict	at PA1
+	1	PD4	UART_CLK/T2-1/beep	 5	1~	13~
+	2	PD5	TX/Ain5			1	2	14/A3
+	3	PD6	RX/Ain6			0	3	15/A4
+	5	PA1	(OscIn, kein HS)	 6	4	0
+	6	PA2	(OscIn, kein HS)	 7	5	1
+	10	PA3	SS/T2-3			10	6~	2~
+	11	PB5	SDA	LED		18	7	3
+	12	PB4	SCL			19	8	4
+	13	PC3	T1-3/[T1-n1]		 9	9~	5~(n~)
+	14	PC4	T1-4/Ain2/[T1-n2]	4	10~	6~(n~)/A0
+	15	PC5	SCK/[T2-1]		13	11~	7(~)
+	16	PC6	MOSI/[T1-1]		11	12~	8(~)
+	17	PC7	MISO/[T1-2]		12	13~	9(~)
+	18	PD1	(SWIM)			 8	14	10
+	19	PD2	Ain3/[T2-3]		3	15(~)	11(~~)/A1
+	20	PD3	Ain4/T2-2		2	16~	12~/A2
 
-Pinmapping nach Funktion:
-TX/RX,SPI,I2C wie Arduino,
-Analog auf D0-D4 (statt D14-D19),
-PWM 2,3,4,5,9,10,11,12,13 (Arduino PWM: 3,5,6,9,10,11, alles ausser 6 ist
-abgedeckt)
-nicht existent 14-17 -> evtl. besser I2C auf 14 und 15.
+functional pin mapping:
 
-Pinmapping streng geometrisch:
+TX/RX,SPI,I2C match the Arduino numbers
+
+Analog mapped to D0-D4 (instead of D14-D19),
+
+PWM 2,3,4,5,9,10,11,12,13 (Arduino PWM: 3,5,6,9,10,11, all matched except
+for pin 6)
+
+non-existant: 14-17 -> it might be better to map I2C to 14 and 15.
+
+
+strict geometrical pin mapping:
+
 SPI: 6,11,12,13 (gleiche Nummern, aber andere Reichenfolge -> fehlerträchtig)
 I2C: 7,8
 Seriell: 2,3
@@ -572,20 +608,23 @@ PWM alternate: 7,8,9
 PWM alternate negativ: 5,6
 PWM alternate doppelt: 11
 
-Pin remapping: Alternate function remapping register (AFR), EEPROM 0x4803
+### Pin remapping
+
+Alternate function remapping register (AFR), EEPROM 0x4803
 (OPT2) und 0x4804 (NOPT2, invertiert).  Programmierbar per SWIM (UM0470) und
 im IAP-Mode (PM0051)
-val	pin	0		1
-AFR7	C3,C4	default		TIM1_CH1N, TIM1_CH2N
-AFR4	B4,B5	default		ADC_ETR, TIM1_BKIN
-AFR3	C3	default		TLI
-AFR1	A3,D2	default		SPI_NSS, TIM2_CH3
-AFR0	C5-C7	GPIO/SPI	TIM2_CH1, TIM1_CH1, TIM1_CH2
+
+	val	pin	0		1
+	AFR7	C3,C4	default		TIM1_CH1N, TIM1_CH2N
+	AFR4	B4,B5	default		ADC_ETR, TIM1_BKIN
+	AFR3	C3	default		TLI
+	AFR1	A3,D2	default		SPI_NSS, TIM2_CH3
+	AFR0	C5-C7	GPIO/SPI	TIM2_CH1, TIM1_CH1, TIM1_CH2
 
 
 
 
-## Anmerkungen zur Arduino-Portierung
+## notes for the Arduino port
 
 use of the timers:
 timer1: PWM for PC6, PC7 (8,9), could be used for ADC
@@ -612,23 +651,23 @@ complexity for the Arduino API. Not sure if it should stay.
 ### Performance compared with the original Arduino environment
 
 Benchmarking the original Arduino examples from Arduino 1.0.5. The simple
-Blinky cmopiles to 57 bytes of code, the total binary including the sduino
+Blinky compiles to 57 bytes of code, the total binary including the sduino
 libraries is 1868 Bytes (0x74c).
 
 So far, wiring_analog depends on wiring_digital, even when analogWrite is not
 used. This could be solved by compiling the sduino functions separately into
 a library.
 
-name			code	total	linked files other than main and wiring
-01. Basics/
-BareMinimum		2	1238	-
-Blink			57	1870	wiring_digital
-AnalogReadSerial	205	3452	digital, analog, serial, print
-DigitalReadSerial	57	3160	digital, serial, print
-Fade			226	2189	digital, analog
-ReadAnalogVoltage			float not yet implemented
-02. Digital/
-Debounce		192	2016	digital
+	name			code	total	linked files other than main and wiring
+	01. Basics/
+	BareMinimum		2	1238	-
+	Blink			57	1870	wiring_digital
+	AnalogReadSerial	205	3452	digital, analog, serial, print
+	DigitalReadSerial	57	3160	digital, serial, print
+	Fade			226	2189	digital, analog
+	ReadAnalogVoltage			float not yet implemented
+	02. Digital/
+	Debounce		192	2016	digital
 
 
 ### Besondere Features, die von Arduino nicht unterstützt werden
