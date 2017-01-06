@@ -84,10 +84,34 @@ void pinMode1(uint8_t pin, uint8_t mode)
 	}
 #endif
 
+#if 0
+;	pinmode.c: 10: uint8_t bit = digitalPinToBitMask(pin);
+	clrw	x
+	ld	a,(0x03, sp)
+	ld	xl,a
+	addw	x, #_digital_pin_to_bit_mask_PGM+0
+	ld	a, (x)		; bit
+	ld	yl,a		; yl = bit
+	cpl	a
+	ld	yh,a		; yh = ~bit
 
+;	pinmode.c: 11: uint8_t port = digitalPinToPort(pin);
+	addw	x, #_digital_pin_to_bit_mask_PGM - _digital_pin_to_bit_mask_PGM
+	ld	a, (x)		; port
+	jreq	00018$
+
+	sll
+	clrw
+	ld	xl,a
+	addw	x, #_port_to_output_PGM+0	; x = gpio
+
+	ld	a,(0x04,sp)	; a = mode, flags are set
+#endif
 //
 void pinMode_asm(uint8_t pin, uint8_t mode)
 {
+	(void)	pin;	// empty code to avoid warning
+	(void)	mode;
 __asm
 	sub	sp, #16
 ;	pinmode.c: 10: uint8_t bit = digitalPinToBitMask(pin);
@@ -98,7 +122,7 @@ __asm
 	adc	a, #0x00
 	ld	xh, a
 	ld	a, (x)
-	ld	(0x04, sp), a
+	ld	(0x04, sp), a	; bit := 4
 ;	pinmode.c: 11: uint8_t port = digitalPinToPort(pin);
 	ldw	x, #_digital_pin_to_port_PGM+0
 	ld	a, xl
@@ -109,7 +133,7 @@ __asm
 	ld	a, (x)
 	ld	(0x03, sp), a
 	ld	a, (0x03, sp)
-	ld	(0x07, sp), a
+	ld	(0x07, sp), a	; port := 7
 ;	pinmode.c: 14: if (port == NOT_A_PIN) return;
 	tnz	(0x03, sp)
 	jrne	00002$
@@ -125,7 +149,7 @@ __asm
 	addw	x, (0x0e, sp)
 	ldw	x, (x)		; jetzt ist gpio in x
 
-	ld	a, (0x10, sp)	; bit
+	ld	a, (0x04, sp)	; bit
 	ld	yl,a		; yl = bit
 	cpl	a
 	ld	yh,a		; yh = ~bit
@@ -161,7 +185,7 @@ __asm
 	ld	(4,x),a
 ;	pinmode.c: 27: gpio->DDR &= ~bit;	// set direction before
 	ld	a,yh
-	and	a,(2,x)
+and	a,(2,x)
 	ld	(2,x),a
 ;	pinmode.c: 28: gpio->CR1 |=  bit;	// activating the pull up
 	ld	a,yl
@@ -230,7 +254,23 @@ __endasm;
 
 void setup(void)
 {
-	pinMode1(1,OUTPUT);
+	// expected result: xx xx 00 00 00
+	pinMode_asm(PA1,INPUT);
+
+	// expected result: xx xx 20 20 00
+	pinMode_asm(PB5,OUTPUT);
+
+	// expected result: xx xx 00 10 00
+	pinMode_asm(PC4,INPUT_PULLUP);
+
+	// expected result: xx xx 20 10 00
+	pinMode_asm(PC5,OUTPUT_OD);
+
+	// expected result: xx xx 02 02 02
+	pinMode_asm(PD1,OUTPUT_FAST);
+
+	// expected result: xx xx 42 02 42
+	pinMode_asm(PD6,OUTPUT_OD_FAST);
 }
 
 
