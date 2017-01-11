@@ -75,13 +75,17 @@ housing. The one in the metal housing uses a different pinout.
 
 Connection to the green flashtool:
 
-|Signal name |CPU board |Flash tool |
-|------ |-----: |-----: |
-|3V3    |1      |2      |
-|SWIM   |2      |5      |
-|GND    |3      |7      |
-|NRST   |4      |9      |
+|Signal name	|CPU board	|Flash tool	|Metal flash tool
+|------ 	|-----:		|-----: 	|-----:
+|3V3    	|1      	|2      	| 7
+|SWIM   	|2      	|5      	| 5
+|GND    	|3      	|7      	| 3
+|NRST   	|4      	|9      	| 1
 
+My breakout boards came preprogrammed with a blink program and with active
+write protection bits. For unlocking before first use:
+
+	stm8flash -cstlinkv2 -pstm8s103?3 -u
 
 
 ## Compatibility with the Arduino world
