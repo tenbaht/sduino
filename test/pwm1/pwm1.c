@@ -14,6 +14,19 @@ uint8_t val;
 int8_t	inc;
 
 
+void printnib(uint8_t val)
+{
+	if (val>9) val+='A'-'9'-1;
+	Print_print_c(val+'0');
+}
+
+void printhex(uint8_t val)
+{
+	printnib(val>>4);
+	printnib(val&15);
+}
+
+
 void dump_hexline(uint8_t *adr)
 {
 	uint8_t i;
@@ -21,8 +34,9 @@ void dump_hexline(uint8_t *adr)
 	Print_print_ub((uint32_t) adr, HEX);
 	Print_print_c(' ');
 	for (i=0; i<16; i++) {
-		Print_print_ub(adr[i], HEX);
-		if (i==8) Print_print_c(' ');
+//		Print_print_ub(adr[i], HEX);
+		printhex(adr[i]);
+		if (i==7) Print_print_c(' ');
 		Print_print_c(' ');
 	}
 }
@@ -72,10 +86,10 @@ void loop (void)
 	int8_t i;
 	uint8_t *tmp;
 
-//	analogWrite( 7,val);
-//	analogWrite(12,val);
-//	analogWrite( 2,val);
-	i=16; while(i) analogWrite(--i, val);
+	analogWrite(PC3,val);// T1-3, 5,val);
+	analogWrite(PC4,val);// T1-4, 6,val);
+	analogWrite(PD3,val);// T2-2, 12,val);
+//	i=16; while(i) analogWrite(--i, val);
 
 	printStr("val=");
 	Print_println_u(val);
