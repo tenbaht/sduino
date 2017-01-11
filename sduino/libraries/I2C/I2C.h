@@ -1,5 +1,9 @@
 /*
-  I2C.h   - I2C library
+  I2C.h - I2C library
+  Based on the I2C library for Arduino by Wayne Truchsess.
+  Ported to C for the STM8S by Michael Mayer.
+  Rev 5.0s1 - ported to C for the STM8S103F3 using SDCC
+
   Copyright (c) 2011-2012 Wayne Truchsess.  All right reserved.
   Rev 5.0 - January 24th, 2012
           - Removed the use of interrupts completely from the library
@@ -87,49 +91,35 @@
 
 
 
-class I2C
-{
-  public:
-    I2C();
-    void begin();
-    void end();
-    void timeOut(uint16_t);
-    void setSpeed(uint8_t); 
-    void pullup(uint8_t);
-    void scan();
-    uint8_t available();
-    uint8_t receive();
-    uint8_t write(uint8_t, uint8_t);
-    uint8_t write(int, int); 
-    uint8_t write(uint8_t, uint8_t, uint8_t);
-    uint8_t write(int, int, int);
-    uint8_t write(uint8_t, uint8_t, char*);
-    uint8_t write(uint8_t, uint8_t, uint8_t*, uint8_t);
-    uint8_t read(uint8_t, uint8_t);
-    uint8_t read(int, int);
-    uint8_t read(uint8_t, uint8_t, uint8_t);
-    uint8_t read(int, int, int);
-    uint8_t read(uint8_t, uint8_t, uint8_t*);
-    uint8_t read(uint8_t, uint8_t, uint8_t, uint8_t*);
+    void I2C_begin();
+    void I2C_end();
+    void I2C_timeOut(uint16_t);
+    void I2C_setSpeed(uint8_t); 
+    void I2C_pullup(uint8_t);
+    void I2C_scan();
+    uint8_t I2C_available();
+    uint8_t I2C_receive();
+    uint8_t I2C_write(uint8_t, uint8_t);
+    uint8_t I2C_write(uint8_t, uint8_t, uint8_t);
+    uint8_t I2C_write(uint8_t, uint8_t, char*);
+    uint8_t I2C_write(uint8_t, uint8_t, uint8_t*, uint8_t);
+    uint8_t I2C_read(uint8_t, uint8_t);
+    uint8_t I2C_read(uint8_t, uint8_t, uint8_t);
+    uint8_t I2C_read(uint8_t, uint8_t, uint8_t*);
+    uint8_t I2C_read(uint8_t, uint8_t, uint8_t, uint8_t*);
 
 
-  private:
-    uint8_t start();
-    uint8_t sendAddress(uint8_t);
-    uint8_t sendByte(uint8_t);
-    uint8_t receiveByte(uint8_t);
-    uint8_t stop();
-    void lockUp();
-    uint8_t returnStatus;
-    uint8_t nack;
-    uint8_t data[MAX_BUFFER_SIZE];
-    static uint8_t bytesAvailable;
-    static uint8_t bufferIndex;
-    static uint8_t totalBytes;
-    static uint16_t timeOutDelay;
+//  private:
+    uint8_t I2C_start();
+    uint8_t I2C_sendAddress(uint8_t);
+    uint8_t I2C_sendByte(uint8_t);
+    uint8_t I2C_receiveByte(uint8_t);
+    uint8_t I2C_stop();
+    void I2C_lockUp();
 
-};
-
-extern I2C I2c;
+// not sure if these really need to be public:
+    extern uint8_t returnStatus;
+    extern uint8_t nack;
+    extern uint8_t data[MAX_BUFFER_SIZE];
 
 #endif
