@@ -84,9 +84,17 @@ void pinMode1(uint8_t pin, uint8_t mode)
 	}
 #endif
 
-#if 0
+//
+void pinMode_asm(uint8_t pin, uint8_t mode)
+{
+	(void)	pin;	// empty code to avoid warning
+	(void)	mode;
+__asm
+	sub	sp, #16
+#if 1
 ;	pinmode.c: 10: uint8_t bit = digitalPinToBitMask(pin);
 	clrw	x
+
 	ld	a,(0x03, sp)
 	ld	xl,a
 	addw	x, #_digital_pin_to_bit_mask_PGM+0
@@ -96,24 +104,17 @@ void pinMode1(uint8_t pin, uint8_t mode)
 	ld	yh,a		; yh = ~bit
 
 ;	pinmode.c: 11: uint8_t port = digitalPinToPort(pin);
-	addw	x, #_digital_pin_to_bit_mask_PGM - _digital_pin_to_bit_mask_PGM
+;;hier	addw	x, #_digital_pin_to_bit_mask_PGM - _digital_pin_to_bit_mask_PGM
 	ld	a, (x)		; port
 	jreq	00018$
 
-	sll
-	clrw
+	sll	a
+	clrw	x
 	ld	xl,a
 	addw	x, #_port_to_output_PGM+0	; x = gpio
 
 	ld	a,(0x04,sp)	; a = mode, flags are set
-#endif
-//
-void pinMode_asm(uint8_t pin, uint8_t mode)
-{
-	(void)	pin;	// empty code to avoid warning
-	(void)	mode;
-__asm
-	sub	sp, #16
+#else
 ;	pinmode.c: 10: uint8_t bit = digitalPinToBitMask(pin);
 	ldw	x, #_digital_pin_to_bit_mask_PGM+0
 	ld	a, xl
@@ -154,6 +155,7 @@ __asm
 	cpl	a
 	ld	yh,a		; yh = ~bit
 	ld	a, (0x14, sp)	; a=mode, flags are set
+#endif
 
 ; gpio->DDR: (2,x) (war an c,SP)
 ; gpio->CR1: (3,x) (war an 8,SP)
@@ -252,25 +254,43 @@ __endasm;
 //
 
 
+uint8_t checkresult(uint8_t *adr, uint8_t *data)
+{
+	uint8_t i,ok;
+
+	ok = 1;
+	for (i=0; i<3; ++i) {
+		if (adr[2+i] != data[i]) ok=0;
+	}
+	return ok;
+}
+
+
 void setup(void)
 {
 	// expected result: xx xx 00 00 00
 	pinMode_asm(PA1,INPUT);
+	checkresult(GPIOA_BaseAddress, "\x00\x00\x00");
 
 	// expected result: xx xx 20 20 00
 	pinMode_asm(PB5,OUTPUT);
+	checkresult(GPIOB_BaseAddress, "\x20\x20\x00");
 
 	// expected result: xx xx 00 10 00
 	pinMode_asm(PC4,INPUT_PULLUP);
+	checkresult(GPIOC_BaseAddress, "\x00\x10\x00");
 
 	// expected result: xx xx 20 10 00
 	pinMode_asm(PC5,OUTPUT_OD);
+	checkresult(GPIOC_BaseAddress, "\x20\x10\x00");
 
 	// expected result: xx xx 02 02 02
 	pinMode_asm(PD1,OUTPUT_FAST);
+	checkresult(GPIOD_BaseAddress, "\x02\x02\x02");
 
 	// expected result: xx xx 42 02 42
 	pinMode_asm(PD6,OUTPUT_OD_FAST);
+	checkresult(GPIOD_BaseAddress, "\x42\x02\x42");
 }
 
 

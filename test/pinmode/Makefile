@@ -20,7 +20,7 @@ OBJECTS=$(BASENAME).rel
 SDOBJECTS=main.rel wiring.rel wiring_digital.rel SPI.rel \
 	HardwareSerial.rel Print.rel
 
-.PHONY: all clean flash
+.PHONY: all clean flash statistics
 
 #all: $(OBJECTS)
 
@@ -39,6 +39,13 @@ flash: $(EXECUTABLE)
 
 readopt:
 	stm8flash -c stlinkv2 -p stm8s103?3 -s opt -r opt.bin
+
+
+# lists the length of functions and constants defined in the primary source
+# file
+statistics: $(EXECUTABLE)
+	grep "[0-9] _" $(BASENAME).rst |\
+	awk 'BEGIN {print "length\tfunction\n------\t----------";}{ a=strtonum("0x"$$1);if (name) print a-s "\t" name; s=a; name=$$3}'
 
 
 clean: 
