@@ -63,7 +63,7 @@
 #include <WProgram.h>
 #endif
 
-#include <inttypes.h>
+//#include <inttypes.h>
 
 #ifndef I2C_h
 #define I2C_h
@@ -100,23 +100,24 @@
     uint8_t I2C_available();
     uint8_t I2C_receive();
     uint8_t I2C_write(uint8_t, uint8_t);
-    uint8_t I2C_write(uint8_t, uint8_t, uint8_t);
-    uint8_t I2C_write(uint8_t, uint8_t, char*);
-    uint8_t I2C_write(uint8_t, uint8_t, uint8_t*, uint8_t);
+    uint8_t I2C_write_c(uint8_t, uint8_t, uint8_t);
+    uint8_t I2C_write_s(uint8_t, uint8_t, char*);
+    uint8_t I2C_write_sn(uint8_t, uint8_t, uint8_t*, uint8_t);
     uint8_t I2C_read(uint8_t, uint8_t);
-    uint8_t I2C_read(uint8_t, uint8_t, uint8_t);
-    uint8_t I2C_read(uint8_t, uint8_t, uint8_t*);
-    uint8_t I2C_read(uint8_t, uint8_t, uint8_t, uint8_t*);
+    uint8_t I2C_read_c(uint8_t, uint8_t, uint8_t);
+    uint8_t I2C_read_s(uint8_t, uint8_t, uint8_t*);
+    uint8_t I2C_read_sn(uint8_t, uint8_t, uint8_t, uint8_t*);
 
 
 //  private:
-    uint8_t I2C_start();
+/*
+    uint8_t I2C_start(void);
     uint8_t I2C_sendAddress(uint8_t);
     uint8_t I2C_sendByte(uint8_t);
     uint8_t I2C_receiveByte(uint8_t);
-    uint8_t I2C_stop();
-    void I2C_lockUp();
-
+    uint8_t I2C_stop(void);
+    void I2C_lockUp(void);
+*/
 // not sure if these really need to be public:
     extern uint8_t returnStatus;
     extern uint8_t nack;

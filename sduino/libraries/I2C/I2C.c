@@ -63,7 +63,7 @@
 #include <WProgram.h>
 #endif
 
-#include <inttypes.h>
+//#include <inttypes.h>
 #include "I2C.h"
 
 
@@ -77,14 +77,20 @@ static uint8_t bufferIndex = 0;
 static uint8_t totalBytes = 0;
 static uint16_t timeOutDelay = 0;
 
+static uint8_t start(void);
+static uint8_t sendAddress(uint8_t);
+static uint8_t sendByte(uint8_t);
+static uint8_t receiveByte(uint8_t);
+static uint8_t stop(void);
+static void lockUp(void);
 
 
 ////////////// Public Methods ////////////////////////////////////////
 
 
-
 void I2C_begin()
 {
+#if 0
   #if defined(__AVR_ATmega168__) || defined(__AVR_ATmega8__) || defined(__AVR_ATmega328P__)
     // activate internal pull-ups for twi
     // as per note from atmega8 manual pg167
@@ -102,18 +108,34 @@ void I2C_begin()
   TWBR = ((F_CPU / 100000) - 16) / 2;
   // enable twi module and acks
   TWCR = _BV(TWEN) | _BV(TWEA); 
+#else 
+	/* I2C Initialize */
+	I2C_Init(
+		I2C_MAX_STANDARD_FREQ,	// 100000// I2C_SPEED,
+		0xA0,		// OwnAddress, egal
+		I2C_DUTYCYCLE_2,	// 0x00
+		I2C_ACK_CURR,		// 0x01
+		I2C_ADDMODE_7BIT,	// 0x00
+		16		// InputClockFreqencyMhz
+	);
+#endif
 }
 
+#if 0
 void I2C_end()
 {
   TWCR = 0;
 }
+#endif
 
+#if 0
 void I2C_timeOut(uint16_t _timeOut)
 {
   timeOutDelay = _timeOut;
 }
+#endif
 
+#if 0
 void I2C_setSpeed(uint8_t _fast)
 {
   if(!_fast)
@@ -125,7 +147,9 @@ void I2C_setSpeed(uint8_t _fast)
     TWBR = ((F_CPU / 400000) - 16) / 2;
   }
 }
+#endif
 
+#if 0
 void I2C_pullup(uint8_t activate)
 {
   if(activate)
@@ -157,7 +181,9 @@ void I2C_pullup(uint8_t activate)
     #endif
   }
 }
+#endif
 
+#if 0
 void I2C_scan()
 {
   uint16_t tempTime = timeOutDelay;
@@ -194,13 +220,16 @@ void I2C_scan()
   if(!totalDevicesFound){Serial.println("No devices found");}
   timeOutDelay = tempTime;
 }
+#endif
 
-
+#if 0
 uint8_t I2C_available()
 {
   return(bytesAvailable);
 }
+#endif
 
+#if 0
 uint8_t I2C_receive()
 {
   bufferIndex = totalBytes - bytesAvailable;
@@ -212,7 +241,7 @@ uint8_t I2C_receive()
   bytesAvailable--;
   return(data[bufferIndex]);
 }
-
+#endif
   
 /*return values for new functions that use the timeOut feature 
   will now return at what point in the transmission the timeout
@@ -262,6 +291,7 @@ uint8_t I2C_write(uint8_t address, uint8_t registerAddress)
   return(returnStatus);
 }
 
+#if 1
 uint8_t I2C_write_c(uint8_t address, uint8_t registerAddress, uint8_t data)
 {
   returnStatus = 0;
@@ -293,7 +323,9 @@ uint8_t I2C_write_c(uint8_t address, uint8_t registerAddress, uint8_t data)
   }
   return(returnStatus);
 }
+#endif
 
+#if 0
 uint8_t I2C_write_s(uint8_t address, uint8_t registerAddress, char *data)
 {
   uint8_t bufferLength = strlen(data);
@@ -301,6 +333,7 @@ uint8_t I2C_write_s(uint8_t address, uint8_t registerAddress, char *data)
   returnStatus = write(address, registerAddress, (uint8_t*)data, bufferLength);
   return(returnStatus);
 }
+#endif
 
 uint8_t I2C_write_sn(uint8_t address, uint8_t registerAddress, uint8_t *data, uint8_t numberBytes)
 {
@@ -337,6 +370,7 @@ uint8_t I2C_write_sn(uint8_t address, uint8_t registerAddress, uint8_t *data, ui
   return(returnStatus);
 }
 
+#if 0
 uint8_t I2C_read(uint8_t address, uint8_t numberBytes)
 {
   bytesAvailable = 0;
@@ -379,7 +413,9 @@ uint8_t I2C_read(uint8_t address, uint8_t numberBytes)
   }
   return(returnStatus);
 }
+#endif
 
+#if 0
 uint8_t I2C_read(uint8_t address, uint8_t registerAddress, uint8_t numberBytes)
 {
   bytesAvailable = 0;
@@ -439,7 +475,9 @@ uint8_t I2C_read(uint8_t address, uint8_t registerAddress, uint8_t numberBytes)
   }
   return(returnStatus);
 }
+#endif
 
+#if 0
 uint8_t I2C_read_sn(uint8_t address, uint8_t numberBytes, uint8_t *dataBuffer)
 {
   bytesAvailable = 0;
@@ -481,7 +519,9 @@ uint8_t I2C_read_sn(uint8_t address, uint8_t numberBytes, uint8_t *dataBuffer)
   }
   return(returnStatus);
 }
+#endif
 
+#if 0
 uint8_t I2C_read_sn(uint8_t address, uint8_t registerAddress, uint8_t numberBytes, uint8_t *dataBuffer)
 {
   bytesAvailable = 0;
@@ -541,13 +581,13 @@ uint8_t I2C_read_sn(uint8_t address, uint8_t registerAddress, uint8_t numberByte
   }
   return(returnStatus);
 }
-
+#endif
 
 /////////////// Private Methods ////////////////////////////////////////
 
-
-uint8_t I2C_start()
+static uint8_t start(void)
 {
+#if 0
   unsigned long startingTime = millis();
   TWCR = (1<<TWINT)|(1<<TWSTA)|(1<<TWEN);
   while (!(TWCR & (1<<TWINT)))
@@ -571,10 +611,15 @@ uint8_t I2C_start()
     return(bufferedStatus);
   }
   return(TWI_STATUS);
+#else
+	I2C->CR2 |= I2C_CR2_START;	// I2C_GenerateSTART(enable);
+	return 0;
+#endif
 }
 
-uint8_t I2C_sendAddress(uint8_t i2cAddress)
+static uint8_t sendAddress(uint8_t i2cAddress)
 {
+#if 0
   TWDR = i2cAddress;
   unsigned long startingTime = millis();
   TWCR = (1<<TWINT) | (1<<TWEN);
@@ -603,10 +648,23 @@ uint8_t I2C_sendAddress(uint8_t i2cAddress)
     lockUp();
     return(bufferedStatus);
   } 
+#else
+	/* Test on EV5 and clear it */
+	while (!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT));
+
+	/* Send the Address + Direction */
+	I2C->DR = i2cAddress;	// I2C_Send7bitAddress()
+
+	/* Test on EV6 and clear it */
+	while (!I2C_CheckEvent(I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED));
+
+	return 0;
+#endif
 }
 
-uint8_t I2C_sendByte(uint8_t i2cData)
+uint8_t sendByte(uint8_t i2cData)
 {
+#if 0
   TWDR = i2cData;
   unsigned long startingTime = millis();
   TWCR = (1<<TWINT) | (1<<TWEN);
@@ -635,10 +693,18 @@ uint8_t I2C_sendByte(uint8_t i2cData)
     lockUp();
     return(bufferedStatus);
   } 
+#else
+	/* Test on EV8 */
+	while (!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTING));
+
+	I2C->DR = i2cData;
+	return 1;
+#endif
 }
 
-uint8_t I2C_receiveByte(uint8_t ack)
+static uint8_t receiveByte(uint8_t ack)
 {
+#if 0
   unsigned long startingTime = millis();
   if(ack)
   {
@@ -665,10 +731,15 @@ uint8_t I2C_receiveByte(uint8_t ack)
     return(bufferedStatus);
   }
   return(TWI_STATUS); 
+#else
+	(void) ack;
+	return 1;
+#endif
 }
 
-uint8_t I2C_stop()
+static uint8_t stop(void)
 {
+#if 0
   unsigned long startingTime = millis();
   TWCR = (1<<TWINT)|(1<<TWEN)| (1<<TWSTO);
   while ((TWCR & (1<<TWSTO)))
@@ -681,11 +752,20 @@ uint8_t I2C_stop()
     }
        
   }
+#else
+	/* Test on EV8_2 */
+	while (!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED));
+
+	/* Generate a STOP condition */
+	I2C->CR2 |= I2C_CR2_STOP;
+#endif
   return(0);
 }
 
-void I2C_lockUp()
+static void lockUp(void)
 {
+#if 0
   TWCR = 0; //releases SDA and SCL lines to high impedance
   TWCR = _BV(TWEN) | _BV(TWEA); //reinitialize TWI 
+#endif
 }
