@@ -701,6 +701,18 @@ functions. This allows for three more PWM pins, but maybe it adds to much
 complexity for the Arduino API. Not sure if it should stay.
 
 
+### Additional libraries
+
+**I2C**: The [I2C master library]
+(http://www.dsscircuits.com/articles/arduino-i2c-master-library)
+by Wayne Truchsess offers some significant advantages over the Wire/TWI
+library included in the standard arduino environment: It fixes some possible
+deadlock situations, it allows for communication using a repeated start
+condition as required by some devices, the code is much more compact and the
+structure is easier to understand.
+
+So I decided to port this library instead of the standard one.
+
 
 ### Performance compared with the original Arduino environment
 

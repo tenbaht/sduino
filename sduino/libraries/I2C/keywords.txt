@@ -1,0 +1,33 @@
+#######################################
+# Syntax Coloring Map For I2C
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+I2C	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+end	KEYWORD2
+timeOut	KEYWORD2
+setSpeed	KEYWORD2
+pullup	KEYWORD2
+scan	KEYWORD2
+write	KEYWORD2
+read	KEYWORD2
+available	KEYWORD2
+receive	KEYWORD2
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+I2c	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
