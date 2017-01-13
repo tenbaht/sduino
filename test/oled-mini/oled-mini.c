@@ -18,7 +18,7 @@ All text above, and the splash screen must be included in any redistribution
 
 #include "ssd1306.h"
 
-#define OLED_RESET 4
+#define OLED_RESET 6
 
 #if (SSD1306_LCDHEIGHT != 64)
 #error("Height incorrect, please fix Adafruit_SSD1306.h!");
@@ -34,7 +34,7 @@ void setup()   {
 
 //  display_init(OLED_RESET);
   // by default, we'll generate the high voltage from the 3.3v line internally! (neat!)
-  Adafruit_SSD1306_begin(SSD1306_SWITCHCAPVCC, 0x3C,0);  // initialize with the I2C addr 0x3D (for the 128x64)
+  Adafruit_SSD1306_begin(SSD1306_SWITCHCAPVCC, 0x3C,1);  // initialize with the I2C addr 0x3D (for the 128x64)
   // init done
   
   // Show image buffer on the display hardware.
@@ -49,7 +49,7 @@ void loop()
 	uint8_t x,y;
 
 	Adafruit_SSD1306_display();
-	delay (1000);
+	delay (100);
 	for (x=0; x<WIDTH; x+=8)
 	{
 		for (y=0; y<HEIGHT; y+=8)

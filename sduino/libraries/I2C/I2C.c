@@ -698,7 +698,7 @@ uint8_t sendByte(uint8_t i2cData)
 	while (!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTING));
 
 	I2C->DR = i2cData;
-	return 1;
+	return 0;
 #endif
 }
 
