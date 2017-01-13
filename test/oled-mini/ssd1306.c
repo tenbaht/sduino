@@ -1,3 +1,51 @@
+/*
+ * This is an example for using the i2c library with a monochrome OLED
+ * display based on SSD1306 drivers.
+ *
+ * The display has 128x64 pixel and uses only SCL and SDA for communication,
+ * there is no reset pin.
+ *
+ * The framebuffer needs to be kept in RAM as reading the display is not
+ * supported by the driver chips. Since the STM8S103F3 has only 1kB RAM
+ * total, we will see the stack contents in the lower part of the display
+ * as a wild bit pattern. Using drawPixel() on this memory would mess up
+ * the stack contents and would result in an immediate crash. So don't
+ * use the lower lines on low memory devices!
+ *
+ * This code is adopted from the Adafruit example code contained in the
+ * Adafruit_SSD1306 library.
+ *
+ * modified 2017 by Michael Mayer
+ */
+
+
+/*
+ * This is an example for using the i2c library with a monochrome OLED
+ * display based on SSD1306 drivers.
+ *
+ * The display has 128x64 pixel and uses only SCL and SDA for communication,
+ * there is no reset pin.
+ *
+ * The framebuffer needs to be kept in RAM as reading the display is not
+ * supported by the driver chips. Since the STM8S103F3 has only 1kB RAM
+ * total, we will see the stack contents in the lower part of the display
+ * as a wild bit pattern. Using drawPixel() on this memory would mess up
+ * the stack contents and would result in an immediate crash. So don't
+ * use the lower lines on low memory devices!
+ *
+ * This code is a stripped down version of the Adafruit_SSD1306 library
+ * adoped for use with the STM8S.
+ *
+ * This library supports only I2C displays using the I2C library, all SPI
+ * related code is removed.
+ *
+ * All dependencies on the Adafruit_GFX library are removed. This simple
+ * code only supports pixel based operations using drawPixel().
+ *
+ * 2017 modified for the STM8S by Michael Mayer
+ */
+
+
 /*********************************************************************
 This is a library for our Monochrome OLEDs based on SSD1306 drivers
 
@@ -16,10 +64,6 @@ BSD license, check license.txt for more information
 All text above, and the splash screen below must be included in any redistribution
 *********************************************************************/
 
-//  #include <avr/pgmspace.h>
-// #include <util/delay.h>
-
-//#include <stdlib.h>
 #define USE_WIRE	0
 
 #if USE_WIRE
@@ -123,8 +167,11 @@ static uint8_t buffer[SSD1306_LCDHEIGHT * SSD1306_LCDWIDTH / 8] = {
 #define rotation	(0)
 #define getRotation()	(0)
 
+static void ssd1306_command(uint8_t c);
+
+
 // the most basic function, set a single pixel
-void drawPixel(int16_t x, int16_t y, uint16_t color) {
+void drawPixel(int16_t x, int16_t y, uint8_t color) {
 //  if ((x < 0) || (x >= width()) || (y < 0) || (y >= height()))
 //    return;
 
@@ -155,13 +202,13 @@ void drawPixel(int16_t x, int16_t y, uint16_t color) {
 }
 
 // initializer for I2C - we only indicate the reset pin!
-void Adafruit_SSD1306_Adafruit_SSD1306(int8_t reset) {
+void display_init(int8_t reset) {
   sclk = dc = cs = sid = -1;
   rst = reset;
 }
 
 #if 1
-void Adafruit_SSD1306_begin(uint8_t vccstate, uint8_t i2caddr, bool reset) {
+void display_begin(uint8_t vccstate, uint8_t i2caddr, bool reset) {
   _vccstate = vccstate;
   _i2caddr = i2caddr;
 
@@ -169,11 +216,6 @@ void Adafruit_SSD1306_begin(uint8_t vccstate, uint8_t i2caddr, bool reset) {
   {
     // I2C Init
     i2c_begin();
-#ifdef __SAM3X8E__
-    // Force 400 KHz I2C, rawr! (Uses pins 20, 21 for SDA, SCL)
-    TWI1->TWI_CWGR = 0;
-    TWI1->TWI_CWGR = ((VARIANT_MCK / (2 * 400000)) - 4) * 0x101;
-#endif
   }
   if ((reset) && (rst >= 0)) {
     // Setup reset pin direction (used by both SPI and I2C)
@@ -253,8 +295,15 @@ void Adafruit_SSD1306_begin(uint8_t vccstate, uint8_t i2caddr, bool reset) {
 }
 #endif
 
-#if 1
-void ssd1306_command(uint8_t c) {
+void display_invertDisplay(uint8_t i) {
+  if (i) {
+    ssd1306_command(SSD1306_INVERTDISPLAY);
+  } else {
+    ssd1306_command(SSD1306_NORMALDISPLAY);
+  }
+}
+
+static void ssd1306_command(uint8_t c) {
   {
     // I2C
 #if USE_WIRE
@@ -268,10 +317,100 @@ void ssd1306_command(uint8_t c) {
 #endif
   }
 }
-#endif
 
-#if 1
-void Adafruit_SSD1306_display(void) {
+
+
+// startscrollright
+// Activate a right handed scroll for rows start through stop
+// Hint, the display is 16 rows tall. To scroll the whole display, run:
+// display.scrollright(0x00, 0x0F)
+void display_startscrollright(uint8_t start, uint8_t stop){
+  ssd1306_command(SSD1306_RIGHT_HORIZONTAL_SCROLL);
+  ssd1306_command(0X00);
+  ssd1306_command(start);
+  ssd1306_command(0X00);
+  ssd1306_command(stop);
+  ssd1306_command(0X00);
+  ssd1306_command(0XFF);
+  ssd1306_command(SSD1306_ACTIVATE_SCROLL);
+}
+
+// startscrollleft
+// Activate a right handed scroll for rows start through stop
+// Hint, the display is 16 rows tall. To scroll the whole display, run:
+// display.scrollright(0x00, 0x0F)
+void display_startscrollleft(uint8_t start, uint8_t stop){
+  ssd1306_command(SSD1306_LEFT_HORIZONTAL_SCROLL);
+  ssd1306_command(0X00);
+  ssd1306_command(start);
+  ssd1306_command(0X00);
+  ssd1306_command(stop);
+  ssd1306_command(0X00);
+  ssd1306_command(0XFF);
+  ssd1306_command(SSD1306_ACTIVATE_SCROLL);
+}
+
+// startscrolldiagright
+// Activate a diagonal scroll for rows start through stop
+// Hint, the display is 16 rows tall. To scroll the whole display, run:
+// display.scrollright(0x00, 0x0F)
+void display_startscrolldiagright(uint8_t start, uint8_t stop){
+  ssd1306_command(SSD1306_SET_VERTICAL_SCROLL_AREA);
+  ssd1306_command(0X00);
+  ssd1306_command(SSD1306_LCDHEIGHT);
+  ssd1306_command(SSD1306_VERTICAL_AND_RIGHT_HORIZONTAL_SCROLL);
+  ssd1306_command(0X00);
+  ssd1306_command(start);
+  ssd1306_command(0X00);
+  ssd1306_command(stop);
+  ssd1306_command(0X01);
+  ssd1306_command(SSD1306_ACTIVATE_SCROLL);
+}
+
+// startscrolldiagleft
+// Activate a diagonal scroll for rows start through stop
+// Hint, the display is 16 rows tall. To scroll the whole display, run:
+// display.scrollright(0x00, 0x0F)
+void display_startscrolldiagleft(uint8_t start, uint8_t stop){
+  ssd1306_command(SSD1306_SET_VERTICAL_SCROLL_AREA);
+  ssd1306_command(0X00);
+  ssd1306_command(SSD1306_LCDHEIGHT);
+  ssd1306_command(SSD1306_VERTICAL_AND_LEFT_HORIZONTAL_SCROLL);
+  ssd1306_command(0X00);
+  ssd1306_command(start);
+  ssd1306_command(0X00);
+  ssd1306_command(stop);
+  ssd1306_command(0X01);
+  ssd1306_command(SSD1306_ACTIVATE_SCROLL);
+}
+
+void display_stopscroll(void){
+  ssd1306_command(SSD1306_DEACTIVATE_SCROLL);
+}
+
+// Dim the display
+// dim = true: display is dimmed
+// dim = false: display is normal
+void display_dim(boolean dim) {
+  uint8_t contrast;
+
+  if (dim) {
+    contrast = 0; // Dimmed display
+  } else {
+    if (_vccstate == SSD1306_EXTERNALVCC) {
+      contrast = 0x9F;
+    } else {
+      contrast = 0xCF;
+    }
+  }
+  // the range of contrast to too small to be really useful
+  // it is useful to dim the display
+  ssd1306_command(SSD1306_SETCONTRAST);
+  ssd1306_command(contrast);
+}
+
+
+void display_display(void) {
   ssd1306_command(SSD1306_COLUMNADDR);
   ssd1306_command(0);   // Column start address (0 = reset)
   ssd1306_command(SSD1306_LCDWIDTH-1); // Column end address (127 = reset)
@@ -289,15 +428,6 @@ void Adafruit_SSD1306_display(void) {
   #endif
 
   {
-    // save I2C bitrate
-#ifdef TWBR
-    uint8_t twbrbackup = TWBR;
-    TWBR = 12; // upgrade to 400KHz!
-#endif
-
-    //Serial.println(TWBR, DEC);
-    //Serial.println(TWSR & 0x3, DEC);
-
     // I2C
     for (uint16_t i=0; i<(SSD1306_LCDWIDTH*SSD1306_LCDHEIGHT/8); i++) {
       // send a bunch of data in one xmission
@@ -315,9 +445,10 @@ void Adafruit_SSD1306_display(void) {
 	i+=15;
 #endif
     }
-#ifdef TWBR
-    TWBR = twbrbackup;
-#endif
   }
 }
-#endif
+
+// clear everything
+void display_clearDisplay(void) {
+  memset(buffer, 0, (SSD1306_LCDWIDTH*SSD1306_LCDHEIGHT/8));
+}

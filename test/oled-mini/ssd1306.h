@@ -146,41 +146,30 @@ All text above, and the splash screen must be included in any redistribution
 #define SSD1306_VERTICAL_AND_RIGHT_HORIZONTAL_SCROLL 0x29
 #define SSD1306_VERTICAL_AND_LEFT_HORIZONTAL_SCROLL 0x2A
 
-  void Adafruit_SSD1306_Adafruit_SSD1306(int8_t reset);
+  void display_init(int8_t reset);
 
-  void Adafruit_SSD1306_begin(uint8_t switchvcc, uint8_t i2caddr, bool reset);
-//  void Adafruit_SSD1306_ssd1306_command(uint8_t c);
-  void ssd1306_command(uint8_t c);
+  void display_begin(uint8_t switchvcc, uint8_t i2caddr, bool reset);
+//  void display_ssd1306_command(uint8_t c);
+//  void ssd1306_command(uint8_t c);
 
-  void Adafruit_SSD1306_clearDisplay(void);
-  void Adafruit_SSD1306_invertDisplay(uint8_t i);
-  void Adafruit_SSD1306_display();
+  void display_clearDisplay(void);
+  void display_invertDisplay(uint8_t i);
+  void display_display();
 
-  void Adafruit_SSD1306_startscrollright(uint8_t start, uint8_t stop);
-  void Adafruit_SSD1306_startscrollleft(uint8_t start, uint8_t stop);
+  void display_startscrollright(uint8_t start, uint8_t stop);
+  void display_startscrollleft(uint8_t start, uint8_t stop);
 
-  void Adafruit_SSD1306_startscrolldiagright(uint8_t start, uint8_t stop);
-  void Adafruit_SSD1306_startscrolldiagleft(uint8_t start, uint8_t stop);
-  void Adafruit_SSD1306_stopscroll(void);
+  void display_startscrolldiagright(uint8_t start, uint8_t stop);
+  void display_startscrolldiagleft(uint8_t start, uint8_t stop);
+  void display_stopscroll(void);
 
-  void Adafruit_SSD1306_dim(boolean dim);
+  void display_dim(boolean dim);
 
-  void drawPixel(int16_t x, int16_t y, uint16_t color);
+  void drawPixel(int16_t x, int16_t y, uint8_t color);
 
-  void Adafruit_SSD1306_drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color);
-  void Adafruit_SSD1306_drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
+//  void display_drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color);
+//  void display_drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
 
-// private:
-/*
-  int8_t _i2caddr, _vccstate, sid, sclk, dc, rst, cs;
-  void fastSPIwrite(uint8_t c);
-
-  boolean hwSPI;
-#ifdef HAVE_PORTREG
-  PortReg *mosiport, *clkport, *csport, *dcport;
-  PortMask mosipinmask, clkpinmask, cspinmask, dcpinmask;
-#endif
-*/
 //  inline void drawFastVLineInternal(int16_t x, int16_t y, int16_t h, uint16_t color) __attribute__((always_inline));
 //  inline void drawFastHLineInternal(int16_t x, int16_t y, int16_t w, uint16_t color) __attribute__((always_inline));
 
