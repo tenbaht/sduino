@@ -113,6 +113,23 @@ an option.
 No real documentation yet. Have a look in the `test` directory and use one of the Makefiles as a template.
 
 
+## Included libraries
+
+**I2C**: The [I2C master library]
+(http://www.dsscircuits.com/articles/arduino-i2c-master-library)
+by Wayne Truchsess offers some significant advantages over the Wire/TWI
+library included in the standard arduino environment: It fixes some possible
+deadlock situations, it allows for communication using a repeated start
+condition as required by some devices, the code is much more compact and the
+structure is easier to understand.
+
+So I decided to port this library instead of the standard one. the current
+state does not include the deadlock protection, though.
+
+
+**ssd1306**: Driver for SSD1306-based monochrome OLED display with 128x64
+pixels. Based on the Adafruit-libray.
+
 
 ## Why use a STM8 instead of an ATmega?
 
@@ -221,6 +238,7 @@ SPI: working, no interrupt support
 
 #### implemented and partly working
 `analogWrite()`  
+Wire/I2C  
 
 #### tested, but not working
 `alternateFunctions()`  
@@ -232,7 +250,6 @@ SPI: working, no interrupt support
 
 #### not implemented
 `yield()`  
-Wire/I2C  
 
 
 
@@ -695,19 +712,6 @@ Handassembler.
 Added `alternateFunction()` to allow switching of some pins to their alternate
 functions. This allows for three more PWM pins, but maybe it adds to much
 complexity for the Arduino API. Not sure if it should stay.
-
-
-### Additional libraries
-
-**I2C**: The [I2C master library]
-(http://www.dsscircuits.com/articles/arduino-i2c-master-library)
-by Wayne Truchsess offers some significant advantages over the Wire/TWI
-library included in the standard arduino environment: It fixes some possible
-deadlock situations, it allows for communication using a repeated start
-condition as required by some devices, the code is much more compact and the
-structure is easier to understand.
-
-So I decided to port this library instead of the standard one.
 
 
 ### Performance compared with the original Arduino environment
