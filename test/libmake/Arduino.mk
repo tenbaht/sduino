@@ -323,6 +323,19 @@ else
 endif
 
 ########################################################################
+# object file name suffix - defaults to .o
+ifndef OBJSUFFIX
+    ifeq ($(notdir $(CC)),sdcc)
+        OBJSUFFIX = rel
+    else
+        OBJSUFFIX = o
+    endif
+    $(call show_config_variable,OBJSUFFIX,[DEFAULT])
+else
+    $(call show_config_variable,OBJSUFFIX,[USER])
+endif
+
+########################################################################
 # 1.5.x vendor - defaults to arduino
 ifndef ARDMK_VENDOR
 	ARDMK_VENDOR = arduino
@@ -771,9 +784,9 @@ LOCAL_AS_SRCS   ?= $(wildcard *.S)
 LOCAL_SRCS      = $(LOCAL_C_SRCS)   $(LOCAL_CPP_SRCS) \
 		$(LOCAL_CC_SRCS)   $(LOCAL_PDE_SRCS) \
 		$(LOCAL_INO_SRCS) $(LOCAL_AS_SRCS)
-LOCAL_OBJ_FILES = $(LOCAL_C_SRCS:.c=.c.o)   $(LOCAL_CPP_SRCS:.cpp=.cpp.o) \
-		$(LOCAL_CC_SRCS:.cc=.cc.o)   $(LOCAL_PDE_SRCS:.pde=.pde.o) \
-		$(LOCAL_INO_SRCS:.ino=.ino.o) $(LOCAL_AS_SRCS:.S=.S.o)
+LOCAL_OBJ_FILES = $(LOCAL_C_SRCS:.c=.c.$(OBJSUFFIX))   $(LOCAL_CPP_SRCS:.cpp=.cpp.$(OBJSUFFIX)) \
+		$(LOCAL_CC_SRCS:.cc=.cc.$(OBJSUFFIX))   $(LOCAL_PDE_SRCS:.pde=.pde.$(OBJSUFFIX)) \
+		$(LOCAL_INO_SRCS:.ino=.ino.$(OBJSUFFIX)) $(LOCAL_AS_SRCS:.S=.S.$(OBJSUFFIX))
 LOCAL_OBJS      = $(patsubst %,$(OBJDIR)/%,$(LOCAL_OBJ_FILES))
 
 ifeq ($(words $(LOCAL_SRCS)), 0)
@@ -812,7 +825,7 @@ ifeq ($(strip $(NO_CORE)),)
             $(call show_config_info,NO_CORE_MAIN_CPP set so core library will not include main.cpp,[MANUAL])
         endif
 
-        CORE_OBJ_FILES  = $(CORE_C_SRCS:.c=.c.o) $(CORE_CPP_SRCS:.cpp=.cpp.o) $(CORE_AS_SRCS:.S=.S.o)
+        CORE_OBJ_FILES  = $(CORE_C_SRCS:.c=.c.$(OBJSUFFIX)) $(CORE_CPP_SRCS:.cpp=.cpp.$(OBJSUFFIX)) $(CORE_AS_SRCS:.S=.S.$(OBJSUFFIX))
         CORE_OBJS       = $(patsubst $(ARDUINO_CORE_PATH)/%,  \
                 $(OBJDIR)/core/%,$(CORE_OBJ_FILES))
     endif
@@ -886,7 +899,7 @@ TARGET_IHX = $(OBJDIR)/$(TARGET).ihx
 TARGET_HEX = $(OBJDIR)/$(TARGET).hex
 TARGET_ELF = $(OBJDIR)/$(TARGET).elf
 TARGET_EEP = $(OBJDIR)/$(TARGET).eep
-CORE_LIB   = $(OBJDIR)/libcore.a
+CORE_LIB   = $(OBJDIR)/libcore.lib
 
 # Names of executables - chipKIT needs to override all to set paths to PIC32
 # tools, and we can't use "?=" assignment because these are already implicitly
@@ -964,26 +977,26 @@ LIB_AS_SRCS         := $(foreach lib, $(SYS_LIBS),  $(call get_library_files,$(l
 USER_LIB_CPP_SRCS   := $(foreach lib, $(USER_LIBS), $(call get_library_files,$(lib),cpp))
 USER_LIB_C_SRCS     := $(foreach lib, $(USER_LIBS), $(call get_library_files,$(lib),c))
 USER_LIB_AS_SRCS    := $(foreach lib, $(USER_LIBS), $(call get_library_files,$(lib),S))
-LIB_OBJS            = $(patsubst $(ARDUINO_LIB_PATH)/%.c,$(OBJDIR)/libs/%.c.o,$(LIB_C_SRCS)) \
-                      $(patsubst $(ARDUINO_LIB_PATH)/%.cpp,$(OBJDIR)/libs/%.cpp.o,$(LIB_CPP_SRCS)) \
-                      $(patsubst $(ARDUINO_LIB_PATH)/%.S,$(OBJDIR)/libs/%.S.o,$(LIB_AS_SRCS))
-USER_LIB_OBJS       = $(patsubst $(USER_LIB_PATH)/%.cpp,$(OBJDIR)/userlibs/%.cpp.o,$(USER_LIB_CPP_SRCS)) \
-                      $(patsubst $(USER_LIB_PATH)/%.c,$(OBJDIR)/userlibs/%.c.o,$(USER_LIB_C_SRCS)) \
-                      $(patsubst $(USER_LIB_PATH)/%.S,$(OBJDIR)/userlibs/%.S.o,$(USER_LIB_AS_SRCS))
+LIB_OBJS            = $(patsubst $(ARDUINO_LIB_PATH)/%.c,$(OBJDIR)/libs/%.c.$(OBJSUFFIX),$(LIB_C_SRCS)) \
+                      $(patsubst $(ARDUINO_LIB_PATH)/%.cpp,$(OBJDIR)/libs/%.cpp.$(OBJSUFFIX),$(LIB_CPP_SRCS)) \
+                      $(patsubst $(ARDUINO_LIB_PATH)/%.S,$(OBJDIR)/libs/%.S.$(OBJSUFFIX),$(LIB_AS_SRCS))
+USER_LIB_OBJS       = $(patsubst $(USER_LIB_PATH)/%.cpp,$(OBJDIR)/userlibs/%.cpp.$(OBJSUFFIX),$(USER_LIB_CPP_SRCS)) \
+                      $(patsubst $(USER_LIB_PATH)/%.c,$(OBJDIR)/userlibs/%.c.$(OBJSUFFIX),$(USER_LIB_C_SRCS)) \
+                      $(patsubst $(USER_LIB_PATH)/%.S,$(OBJDIR)/userlibs/%.S.$(OBJSUFFIX),$(USER_LIB_AS_SRCS))
 
 ifdef ARDUINO_PLATFORM_LIB_PATH
     PLATFORM_INCLUDES     := $(foreach lib, $(PLATFORM_LIBS), $(call get_library_includes,$(lib)))
     PLATFORM_LIB_CPP_SRCS := $(foreach lib, $(PLATFORM_LIBS), $(call get_library_files,$(lib),cpp))
     PLATFORM_LIB_C_SRCS   := $(foreach lib, $(PLATFORM_LIBS), $(call get_library_files,$(lib),c))
     PLATFORM_LIB_AS_SRCS  := $(foreach lib, $(PLATFORM_LIBS), $(call get_library_files,$(lib),S))
-    PLATFORM_LIB_OBJS     := $(patsubst $(ARDUINO_PLATFORM_LIB_PATH)/%.cpp,$(OBJDIR)/platformlibs/%.cpp.o,$(PLATFORM_LIB_CPP_SRCS)) \
-                             $(patsubst $(ARDUINO_PLATFORM_LIB_PATH)/%.c,$(OBJDIR)/platformlibs/%.c.o,$(PLATFORM_LIB_C_SRCS)) \
-                             $(patsubst $(ARDUINO_PLATFORM_LIB_PATH)/%.S,$(OBJDIR)/platformlibs/%.S.o,$(PLATFORM_LIB_AS_SRCS))
+    PLATFORM_LIB_OBJS     := $(patsubst $(ARDUINO_PLATFORM_LIB_PATH)/%.cpp,$(OBJDIR)/platformlibs/%.cpp.$(OBJSUFFIX),$(PLATFORM_LIB_CPP_SRCS)) \
+                             $(patsubst $(ARDUINO_PLATFORM_LIB_PATH)/%.c,$(OBJDIR)/platformlibs/%.c.$(OBJSUFFIX),$(PLATFORM_LIB_C_SRCS)) \
+                             $(patsubst $(ARDUINO_PLATFORM_LIB_PATH)/%.S,$(OBJDIR)/platformlibs/%.S.$(OBJSUFFIX),$(PLATFORM_LIB_AS_SRCS))
 
 endif
 
 # Dependency files
-DEPS                = $(LOCAL_OBJS:.o=.d) $(LIB_OBJS:.o=.d) $(PLATFORM_OBJS:.o=.d) $(USER_LIB_OBJS:.o=.d) $(CORE_OBJS:.o=.d)
+DEPS                = $(LOCAL_OBJS:.$(OBJSUFFIX)=.d) $(LIB_OBJS:.$(OBJSUFFIX)=.d) $(PLATFORM_OBJS:.$(OBJSUFFIX)=.d) $(USER_LIB_OBJS:.$(OBJSUFFIX)=.d) $(CORE_OBJS:.$(OBJSUFFIX)=.d)
 
 # Optimization level for the compiler.
 # You can get the list of options at http://www.nongnu.org/avr-libc/user-manual/using_tools.html#gcc_optO
@@ -1000,7 +1013,7 @@ ifndef DEBUG_FLAGS
 endif
 
 # SoftwareSerial requires -Os (some delays are tuned for this optimization level)
-%SoftwareSerial.cpp.o : OPTIMIZATION_FLAGS = -Os
+%SoftwareSerial.cpp.$(OBJSUFFIX) : OPTIMIZATION_FLAGS = -Os
 
 ifndef MCU_FLAG_NAME
     MCU_FLAG_NAME = mmcu=
@@ -1070,7 +1083,8 @@ ASFLAGS       += -x assembler-with-cpp
 ifeq ($(shell expr $(CC_VERNUM) '>' 490), 1)
     ASFLAGS += -flto
 endif
-LDFLAGS       += -$(MCU_FLAG_NAME)=$(MCU) -Wl,--gc-sections -O$(OPTIMIZATION_LEVEL)
+#LDFLAGS       += -$(MCU_FLAG_NAME)=$(MCU) -Wl,--gc-sections -O$(OPTIMIZATION_LEVEL)
+LDFLAGS       += -$(MCU_FLAG_NAME)$(MCU) -O$(OPTIMIZATION_LEVEL)
 ifeq ($(shell expr $(CC_VERNUM) '>' 490), 1)
     LDFLAGS += -flto -fuse-linker-plugin
 endif
@@ -1182,45 +1196,45 @@ $(call show_separator)
 # easy to change the build options in future
 
 # library sources
-$(OBJDIR)/libs/%.c.o: $(ARDUINO_LIB_PATH)/%.c
+$(OBJDIR)/libs/%.c.$(OBJSUFFIX): $(ARDUINO_LIB_PATH)/%.c
 	@$(MKDIR) $(dir $@)
 	$(CC) "-Wp-MMD $(patsubst %.o,%.d,$@)" -c $(CPPFLAGS) $(CFLAGS) $< -o $@
-	mv $(patsubst %.o,%.rel,$@) $@
+#	mv $(patsubst %.o,%.rel,$@) $@
 #	$(CC) -MMD -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 
-$(OBJDIR)/libs/%.cpp.o: $(ARDUINO_LIB_PATH)/%.cpp
+$(OBJDIR)/libs/%.cpp.$(OBJSUFFIX): $(ARDUINO_LIB_PATH)/%.cpp
 	@$(MKDIR) $(dir $@)
 	$(CXX) -MMD -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
 
-$(OBJDIR)/libs/%.S.o: $(ARDUINO_LIB_PATH)/%.S
+$(OBJDIR)/libs/%.S.$(OBJSUFFIX): $(ARDUINO_LIB_PATH)/%.S
 	@$(MKDIR) $(dir $@)
 	$(CC) -MMD -c $(CPPFLAGS) $(ASFLAGS) $< -o $@
 
-$(OBJDIR)/platformlibs/%.c.o: $(ARDUINO_PLATFORM_LIB_PATH)/%.c
+$(OBJDIR)/platformlibs/%.c.$(OBJSUFFIX): $(ARDUINO_PLATFORM_LIB_PATH)/%.c
 	@$(MKDIR) $(dir $@)
 	$(CC) "-Wp-MMD $(patsubst %.o,%.d,$@)" -c $(CPPFLAGS) $(CFLAGS) $< -o $@
-	mv $(patsubst %.o,%.rel,$@) $@
+#	mv $(patsubst %.o,%.rel,$@) $@
 #	$(CC) -MMD -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 
-$(OBJDIR)/platformlibs/%.cpp.o: $(ARDUINO_PLATFORM_LIB_PATH)/%.cpp
+$(OBJDIR)/platformlibs/%.cpp.$(OBJSUFFIX): $(ARDUINO_PLATFORM_LIB_PATH)/%.cpp
 	@$(MKDIR) $(dir $@)
 	$(CXX) -MMD -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
 
-$(OBJDIR)/platformlibs/%.S.o: $(ARDUINO_PLATFORM_LIB_PATH)/%.S
+$(OBJDIR)/platformlibs/%.S.$(OBJSUFFIX): $(ARDUINO_PLATFORM_LIB_PATH)/%.S
 	@$(MKDIR) $(dir $@)
 	$(CC) -MMD -c $(CPPFLAGS) $(ASFLAGS) $< -o $@
 
-$(OBJDIR)/userlibs/%.cpp.o: $(USER_LIB_PATH)/%.cpp
+$(OBJDIR)/userlibs/%.cpp.$(OBJSUFFIX): $(USER_LIB_PATH)/%.cpp
 	@$(MKDIR) $(dir $@)
 	$(CXX) -MMD -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
 
-$(OBJDIR)/userlibs/%.c.o: $(USER_LIB_PATH)/%.c
+$(OBJDIR)/userlibs/%.c.$(OBJSUFFIX): $(USER_LIB_PATH)/%.c
 	@$(MKDIR) $(dir $@)
-	$(CC) "-Wp-MMD $(patsubst %.o,%.d,$@)" -c $(CPPFLAGS) $(CFLAGS) $< -o $@
-	mv $(patsubst %.o,%.rel,$@) $@
+	$(CC) "-Wp-MMD $(patsubst %.$(OBJSUFFIX),%.d,$@)" -c $(CPPFLAGS) $(CFLAGS) $< -o $@
+#	mv $(patsubst %.o,%.rel,$@) $@
 #	$(CC) -MMD -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 
-$(OBJDIR)/userlibs/%.S.o: $(USER_LIB_PATH)/%.S
+$(OBJDIR)/userlibs/%.S.$(OBJSUFFIX): $(USER_LIB_PATH)/%.S
 	@$(MKDIR) $(dir $@)
 	$(CC) -MMD -c $(CPPFLAGS) $(ASFLAGS) $< -o $@
 
@@ -1231,35 +1245,35 @@ else
 endif
 
 # normal local sources
-$(OBJDIR)/%.c.o: %.c $(COMMON_DEPS) | $(OBJDIR)
+$(OBJDIR)/%.c.$(OBJSUFFIX): %.c $(COMMON_DEPS) | $(OBJDIR)
 	@$(MKDIR) $(dir $@)
-	$(CC) "-Wp-MMD $(patsubst %.o,%.d,$@)" -c $(CPPFLAGS) $(CFLAGS) $< -o $@
-	mv $(patsubst %.o,%.rel,$@) $@
+	$(CC) "-Wp-MMD $(patsubst %.$(OBJSUFFIX),%.d,$@)" -c $(CPPFLAGS) $(CFLAGS) $< -o $@
+#	mv $(patsubst %.o,%.rel,$@) $@
 #	$(CC) -MMD -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 
-$(OBJDIR)/%.cc.o: %.cc $(COMMON_DEPS) | $(OBJDIR)
+$(OBJDIR)/%.cc.$(OBJSUFFIX): %.cc $(COMMON_DEPS) | $(OBJDIR)
 	@$(MKDIR) $(dir $@)
 	$(CXX) -MMD -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
 
-$(OBJDIR)/%.cpp.o: %.cpp $(COMMON_DEPS) | $(OBJDIR)
+$(OBJDIR)/%.cpp.$(OBJSUFFIX): %.cpp $(COMMON_DEPS) | $(OBJDIR)
 	@$(MKDIR) $(dir $@)
 	$(CXX) -MMD -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
 
-$(OBJDIR)/%.S.o: %.S $(COMMON_DEPS) | $(OBJDIR)
+$(OBJDIR)/%.S.$(OBJSUFFIX): %.S $(COMMON_DEPS) | $(OBJDIR)
 	@$(MKDIR) $(dir $@)
 	$(CC) -MMD -c $(CPPFLAGS) $(ASFLAGS) $< -o $@
 
-$(OBJDIR)/%.s.o: %.s $(COMMON_DEPS) | $(OBJDIR)
+$(OBJDIR)/%.s.$(OBJSUFFIX): %.s $(COMMON_DEPS) | $(OBJDIR)
 	@$(MKDIR) $(dir $@)
 	$(CC) -c $(CPPFLAGS) $(ASFLAGS) $< -o $@
 
 # the pde -> o file
-$(OBJDIR)/%.pde.o: %.pde $(COMMON_DEPS) | $(OBJDIR)
+$(OBJDIR)/%.pde.$(OBJSUFFIX): %.pde $(COMMON_DEPS) | $(OBJDIR)
 	@$(MKDIR) $(dir $@)
 	$(CXX) -x c++ -include $(ARDUINO_HEADER) -MMD -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
 
 # the ino -> o file
-$(OBJDIR)/%.ino.o: %.ino $(COMMON_DEPS) | $(OBJDIR)
+$(OBJDIR)/%.ino.$(OBJSUFFIX): %.ino $(COMMON_DEPS) | $(OBJDIR)
 	@$(MKDIR) $(dir $@)
 	$(CXX) -x c++ -include $(ARDUINO_HEADER) -MMD -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
 
@@ -1277,17 +1291,17 @@ $(OBJDIR)/%.s: %.cpp $(COMMON_DEPS) | $(OBJDIR)
 	$(CXX) -x c++ -include $(ARDUINO_HEADER) -MMD -S -fverbose-asm $(CPPFLAGS) $(CXXFLAGS) $< -o $@
 
 # core files
-$(OBJDIR)/core/%.c.o: $(ARDUINO_CORE_PATH)/%.c $(COMMON_DEPS) | $(OBJDIR)
+$(OBJDIR)/core/%.c.$(OBJSUFFIX): $(ARDUINO_CORE_PATH)/%.c $(COMMON_DEPS) | $(OBJDIR)
 	@$(MKDIR) $(dir $@)
-	$(CC) "-Wp-MMD $(patsubst %.o,%.d,$@)" -c $(CPPFLAGS) $(CFLAGS) $< -o $@
-	mv $(patsubst %.o,%.rel,$@) $@
+	$(CC) "-Wp-MMD $(patsubst %.$(OBJSUFFIX),%.d,$@)" -c $(CPPFLAGS) $(CFLAGS) $< -o $@
+#	mv $(patsubst %.o,%.rel,$@) $@
 #	$(CC) -MMD -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 
-$(OBJDIR)/core/%.cpp.o: $(ARDUINO_CORE_PATH)/%.cpp $(COMMON_DEPS) | $(OBJDIR)
+$(OBJDIR)/core/%.cpp.$(OBJSUFFIX): $(ARDUINO_CORE_PATH)/%.cpp $(COMMON_DEPS) | $(OBJDIR)
 	@$(MKDIR) $(dir $@)
 	$(CXX) -MMD -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
 
-$(OBJDIR)/core/%.S.o: $(ARDUINO_CORE_PATH)/%.S $(COMMON_DEPS) | $(OBJDIR)
+$(OBJDIR)/core/%.S.$(OBJSUFFIX): $(ARDUINO_CORE_PATH)/%.S $(COMMON_DEPS) | $(OBJDIR)
 	@$(MKDIR) $(dir $@)
 	$(CC) -MMD -c $(CPPFLAGS) $(ASFLAGS) $< -o $@
 
@@ -1439,7 +1453,7 @@ endif
 # Explicit targets start here
 
 #all: 		$(TARGET_EEP) $(TARGET_HEX)
-all: 		$(TARGET_IHX)
+all: 		$(TARGET_HEX)
 
 # Rule to create $(OBJDIR) automatically. All rules with recipes that
 # create a file within it, but do not already depend on a file within it
@@ -1454,14 +1468,15 @@ pre-build:
 		$(call runscript_if_exists,$(PRE_BUILD_HOOK))
 
 $(TARGET_IHX): 	$(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS)
-		$(CC) $(LDFLAGS) -o $@ $(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS) $(OTHER_LIBS) -lc -lm $(LINKER_SCRIPTS)
+		$(CC) $(LDFLAGS) $(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS) $(OTHER_LIBS) -lstm8s103 -lm $(LINKER_SCRIPTS) -o $@
+#		$(CC) $(LDFLAGS) -o $@ $(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS) $(OTHER_LIBS) -lc -lm $(LINKER_SCRIPTS)
 
 $(TARGET_ELF): 	$(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS)
 		$(CC) $(LDFLAGS) -o $@ $(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS) $(OTHER_LIBS) -lc -lm $(LINKER_SCRIPTS)
 
 $(CORE_LIB):	$(CORE_OBJS) $(LIB_OBJS) $(PLATFORM_LIB_OBJS) $(USER_LIB_OBJS)
-		$(AR) rcs $@ $(patsubst %.o,%.rel, $(CORE_OBJS) $(LIB_OBJS) $(PLATFORM_LIB_OBJS) $(USER_LIB_OBJS))
-#		$(AR) rcs $@ $(CORE_OBJS) $(LIB_OBJS) $(PLATFORM_LIB_OBJS) $(USER_LIB_OBJS)
+#		$(AR) rcs $@ $(patsubst %.o,%.rel, $(CORE_OBJS) $(LIB_OBJS) $(PLATFORM_LIB_OBJS) $(USER_LIB_OBJS))
+		$(AR) rcs $@ $(CORE_OBJS) $(LIB_OBJS) $(PLATFORM_LIB_OBJS) $(USER_LIB_OBJS)
 
 error_on_caterina:
 		$(ERROR_ON_CATERINA)
