@@ -4,9 +4,10 @@
 
 stm8sblue.name=STM8S103F3 Breakout Board
 
-stm8sblue.upload.protocol=stlinkv2
-stm8sblue.upload.maximum_size=8192
 stm8sblue.upload.using=stm8flash
+stm8sblue.upload.protocol=stlinkv2
+stm8sblue.upload.mcu=stm8s103?3
+stm8sblue.upload.maximum_size=8192
 
 stm8sblue.build.mcu=stm8
 stm8sblue.build.f_cpu=16000000L

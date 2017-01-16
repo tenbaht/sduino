@@ -654,6 +654,13 @@ ifeq ($(strip $(NO_CORE)),)
         endif
     endif
 
+    ifndef AVRDUDE_MCU
+        AVRDUDE_MCU := $(call PARSE_BOARD,$(BOARD_TAG),upload.mcu)
+        ifndef AVRDUDE_MCU
+            AVRDUDE_MCU = $(MCU)
+        endif
+    endif
+
     ifndef AVRDUDE_ARD_BAUDRATE
         AVRDUDE_ARD_BAUDRATE := $(call PARSE_BOARD,$(BOARD_TAG),menu.(chip|cpu).$(BOARD_SUB).upload.speed)
         ifndef AVRDUDE_ARD_BAUDRATE
@@ -895,8 +902,9 @@ endif
 # Rules for making stuff
 
 # The name of the main targets
-TARGET_IHX = $(OBJDIR)/$(TARGET).ihx
-TARGET_HEX = $(OBJDIR)/$(TARGET).hex
+#TARGET_IHX = $(OBJDIR)/$(TARGET).ihx
+#TARGET_HEX = $(OBJDIR)/$(TARGET).hex
+TARGET_HEX = $(OBJDIR)/$(TARGET).ihx
 TARGET_ELF = $(OBJDIR)/$(TARGET).elf
 TARGET_EEP = $(OBJDIR)/$(TARGET).eep
 CORE_LIB   = $(OBJDIR)/libcore.lib
@@ -1032,7 +1040,8 @@ CPPFLAGS      += -$(MCU_FLAG_NAME)$(MCU) -DF_CPU=$(F_CPU) -DARDUINO=$(ARDUINO_VE
 ifdef DEBUG
 OPTIMIZATION_FLAGS= $(DEBUG_FLAGS)
 else
-OPTIMIZATION_FLAGS = -O$(OPTIMIZATION_LEVEL)
+#OPTIMIZATION_FLAGS = -O$(OPTIMIZATION_LEVEL)
+OPTIMIZATION_FLAGS =
 endif
 
 CPPFLAGS += $(OPTIMIZATION_FLAGS)
@@ -1084,7 +1093,7 @@ ifeq ($(shell expr $(CC_VERNUM) '>' 490), 1)
     ASFLAGS += -flto
 endif
 #LDFLAGS       += -$(MCU_FLAG_NAME)=$(MCU) -Wl,--gc-sections -O$(OPTIMIZATION_LEVEL)
-LDFLAGS       += -$(MCU_FLAG_NAME)$(MCU) -O$(OPTIMIZATION_LEVEL)
+LDFLAGS       += -$(MCU_FLAG_NAME)$(MCU)
 ifeq ($(shell expr $(CC_VERNUM) '>' 490), 1)
     LDFLAGS += -flto -fuse-linker-plugin
 endif
@@ -1350,9 +1359,9 @@ endif
 # This is needed to be able to compile for attiny84a but specify the upload mcu as attiny84.
 # We default to picking the -mmcu flag, but you can override this by setting
 # AVRDUDE_MCU in your makefile.
-ifndef AVRDUDE_MCU
-  AVRDUDE_MCU = $(MCU)
-endif
+#ifndef AVRDUDE_MCU
+#  AVRDUDE_MCU = $(MCU)
+#endif
 
 AVRDUDE_COM_OPTS = $(AVRDUDE_OPTS) -p $(AVRDUDE_MCU)
 ifdef AVRDUDE_CONF
@@ -1453,7 +1462,8 @@ endif
 # Explicit targets start here
 
 #all: 		$(TARGET_EEP) $(TARGET_HEX)
-all: 		$(TARGET_HEX)
+all: 		size
+#$(TARGET_HEX) $(SIZE)
 
 # Rule to create $(OBJDIR) automatically. All rules with recipes that
 # create a file within it, but do not already depend on a file within it
@@ -1467,15 +1477,14 @@ $(OBJDIR): pre-build
 pre-build:
 		$(call runscript_if_exists,$(PRE_BUILD_HOOK))
 
-$(TARGET_IHX): 	$(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS)
-		$(CC) $(LDFLAGS) $(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS) $(OTHER_LIBS) -lstm8s103 -lm $(LINKER_SCRIPTS) -o $@
+$(TARGET_HEX): 	$(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS)
+		$(CC) $(LDFLAGS) $(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS) $(OTHER_LIBS) -lstm8s103 -lstm8 $(LINKER_SCRIPTS) -o $@
 #		$(CC) $(LDFLAGS) -o $@ $(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS) $(OTHER_LIBS) -lc -lm $(LINKER_SCRIPTS)
 
 $(TARGET_ELF): 	$(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS)
 		$(CC) $(LDFLAGS) -o $@ $(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS) $(OTHER_LIBS) -lc -lm $(LINKER_SCRIPTS)
 
 $(CORE_LIB):	$(CORE_OBJS) $(LIB_OBJS) $(PLATFORM_LIB_OBJS) $(USER_LIB_OBJS)
-#		$(AR) rcs $@ $(patsubst %.o,%.rel, $(CORE_OBJS) $(LIB_OBJS) $(PLATFORM_LIB_OBJS) $(USER_LIB_OBJS))
 		$(AR) rcs $@ $(CORE_OBJS) $(LIB_OBJS) $(PLATFORM_LIB_OBJS) $(USER_LIB_OBJS)
 
 error_on_caterina:
