@@ -1462,7 +1462,8 @@ endif
 # Explicit targets start here
 
 #all: 		$(TARGET_EEP) $(TARGET_HEX)
-all: 		size
+#all: 		size
+all: 		$(TARGET_HEX)
 #$(TARGET_HEX) $(SIZE)
 
 # Rule to create $(OBJDIR) automatically. All rules with recipes that
@@ -1479,6 +1480,13 @@ pre-build:
 
 $(TARGET_HEX): 	$(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS)
 		$(CC) $(LDFLAGS) $(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS) $(OTHER_LIBS) -lstm8s103 -lstm8 $(LINKER_SCRIPTS) -o $@
+	$(call avr_size,$<,$@)
+ifneq ($(strip $(HEX_MAXIMUM_SIZE)),)
+	@if [ `$(SIZE) $@ | awk 'FNR == 2 {print $$2}'` -le $(HEX_MAXIMUM_SIZE) ]; then touch $@.sizeok; fi
+else
+	@$(ECHO) "Maximum flash memory of $(BOARD_TAG) is not specified. Make sure the size of $@ is less than $(BOARD_TAG)\'s flash memory"
+	@touch $@.sizeok
+endif
 #		$(CC) $(LDFLAGS) -o $@ $(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS) $(OTHER_LIBS) -lc -lm $(LINKER_SCRIPTS)
 
 $(TARGET_ELF): 	$(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS)
