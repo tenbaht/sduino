@@ -69,7 +69,7 @@ static const uint8_t PROGMEM analogInputToDigitalPinMap[5]={6,11,12,14,15};
  * This way it does get optimized to a hard constant load when used with a
  * const value. It is extremy ineffizient for run time accesses though.
  */
-/*
+
 #define analogInputToDigitalPin(p)  (	(p<0)?-1:(\
 					(p<1)?PIN_A0:(\
 					(p<2)?PIN_A1:(\
@@ -77,7 +77,7 @@ static const uint8_t PROGMEM analogInputToDigitalPinMap[5]={6,11,12,14,15};
 					(p<4)?PIN_A3:(\
 					(p<5)?PIN_A4:(\
 					-1)))))))
-*/
+
 
 
 #ifdef SUPPORT_ALTERNATE_MAPPINGS

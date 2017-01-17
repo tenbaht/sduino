@@ -255,6 +255,12 @@ Wire/I2C
 #### not implemented
 `yield()`  
 
+The compile environment needs to detect which interrupts are actively used
+and link only the needed ones into the binary. See test/digitalWrite:
+Compiling with the straight Makefile.classic does not add UART interrupt
+routines. But when using the sduino.mk Makefile the two UART interrupt
+routines are pulled into the binary by the interrupt table in main.c.
+
 
 
 ## Differences from the original Arduino environment
@@ -302,9 +308,13 @@ Migration guideline within the STM8L familiy
 
 
 
-### Anmerkungen zu SDCC
+### Notes on SDCC
 
-Befehl '_ _ critical{..}' sollte eigentlich den vorherigen Interrupt-Zustand
+The linker `sdld` does not automatically link the object file for main.c if it
+is part of a library. It must be part of the list of object files. (Important
+for the build process with Arduino.mk)
+
+Befehl `__critical{..}` sollte eigentlich den vorherigen Interrupt-Zustand
 wiederherstellen, es wird aber einfach ein festes Paar sim/rim produziert.
 Mit "push cc; sim" und "pop cc" klappt es im Simulator, aber nicht in der
 Realität.
