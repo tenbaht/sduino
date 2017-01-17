@@ -45,10 +45,10 @@ All text above, and the splash screen must be included in any redistribution
 #error("Height incorrect, please fix Adafruit_SSD1306.h!");
 #endif
 
-// empty IRQ handler just to keep the linker happy as we are not using the
-// Hardware_Serial library
-//void UART1_RX_IRQHandler(void) __interrupt(ITC_IRQ_UART1_RX){}
-//void UART1_TX_IRQHandler(void) __interrupt(ITC_IRQ_UART1_TX){}
+// empty IRQ handler just to keep the linker happy and stop it from pulling
+// in the HardwareSerial library when using the sduino.mk makefile
+void UART1_RX_IRQHandler(void) __interrupt(ITC_IRQ_UART1_RX){}
+void UART1_TX_IRQHandler(void) __interrupt(ITC_IRQ_UART1_TX){}
 
 
 void setup()

@@ -17,7 +17,7 @@ CFLAGS= --debug -mstm8 -DF_CPU=16000000L -DSTM8S103 -DARDUINO=180 \
 	-I$(LIBBASE)/inc -I/usr/share/sdcc/include/
 # -DSUPPORT_ALTERNATE_MAPPINGS 
 
-LDFLAGS=-L$(LIBBASE)/src -L/opt/sdcc/share/sdcc/lib/stm8 -lstm8s103 --out-fmt-elf
+LDFLAGS=-L$(LIBBASE)/src -L/opt/sdcc/share/sdcc/lib/stm8 -lstm8s103
 
 OBJECTS=$(BASENAME).rel
 #SDLIBS=I2C
@@ -39,6 +39,7 @@ $(SDOBJECTS) : %.rel : $(SDUINO)/%.c
 	$(CC) -c $(CFLAGS) $^ -o $@
 
 $(SDLIBOBJECTS) : %.rel : $(SDUINO)/hardware/sduino/stm8/libraries/%.c
+	mkdir -p $(dir $@)
 	$(CC) -c $(CFLAGS) $^ -o $@
 
 flash: $(EXECUTABLE)
