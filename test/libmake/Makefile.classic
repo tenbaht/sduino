@@ -19,7 +19,7 @@ CFLAGS= --debug -mstm8 -DF_CPU=16000000L -DSTM8S103 -DARDUINO=180 \
 
 LDFLAGS=-L$(LIBBASE)/src -L/opt/sdcc/share/sdcc/lib/stm8 -lstm8s103 --out-fmt-elf
 
-OBJECTS=$(BASENAME).rel ssd1306.rel
+OBJECTS=$(BASENAME).rel
 #SDLIBS=I2C
 SDOBJECTS=main.rel wiring.rel wiring_digital.rel
 SDLIBOBJECTS=I2C/I2C.rel ssd1306/ssd1306.rel
@@ -38,7 +38,7 @@ $(OBJECTS) : %.rel : %.c
 $(SDOBJECTS) : %.rel : $(SDUINO)/%.c
 	$(CC) -c $(CFLAGS) $^ -o $@
 
-$(SDLIBOBJECTS) : %.rel : $(SDUINO)/libraries/%.c
+$(SDLIBOBJECTS) : %.rel : $(SDUINO)/hardware/sduino/stm8/libraries/%.c
 	$(CC) -c $(CFLAGS) $^ -o $@
 
 flash: $(EXECUTABLE)

@@ -829,7 +829,8 @@ ifeq ($(strip $(NO_CORE)),)
 
         ifneq ($(strip $(NO_CORE_MAIN_CPP)),)
             CORE_CPP_SRCS := $(filter-out %main.cpp, $(CORE_CPP_SRCS))
-            $(call show_config_info,NO_CORE_MAIN_CPP set so core library will not include main.cpp,[MANUAL])
+            CORE_C_SRCS   := $(filter-out %main.c,   $(CORE_C_SRCS))
+            $(call show_config_info,NO_CORE_MAIN_CPP set so core library will not include main.cpp or main.c,[MANUAL])
         endif
 
         CORE_OBJ_FILES  = $(CORE_C_SRCS:.c=.c.$(OBJSUFFIX)) $(CORE_CPP_SRCS:.cpp=.cpp.$(OBJSUFFIX)) $(CORE_AS_SRCS:.S=.S.$(OBJSUFFIX))
@@ -1479,7 +1480,9 @@ pre-build:
 		$(call runscript_if_exists,$(PRE_BUILD_HOOK))
 
 $(TARGET_HEX): 	$(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS)
-		$(CC) $(LDFLAGS) $(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS) $(OTHER_LIBS) -lstm8s103 -lstm8 $(LINKER_SCRIPTS) -o $@
+	$(CC) $(LDFLAGS) $(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS) \
+		$(filter %/core/main.c.$(OBJSUFFIX),$(CORE_OBJS)) \
+		$(OTHER_LIBS) -lstm8s103 -lstm8 $(LINKER_SCRIPTS) -o $@
 	$(call avr_size,$<,$@)
 ifneq ($(strip $(HEX_MAXIMUM_SIZE)),)
 	@if [ `$(SIZE) $@ | awk 'FNR == 2 {print $$2}'` -le $(HEX_MAXIMUM_SIZE) ]; then touch $@.sizeok; fi
