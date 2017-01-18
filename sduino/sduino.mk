@@ -42,10 +42,10 @@ endif
 ARDUINO_SKETCHBOOK	= /tmp	# temporarly, to prevent usage of the real libs
 ARDMK_VENDOR	= sduino
 ARCHITECTURE	= stm8
-CPPFLAGS	= -DSTM8S103 -I$(ARDUINO_DIR)/../STM8S_StdPeriph_Driver/inc -I/opt/sdcc/share/sdcc/include/
+CPPFLAGS	+= -DSTM8S103 -I. -I$(ARDUINO_DIR)/../STM8S_StdPeriph_Driver/inc -I/opt/sdcc/share/sdcc/include/
 #CFLAGS		= -I ../STM8S_StdPeriph_Driver/inc
 #LDFLAGS		= --out-fmt-elf 
-LDFLAGS		= -L $(ARDUINO_DIR)/../STM8S_StdPeriph_Driver/src -L/opt/sdcc/share/sdcc/lib/stm8
+LDFLAGS		+= -L $(ARDUINO_DIR)/../STM8S_StdPeriph_Driver/src -L/opt/sdcc/share/sdcc/lib/stm8
 
 
 
