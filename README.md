@@ -27,6 +27,60 @@ for others as well. The documentation is incomplete and written in a wild
 mix of English and German, but hopefully you can still figure it out.
 
 
+## Usage
+
+If you have ever used the Arduino environment before you will feel at home
+right away. The compilation is controlled by a makefile based on the amazing
+[Arduino.mk makefile](https://github.com/sudar/Arduino-Makefile) by
+[Sudar](http://sudarmuthu.com>).
+
+Let's blink an LED using the Blink example from Arduino:
+
+```
+/*
+  Blink
+  Turns on an LED on for one second, then off for one second, repeatedly.
+
+  This example code is in the public domain.
+*/
+
+#include <Arduino.h>
+
+// Pin 13 has an LED connected on most Arduino boards.
+// Pin 3 for the STM8S103 break out board
+// give it a name:
+int led = PIN_LED_BUILDIN;
+
+// the setup routine runs once when you press reset:
+void setup() {
+  // initialize the digital pin as an output.
+  pinMode(led, OUTPUT);
+}
+
+// the loop routine runs over and over again forever:
+void loop() {
+  digitalWrite(led, HIGH);   // turn the LED on (HIGH is the voltage level)
+  delay(1000);               // wait for a second
+  digitalWrite(led, LOW);    // turn the LED off by making the voltage LOW
+  delay(1000);               // wait for a second
+}
+```
+
+All we need for a full build is this very basic `Makefile`:
+
+```
+BOARD_TAG	= stm8sblue
+
+include ../../sduino/sduino.mk
+```
+
+Compile and upload it:
+
+	make upload
+
+Done! Your first STM8 based project is up and running!
+
+
 
 ## Tools used
 
@@ -39,9 +93,9 @@ SDCC support for the STM8 is still quite fresh and not very mature. It
 improves significantly from version to version. Be sure to use
 [the latest snapshot build](http://sdcc.sourceforge.net/snap.php) from the
 [project site on sourceforge](http://sdcc.sourceforge.net/), not the older
-version that might be included in your distribution. Version 3.5.0 as included with
-ubuntu 16.04 is definitly too old and compilation will fail due to some
-compiler errors.
+version that might be included in your distribution. Version 3.5.0 as
+included with ubuntu 16.04 is definitly too old and compilation will fail
+due to some compiler errors.
 
 Support for the Cosmic compiler under Windows and integration into the ST
 visual developer IDE might be possible, but is not done (yet?).
@@ -112,27 +166,22 @@ an option.
 
 
 
-## Usage
-
-No real documentation yet. Have a look in the `test` directory and use one of the Makefiles as a template.
-
-
 ## Included libraries
 
-**I2C**: The [I2C master library]
-(http://www.dsscircuits.com/articles/arduino-i2c-master-library)
+**I2C**: The
+[I2C master library] (http://www.dsscircuits.com/articles/arduino-i2c-master-library)
 by Wayne Truchsess offers some significant advantages over the Wire/TWI
 library included in the standard arduino environment: It fixes some possible
 deadlock situations, it allows for communication using a repeated start
 condition as required by some devices, the code is much more compact and the
 structure is easier to understand.
 
-So I decided to port this library instead of the standard one. the current
-state does not include the deadlock protection, though.
+The current state of the port does not include the deadlock protection,
+though.
 
 
 **ssd1306**: Driver for SSD1306-based monochrome OLED display with 128x64
-pixels. Based on the Adafruit-libray.
+pixels. I2C support only. Based on the Adafruit-libray.
 
 
 ## Why use a STM8 instead of an ATmega?
