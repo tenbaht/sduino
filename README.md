@@ -275,6 +275,18 @@ resulting stack content (starting at [SP], using simulator sstm8):
 
 => first paramter starts at [SP+3], MSB first.
 
+#### Register assignment
+
+**return values**:
+8 bit values in A, 16 bit values in X, 32 bit values in Y/X (Y=MSB, X=LSB)
+
+**register preservation**:
+Not implemented for the STM8 (yet?). For some architectures SDCC implements
+the possibility to mark a function that it does not effect the contents of
+some registers:
+
+	void f(void) __preserves_regs(b, c, iyl, iyh);
+
 
 
 
@@ -391,11 +403,13 @@ Multiplikation mit zwei wird nicht durch bitshift ersetzt (besonders beim
 Arrayzugriff absurd)
 
 Fehlende Features:
+  - _ _preserves_regs() function attribute not supported
   - _ _attribute_ _((weak))
-  - _ _critical{} erzeugt sim/rim statt push cc,sim/pop cc
-  - dead code elimination: Verbietet es, const-Tabellen anzulegen und fordert
-"#define" für alles.
-
+  - _ _critical{} generates sim/rim instead of push cc,sim/pop cc
+  - dead code elimination: Does not recognize tables of const values. Using a
+  const table would still pull in the whole object file, even when all
+  accesses to the table have been eleminated by the optimizer. Only way out
+  is to use `#define` statements instead.
 
 
 ## ST Standard Library
