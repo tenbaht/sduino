@@ -33,38 +33,41 @@
 #define BIN 2
 
 
+// for the function pointer to the actual write function
+typedef size_t (*writefunc_p)(char c);
+
 // this function is used for the actual output:
-int HardwareSerial_write(uint8_t c);	// FIXME: this prototype should not be here
-#define printChr(C)	HardwareSerial_write(C)
+//int HardwareSerial_write(uint8_t c);	// FIXME: this prototype should not be here
+//#define printChr(C)	HardwareSerial_write(C)
 
 // the actual used functions, mostly for internal use
-size_t printBuf(const uint8_t *buffer, size_t size);
-size_t printStr(const char *str);
-size_t printNumber(unsigned long n, uint8_t base);
-size_t printInt(long n, uint8_t base);
-size_t println(void);
+size_t printBuf(writefunc_p writefunc, const uint8_t *buffer, size_t size);
+size_t printStr(writefunc_p writefunc, const char *str);
+size_t printNumber(writefunc_p writefunc, unsigned long n, uint8_t base);
+size_t printInt(writefunc_p writefunc, long n, uint8_t base);
+size_t println(writefunc_p writefunc);
 
 // the more sophisticated Arduino-Style functions:
 
-#define Print_write(B,N)	printBuf(B,N)
+//#define Print_write(B,N)	printBuf(B,N)
 
 // variants of the standard Serial.print() function: Separate impementations
 // for string, char, unsigned, signed int
-#define Print_print_s(S)	printStr(S)
-#define Print_print_c(C)	printChr(C)
+//#define Print_print_s(S)	printStr(S)
+//#define Print_print_c(C)	printChr(C)
 // print unsigned integer values (char, short, int, long) as decimal values
-size_t Print_print_u(unsigned long n);
+size_t Print_print_u(writefunc_p writefunc, unsigned long n);
 // print signed integer values (char, short, int, long) as decimal value
-size_t Print_print_i(long n);
+size_t Print_print_i(writefunc_p writefunc, long n);
 // print unsigned integer values (char, short, int, long) to base B
-#define Print_print_ub(U,B)	printNumber(U,B)
+//#define Print_print_ub(U,B)	printNumber(U,B)
 // print signed integer values (char, short, int, long) to base B
-#define Print_print_ib(I,B)	printInt(I,B)
+//#define Print_print_ib(I,B)	printInt(I,B)
 
-size_t Print_println_s(char *str);
-size_t Print_println_u(unsigned long n);
-size_t Print_println_i(long n);
+size_t Print_println_s(writefunc_p writefunc, char *str);
+size_t Print_println_u(writefunc_p writefunc, unsigned long n);
+size_t Print_println_i(writefunc_p writefunc, long n);
 
-size_t Print_printFloat(double number, uint8_t digits);
+size_t Print_printFloat(writefunc_p writefunc, double number, uint8_t digits);
 
 #endif

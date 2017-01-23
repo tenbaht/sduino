@@ -44,17 +44,17 @@ void printNL(void);
 
 // Public Methods //////////////////////////////////////////////////////////////
 
-size_t printBuf(const uint8_t *buffer, size_t size)
+size_t printBuf(writefunc_p writefunc, const uint8_t *buffer, size_t size)
 {
   size_t n = 0;
   while (size--) {
-    if (printChr(*buffer++)) n++;
+    if (writefunc(*buffer++)) n++;
     else break;
   }
   return n;
 }
 
-size_t printStr(const char *str)
+size_t printStr(writefunc_p writefunc, const char *str)
 {
 	size_t		n = 0;
 	char c;
@@ -62,176 +62,63 @@ size_t printStr(const char *str)
 	if (!str) return 0;
 
 	while ( c=*str++ ) {	// assignment intented
-		if (printChr(c)) n++;
+		if (writefunc(c)) n++;
 		else break;
 	}
 	return n;
 }
 
 
-size_t Print_print_u(unsigned long n)
+size_t Print_print_u(writefunc_p writefunc, unsigned long n)
 {
-	return printNumber(n,10);
+	return printNumber(writefunc, n,10);
 }
 
-size_t Print_print_i(long n)
+size_t Print_print_i(writefunc_p writefunc, long n)
 {
-	return printInt(n,10);
+	return printInt(writefunc, n,10);
 }
 
-size_t Print_println_s(char *str)
-{
-	size_t r;
-
-	r = printStr(str);
-	return r + println();
-}
-
-
-
-size_t Print_println_u(unsigned long n)
+size_t Print_println_s(writefunc_p writefunc, char *str)
 {
 	size_t r;
 
-	r = printNumber(n,10);
-	return r + println();
+	r = printStr(writefunc, str);
+	return r + println(writefunc);
 }
 
-size_t Print_println_i(long n)
+
+
+size_t Print_println_u(writefunc_p writefunc, unsigned long n)
 {
 	size_t r;
 
-	r = printInt(n,10);
-	return r + println();
+	r = printNumber(writefunc, n,10);
+	return r + println(writefunc);
 }
 
-
-/*
-size_t Print::print(long n, int base)
+size_t Print_println_i(writefunc_p writefunc, long n)
 {
-  if (base == 0) {
-    return write(n);
-  } else if (base == 10) {
-    if (n < 0) {
-      int t = print('-');
-      n = -n;
-      return printNumber(n, 10) + t;
-    }
-    return printNumber(n, 10);
-  } else {
-    return printNumber(n, base);
-  }
+	size_t r;
+
+	r = printInt(writefunc, n,10);
+	return r + println(writefunc);
 }
 
-size_t Print::print(unsigned long n, int base)
-{
-  if (base == 0) return write(n);
-  else return printNumber(n, base);
-}
 
-size_t Print::print(double n, int digits)
-{
-  return printFloat(n, digits);
-}
-
-size_t Print::println(const __FlashStringHelper *ifsh)
-{
-  size_t n = print(ifsh);
-  n += println();
-  return n;
-}
-
-size_t Print::print(const Printable& x)
-{
-  return x.printTo(*this);
-}
-
-size_t Print::println(void)
-{
-  return write("\r\n");
-}
-
-size_t Print::println(const String &s)
-{
-  size_t n = print(s);
-  n += println();
-  return n;
-}
-
-size_t Print::println(const char c[])
-{
-  size_t n = print(c);
-  n += println();
-  return n;
-}
-
-size_t Print::println(char c)
-{
-  size_t n = print(c);
-  n += println();
-  return n;
-}
-
-size_t Print::println(unsigned char b, int base)
-{
-  size_t n = print(b, base);
-  n += println();
-  return n;
-}
-
-size_t Print::println(int num, int base)
-{
-  size_t n = print(num, base);
-  n += println();
-  return n;
-}
-
-size_t Print::println(unsigned int num, int base)
-{
-  size_t n = print(num, base);
-  n += println();
-  return n;
-}
-
-size_t Print::println(long num, int base)
-{
-  size_t n = print(num, base);
-  n += println();
-  return n;
-}
-
-size_t Print::println(unsigned long num, int base)
-{
-  size_t n = print(num, base);
-  n += println();
-  return n;
-}
-
-size_t Print::println(double num, int digits)
-{
-  size_t n = print(num, digits);
-  n += println();
-  return n;
-}
-
-size_t Print::println(const Printable& x)
-{
-  size_t n = print(x);
-  n += println();
-  return n;
-}
-*/
 // Private Methods /////////////////////////////////////////////////////////////
 
-size_t println(void)
+size_t println(writefunc_p writefunc)
 {
-	printChr(13);
-	printChr(10);
-	return 2;
+	size_t n;
+
+	n  = writefunc(13);
+	n += writefunc(10);
+	return n;
 }
 
 
-size_t printNumber(unsigned long n, uint8_t base)
+size_t printNumber(writefunc_p writefunc, unsigned long n, uint8_t base)
 {
   char buf[8 * sizeof(long) + 1]; // Assumes 8-bit chars plus zero byte.
   char *str = &buf[sizeof(buf) - 1];
@@ -248,27 +135,27 @@ size_t printNumber(unsigned long n, uint8_t base)
     *--str = c < 10 ? c + '0' : c + 'A' - 10;
   } while(n);
 
-  return printStr(str);
+  return printStr(writefunc, str);
 }
 
-size_t printInt(long n, uint8_t base)
+size_t printInt(writefunc_p writefunc, long n, uint8_t base)
 {
   if (base == 0) {
-    return printChr((unsigned char) n);
+    return writefunc((unsigned char) n);
   } else if (base == 10) {
     if (n < 0) {
-      int t = printChr('-');
+      int t = writefunc('-');
       n = -n;
-      return printNumber(n, 10) + t;
+      return printNumber(writefunc, n, 10) + t;
     }
-    return printNumber(n, 10);
+    return printNumber(writefunc, n, 10);
   } else {
-    return printNumber(n, base);
+    return printNumber(writefunc, n, base);
   }
 }
 
 /*
-size_t Print_printFloat(double number, uint8_t digits) 
+size_t Print_printFloat(writefunc_p writefunc, double number, uint8_t digits) 
 { 
   size_t n = 0;
   uint8_t i;

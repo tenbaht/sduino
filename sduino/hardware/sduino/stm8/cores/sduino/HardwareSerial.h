@@ -65,3 +65,25 @@ int HardwareSerial_write(uint8_t c);
 void HardwareSerial_flush(void);
 
 void HardwareSerial_end(void);
+
+
+// variants of the standard Serial.print() function: Separate impementations
+// for string, char, unsigned, signed int
+#define Serial_print_s(S)	printStr(HardwareSerial_write,S)
+#define Serial_print_c(C)	printChr(HardwareSerial_write,C)
+
+// print signed/unsigned integer values (char, short, int, long) as decimal values
+#define Serial_print_i(I)	Print_print_i(HardwareSerial_write,I)
+#define Serial_print_u(U)	Print_print_u(HardwareSerial_write,U)
+
+// print signed/unsigned integer values (char, short, int, long) to base B
+#define Serial_print_ib(I,B)	printInt(HardwareSerial_write,I,B)
+#define Serial_print_ub(U,B)	printNumber(HardwareSerial_write,U,B)
+
+
+#define Serial_println_s(S)	Print_println_s(HardwareSerial_write,S)
+#define Serial_println_u(U)	Print_println_u(HardwareSerial_write,U)
+#define Serial_println_i(I)	Print_println_i(HardwareSerial_write,I)
+
+// float (not implemented yet)
+#define Serial_print_f(F,D)	Print_printFloat(HardwareSerial_write,F,D)
