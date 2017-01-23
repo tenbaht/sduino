@@ -151,23 +151,36 @@ private:
   void lcd_setRowOffsets(uint8_t row0, uint8_t row1, uint8_t row2, uint8_t row3);
   void lcd_createChar(uint8_t, uint8_t[]);
   void lcd_setCursor(uint8_t, uint8_t); 
-//FIXME  virtual size_t write(uint8_t);
-//  void lcd_command(uint8_t);
+  size_t lcd_write(uint8_t);
+  void lcd_command(uint8_t);
   
-//FIXME  using Print::write;
 
-/*********** mid level commands, for sending data/cmds */
+/*
+ * simulate the inheritance of Print class:
+ * define some function names with similar names to the methods
+ * "inheritated" from "class" Print
+ */
 
-  void lcd_send(uint8_t value, uint8_t mode);
+// variants of the standard lcd.print() function: Separate impementations
+// for string, char, unsigned, signed int
+#define lcd_print_s(S)	printStr(lcd_write,S)
+#define lcd_print_c(C)	printChr(lcd_write,C)
 
-inline void lcd_command(uint8_t value) {
-  lcd_send(value, LOW);
-}
+// print signed/unsigned integer values (char, short, int, long) as decimal values
+#define lcd_print_i(I)	Print_print_i(lcd_write,I)
+#define lcd_print_u(U)	Print_print_u(lcd_write,U)
 
-inline size_t lcd_write(uint8_t value) {
-  lcd_send(value, HIGH);
-  return 1; // assume sucess
-}
+// print signed/unsigned integer values (char, short, int, long) to base B
+#define lcd_print_ib(I,B)	printInt(lcd_write,I,B)
+#define lcd_print_ub(U,B)	printNumber(lcd_write,U,B)
+
+
+#define lcd_println_s(S)	Print_println_s(lcd_write,S)
+#define lcd_println_u(U)	Print_println_u(lcd_write,U)
+#define lcd_println_i(I)	Print_println_i(lcd_write,I)
+
+// float (not implemented yet)
+#define lcd_print_f(F,D)	Print_printFloat(lcd_write,F,D)
 
 
 #endif
