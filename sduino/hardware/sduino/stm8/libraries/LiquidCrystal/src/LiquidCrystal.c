@@ -26,7 +26,7 @@
 
 // private variables
 
-//static void lcd_send(uint8_t, uint8_t);
+static void lcd_send(uint8_t, uint8_t);
 static void lcd_write4bits(uint8_t);
 static void lcd_write8bits(uint8_t);
 static void lcd_pulseEnable();
@@ -294,22 +294,23 @@ void lcd_createChar(uint8_t location, uint8_t charmap[]) {
   }
 }
 
+
 /*********** mid level commands, for sending data/cmds */
-/*
-inline void lcd_command(uint8_t value) {
+
+void lcd_command(uint8_t value) {
   lcd_send(value, LOW);
 }
 
-inline size_t lcd_write(uint8_t value) {
+size_t lcd_write(uint8_t value) {
   lcd_send(value, HIGH);
   return 1; // assume sucess
 }
-*/
+
 
 /************ low level data pushing commands **********/
 
 // write either command or data, with automatic 4/8-bit selection
-void lcd_send(uint8_t value, uint8_t mode) {
+static void lcd_send(uint8_t value, uint8_t mode) {
   digitalWrite(_rs_pin, mode);
 
   // if there is a RW pin indicated, set it low to Write
