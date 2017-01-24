@@ -309,6 +309,7 @@ some registers:
 `delay()`  
 `analogWrite()`  
 `ShiftOut()`  
+WMath: `map()`  
 HardwareSerial  
 Print (without float)  
 SPI: working, no interrupt support
@@ -323,7 +324,8 @@ Wire/I2C
 
 #### not tested
 `ShiftIn()`  
-
+`random()`  
+`srandom()`  
 
 #### not implemented
 `yield()`  
