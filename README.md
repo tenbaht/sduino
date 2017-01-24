@@ -168,6 +168,14 @@ an option.
 
 ## Included libraries
 
+**LiquidCrystal**:
+Supports text LCD based on the HD44780 and compatibles, that includes almost
+all character LCDs up to 4x40 Characters.
+
+
+**SPI**
+
+
 **I2C**: The
 [I2C master library] (http://www.dsscircuits.com/articles/arduino-i2c-master-library)
 by Wayne Truchsess offers some significant advantages over the Wire/TWI
@@ -182,6 +190,8 @@ though.
 
 **ssd1306**: Driver for SSD1306-based monochrome OLED display with 128x64
 pixels. I2C support only. Based on the Adafruit-libray.
+
+
 
 
 ## Why use a STM8 instead of an ATmega?
@@ -297,12 +307,16 @@ some registers:
 `digitalWrite()`  
 `analogRead()`  
 `delay()`  
+`analogWrite()`  
+`ShiftOut()`  
+WMath: `map()`  
 HardwareSerial  
 Print (without float)  
 SPI: working, no interrupt support
+LiquidCrystal (for text LCD based on the HD44780 controller)
+PCD8544 (for Nokia 5110 type displays)
 
 #### implemented and partly working
-`analogWrite()`  
 Wire/I2C  
 
 #### tested, but not working
@@ -310,11 +324,18 @@ Wire/I2C
 
 #### not tested
 `ShiftIn()`  
-`ShiftOut()`  
-
+`random()`  
+`srandom()`  
 
 #### not implemented
 `yield()`  
+`tone()`  
+`noTone()`  
+`pulseIn()`  
+`pulseInLong()`  
+module WCharacter  
+module WString  
+
 
 The compile environment needs to detect which interrupts are actively used
 and link only the needed ones into the binary. See test/digitalWrite:
@@ -325,6 +346,70 @@ routines are pulled into the binary by the interrupt table in main.c.
 
 
 ## Differences from the original Arduino environment
+
+The original Arduino environment uses C++ syntax while sduino can only use
+plain C syntax. Luckily, not many C++ features are used and in most cases a
+conversion is not very hard.
+
+
+
+### Migrating existing code from C++ to C syntax
+
+In most cases a conversion from C++ to C it is just a matter of exchanging a
+dot for an underscore. A C++ method name `class.method()` becomes a C
+function name `class_method()`.
+
+This is possible since most libraries are written to be used as a singleton
+anyway, so the fixed name prefix is not a problem.
+
+There are two bigger problems left:
+
+
+
+#### Polymorph functions
+
+The concept of polymorphism does not exist for plain C. As a workaround
+'mangled' function names are used for the different parameter type
+combinations supported by the original polymorph methods.
+
+Typical name extensions are: `_u` for unsigned values, `_i` for signed
+integer values, `_c`for characters, `_s` for strings, `_n` for data
+buffer/length combinations.
+
+For more non-regular polymorphism the name extension is often related to the
+different use cases or to the names of the given parameters. Refer to the
+respective library header file for details.
+
+Some examples of typical name changes:
+
+C++ name				| C name
+-------					| -------
+`Print.print(int)`			| `Print_print_i`
+`Print.print(unsigned)`			| `Print_print_u`
+`Print.print(char)`			| `Print_print_c`
+`Print.print(char *)`			| `Print_print_s`
+`Print.print(char *buf, int len)`	| `Print_print_n`
+`Print.print(unsigned n, int base)`	| `Print_print_ub`
+`random(long)`				| `random`
+`random(long howsmall, long howbig)	| `random_minmax`
+
+
+
+
+#### Inheritance from Print class
+
+Most character output modules inherit methods from the Print class by
+providing a virtual write method. A similar result can be achived by
+providing a function pointer to the write function to be used to the print
+functions.
+
+This additional parameter is hidden from the user by providing more
+convinient defines in every library that need to 'inherit' functions from
+Print. This way 
+`lcd.print("Hello World!")` becomes
+`lcd_print_s("Hello World!")`
+
+
 
 #### Additional output pin modes
 
@@ -342,6 +427,11 @@ routines are pulled into the binary by the interrupt table in main.c.
 time for a cycle time as close to 1ms as possible. Default values @16Mhz:
 prescaler=64, counter cycle=250 (end value=249), resulting in exactly 1ms
 intervals.
+
+
+#### Other modifications
+
+`makeWord(unsigned char, unsigned char)` is an inline function now.
 
 
 

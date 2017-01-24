@@ -257,12 +257,12 @@ void tone(uint8_t _pin, unsigned int frequency, unsigned long duration);
 void noTone(uint8_t _pin);
 
 // WMath prototypes
-/*FIXME
-long random(long);
-long random(long, long);
-void randomSeed(unsigned long);
-long map(long, long, long, long, long);
-*/
+long random(long howbig);
+long random_minmax(long howsmall, long howbig);
+void randomSeed(unsigned long seed);
+long map(long x, long in_min, long in_max, long out_min, long out_max);
+
+inline unsigned int makeWord(unsigned char h, unsigned char l) { return (h << 8) | l; }
 
 #include "pins_arduino.h"
 
