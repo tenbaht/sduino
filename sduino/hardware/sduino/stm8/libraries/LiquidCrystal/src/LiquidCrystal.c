@@ -292,6 +292,8 @@ void lcd_createChar(uint8_t location, uint8_t charmap[]) {
   for (int i=0; i<8; i++) {
     lcd_write(charmap[i]);
   }
+  // switch back to character output mode
+  lcd_command(LCD_SETDDRAMADDR);
 }
 
 

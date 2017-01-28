@@ -224,10 +224,8 @@ void analogWrite(uint8_t pin, int val)
 				TIM1->CCR4L = (uint8_t)(val);
 #endif
 				break;
-#ifdef SUPPORT_ALTERNATE_MAPPINGS
 			case TIMER21:
 				// connect pwm to pin on timer 2, channel 1
-				alternateFunction(1);
 #ifdef USE_SPL
 				TIM2_OC1Init(
 					TIM2_OCMODE_PWM1,
@@ -245,7 +243,6 @@ void analogWrite(uint8_t pin, int val)
 				TIM2->CCR1L = (uint8_t)(val);
 #endif
 				break;
-#endif
 			case TIMER22:
 				// connect pwm to pin on timer 2, channel 2
 #ifdef USE_SPL
@@ -264,7 +261,6 @@ void analogWrite(uint8_t pin, int val)
 				TIM2->CCR2L = (uint8_t)(val);
 #endif
 				break;
-#ifdef SUPPORT_ALTERNATE_MAPPINGS
 			case TIMER23:
 				// connect pwm to pin on timer 2, channel 3
 #ifdef USE_SPL
@@ -284,7 +280,6 @@ void analogWrite(uint8_t pin, int val)
 				TIM2->CCR3L = (uint8_t)(val);
 #endif
 				break;
-#endif
 			case NOT_ON_TIMER:
 			default:
 				if (val < 128) {

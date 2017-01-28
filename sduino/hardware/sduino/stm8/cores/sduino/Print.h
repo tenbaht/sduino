@@ -36,10 +36,6 @@
 // for the function pointer to the actual write function
 typedef size_t (*writefunc_p)(char c);
 
-// this function is used for the actual output:
-//int HardwareSerial_write(uint8_t c);	// FIXME: this prototype should not be here
-//#define printChr(C)	HardwareSerial_write(C)
-
 // the actual used functions, mostly for internal use
 size_t printBuf(writefunc_p writefunc, const uint8_t *buffer, size_t size);
 size_t printStr(writefunc_p writefunc, const char *str);

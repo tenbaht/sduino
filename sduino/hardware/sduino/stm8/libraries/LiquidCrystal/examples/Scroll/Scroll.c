@@ -1,13 +1,14 @@
 /*
-  LiquidCrystal Library - Hello World
+  LiquidCrystal Library - scrollDisplayLeft() and scrollDisplayRight()
 
  Demonstrates the use a 16x2 LCD display.  The LiquidCrystal
  library works with all LCD displays that are compatible with the
  Hitachi HD44780 driver. There are many of them out there, and you
  can usually tell them by the 16-pin interface.
 
- This sketch prints "Hello World!" to the LCD
- and shows the time.
+ This sketch prints "Hello World!" to the LCD and uses the
+ scrollDisplayLeft() and scrollDisplayRight() methods to scroll
+ the text.
 
   The circuit:
   lcd_connection_4bit_r(PA2,PA3, PD2,PD3,PD6,PA1);
@@ -37,7 +38,8 @@
 
  This example code is in the public domain.
 
- http://www.arduino.cc/en/Tutorial/LiquidCrystal
+ http://www.arduino.cc/en/Tutorial/LiquidCrystalScroll
+
  */
 
 // include the library code:
@@ -52,13 +54,39 @@ void setup() {
   lcd_begin(16, 2);
   // Print a message to the LCD.
   lcd_print_s("hello, world!");
+  delay(1000);
 }
-
 
 void loop() {
-  // set the cursor to column 0, line 1
-  // (note: line 1 is the second row, since counting begins with 0):
-  lcd_setCursor(0, 1);
-  // print the number of seconds since reset:
-  lcd_print_u(millis() / 100);
+  // scroll 13 positions (string length) to the left
+  // to move it offscreen left:
+  for (int positionCounter = 0; positionCounter < 13; positionCounter++) {
+    // scroll one position left:
+    lcd_scrollDisplayLeft();
+    // wait a bit:
+    delay(150);
+  }
+
+  // scroll 29 positions (string length + display length) to the right
+  // to move it offscreen right:
+  for (int positionCounter = 0; positionCounter < 29; positionCounter++) {
+    // scroll one position right:
+    lcd_scrollDisplayRight();
+    // wait a bit:
+    delay(150);
+  }
+
+  // scroll 16 positions (display length + string length) to the left
+  // to move it back to center:
+  for (int positionCounter = 0; positionCounter < 16; positionCounter++) {
+    // scroll one position left:
+    lcd_scrollDisplayLeft();
+    // wait a bit:
+    delay(150);
+  }
+
+  // delay at the end of the full loop:
+  delay(1000);
+
 }
+

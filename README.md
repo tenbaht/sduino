@@ -391,7 +391,7 @@ C++ name				| C name
 `Print.print(char *buf, int len)`	| `Print_print_n`
 `Print.print(unsigned n, int base)`	| `Print_print_ub`
 `random(long)`				| `random`
-`random(long howsmall, long howbig)	| `random_minmax`
+`random(long howsmall, long howbig)`	| `random_minmax`
 
 
 
@@ -407,7 +407,11 @@ This additional parameter is hidden from the user by providing more
 convinient defines in every library that need to 'inherit' functions from
 Print. This way 
 `lcd.print("Hello World!")` becomes
-`lcd_print_s("Hello World!")`
+`lcd_print_s("Hello World!")` and
+`Serial.print("Hello World!")` becomes
+`Serial_print_s("Hello World!")`. Both call the same code from Print, but
+with different function pointers to their own putchar/write function.
+
 
 
 

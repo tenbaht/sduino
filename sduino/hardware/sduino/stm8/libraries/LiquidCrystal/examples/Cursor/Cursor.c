@@ -1,13 +1,14 @@
 /*
-  LiquidCrystal Library - Hello World
+  LiquidCrystal Library - Cursor
 
  Demonstrates the use a 16x2 LCD display.  The LiquidCrystal
  library works with all LCD displays that are compatible with the
  Hitachi HD44780 driver. There are many of them out there, and you
  can usually tell them by the 16-pin interface.
 
- This sketch prints "Hello World!" to the LCD
- and shows the time.
+ This sketch prints "Hello World!" to the LCD and
+ uses the cursor()  and noCursor() methods to turn
+ on and off the cursor.
 
   The circuit:
   lcd_connection_4bit_r(PA2,PA3, PD2,PD3,PD6,PA1);
@@ -37,7 +38,8 @@
 
  This example code is in the public domain.
 
- http://www.arduino.cc/en/Tutorial/LiquidCrystal
+ http://www.arduino.cc/en/Tutorial/LiquidCrystalCursor
+
  */
 
 // include the library code:
@@ -56,9 +58,11 @@ void setup() {
 
 
 void loop() {
-  // set the cursor to column 0, line 1
-  // (note: line 1 is the second row, since counting begins with 0):
-  lcd_setCursor(0, 1);
-  // print the number of seconds since reset:
-  lcd_print_u(millis() / 100);
+  // Turn off the cursor:
+  lcd_noCursor();
+  delay(500);
+  // Turn on the cursor:
+  lcd_cursor();
+  delay(500);
 }
+
