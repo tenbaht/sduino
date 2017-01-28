@@ -1,13 +1,13 @@
 /*
-  LiquidCrystal Library - Hello World
+  LiquidCrystal Library - setCursor
 
  Demonstrates the use a 16x2 LCD display.  The LiquidCrystal
  library works with all LCD displays that are compatible with the
  Hitachi HD44780 driver. There are many of them out there, and you
  can usually tell them by the 16-pin interface.
 
- This sketch prints "Hello World!" to the LCD
- and shows the time.
+ This sketch prints to all the positions of the LCD using the
+ setCursor() method:
 
   The circuit:
   lcd_connection_4bit_r(PA2,PA3, PD2,PD3,PD6,PA1);
@@ -37,28 +37,41 @@
 
  This example code is in the public domain.
 
- http://www.arduino.cc/en/Tutorial/LiquidCrystal
+ http://www.arduino.cc/en/Tutorial/LiquidCrystalSetCursor
+
  */
 
 // include the library code:
 #include <Arduino.h>
 #include <LiquidCrystal.h>
 
+// these constants won't change.  But you can change the size of
+// your LCD using them:
+const int numRows = 2;
+const int numCols = 16;
 
 void setup() {
   // initialize the library with the numbers of the interface pins
   lcd_connection_4bit_r(PA1,PA2, PA3,PD2,PD3,PD4);
   // set up the LCD's number of columns and rows:
-  lcd_begin(16, 2);
-  // Print a message to the LCD.
-  lcd_print_s("hello, world!");
+  lcd_begin(numCols, numRows);
 }
-
 
 void loop() {
-  // set the cursor to column 0, line 1
-  // (note: line 1 is the second row, since counting begins with 0):
-  lcd_setCursor(0, 1);
-  // print the number of seconds since reset:
-  lcd_print_u(millis() / 100);
+  // loop from ASCII 'a' to ASCII 'z':
+  for (int thisLetter = 'a'; thisLetter <= 'z'; thisLetter++) {
+    // loop over the columns:
+    for (int  thisRow = 0; thisRow < numRows; thisRow++) {
+      // loop over the rows:
+      for (int thisCol = 0; thisCol < numCols; thisCol++) {
+        // set the cursor position:
+        lcd_setCursor(thisCol, thisRow);
+        // print the letter:
+        lcd_write(thisLetter);
+        delay(200);
+      }
+    }
+  }
 }
+
+

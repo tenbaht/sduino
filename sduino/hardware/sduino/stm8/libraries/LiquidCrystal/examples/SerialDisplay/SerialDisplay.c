@@ -1,13 +1,13 @@
 /*
-  LiquidCrystal Library - Hello World
+  LiquidCrystal Library - Serial Input
 
  Demonstrates the use a 16x2 LCD display.  The LiquidCrystal
  library works with all LCD displays that are compatible with the
  Hitachi HD44780 driver. There are many of them out there, and you
  can usually tell them by the 16-pin interface.
 
- This sketch prints "Hello World!" to the LCD
- and shows the time.
+ This sketch displays text sent over the serial port
+ (e.g. from the Serial Monitor) on an attached LCD.
 
   The circuit:
   lcd_connection_4bit_r(PA2,PA3, PD2,PD3,PD6,PA1);
@@ -32,33 +32,39 @@
  by Tom Igoe
  modified 22 Nov 2010
  by Tom Igoe
- modified 23 Jan 2017
+ modified 26 Jan 2017
  by Michael Mayer
 
  This example code is in the public domain.
 
- http://www.arduino.cc/en/Tutorial/LiquidCrystal
+ http://www.arduino.cc/en/Tutorial/LiquidCrystalSerial
  */
 
 // include the library code:
 #include <Arduino.h>
 #include <LiquidCrystal.h>
-
+#include <HardwareSerial.h>
 
 void setup() {
   // initialize the library with the numbers of the interface pins
   lcd_connection_4bit_r(PA1,PA2, PA3,PD2,PD3,PD4);
   // set up the LCD's number of columns and rows:
   lcd_begin(16, 2);
-  // Print a message to the LCD.
-  lcd_print_s("hello, world!");
+  // initialize the serial communications:
+  Serial_begin(9600);
 }
 
-
 void loop() {
-  // set the cursor to column 0, line 1
-  // (note: line 1 is the second row, since counting begins with 0):
-  lcd_setCursor(0, 1);
-  // print the number of seconds since reset:
-  lcd_print_u(millis() / 100);
+  // when characters arrive over the serial port...
+  if (Serial_available()) {
+    // wait a bit for the entire message to arrive
+    delay(100);
+    // clear the screen
+    lcd_clear();
+    // read all the available characters
+    while (Serial_available() > 0) {
+      // display each character to the LCD
+      lcd_write(Serial_read());
+    }
+  }
 }
