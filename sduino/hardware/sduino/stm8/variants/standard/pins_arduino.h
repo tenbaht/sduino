@@ -172,12 +172,12 @@ extern const uint8_t digitalPinToAnalogChannelMap[];
 // STM8S103F3 breakout board
 //
 //                       +-\/-+
-//          (D 13) PD4  1|    |20  PD3 (D 12, AI 2) PWM
+// PWM      (D 13) PD4  1|    |20  PD3 (D 12, AI 2) PWM
 // TX (D 14, AI 3) PD5  2|    |19  PD2 (D 11, AI 1)
 // RX (D 15, AI 4) PD6  3|    |18  PD1 (D 10)
 //                NRST  4|    |17  PC7 (D 9)   MISO/PWM+
 //           (D 0) PA1  5|    |16  PC6 (D 8)   MOSI/PWM+
-//           (D 1) PA2  6|    |15  PC5 (D 7)    SCK/PWM+
+//           (D 1) PA2  6|    |15  PC5 (D 7)    SCK
 //                 GND  7|    |14  PC4 (D 6, AI 0)  PWM
 //                Vcap  8|    |13  PC3 (D 5)        PWM
 //                 Vdd  9|    |12  PB4 (D 4)        SCL
@@ -278,19 +278,18 @@ const uint8_t PROGMEM digital_pin_to_timer_PGM[] = {
 	NOT_ON_TIMER,
 	TIMER13,	// 5
 	TIMER14,	// 6
+	NOT_ON_TIMER,	// 7, TIMER21,	duplicate from PD4/dig. 13
 #ifdef SUPPORT_ALTERNATE_MAPPINGS
-	TIMER21,	// 7
 	TIMER11,	// 8
 	TIMER12,	// 9
 #else
-	NOT_ON_TIMER,	// 7
 	NOT_ON_TIMER,	// 8
 	NOT_ON_TIMER,	// 9
 #endif
 	NOT_ON_TIMER,
-	NOT_ON_TIMER,	// TIMER23,	/* 11, only alternate function */
+	NOT_ON_TIMER,	// 11, TIMER23, duplicate from PA3/dig. 3
 	TIMER22,	// 12
-	NOT_ON_TIMER,	// TIMER21,	/* 13, only alternate function */
+	TIMER21,	// 13
 	NOT_ON_TIMER,
 	NOT_ON_TIMER,
 };
