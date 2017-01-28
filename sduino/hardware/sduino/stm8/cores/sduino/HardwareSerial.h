@@ -61,16 +61,27 @@ void HardwareSerial_begin_config(unsigned long baud, uint8_t config);
 
 int HardwareSerial_available(void);
 int HardwareSerial_read(void);
-int HardwareSerial_write(uint8_t c);
+size_t HardwareSerial_write(uint8_t c);
 void HardwareSerial_flush(void);
 
 void HardwareSerial_end(void);
 
 
-// variants of the standard Serial.print() function: Separate impementations
+// Alias Definitions for a more Arduino-like look ////////////////////////////
+
+#define Serial_begin		HardwareSerial_begin
+#define Serial_begin_config	HardwareSerial_begin_config
+#define Serial_available	HardwareSerial_available
+#define Serial_read		HardwareSerial_read
+#define Serial_write		HardwareSerial_write
+#define Serial_flush		HardwareSerial_flush
+#define Serial_end		HardwareSerial_end
+
+
+// variants of the standard Serial.print() function: Separate implementations
 // for string, char, unsigned, signed int
 #define Serial_print_s(S)	printStr(HardwareSerial_write,S)
-#define Serial_print_c(C)	printChr(HardwareSerial_write,C)
+#define Serial_print_c(C)	HardwareSerial_write(C)
 
 // print signed/unsigned integer values (char, short, int, long) as decimal values
 #define Serial_print_i(I)	Print_print_i(HardwareSerial_write,I)
@@ -81,6 +92,7 @@ void HardwareSerial_end(void);
 #define Serial_print_ub(U,B)	printNumber(HardwareSerial_write,U,B)
 
 
+#define Serial_println()	Print_println(HardwareSerial_write)
 #define Serial_println_s(S)	Print_println_s(HardwareSerial_write,S)
 #define Serial_println_u(U)	Print_println_u(HardwareSerial_write,U)
 #define Serial_println_i(I)	Print_println_i(HardwareSerial_write,I)

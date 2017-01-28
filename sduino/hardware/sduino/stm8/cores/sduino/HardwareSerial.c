@@ -236,8 +236,7 @@ void HardwareSerial_flush(void)
   transmitting = 0;
 }
 
-//size_t 
-int HardwareSerial_write(uint8_t c)
+size_t HardwareSerial_write(uint8_t c)
 {
   int i = (tx_buffer.head + 1) % SERIAL_BUFFER_SIZE;
 	
