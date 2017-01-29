@@ -25,6 +25,9 @@
   Modified 15 December 2016 by Michael Mayer
 */
 
+#ifndef _HARDWARE_SERIAL_H_
+#define _HARDWARE_SERIAL_H_
+
 #include <stdlib.h>
 
 
@@ -99,3 +102,6 @@ void HardwareSerial_end(void);
 
 // float (not implemented yet)
 #define Serial_print_f(F,D)	Print_printFloat(HardwareSerial_write,F,D)
+
+
+#endif

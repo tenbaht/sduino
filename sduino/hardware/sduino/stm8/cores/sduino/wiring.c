@@ -438,11 +438,17 @@ void alternateFunction(uint8_t val)
 
 void init()
 {
+#ifndef ENABLE_SWIM
 	// free the SWIM pin to be used as a general I/O-Pin
-//FIXME: CFG_GCR setzen
+	CFG->GCR = CFG_GCR_SWD;
+#endif
 
 	// set the clock to 16 MHz
+#ifdef USE_SPL
 	CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);
+#else
+	CLK->CKDIVR = 0;
+#endif
 	
 	GPIO_DeInit(GPIOA);
 	GPIO_DeInit(GPIOB);

@@ -21,10 +21,6 @@ Arduino libraries porting parts of the Arduino environment was the logical
 first step. After doing that porting the firmware was finished in a
 couple of days.
 
-Find more in detail information about the supported boards, needed tools and
-the library APIs on the
-[project website](https://tenbaht.github.io/sduino/).
-
 This whole thing is far from being a finished product. It is in alpha stage,
 but still already useful. It solved its purpose for me, it might me useful
 for others as well. The documentation is incomplete and written in a wild
@@ -172,6 +168,51 @@ an option.
 
 
 
+## Included libraries
+
+### LiquidCrystal
+Supports text LCD based on the HD44780 and compatibles, that includes almost
+all character LCDs up to 4x40 Characters.
+
+
+### PCD8544
+Supports monochrome graphical LCD based on the PCD8544 controller like the
+popular Nokia N5110 display. Only SPI mode supported. The library is a very
+much simpified version of the Adafruit library optimized for a minimal memory
+footprint. Uses soft-SPI, does not need the SPI pins.
+
+
+### SPI
+Real hardware-SPI up to 10MHz.
+
+
+### I2C
+The
+[I2C master library] (http://www.dsscircuits.com/articles/arduino-i2c-master-library)
+by Wayne Truchsess offers some significant advantages over the Wire/TWI
+library included in the standard arduino environment: It fixes some possible
+deadlock situations, it allows for communication using a repeated start
+condition as required by some devices, the code is much more compact and the
+structure is easier to understand.
+
+The current state of the port does not include the deadlock protection,
+though.
+
+
+### ssd1306
+Driver for SSD1306-based monochrome OLED display with 128x64
+pixels. I2C support only. Based on the Adafruit-libray.
+
+
+### Stepper
+For stepper motors with 2, 4 or 5 phases. This library has a slightly
+diffent user interface than the usual singleton libraries. This allow it to
+handle more than one stepper per Sketch.
+[API description](api/Stepper.md)
+
+
+
+
 ## Current status and to-do list
 
 #### tested and working
@@ -187,11 +228,10 @@ Print (without float)
 SPI: working, no interrupt support  
 LiquidCrystal (for text LCD based on the HD44780 controller)  
 PCD8544 (for Nokia 5110 type displays)  
-[Stepper](Stepper.md) (multi-instance design for more than one stepper at a time)  
-ssd1306 (for monochrome OLED displays based on SSD1306 controller)  
+[Stepper](api/Stepper.md) (multi-instance design for more than one stepper at a time)  
 
 #### implemented and partly working
-Wire/I2C: no deadlock protection yet  
+Wire/I2C  
 
 #### tested, but not working
 `alternateFunctions()`  
@@ -217,6 +257,37 @@ Compiling with the straight Makefile.classic does not add UART interrupt
 routines. But when using the sduino.mk Makefile the two UART interrupt
 routines are pulled into the binary by the interrupt table in main.c.
 
+
+
+## Differences from the original Arduino environment
+
+The original Arduino environment uses C++ syntax while sduino can only use
+plain C syntax. Luckily, not many C++ features are used and in most cases a
+conversion is not very hard. See the [migration guildelines](migration.md)
+for details.
+
+
+### Additional output pin modes
+
+|Pin mode		|Pin properties
+|---------------------	|------------------------------------
+|`OUTPUT`		|output, push-pull, slow mode (default)  
+|`OUTPUT_OD`		|output, open drain, fast mode  
+|`OUTPUT_FAST`		|output, push-pull, fast mode  
+|`OUTPUT_OD_FAST`	|output, open drain, fast mode  
+
+
+### Timer
+
+`millis()` uses timer4. The prescaler and end value is calculated at compile
+time for a cycle time as close to 1ms as possible. Default values @16Mhz:
+prescaler=64, counter cycle=250 (end value=249), resulting in exactly 1ms
+intervals.
+
+
+### Other modifications
+
+`makeWord(unsigned char, unsigned char)` is an inline function now.
 
 
 ## Why use a STM8 instead of an ATmega?
@@ -274,6 +345,128 @@ https://sourceforge.net/p/oggstreamer/oggs-stm8-firmware-001/ci/master/tree/rx_r
 
 [AN3139](http://www.st.com/resource/en/application_note/cd00262293.pdf):
 Migration guideline within the STM8L familiy  
+
+
+
+## ST Standard Library
+
+Can be [downloaded from the ST website]
+(http://www.st.com/en/embedded-software/stsw-stm8069.html)
+(free registration required). Don't miss the Examples folder within the
+downloaded zip file. This is the most useful reference on using this library
+and programming the STM8 in general.
+
+For use with SDCC the library needs to be patched:
+
+	git clone https://github.com/g-gabber/STM8S_StdPeriph_Driver.git
+	git clone https://github.com/gicking/SPL_2.2.0_SDCC_patch.git
+	cp ../STM8S_SPL_2.2.0/Libraries/STM8S_StdPeriph_Driver/inc/stm8s.h .
+	patch -p1 < ../SPL_2.2.0_SDCC_patch/STM8_SPL_v2.2.0_SDCC.patch
+	cp -av  ../STM8S_StdPeriph_Lib/Project/STM8S_StdPeriph_Template/stm8s_conf.h .
+	cp -av  ../STM8S_StdPeriph_Lib/Project/STM8S_StdPeriph_Template/stm8s_it.h .
+
+SDCC uses .rel as the file extension for its object files.
+
+Additional patch required for stm8s_itc.c:
+
+```diff
+--- stm8s_itc.c~	2014-10-21 17:32:20.000000000 +0200
++++ stm8s_itc.c	2016-12-11 21:56:41.786048494 +0100
+@@ -55,9 +55,12 @@
+   return; /* Ignore compiler warning, the returned value is in A register */
+ #elif defined _RAISONANCE_ /* _RAISONANCE_ */
+   return _getCC_();
+-#else /* _IAR_ */
++#elif defined _IAR_ /* _IAR_ */
+   asm("push cc");
+   asm("pop a"); /* Ignore compiler warning, the returned value is in A register */
++#else /* _SDCC_ */
++  __asm__("push cc");
++  __asm__("pop a"); /* Ignore compiler warning, the returned value is in A register */
+ #endif /* _COSMIC_*/
+ }
+```
+
+
+
+Now the library can be compiled for the STM8S103 using this Makefile:
+
+```make
+CC=sdcc
+AR=sdar
+CFLAGS=-c -mstm8 -DSTM8S103 -I ../inc --opt-code-size -I.
+LDFLAGS=-rc
+SOURCES= \
+	stm8s_adc1.c	stm8s_awu.c	stm8s_beep.c	stm8s_clk.c \
+	stm8s_exti.c	stm8s_flash.c	stm8s_gpio.c	stm8s_i2c.c \
+	stm8s_itc.c	stm8s_iwdg.c	stm8s_rst.c	stm8s_spi.c \
+	stm8s_tim1.c	stm8s_tim2.c	stm8s_tim4.c	stm8s_uart1.c \
+	stm8s_wwdg.c
+
+OBJECTS=$(SOURCES:.c=.o)
+OBJECTS_LINK=$(SOURCES:.c=.rel)
+EXECUTABLE=stm8s.lib
+
+all: $(SOURCES) $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS)
+$(AR) $(LDFLAGS) $(EXECUTABLE) $(OBJECTS_LINK)
+
+.c.o:
+	$(CC) $(CFLAGS) $< -o $@
+
+clean:
+	rm -f *.lib *.rst *.rel *.lst *.ihx *.sym *.asm *.lk *.map
+	rm -f $(EXECUTABLE)
+```
+
+This library can now be used for linking with blink_spl or uart_spl. The
+files stm8s_conf.h and stm8s_it.h are still needed for compilation.
+
+The linker does not remove individual unused functions from an object file,
+only complete object files can be skipped.  
+**=> for building a library it is better to separate all functions into
+individual source files **
+
+The SPL folder in this archive contains a script `doit` to separate the
+functions before compilation.
+FIXME: description needed
+
+Erklärung wie zumindest die Interrupt-Vektoren in die eigene Datei kommen
+können:
+http://richs-words.blogspot.de/2010/09/stm8s-interrupt-handling.html
+
+
+
+### Interrupts
+
+Namen definiert in stm8s_itc.h
+Interrupt-Routine definieren:
+
+```c
+/* UART1 TX */
+void UART1_TX_IRQHandler(void) __interrupt(ITC_IRQ_UART1_TX)
+{
+}
+```
+
+Jetzt muss noch das passende IRQ-Enable-Flag gesetzt werden und Interrupt
+generell freigegeben werden, also hier:
+
+```c
+UART1_ITConfig(UART1_IT_TXE, ENABLE);
+enableInterrupts();
+```
+
+Unklar ist, was die ITC-Prioritäten bewirken. Es geht jedenfalls auch ohne:
+
+```c
+ITC_DeInit();
+ITC_SetSoftwarePriority(ITC_IRQ_UART1_TX, ITC_PRIORITYLEVEL_2);
+```
+
+
+
 
 
 
@@ -336,6 +529,18 @@ For Linux: required lines in /etc/udev/rules.d/99-stlink.rules:
 
 
 
+## Modifications for the sdcc example programs
+
+blinky.c: LED pin assignment
+
+**uart.c**:  pin assignment (TX is at PD5, RX is at PD6).  
+The UART is sending at 1200 Baud => CPU clock only 2MHz instead of 16MHz.
+The clock divider needs to be configured or a different baud rate prescale value
+has to be used. Pitfall: The register address for the clock divider is
+different for the STM8S and the STM8L.
+
+
+
 ## Pin number mappings
 
 The Arduino environment uses its own pin numbering scheme independent from
@@ -344,10 +549,9 @@ hard-coded assumptions about the number of pins with special functions.
 Ideally, all these numbers would be the same and all programs could be
 compiled without changes.
 
-[Here](https://tenbaht.github.io/sduino/pin_mapping.md)
-I discuss some possible pin mapping and check how close we could get the the
-ideal mapping. Unfortunatly, it turns out that a perfect mapping is not
-possible.
+[Here](docs/pin_mapping.html) I discuss some possible pin mapping and check
+how close we could get the the ideal mapping. Unfortunatly, it turns out
+that a perfect mapping is not possible.
 
 In the end I chose a simple geometric numbering for the square UFQFPN20
 package starting with port pin PA1 and counting up from 0. This results in
