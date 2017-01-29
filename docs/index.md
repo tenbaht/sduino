@@ -131,12 +131,12 @@ housing. The one in the metal housing uses a different pinout.
 
 Connection to the green flashtool:
 
-|Signal name	|CPU board	|Flash tool	|Metal flash tool
-|------ 	|-----:		|-----: 	|-----:
-|3V3    	|1      	|2      	| 7
-|SWIM   	|2      	|5      	| 5
-|GND    	|3      	|7      	| 3
-|NRST   	|4      	|9      	| 1
+Signal name	|CPU board	|Flash tool	|Metal flash tool
+------ 		|-----:		|-----: 	|-----:
+3V3    		|1      	|2      	| 7
+SWIM   		|2      	|5      	| 5
+GND    		|3      	|7      	| 3
+NRST   		|4      	|9      	| 1
 
 My breakout boards came preprogrammed with a blink program and with active
 write protection bits. For unlocking before first use:
@@ -188,7 +188,7 @@ Real hardware-SPI up to 10MHz.
 
 ### I2C
 The
-[I2C master library] (http://www.dsscircuits.com/articles/arduino-i2c-master-library)
+[I2C master library](http://www.dsscircuits.com/articles/arduino-i2c-master-library)
 by Wayne Truchsess offers some significant advantages over the Wire/TWI
 library included in the standard arduino environment: It fixes some possible
 deadlock situations, it allows for communication using a repeated start
