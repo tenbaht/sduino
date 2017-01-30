@@ -3,7 +3,7 @@
 Many Arduino sketches and libraries contain hard-coded assumptions about the
 number of pins with special functions. Ideally, all these numbers would be
 the same and all programs could be compiled without changes. This is not
-possible, but let's check how close we could get.
+possible, but let's check how close we could get for the STM8S103F.
 
 
 
@@ -23,7 +23,7 @@ of pin numbers when using a simple breakout board.
 
 Geometrical mapping is easier for breadboard use, but will always require
 changes on existing sketches. Since we need to modify them from C++ to C
-syntax anyway that is maybe a less severe problem as it sounds.
+syntax anyway that is maybe a less severe problem than it sounds.
 
 
 

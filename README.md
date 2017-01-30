@@ -117,35 +117,15 @@ visual developer IDE might be possible, but is not done (yet?).
 
 ## Supported hardware
 
-The simple breakout boards are build around a CPU STM8S103F3P6 with 16MHz internal
-oscillator, 8kB flash, 1kB RAM, and 640 byte EEPROM. The CPU includes a
-UART, SPI, I2C, PWM, 10 bit ADC, 3 timer, and up to 14 I/O pins - quite similar to the Atmel ATmega8.
+[STM8S103 breakout board](https://tenbaht.github.io/sduino/hardware/stm8blue.html):
+works  
 
-One (red) LED is connected to GPIO PB5 (CPU pin 11). The push button is for
-reset. The CPU runs on 3.3V, a linear regulator is integrated on the
-board. The micro USB connector is only for (5V) power supply, the data lines
-are not connected.
+[ESP14 Wifi board](https://tenbaht.github.io/sduino/hardware/esp14.html):
+untested, but expected to work.
 
-All CPU pins are easily accessible on (optional) pin headers
-(pitch 2.54mm, perfect for breadboards).
+[STM8S105 Discovery board](https://tenbaht.github.io/sduino/hardware/stm8disco.html):
+not supported yet, but work in progress.
 
-
-I am using the ST-Link V2 compatible flash tool in the green plastic
-housing. The one in the metal housing uses a different pinout.
-
-Connection to the green flashtool:
-
-|Signal name	|CPU board	|Flash tool	|Metal flash tool
-|------ 	|-----:		|-----: 	|-----:
-|3V3    	|1      	|2      	| 7
-|SWIM   	|2      	|5      	| 5
-|GND    	|3      	|7      	| 3
-|NRST   	|4      	|9      	| 1
-
-My breakout boards came preprogrammed with a blink program and with active
-write protection bits. For unlocking before first use:
-
-	stm8flash -cstlinkv2 -pstm8s103?3 -u
 
 
 ## Compatibility with the Arduino world
@@ -277,64 +257,6 @@ Migration guideline within the STM8L familiy
 
 
 
-## Programmer
-
-STM8 uses the SWIM protocol, STM32 uses SWD protocol.
-
-| STM8-Board	| SWIM-Verbinder P3
-| ----------	| -----------------
-| 1		| 3V3
-| 2		| SWIM (PD1)
-| 3		| GND
-| 4		| NRST
-
-
-Discovery STM32F0308 as ST-Link/V2 (SWD only, not usable for the STM8):
-
-|Pin out CN3	| SWD
-|-----------	| --------------
-|1		| ? detect oder so?
-|2		|JTCK/SWCLK
-|3		|GND
-|4		|JTMS/SWDIO
-|5		|NRST
-|6		|SWO
-
-
-Pinout of Chinese ST-Link V2-clone with green plasic housing:
-
-		+-----+
-	T_JRST	| 1  2|	3V3
-	5V	| 3  4|	T_JTCK/T_SWCLK
-	SWIM	  5  6|	T_JTMS/T_SWDIO
-	GND	| 7  8|	T_JTDO
-	SWIM RST| 9 10|	T_JTDI
-		+-----+
-
-Pinout of Chinese ST-Link V2-clone with metal housing:
-
-		+-----+
-	RST	| 1  2|	SWDIO
-	GND	| 3  4|	GND
-	SWIM	  5  6|	SWCLK
-	3V3	| 7  8|	3V3
-	5V	| 9 10|	5V
-		+-----+
-
-For Linux: required lines in /etc/udev/rules.d/99-stlink.rules:
-
-	# ST-Link/V2 programming adapter
-
-	# ST-Link V1
-	#SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device",
-	ATTR{idVendor}=="0483", ATTR{idProduct}=="3744", MODE="0666", GROUP="plugdev"
-
-	# ST-Link/V2, the china adapter with the green plastic housing
-	#SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="0483", ATTR{idProduct}=="3748", MODE="0666"
-	ATTR{idVendor}=="0483", ATTR{idProduct}=="3748", MODE="0666", GROUP="plugdev"
-
-
-
 
 ## Pin number mappings
 
@@ -345,9 +267,9 @@ Ideally, all these numbers would be the same and all programs could be
 compiled without changes.
 
 [Here](https://tenbaht.github.io/sduino/pin_mapping.md)
-I discuss some possible pin mapping and check how close we could get the the
-ideal mapping. Unfortunatly, it turns out that a perfect mapping is not
-possible.
+I discuss some possible pin mapping strategies and check how close we could
+get the the ideal mapping. Unfortunatly, it turns out that a perfect mapping
+is not possible.
 
 In the end I chose a simple geometric numbering for the square UFQFPN20
 package starting with port pin PA1 and counting up from 0. This results in
@@ -405,53 +327,6 @@ paratheses):
 
 
 
-## Notes for the Arduino port
-
-### Additional compile-time flags
-
-Some internal details can be influenced by setting compile-time defines
-using the `CFLAGS=-Dflagname` line in the Makefile.
-
-Compile-time flag		| Purpose
------------------		| --------
-`SUPPORT_ALTERNATE_MAPPINGS`	| Allow the use of `alternateFunctions()`
-`ENABLE_SWIM`			| Do not disable the remote debugging
-function on the SWIM pin. This means that this pin can not be used for
-normal I/O functions.
-`USE_SPL`			| Use SPL functions for I/O access instead
-of direct register accesses. Useful only for debugging and porting to other
-CPU variants. Do not use for regular development.
-``				|
-``				|
-``				|
-
-
-
-
-#### Use of the timers
-timer1: PWM for PC6, PC7 (8,9), could be used for ADC  
-timer2: PWM for PA3 (2)  
-timer4: millis()  
-
-#### ADC
-the prescaler is initialised for an ADC clock in the range of 1..2 MHz. The
-minimum prescaler value is 2, so for a clock speed of less than 2 MHz the
-required minimum ADC clock frequency can not be reached anymore.
-
-#### Mapping of logical pin numbers to register addresses
-Die ganze Pin->Portadressen-Arithmetik könnte komlett entrümpelt werden. Statt
-Tabellen fest im Code enthalten.
-
-#### Inefficient compilation
-`digitalWrite` wird spektakulär umständlich übersetzt. Hier lohnt sich
-Handassembler.
-
-#### Accessing the alternate pin functions
-Added `alternateFunction()` to allow switching of some pins to their alternate
-functions. This allows for three more PWM pins, but maybe it adds to much
-complexity for the Arduino API. Not sure if it should stay. Has to be
-enabled by defining `SUPPORT_ALTERNATE_MAPPINGS`.
-
 
 ### Performance compared with the original Arduino environment
 
@@ -474,13 +349,4 @@ a library.
 |ReadAnalogVoltage	|	|	|float not yet implemented
 |02. Digital/		|
 |Debounce		|192	|2016	|digital
-
-
-
-### Useful CPU features that are not supported by the Arduino API
-
-**Input-Capture-Mode:** Available for all four channels, at least for timer1. Would be great for precise time measurements. Maybe build a library?
-
-**Encoder interface mode:** Kann von Haus aus mit Quadratur-Encodern umgehen
-und in Hardware zählen -> perfekt für die Druckerschlitten-Motorsteuerung.
 

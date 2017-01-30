@@ -84,3 +84,88 @@ void loop() {
 }
 ```
 
+
+## Differences from the original Arduino environment
+
+### Additional output pin modes
+
+|Pin mode		|Pin properties
+|---------------------	|------------------------------------
+|`OUTPUT`		|output, push-pull, slow mode (default)  
+|`OUTPUT_OD`		|output, open drain, fast mode  
+|`OUTPUT_FAST`		|output, push-pull, fast mode  
+|`OUTPUT_OD_FAST`	|output, open drain, fast mode  
+
+
+### Timer
+
+`millis()` uses timer4. The prescaler and end value is calculated at compile
+time for a cycle time as close to 1ms as possible. Default values @16Mhz:
+prescaler=64, counter cycle=250 (end value=249), resulting in exactly 1ms
+intervals.
+
+timer1: PWM for PC6, PC7 (8,9), could be used for ADC  
+timer2: PWM for PA3 (2)  
+timer4: millis()  
+
+
+### Other modifications
+
+`makeWord(unsigned char, unsigned char)` is an inline function now.
+
+
+### Additional compile-time flags
+
+Some internal details can be influenced by setting compile-time defines
+using the `CFLAGS=-Dflagname` line in the Makefile.
+
+Compile-time flag		| Purpose
+-----------------		| --------
+`SUPPORT_ALTERNATE_MAPPINGS`	| Allow the use of `alternateFunctions()`
+`ENABLE_SWIM`			| Do not disable the remote debugging
+function on the SWIM pin. This means that this pin can not be used for
+normal I/O functions.
+`USE_SPL`			| Use SPL functions for I/O access instead
+of direct register accesses. Useful only for debugging and porting to other
+CPU variants. Do not use for regular development.
+``				|
+``				|
+``				|
+
+
+
+## General notes on the Arduino port
+
+
+### ADC
+the prescaler is initialised for an ADC clock in the range of 1..2 MHz. The
+minimum prescaler value is 2, so for a clock speed of less than 2 MHz the
+required minimum ADC clock frequency can not be reached anymore.
+
+
+### Mapping of logical pin numbers to register addresses
+The lookup-table approach for assigning port and bit adresses to the logical
+pin numbers is not effient on the STM8. The hole system could be changed to
+a more regular scheme and replace the tables by hardcoded adress
+calculations.
+
+
+### Inefficient compilation
+`digitalWrite` compiles very ineffiently. It might be worth some hand
+optimization.
+
+
+### Accessing the alternate pin functions
+Added `alternateFunction()` to allow switching of some pins to their alternate
+functions. This allows for three more PWM pins, but maybe it adds to much
+complexity for the Arduino API. Not sure if it should stay. Has to be
+enabled by defining `SUPPORT_ALTERNATE_MAPPINGS`.
+
+
+### Useful CPU features that are not supported by the Arduino API
+
+**Input-Capture-Mode:** Available for all four channels, at least for timer1. Would be great for precise time measurements. Maybe build a library?
+
+**Encoder interface mode:** Kann von Haus aus mit Quadratur-Encodern umgehen
+und in Hardware zählen -> perfekt für die Druckerschlitten-Motorsteuerung.
+

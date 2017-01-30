@@ -9,6 +9,7 @@ powerful and very similar to the one used for the STM32 CPU series offering
 a relatively easy upgrade path in case a project outgrows the capabilities
 of the 8-bit STM8 series. But using that library is not very intuitive and
 still requires a fairly detailed knowledge of the CPU internals.
+[compiling the SPL with SDCC](spl.html)
 
 The Arduino project was very successful in offering a simplified API hiding
 most of the complexity of embedded system programming while still allowing
@@ -104,7 +105,7 @@ improves significantly from version to version. Be sure to use
 version that might be included in your distribution. Version 3.5.0 as
 included with ubuntu 16.04 is definitly too old and compilation will fail
 due to some compiler errors.
-[More information on installing SDCC](sdcc.md)
+[More information on installing SDCC](sdcc.html)
 
 Support for the Cosmic compiler under Windows and integration into the ST
 visual developer IDE might be possible, but is not done (yet?).
@@ -113,35 +114,96 @@ visual developer IDE might be possible, but is not done (yet?).
 
 ## Supported hardware
 
-The simple breakout boards are build around a CPU STM8S103F3P6 with 16MHz internal
-oscillator, 8kB flash, 1kB RAM, and 640 byte EEPROM. The CPU includes a
-UART, SPI, I2C, PWM, 10 bit ADC, 3 timer, and up to 14 I/O pins - quite similar to the Atmel ATmega8.
+### STM8S boards
 
-One (red) LED is connected to GPIO PB5 (CPU pin 11). The push button is for
-reset. The CPU runs on 3.3V, a linear regulator is integrated on the
-board. The micro USB connector is only for (5V) power supply, the data lines
-are not connected.
+So far only the the
+[simple STM8S103 breakout boards](hardware/stm8blue.html)
+are supported. They are build around a CPU STM8S103F3P6 and cost less than a
+dollar. The CPU features a 16MHz internal oscillator, 8kB flash, 1kB RAM,
+640 byte EEPROM. It includes a UART, SPI, I2C, PWM, 10 bit ADC, 3 timer, and
+up to 14 I/O pins - quite similar to an Atmel ATmega8.
 
-All CPU pins are easily accessible on (optional) pin headers
-(pitch 2.54mm, perfect for breadboards).
+They are very similar the [ESP14 Wifi-boards](hardware/esp14.html). Most
+programs should run on those chinese Wifi-enabled gems as well, but that is
+still untested.
+
+Support for the more powerful
+[STM8S105Discovery-boards](hardware/stm8disco.html) is planned, but not
+started yet. These are very similar to an Arduino Uno with a ATmega328 CPU.
 
 
-I am using the ST-Link V2 compatible flash tool in the green plastic
-housing. The one in the metal housing uses a different pinout.
 
-Connection to the green flashtool:
+### Flash tool
 
-Signal name	|CPU board	|Flash tool	|Metal flash tool
------- 		|-----:		|-----: 	|-----:
-3V3    		|1      	|2      	| 7
-SWIM   		|2      	|5      	| 5
-GND    		|3      	|7      	| 3
-NRST   		|4      	|9      	| 1
+You need a special flash tools in order to program the CPU. As far as I know
+there is no third-party product or software that implements the needed
+communication protocol. But this is not a problem, as these tools are are
+easily available and unbeliveably cheap (well under $3 on aliexpress).
 
-My breakout boards came preprogrammed with a blink program and with active
-write protection bits. For unlocking before first use:
+There are to versions of the ST-Link V2 compatible flash tool available: One
+in a green plastic housing and one in a USB-Drive-like (pink) metal housing.
+Both work equally well, but they use a different pinout.
 
-	stm8flash -cstlinkv2 -pstm8s103?3 -u
+Both flash tools support both, the SWIM protocol for STM8 CPUs and the SWD
+protocol for the STM32 CPUs.
+
+Pinout of Chinese ST-Link V2-clone with green plasic housing:
+
+		+-----+
+	T_JRST	| 1  2|	3V3
+	5V	| 3  4|	T_JTCK/T_SWCLK
+	SWIM	  5  6|	T_JTMS/T_SWDIO
+	GND	| 7  8|	T_JTDO
+	SWIM RST| 9 10|	T_JTDI
+		+-----+
+
+Pinout of Chinese ST-Link V2-clone with metal housing:
+
+		+-----+
+	RST	| 1  2|	SWDIO
+	GND	| 3  4|	GND
+	SWIM	  5  6|	SWCLK
+	3V3	| 7  8|	3V3
+	5V	| 9 10|	5V
+		+-----+
+
+For Linux: required lines in /etc/udev/rules.d/99-stlink.rules:
+
+	# ST-Link/V2 programming adapter
+
+	# ST-Link V1
+	#SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device",
+	ATTR{idVendor}=="0483", ATTR{idProduct}=="3744", MODE="0666", GROUP="plugdev"
+
+	# ST-Link/V2, the china adapter with the green plastic housing
+	#SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="0483", ATTR{idProduct}=="3748", MODE="0666"
+	ATTR{idVendor}=="0483", ATTR{idProduct}=="3748", MODE="0666", GROUP="plugdev"
+
+
+The pinout of the SWIM connector P3 on my board fits the pinout of the flash
+tool in the metal housing perfectly:
+
+| STM8-Board	| SWIM-Verbinder P3
+| ----------	| -----------------
+| 1		| 3V3
+| 2		| SWIM (PD1)
+| 3		| GND
+| 4		| NRST
+
+
+The Discovery boards made by ST all feature a ST-Link interface as well, but
+only the Discovery STM8S105 supports the SWIM protocol. The Discovery
+STM32F0308 implements SWD only and is not usable for the STM8:
+
+|Pin out CN3	| SWD
+|-----------	| --------------
+|1		| ? detect oder so?
+|2		|JTCK/SWCLK
+|3		|GND
+|4		|JTMS/SWDIO
+|5		|NRST
+|6		|SWO
+
 
 
 ## Compatibility with the Arduino world
@@ -169,6 +231,10 @@ an option.
 
 
 ## Included libraries
+Some Arduino libraries are already ported to C-syntax. The resulting API is
+still very close to the C++ version and porting an existing application is
+not hard. Check out the [API migration guidelines](api.html) for details.
+
 
 ### LiquidCrystal
 Supports text LCD based on the HD44780 and compatibles, that includes almost
@@ -208,7 +274,7 @@ pixels. I2C support only. Based on the Adafruit-libray.
 For stepper motors with 2, 4 or 5 phases. This library has a slightly
 diffent user interface than the usual singleton libraries. This allow it to
 handle more than one stepper per Sketch.
-[API description](api/Stepper.md)
+[API description](api/Stepper.html)
 
 
 
@@ -228,7 +294,7 @@ Print (without float)
 SPI: working, no interrupt support  
 LiquidCrystal (for text LCD based on the HD44780 controller)  
 PCD8544 (for Nokia 5110 type displays)  
-[Stepper](api/Stepper.md) (multi-instance design for more than one stepper at a time)  
+[Stepper](api/Stepper.html) (multi-instance design for more than one stepper at a time)  
 
 #### implemented and partly working
 Wire/I2C  
@@ -257,37 +323,6 @@ Compiling with the straight Makefile.classic does not add UART interrupt
 routines. But when using the sduino.mk Makefile the two UART interrupt
 routines are pulled into the binary by the interrupt table in main.c.
 
-
-
-## Differences from the original Arduino environment
-
-The original Arduino environment uses C++ syntax while sduino can only use
-plain C syntax. Luckily, not many C++ features are used and in most cases a
-conversion is not very hard. See the [migration guildelines](migration.md)
-for details.
-
-
-### Additional output pin modes
-
-|Pin mode		|Pin properties
-|---------------------	|------------------------------------
-|`OUTPUT`		|output, push-pull, slow mode (default)  
-|`OUTPUT_OD`		|output, open drain, fast mode  
-|`OUTPUT_FAST`		|output, push-pull, fast mode  
-|`OUTPUT_OD_FAST`	|output, open drain, fast mode  
-
-
-### Timer
-
-`millis()` uses timer4. The prescaler and end value is calculated at compile
-time for a cycle time as close to 1ms as possible. Default values @16Mhz:
-prescaler=64, counter cycle=250 (end value=249), resulting in exactly 1ms
-intervals.
-
-
-### Other modifications
-
-`makeWord(unsigned char, unsigned char)` is an inline function now.
 
 
 ## Why use a STM8 instead of an ATmega?
@@ -348,183 +383,10 @@ Migration guideline within the STM8L familiy
 
 
 
-## ST Standard Library
-
-Can be [downloaded from the ST website]
-(http://www.st.com/en/embedded-software/stsw-stm8069.html)
-(free registration required). Don't miss the Examples folder within the
-downloaded zip file. This is the most useful reference on using this library
-and programming the STM8 in general.
-
-For use with SDCC the library needs to be patched:
-
-	git clone https://github.com/g-gabber/STM8S_StdPeriph_Driver.git
-	git clone https://github.com/gicking/SPL_2.2.0_SDCC_patch.git
-	cp ../STM8S_SPL_2.2.0/Libraries/STM8S_StdPeriph_Driver/inc/stm8s.h .
-	patch -p1 < ../SPL_2.2.0_SDCC_patch/STM8_SPL_v2.2.0_SDCC.patch
-	cp -av  ../STM8S_StdPeriph_Lib/Project/STM8S_StdPeriph_Template/stm8s_conf.h .
-	cp -av  ../STM8S_StdPeriph_Lib/Project/STM8S_StdPeriph_Template/stm8s_it.h .
-
-SDCC uses .rel as the file extension for its object files.
-
-Additional patch required for stm8s_itc.c:
-
-```diff
---- stm8s_itc.c~	2014-10-21 17:32:20.000000000 +0200
-+++ stm8s_itc.c	2016-12-11 21:56:41.786048494 +0100
-@@ -55,9 +55,12 @@
-   return; /* Ignore compiler warning, the returned value is in A register */
- #elif defined _RAISONANCE_ /* _RAISONANCE_ */
-   return _getCC_();
--#else /* _IAR_ */
-+#elif defined _IAR_ /* _IAR_ */
-   asm("push cc");
-   asm("pop a"); /* Ignore compiler warning, the returned value is in A register */
-+#else /* _SDCC_ */
-+  __asm__("push cc");
-+  __asm__("pop a"); /* Ignore compiler warning, the returned value is in A register */
- #endif /* _COSMIC_*/
- }
-```
-
-
-
-Now the library can be compiled for the STM8S103 using this Makefile:
-
-```make
-CC=sdcc
-AR=sdar
-CFLAGS=-c -mstm8 -DSTM8S103 -I ../inc --opt-code-size -I.
-LDFLAGS=-rc
-SOURCES= \
-	stm8s_adc1.c	stm8s_awu.c	stm8s_beep.c	stm8s_clk.c \
-	stm8s_exti.c	stm8s_flash.c	stm8s_gpio.c	stm8s_i2c.c \
-	stm8s_itc.c	stm8s_iwdg.c	stm8s_rst.c	stm8s_spi.c \
-	stm8s_tim1.c	stm8s_tim2.c	stm8s_tim4.c	stm8s_uart1.c \
-	stm8s_wwdg.c
-
-OBJECTS=$(SOURCES:.c=.o)
-OBJECTS_LINK=$(SOURCES:.c=.rel)
-EXECUTABLE=stm8s.lib
-
-all: $(SOURCES) $(EXECUTABLE)
-
-$(EXECUTABLE): $(OBJECTS)
-$(AR) $(LDFLAGS) $(EXECUTABLE) $(OBJECTS_LINK)
-
-.c.o:
-	$(CC) $(CFLAGS) $< -o $@
-
-clean:
-	rm -f *.lib *.rst *.rel *.lst *.ihx *.sym *.asm *.lk *.map
-	rm -f $(EXECUTABLE)
-```
-
-This library can now be used for linking with blink_spl or uart_spl. The
-files stm8s_conf.h and stm8s_it.h are still needed for compilation.
-
-The linker does not remove individual unused functions from an object file,
-only complete object files can be skipped.  
-**=> for building a library it is better to separate all functions into
-individual source files **
-
-The SPL folder in this archive contains a script `doit` to separate the
-functions before compilation.
-FIXME: description needed
-
-Erklärung wie zumindest die Interrupt-Vektoren in die eigene Datei kommen
-können:
-http://richs-words.blogspot.de/2010/09/stm8s-interrupt-handling.html
-
-
-
-### Interrupts
-
-Namen definiert in stm8s_itc.h
-Interrupt-Routine definieren:
-
-```c
-/* UART1 TX */
-void UART1_TX_IRQHandler(void) __interrupt(ITC_IRQ_UART1_TX)
-{
-}
-```
-
-Jetzt muss noch das passende IRQ-Enable-Flag gesetzt werden und Interrupt
-generell freigegeben werden, also hier:
-
-```c
-UART1_ITConfig(UART1_IT_TXE, ENABLE);
-enableInterrupts();
-```
-
-Unklar ist, was die ITC-Prioritäten bewirken. Es geht jedenfalls auch ohne:
-
-```c
-ITC_DeInit();
-ITC_SetSoftwarePriority(ITC_IRQ_UART1_TX, ITC_PRIORITYLEVEL_2);
-```
 
 
 
 
-
-
-## Programmer
-
-STM8 uses the SWIM protocol, STM32 uses SWD protocol.
-
-| STM8-Board	| SWIM-Verbinder P3
-| ----------	| -----------------
-| 1		| 3V3
-| 2		| SWIM (PD1)
-| 3		| GND
-| 4		| NRST
-
-
-Discovery STM32F0308 as ST-Link/V2 (SWD only, not usable for the STM8):
-
-|Pin out CN3	| SWD
-|-----------	| --------------
-|1		| ? detect oder so?
-|2		|JTCK/SWCLK
-|3		|GND
-|4		|JTMS/SWDIO
-|5		|NRST
-|6		|SWO
-
-
-Pinout of Chinese ST-Link V2-clone with green plasic housing:
-
-		+-----+
-	T_JRST	| 1  2|	3V3
-	5V	| 3  4|	T_JTCK/T_SWCLK
-	SWIM	  5  6|	T_JTMS/T_SWDIO
-	GND	| 7  8|	T_JTDO
-	SWIM RST| 9 10|	T_JTDI
-		+-----+
-
-Pinout of Chinese ST-Link V2-clone with metal housing:
-
-		+-----+
-	RST	| 1  2|	SWDIO
-	GND	| 3  4|	GND
-	SWIM	  5  6|	SWCLK
-	3V3	| 7  8|	3V3
-	5V	| 9 10|	5V
-		+-----+
-
-For Linux: required lines in /etc/udev/rules.d/99-stlink.rules:
-
-	# ST-Link/V2 programming adapter
-
-	# ST-Link V1
-	#SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device",
-	ATTR{idVendor}=="0483", ATTR{idProduct}=="3744", MODE="0666", GROUP="plugdev"
-
-	# ST-Link/V2, the china adapter with the green plastic housing
-	#SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="0483", ATTR{idProduct}=="3748", MODE="0666"
-	ATTR{idVendor}=="0483", ATTR{idProduct}=="3748", MODE="0666", GROUP="plugdev"
 
 
 
@@ -540,121 +402,6 @@ has to be used. Pitfall: The register address for the clock divider is
 different for the STM8S and the STM8L.
 
 
-
-## Pin number mappings
-
-The Arduino environment uses its own pin numbering scheme independent from
-the physical CPU pin numbers. Many Arduino sketches and libraries contain
-hard-coded assumptions about the number of pins with special functions.
-Ideally, all these numbers would be the same and all programs could be
-compiled without changes.
-
-[Here](docs/pin_mapping.html) I discuss some possible pin mapping and check
-how close we could get the the ideal mapping. Unfortunatly, it turns out
-that a perfect mapping is not possible.
-
-In the end I chose a simple geometric numbering for the square UFQFPN20
-package starting with port pin PA1 and counting up from 0. This results in
-this mapping:
-
-sduino pin	| STM8S103 CPU port pin
-----------	| ---------------------
- 0-2		| PA1-PA3
- 3-4		| PB5-PB4 (reverse order)
- 5-9		| PC3-PC7
-10-15		| PD1-PD6
-
-serial: 14,15  
-SPI: 2,7,8,9  
-I2C: 3,4  
-Analog: 6,11,12,14,15  
-PWM: 2,5,6,12 plus either only 13 or 7-9 but not 13 (via alternate mapping)  
-
- + Easy and logical for use on a breadboard
- + Very clear and logical port pin ordering
- - Analog pins are still scattered around
- + TX and RX would be the rarely used analog pin numbers A3/A4 at
-   the end of the analog pin number list
- + At least the analog pins are in data sheet order
- - All functions use totally different pin numbers than Arduino
-
-I am still not really happy with this mapping. Instead of simplifing things
-it only adds another layer of abstraction and confusion. To avoid this I
-added definitions for the regular CPU pin names like `PA1` and `PD2`. In the
-end, this notation seem a lot easier to me. I am open for suggestions for a
-better pin number mapping.
-
-The chosen pin mapping for the STM8S103 (possible alternate function in
-paratheses):
-
-|Phys. STM8 pin|Name	|Functions	|Geometrical mapping|special funcion
-|---:	|---	|---			| ---	|---
-|1	|PD4	|UART_CLK/T2-1/beep	|13	|PWM
-|2	|PD5	|TX/Ain5		|14	|Analog A3
-|3	|PD6	|RX/Ain6		|15	|Analog A4
-|5	|PA1	|(OscIn, kein HS)	|0	|
-|6	|PA2	|(OscIn, kein HS)	|1	|
-|10	|PA3	|SS/T2-3		|2	|PWM
-|11	|PB5	|SDA	LED		|3	|
-|12	|PB4	|SCL			|4	|
-|13	|PC3	|T1-3/[T1-n1]		|5	|PWM, (n~)
-|14	|PC4	|T1-4/Ain2/[T1-n2]	|6	|PWM, Analog A0, (n~)
-|15	|PC5	|SCK/[T2-1]		|7	|(~)
-|16	|PC6	|MOSI/[T1-1]		|8	|(~)
-|17	|PC7	|MISO/[T1-2]		|9	|(~)
-|18	|PD1	|(SWIM)			|10	|
-|19	|PD2	|Ain3/[T2-3]		|11	|Analog A1, (~~)
-|20	|PD3	|Ain4/T2-2		|12	|PWM, Analog A2
-
-
-
-
-## Notes for the Arduino port
-
-### Additional compile-time flags
-
-Some internal details can be influenced by setting compile-time defines
-using the `CFLAGS=-Dflagname` line in the Makefile.
-
-Compile-time flag		| Purpose
------------------		| --------
-`SUPPORT_ALTERNATE_MAPPINGS`	| Allow the use of `alternateFunctions()`
-`ENABLE_SWIM`			| Do not disable the remote debugging
-function on the SWIM pin. This means that this pin can not be used for
-normal I/O functions.
-`USE_SPL`			| Use SPL functions for I/O access instead
-of direct register accesses. Useful only for debugging and porting to other
-CPU variants. Do not use for regular development.
-``				|
-``				|
-``				|
-
-
-
-
-#### Use of the timers
-timer1: PWM for PC6, PC7 (8,9), could be used for ADC  
-timer2: PWM for PA3 (2)  
-timer4: millis()  
-
-#### ADC
-the prescaler is initialised for an ADC clock in the range of 1..2 MHz. The
-minimum prescaler value is 2, so for a clock speed of less than 2 MHz the
-required minimum ADC clock frequency can not be reached anymore.
-
-#### Mapping of logical pin numbers to register addresses
-Die ganze Pin->Portadressen-Arithmetik könnte komlett entrümpelt werden. Statt
-Tabellen fest im Code enthalten.
-
-#### Inefficient compilation
-`digitalWrite` wird spektakulär umständlich übersetzt. Hier lohnt sich
-Handassembler.
-
-#### Accessing the alternate pin functions
-Added `alternateFunction()` to allow switching of some pins to their alternate
-functions. This allows for three more PWM pins, but maybe it adds to much
-complexity for the Arduino API. Not sure if it should stay. Has to be
-enabled by defining `SUPPORT_ALTERNATE_MAPPINGS`.
 
 
 ### Performance compared with the original Arduino environment
@@ -678,13 +425,3 @@ a library.
 |ReadAnalogVoltage	|	|	|float not yet implemented
 |02. Digital/		|
 |Debounce		|192	|2016	|digital
-
-
-
-### Useful CPU features that are not supported by the Arduino API
-
-**Input-Capture-Mode:** Available for all four channels, at least for timer1. Would be great for precise time measurements. Maybe build a library?
-
-**Encoder interface mode:** Kann von Haus aus mit Quadratur-Encodern umgehen
-und in Hardware zählen -> perfekt für die Druckerschlitten-Motorsteuerung.
-
