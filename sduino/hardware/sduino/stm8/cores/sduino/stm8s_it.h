@@ -137,7 +137,7 @@
 #endif /* (STM8S208) || (STM8AF52Ax) */
 
 // void SPI_IRQHandler(void) __interrupt(ITC_IRQ_SPI); /* SPI */
-// void TIM1_CAP_COM_IRQHandler(void) __interrupt(ITC_IRQ_TIM1_CAPCOM); /* TIM1 CAP/COM */
+void TIM1_CAP_COM_IRQHandler(void) __interrupt(ITC_IRQ_TIM1_CAPCOM); /* TIM1 CAP/COM */
 // void TIM1_UPD_OVF_TRG_BRK_IRQHandler(void) __interrupt(ITC_IRQ_TIM1_OVF); /* TIM1 UPD/OVF/TRG/BRK */
 
 #if defined(STM8S903) || defined(STM8AF622x)

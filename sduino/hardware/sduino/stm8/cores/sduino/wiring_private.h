@@ -50,19 +50,6 @@ extern "C"{
 #endif
 */
 
-/* for SDCC this is supposed to be "__critical{" and "}", but up to
- * sdcc version 3.6.4 it is wrongly implemented. */
-/* so geht es nicht:
-#define BEGIN_CRITICAL		__asm__("push\tcc");__asm__("sim");
-#define END_CRITICAL		__asm__("pop\tcc");
-*/
-#define BEGIN_CRITICAL		__critical {
-#define END_CRITICAL		}
-/* klappt:
-#define BEGIN_CRITICAL
-#define END_CRITICAL
-*/
-
 uint32_t countPulseASM(volatile uint8_t *port, uint8_t bit, uint8_t stateMask, unsigned long maxloops);
 
 #define EXTERNAL_INT_0 0

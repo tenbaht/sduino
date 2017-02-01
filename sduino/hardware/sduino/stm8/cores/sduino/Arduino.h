@@ -144,6 +144,21 @@ void yield(void);
 #define _NOP() do { __asm__ volatile ("nop"); } while (0)
 #endif
 
+/* for SDCC this is supposed to be "__critical{" and "}", but up to
+ * sdcc version 3.6.4 it is wrongly implemented. */
+/* so geht es nicht:
+#define BEGIN_CRITICAL		__asm__("push\tcc");__asm__("sim");
+#define END_CRITICAL		__asm__("pop\tcc");
+*/
+#define BEGIN_CRITICAL		__critical {
+#define END_CRITICAL		}
+/* klappt:
+#define BEGIN_CRITICAL
+#define END_CRITICAL
+*/
+
+
+
 typedef unsigned int word;
 
 #define bit(b) (1UL << (b))

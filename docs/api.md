@@ -32,16 +32,16 @@ respective library header file for details.
 
 Some examples of typical name changes:
 
-C++ name				| C name
--------					| -------
-`Print.print(int)`			| `Print_print_i`
-`Print.print(unsigned)`			| `Print_print_u`
-`Print.print(char)`			| `Print_print_c`
-`Print.print(char *)`			| `Print_print_s`
-`Print.print(char *buf, int len)`	| `Print_print_n`
-`Print.print(unsigned n, int base)`	| `Print_print_ub`
-`random(long)`				| `random`
-`random(long howsmall, long howbig)`	| `random_minmax`
+|C++ name				| C name		|
+|--------				| -------		|
+|`Serial.print(int)`			| `Serial_print_i`	|
+|`Serial.print(unsigned)`		| `Serial_print_u`	|
+|`Serial.print(char)`			| `Serial_print_c`	|
+|`Serial.print(char *)`			| `Serial_print_s`	|
+|`Serial.print(char *buf, int len)`	| `Serial_print_n`	|
+|`Serial.print(unsigned n, int base)`	| `Serial_print_ub`	|
+|`random(long)`				| `random`		|
+|`random(long howsmall, long howbig)`	| `random_minmax`	|
 
 
 
@@ -64,14 +64,14 @@ pointers to their own putchar/write function.
 
 ## Libraries with multiple instances
 
-If multiple instances need to be supported, an approach similar to C file
-descriptors is used. The "constructor" function allocates and initializes a
+If multiple instances need to be supported, an approach similar to a C file
+descriptor is used. The "constructor" function allocates and initializes a
 data structure for one particular instance and return a pointer to this
 structure. Typically, this is done in the `setup()`-function and this pointer 
 is stored in a global variable to be used as a device descriptor.
 
 
-So far the [Stepper library](Stepper.md) is the only example:
+So far the [Stepper library](api/Stepper.html) is the only example:
 
 ```c
 #include <Stepper.h>
@@ -89,12 +89,12 @@ void loop() {
 
 ### Additional output pin modes
 
-|Pin mode		|Pin properties
-|---------------------	|------------------------------------
-|`OUTPUT`		|output, push-pull, slow mode (default)  
-|`OUTPUT_OD`		|output, open drain, fast mode  
-|`OUTPUT_FAST`		|output, push-pull, fast mode  
-|`OUTPUT_OD_FAST`	|output, open drain, fast mode  
+Pin mode		|Pin properties
+---------------------	|------------------------------------
+`OUTPUT`		|output, push-pull, slow mode (default)
+`OUTPUT_OD`		|output, open drain, fast mode
+`OUTPUT_FAST`		|output, push-pull, fast mode
+`OUTPUT_OD_FAST`	|output, open drain, fast mode
 
 
 ### Timer
@@ -104,9 +104,10 @@ time for a cycle time as close to 1ms as possible. Default values @16Mhz:
 prescaler=64, counter cycle=250 (end value=249), resulting in exactly 1ms
 intervals.
 
-timer1: PWM for PC6, PC7 (8,9), could be used for ADC  
-timer2: PWM for PA3 (2)  
+timer1: PWM for PC3, PC4, on alternate mapping PC6, PC7, could be used for ADC  
+timer2: PWM for PA3, PD3, PD4 or PC5 (mutual exclusive)  
 timer4: millis()  
+
 
 
 ### Other modifications
@@ -119,18 +120,18 @@ timer4: millis()
 Some internal details can be influenced by setting compile-time defines
 using the `CFLAGS=-Dflagname` line in the Makefile.
 
-Compile-time flag		| Purpose
------------------		| --------
-`SUPPORT_ALTERNATE_MAPPINGS`	| Allow the use of `alternateFunctions()`
-`ENABLE_SWIM`			| Do not disable the remote debugging
-function on the SWIM pin. This means that this pin can not be used for
-normal I/O functions.
-`USE_SPL`			| Use SPL functions for I/O access instead
-of direct register accesses. Useful only for debugging and porting to other
-CPU variants. Do not use for regular development.
-``				|
-``				|
-``				|
+**`SUPPORT_ALTERNATE_MAPPINGS`**:
+Allow the use of `alternateFunctions()`
+
+**`ENABLE_SWIM`**:
+Do not disable the remote debugging function on the SWIM pin. This means
+that this pin can not be used for normal I/O functions.
+
+**`USE_SPL`**:
+Use SPL functions for I/O access instead of direct register accesses. Useful
+only for debugging and porting to other CPU variants. Do not use for regular
+development.
+
 
 
 

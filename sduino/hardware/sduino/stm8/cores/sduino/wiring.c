@@ -454,7 +454,7 @@ void init()
 	GPIO_DeInit(GPIOB);
 	GPIO_DeInit(GPIOC);
 	GPIO_DeInit(GPIOD);
-	GPIO_DeInit(GPIOE);
+//	GPIO_DeInit(GPIOE);	// not present on STM8S103
 
 	UART1_DeInit();
 
@@ -489,7 +489,8 @@ void init()
 	// 8 MHz (with a 16 MHz clock) at 50% duty cycle
 
 	TIM1_DeInit();	// keep this
-	TIM1_TimeBaseInit(64, TIM1_COUNTERMODE_UP, 255, 0);	// keep this
+	// actual prescaler is (n+1)
+	TIM1_TimeBaseInit(63, TIM1_COUNTERMODE_UP, 255, 0);	// keep this
 #ifdef USE_SPL
 	TIM1_Cmd(ENABLE);
 

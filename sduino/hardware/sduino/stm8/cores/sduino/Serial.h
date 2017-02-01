@@ -8,7 +8,7 @@
  * All it does is to include HardwareSerial.h, so it doesn't matter if you
  * include HardwareSerial or Serial into your code.
  *
-
+ */
 
 #include <Arduino.h>
 #include <HardwareSerial.h>

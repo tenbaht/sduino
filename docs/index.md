@@ -105,10 +105,14 @@ improves significantly from version to version. Be sure to use
 version that might be included in your distribution. Version 3.5.0 as
 included with ubuntu 16.04 is definitly too old and compilation will fail
 due to some compiler errors.
-[More information on installing SDCC](sdcc.html)
+[More information on installing and using SDCC](sdcc.html)
 
 Support for the Cosmic compiler under Windows and integration into the ST
 visual developer IDE might be possible, but is not done (yet?).
+
+The build process is controlled by a makefile based on the amazing
+[Arduino.mk makefile](https://github.com/sudar/Arduino-Makefile) by
+[Sudar](http://sudarmuthu.com>).
 
 
 
@@ -117,19 +121,19 @@ visual developer IDE might be possible, but is not done (yet?).
 ### STM8S boards
 
 So far only the the
-[simple STM8S103 breakout boards](hardware/stm8blue.html)
-are supported. They are build around a CPU STM8S103F3P6 and cost less than a
-dollar. The CPU features a 16MHz internal oscillator, 8kB flash, 1kB RAM,
-640 byte EEPROM. It includes a UART, SPI, I2C, PWM, 10 bit ADC, 3 timer, and
-up to 14 I/O pins - quite similar to an Atmel ATmega8.
+[simple STM8S103 breakout board](hardware/stm8blue.html)
+is supported. This board is build around a CPU STM8S103F3P6 and costs less
+than a dollar. The CPU features a 16MHz internal oscillator, 8kB flash, 1kB
+RAM, 640 byte EEPROM. It includes an UART, SPI, I2C, PWM, 10 bit ADC, 3
+timer, and up to 14 I/O pins - quite similar to an Atmel ATmega8.
 
-They are very similar the [ESP14 Wifi-boards](hardware/esp14.html). Most
+It is very similar to the [ESP14 Wifi-boards](hardware/esp14.html). Most
 programs should run on those chinese Wifi-enabled gems as well, but that is
 still untested.
 
 Support for the more powerful
 [STM8S105Discovery-boards](hardware/stm8disco.html) is planned, but not
-started yet. These are very similar to an Arduino Uno with a ATmega328 CPU.
+started yet. These are very similar to an Arduino Uno with an ATmega328 CPU.
 
 
 
