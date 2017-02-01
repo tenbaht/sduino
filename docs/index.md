@@ -281,6 +281,12 @@ handle more than one stepper per Sketch.
 [API description](api/Stepper.html)
 
 
+### Servo
+This library can control a great number of servos. It makes careful use
+of timers: the library can control 12 servos using only 1 timer.
+[API description](api/Servo.html)
+
+
 
 
 ## Current status and to-do list
@@ -299,6 +305,7 @@ SPI: working, no interrupt support
 LiquidCrystal (for text LCD based on the HD44780 controller)  
 PCD8544 (for Nokia 5110 type displays)  
 [Stepper](api/Stepper.html) (multi-instance design for more than one stepper at a time)  
+[Servo](api/Servo.html) (multi-instance design for more than one servo at a time)  
 
 #### implemented and partly working
 Wire/I2C  
