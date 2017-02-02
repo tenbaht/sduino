@@ -121,10 +121,10 @@
 // void TLI_IRQHandler(void) __interrupt(ITC_IRQ_TLI); /* TLI */
 // void AWU_IRQHandler(void) __interrupt(ITC_IRQ_AWU); /* AWU */
 // void CLK_IRQHandler(void) __interrupt(ITC_IRQ_CLK); /* CLOCK */
-// void EXTI_PORTA_IRQHandler(void) __interrupt(ITC_IRQ_PORTA); /* EXTI PORTA */
-// void EXTI_PORTB_IRQHandler(void) __interrupt(ITC_IRQ_PORTB); /* EXTI PORTB */
-// void EXTI_PORTC_IRQHandler(void) __interrupt(ITC_IRQ_PORTC); /* EXTI PORTC */
-// void EXTI_PORTD_IRQHandler(void) __interrupt(ITC_IRQ_PORTD); /* EXTI PORTD */
+ void EXTI_PORTA_IRQHandler(void) __interrupt(ITC_IRQ_PORTA); /* EXTI PORTA */
+ void EXTI_PORTB_IRQHandler(void) __interrupt(ITC_IRQ_PORTB); /* EXTI PORTB */
+ void EXTI_PORTC_IRQHandler(void) __interrupt(ITC_IRQ_PORTC); /* EXTI PORTC */
+ void EXTI_PORTD_IRQHandler(void) __interrupt(ITC_IRQ_PORTD); /* EXTI PORTD */
 // void EXTI_PORTE_IRQHandler(void) __interrupt(ITC_IRQ_PORTE); /* EXTI PORTE */
 
 #if defined(STM8S903) || defined(STM8AF622x)
@@ -137,7 +137,7 @@
 #endif /* (STM8S208) || (STM8AF52Ax) */
 
 // void SPI_IRQHandler(void) __interrupt(ITC_IRQ_SPI); /* SPI */
-void TIM1_CAP_COM_IRQHandler(void) __interrupt(ITC_IRQ_TIM1_CAPCOM); /* TIM1 CAP/COM */
+ void TIM1_CAP_COM_IRQHandler(void) __interrupt(ITC_IRQ_TIM1_CAPCOM); /* TIM1 CAP/COM */
 // void TIM1_UPD_OVF_TRG_BRK_IRQHandler(void) __interrupt(ITC_IRQ_TIM1_OVF); /* TIM1 UPD/OVF/TRG/BRK */
 
 #if defined(STM8S903) || defined(STM8AF622x)

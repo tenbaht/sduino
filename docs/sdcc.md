@@ -104,9 +104,54 @@ libboost-graph1.55.0 - generic graph components and algorithms in C++
 
 #### Missing peephole optimisations
 
-aufeinander folgende addw x,# und subw x,# werden nicht zusammengefasst
-Multiplikation mit zwei wird nicht durch bitshift ersetzt (besonders beim
-Arrayzugriff absurd)
+Directly connected sequences of 'addw x,#' and 'subw x,#' should be
+combined into one operation.
+
+Multiplication by two is done by 'mul' instead of a bitshift. Important for
+array access.
+
+**Interrupt routine preamble**:
+Why is there a 'clr a/div x,a' sequence?
+
+**Indirect 16 bit access**:
+'ldw x,#addr/ldw x,(x)' should be 'ldw x,[addr]'
+
+**Indirect function call**:
+'ldw x,#addr/ldw x,(x)/call (x)' should be 'call [addr]'
+
+Example (Interrupt routine calls a function from a jump table):
+
+```c
+static volatile voidFuncPtr intFunc[EXTERNAL_NUM_INTERRUPTS] = {
+    nothing,
+    nothing,
+};
+
+void TIM1_CAP_COM_IRQHandler(void) __interrupt(ITC_IRQ_TIM1_CAPCOM)
+{
+    intFunc[1]();
+}
+```
+
+
+```asm
+;	-----------------------------------------
+;	 function TIM1_CAP_COM_IRQHandler
+;	-----------------------------------------
+_TIM1_CAP_COM_IRQHandler:
+	clr	a
+	div	x, a
+	ldw	x, #_intFunc+2
+	ldw	x, (x)
+	call	(x)
+	iret
+	.area CODE
+	.area INITIALIZER
+__xinit__intFunc:
+	.dw _nothing
+	.dw _nothing
+	.area CABS (ABS)
+```
 
 
 #### Missing compiler features

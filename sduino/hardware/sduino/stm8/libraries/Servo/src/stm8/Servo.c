@@ -21,7 +21,7 @@
 
 //#include <avr/interrupt.h>
 #include <Arduino.h>
-
+#include <irqtable.h>
 #include "Servo.h"
 
 #define usToTicks(_us)    (( clockCyclesPerMicrosecond()* _us) / 8)     // converts microseconds to tick (assumes prescale of 8)  // 12 Aug 2009
@@ -91,6 +91,7 @@ static void handle_interrupts(timer16_Sequence_t timer, volatile uint8_t *TCNTn,
 // Interrupt handlers for Arduino
 #if defined(_useTimer1)
 INTERRUPT_HANDLER(TIM1_CAP_COM_IRQHandler, ITC_IRQ_TIM1_CAPCOM)
+//void t1ccservice(void)
 {
   TIM1->SR1	= 0;		// clear any pending interrupts;
   irqcnt++;	// debug only
@@ -123,7 +124,28 @@ INTERRUPT_HANDLER(TIM5_CAP_COM_IRQHandler, ITC_IRQ_TIM5_CAPCOM)
 #endif
 
 #elif defined WIRING
-#error constant WIRING is defined, but not sure about the implications
+// Interrupt handlers for Wiring
+#if defined(_useTimer1)
+void Timer1Service()
+{
+  TIM1->SR1	= 0;		// clear any pending interrupts;
+  handle_interrupts(_timer1, &TIM1->CNTRH, &TIM1->CCR1H);
+}
+#endif
+#if defined(_useTimer2)
+void Timer2Service()
+{
+  TIM2->SR1	= 0;		// clear any pending interrupts;
+  handle_interrupts(_timer2, &TIM2->CNTRH, &TIM2->CCR1H);
+}
+#endif
+#if defined(_useTimer3)
+void Timer3Service()
+{
+  TIM3->SR1	= 0;		// clear any pending interrupts;
+  handle_interrupts(_timer3, &TIM3->CNTRH, &TIM3->CCR1H);
+}
+#endif
 #endif
 
 
@@ -131,6 +153,8 @@ static void initISR(timer16_Sequence_t timer)
 {
 #if defined (_useTimer1)
   if(timer == _timer1) {
+    // do the AND to avoid a compiler warning.
+    attachInterrupt(INT_TIM1_CAPCOM & 0xff, Timer1Service, 0);
     TIM1_TimeBaseInit(7, TIM1_COUNTERMODE_UP, 0xffff, 0);     // keep this
 /* all included in TIM1_TimeBaseInit()
     TIM1->CR1	= 0;		// disable counter, mode upcount, no preload
@@ -154,6 +178,7 @@ static void initISR(timer16_Sequence_t timer)
     // very important: trigger an update event to change the prescaler
     TIM1->EGR	= 1;		// trigger an update event to change the prescaler
 
+//    attach_irq(INT_TIM1_CC, &t1ccservice);
     TIM1->SR1	= 0;		// clear any pending interrupts;
     TIM1->IER	= TIM1_IER_CC1IE;// enable the output compare interrupt
     TIM1->CR1	= TIM1_CR1_CEN;	// enable counter, mode upcount

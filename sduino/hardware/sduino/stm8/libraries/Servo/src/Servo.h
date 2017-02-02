@@ -118,8 +118,9 @@ private:
 #else
 
 // plain C interface for use with SDCC
+#include <xmacro.h>
 
-typedef unsigned char Servo;	// used as a fake class constructor
+typedef unsigned char Servo;		// used as a class instance aquivalent
 
 typedef struct  {
   uint8_t nbr        :6 ;             // a pin number from 0 to 63
@@ -142,6 +143,51 @@ void Servo_writeMicroseconds(byte channel, int value); // Write pulse width in m
 int Servo_read(byte channel);              // returns current pulse width as an angle between 0 and 180 degrees
 int Servo_readMicroseconds(byte channel);  // returns current pulse width in microseconds for this servo (was read_us() in first release)
 bool Servo_attached(byte channel);         // return true if this servo is attached, otherwise false 
+
+
+// Pseudo-OO interface: Plain C disguised as almost-C++, thanks to X-Macros
+#include <xmacro.h>
+
+/* usage:
+ * Instantiation:
+ *   Typically as a global definition. Has to be at the placed in the source
+ *   file before any of the "methods" can be used.
+ *     Servo(instancename);
+ * Constructors (typically in the setup() function):
+ *   Different constructors to emulate the polymorph class constructor
+ *     instancename_attach(pin);
+ *     instancename_attach_minmax(pin, min, max);
+ * Methods:
+ *     instancename_detach();
+ *     instancename_write(val);
+ *     instancename_writeMicroseconds(val);
+ *     int instancename_read();
+ *     int instancename_readMicroseconds();
+ *     bool instancename_attached();
+ */
+
+// The instantiation macro *must* be first in the list to allow for a
+// extern declaration if the global "object" is used in different source code
+// modules.
+//
+// And it is duplicated as an external declaration at the end of the list to
+// avoid a compiler syntax error with the following ';'
+
+// The instantiation macro *must* be the last in the list as it is the only
+// macro that does not result in a syntax error with the following ';'
+#define Servo(instance) \
+	XInstanciation	(Servo,instance); \
+	XConstructor1	(Servo,instance,attach,int,pin) \
+	XConstructor3	(Servo,instance,attach_minmax,int,pin,int,min,int,max) \
+	XMethod0	(Servo,instance,detach) \
+	XMethod1	(Servo,instance,write,int,val) \
+	XMethod1	(Servo,instance,writeMicroseconds,int,val) \
+	XMethod0return	(Servo,instance,int,read) \
+	XMethod0return	(Servo,instance,int,readMicroseconds) \
+	XMethod0return	(Servo,instance,bool,attached) \
+	extern XInstanciation	(Servo,instance)
+
+
 #endif
 
 #endif
