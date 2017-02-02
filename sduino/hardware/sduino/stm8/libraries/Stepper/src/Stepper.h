@@ -1,5 +1,5 @@
 /*
- * Stepper.h - Stepper library for Wiring/Arduino - Version 1.1.0
+ * Stepper.h - Stepper library for Wiring/Arduino - Version c/1.1.0
  *
  * Original library        (0.1)   by Tom Igoe.
  * Two-wire modifications  (0.2)   by Sebastian Gassner
@@ -8,7 +8,7 @@
  * High-speed stepping mod         by Eugene Kozlenko
  * Timer rollover fix              by Eugene Kozlenko
  * Five phase five wire    (1.1.0) by Ryan Orendorff
- * Ported to C syntax      (1.1.0) by Michael Mayer
+ * Ported to C syntax      (c/1.1.0) by Michael Mayer
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -125,6 +125,7 @@ class Stepper {
 #else
 
 // plain C interface for use with SDCC
+#include <xmacro.h>
 
 // the descriptor structure for one motor
 struct Stepper_s {
@@ -167,12 +168,69 @@ void Stepper_setSpeed(Stepper this, long whatSpeed);
 void Stepper_step(Stepper this, int number_of_steps);
 
 // replace the version() method with a simple define
-//int Stepper_version(void);
-#define Stepper_version()       5
+inline int Stepper_version(void){return 5;}
+//#define Stepper_version()       5
 
 // (not so) private:
 void Stepper_stepMotor(Stepper s, int this_step);
 
+
+//////// X-Macro magic to "OO-ify" the external user API
+/* usage:
+ * Instantiation:
+ *   Typically as a global definition. Has to be at the placed in the source
+ *   file before any of the "methods" can be used.
+ *     Stepper(instancename);
+ * Constructors (typically in the setup() function):
+ *   Different constructors to emulate the polymorph class constructor
+ *     instancename_2phase(number_of_steps, motor_pin_1, motor_pin_2);
+ *     instancename_4phase(number_of_steps, pin1, pin2, pin3, pin4);
+ *     instancename_5phase(number_of_steps, pin1, pin2, pin3, pin4, pin5);
+ * Methods:
+ *     instancename_setSpeed(whatSpeed);
+ *     instancename_step(number_of_steps);
+ */
+
+/// specific X-Macros
+#define XStepper2(instance) inline \
+        void instance##_2phase(\
+            unsigned int n,\
+            unsigned char pin1,\
+            unsigned char pin2)\
+        {instance=Stepper_5phase(n,pin1,pin2,0,0,0);}
+#define XStepper4(instance) inline \
+        void instance##_4phase(\
+            unsigned int n,\
+            unsigned char pin1,\
+            unsigned char pin2,\
+            unsigned char pin3,\
+            unsigned char pin4)\
+        {instance=Stepper_5phase(n,pin1,pin2,pin3,pin4,0);}
+#define XStepper5(instance) inline \
+        void instance##_5phase(\
+            unsigned int n,\
+            unsigned char pin1,\
+            unsigned char pin2,\
+            unsigned char pin3,\
+            unsigned char pin4,\
+            unsigned char pin5)\
+        {instance=Stepper_5phase(n,pin1,pin2,pin3,pin4,pin5);}
+
+// The instantiation macro *must* be first in the list to allow for a
+// extern declaration if the global "object" is used in different source code
+// modules.
+//
+// And it is duplicated as an external declaration at the end of the list to
+// avoid a compiler syntax error with the following ';'
+#define Stepper(instance) \
+	XInstanciation	(Stepper,instance); \
+	XStepper2	(instance) \
+	XStepper4	(instance) \
+	XStepper5	(instance) \
+	XMethod1	(Stepper,instance,setSpeed,long, whatSpeed) \
+	XMethod1	(Stepper,instance,step,int, number_of_steps) \
+	XMethod0return	(Stepper,instance,int,version) \
+	extern XInstanciation	(Stepper,instance)
 
 
 #endif // ifdef __cplusplus

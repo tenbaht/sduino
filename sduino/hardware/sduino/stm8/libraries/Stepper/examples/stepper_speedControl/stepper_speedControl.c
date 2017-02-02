@@ -26,13 +26,13 @@ const int stepsPerRevolution = 200;  // change this to fit the number of steps p
 // for your motor
 
 
-Stepper myStepper;
+Stepper(myStepper);
 
 int stepCount = 0;  // number of steps the motor has taken
 
 void setup() {
   // initialize the stepper library on pins 8 through 11:
-  myStepper = Stepper_4phase(stepsPerRevolution, 8, 9, 10, 11);
+  myStepper_4phase(stepsPerRevolution, 8, 9, 10, 11);
 }
 
 void loop() {
@@ -42,9 +42,9 @@ void loop() {
   int motorSpeed = map(sensorReading, 0, 1023, 0, 100);
   // set the motor speed:
   if (motorSpeed > 0) {
-    Stepper_setSpeed(myStepper, motorSpeed);
+    myStepper_setSpeed(motorSpeed);
     // step 1/100 of a revolution:
-    Stepper_step(myStepper, stepsPerRevolution / 100);
+    myStepper_step(stepsPerRevolution / 100);
   }
 }
 

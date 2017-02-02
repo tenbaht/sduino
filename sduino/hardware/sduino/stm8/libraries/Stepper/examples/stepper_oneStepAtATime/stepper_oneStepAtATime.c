@@ -27,20 +27,20 @@
 const int stepsPerRevolution = 200;  // change this to fit the number of steps per revolution
 // for your motor
 
-Stepper myStepper;
+Stepper(myStepper);
 
 int stepCount = 0;         // number of steps the motor has taken
 
 void setup() {
   // initialize the stepper library on pins 8 through 11:
-  myStepper = Stepper_4phase(stepsPerRevolution, 8, 9, 10, 11);
+  myStepper_4phase(stepsPerRevolution, 8, 9, 10, 11);
   // initialize the serial port:
   Serial_begin(9600);
 }
 
 void loop() {
   // step one step:
-  Stepper_step(myStepper, 1);
+  myStepper_step(1);
   Serial_print_s("steps:");
   Serial_println_u(stepCount);
   stepCount++;
