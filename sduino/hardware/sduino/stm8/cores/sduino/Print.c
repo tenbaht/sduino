@@ -44,7 +44,7 @@ void printNL(void);
 
 // Public Methods //////////////////////////////////////////////////////////////
 
-size_t printBuf(writefunc_p writefunc, const uint8_t *buffer, size_t size)
+size_t Print_print_sn(writefunc_p writefunc, const uint8_t *buffer, size_t size)
 {
   size_t n = 0;
   while (size--) {
@@ -54,7 +54,7 @@ size_t printBuf(writefunc_p writefunc, const uint8_t *buffer, size_t size)
   return n;
 }
 
-size_t printStr(writefunc_p writefunc, const char *str)
+size_t Print_print_s(writefunc_p writefunc, const char *str)
 {
 	size_t		n = 0;
 	char c;
@@ -79,12 +79,12 @@ size_t Print_print_i(writefunc_p writefunc, long n)
 	return printInt(writefunc, n,10);
 }
 
-size_t Print_println_s(writefunc_p writefunc, char *str)
+size_t Print_println_s(writefunc_p writefunc, const char *str)
 {
 	size_t r;
 
-	r = printStr(writefunc, str);
-	return r + println(writefunc);
+	r = Print_print_s(writefunc, str);
+	return r + Print_println(writefunc);
 }
 
 
@@ -94,7 +94,7 @@ size_t Print_println_u(writefunc_p writefunc, unsigned long n)
 	size_t r;
 
 	r = printNumber(writefunc, n,10);
-	return r + println(writefunc);
+	return r + Print_println(writefunc);
 }
 
 size_t Print_println_i(writefunc_p writefunc, long n)
@@ -102,13 +102,13 @@ size_t Print_println_i(writefunc_p writefunc, long n)
 	size_t r;
 
 	r = printInt(writefunc, n,10);
-	return r + println(writefunc);
+	return r + Print_println(writefunc);
 }
 
 
 // (not so) Private Methods /////////////////////////////////////////////////////////////
 
-size_t println(writefunc_p writefunc)
+size_t Print_println(writefunc_p writefunc)
 {
 	size_t n;
 
@@ -118,7 +118,7 @@ size_t println(writefunc_p writefunc)
 }
 
 
-size_t printNumber(writefunc_p writefunc, unsigned long n, uint8_t base)
+size_t Print_print_ub(writefunc_p writefunc, unsigned long n, uint8_t base)
 {
   char buf[8 * sizeof(long) + 1]; // Assumes 8-bit chars plus zero byte.
   char *str = &buf[sizeof(buf) - 1];
@@ -135,10 +135,10 @@ size_t printNumber(writefunc_p writefunc, unsigned long n, uint8_t base)
     *--str = c < 10 ? c + '0' : c + 'A' - 10;
   } while(n);
 
-  return printStr(writefunc, str);
+  return Print_print_s(writefunc, str);
 }
 
-size_t printInt(writefunc_p writefunc, long n, uint8_t base)
+size_t Print_print_ib(writefunc_p writefunc, long n, uint8_t base)
 {
   if (base == 0) {
     return writefunc((unsigned char) n);
@@ -155,7 +155,7 @@ size_t printInt(writefunc_p writefunc, long n, uint8_t base)
 }
 
 /*
-size_t Print_printFloat(writefunc_p writefunc, double number, uint8_t digits) 
+size_t Print_print_f(writefunc_p writefunc, double number, uint8_t digits) 
 { 
   size_t n = 0;
   uint8_t i;

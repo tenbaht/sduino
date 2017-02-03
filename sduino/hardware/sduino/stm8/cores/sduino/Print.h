@@ -34,36 +34,41 @@
 
 
 // for the function pointer to the actual write function
-typedef size_t (*writefunc_p)(char c);
+typedef size_t (*writefunc_p)(uint8_t c);
 
-// the actual used functions, mostly for internal use
-size_t printBuf(writefunc_p writefunc, const uint8_t *buffer, size_t size);
-size_t printStr(writefunc_p writefunc, const char *str);
-size_t printNumber(writefunc_p writefunc, unsigned long n, uint8_t base);
-size_t printInt(writefunc_p writefunc, long n, uint8_t base);
-size_t println(writefunc_p writefunc);
+// abreviations of the actual function names, mostly for internal use
+#define printBuf	Print_print_sn
+#define printStr	Print_print_s
+#define printNumber	Print_print_ub
+#define printInt	Print_print_ib
+#define println		Print_println
 
-// the more sophisticated Arduino-Style functions:
 
-//#define Print_write(B,N)	printBuf(B,N)
+// the more sophisticated Arduino-Style functions. Variants of the standard
+// Serial.print() function: Separate impementations for different datatype
+// to mimic polymorphism.
 
-// variants of the standard Serial.print() function: Separate impementations
-// for string, char, unsigned, signed int
-//#define Print_print_s(S)	printStr(S)
-//#define Print_print_c(C)	printChr(C)
-// print unsigned integer values (char, short, int, long) as decimal values
-size_t Print_print_u(writefunc_p writefunc, unsigned long n);
-// print signed integer values (char, short, int, long) as decimal value
+// print strings (C-Style or buffer contents)
+size_t Print_print_s(writefunc_p writefunc, const char *str);
+size_t Print_print_sn(writefunc_p writefunc, const uint8_t *buffer, size_t size);
+
+// print signed/unsigned values (char, short, int, long) as decimal values
 size_t Print_print_i(writefunc_p writefunc, long n);
-// print unsigned integer values (char, short, int, long) to base B
-//#define Print_print_ub(U,B)	printNumber(U,B)
-// print signed integer values (char, short, int, long) to base B
-//#define Print_print_ib(I,B)	printInt(I,B)
+size_t Print_print_u(writefunc_p writefunc, unsigned long n);
 
-size_t Print_println_s(writefunc_p writefunc, char *str);
+// print signed/unsigned integer values (char, short, int, long) to base B
+size_t Print_print_ib(writefunc_p writefunc, long n, uint8_t base);
+size_t Print_print_ub(writefunc_p writefunc, unsigned long n, uint8_t base);
+
+// print float values
+//size_t Print_print_f(writefunc_p writefunc, double number, uint8_t digits);
+
+
+// Variants of the above with a newline added at the and:
+size_t Print_println(writefunc_p writefunc);
+size_t Print_println_s(writefunc_p writefunc, const char *str);
 size_t Print_println_u(writefunc_p writefunc, unsigned long n);
 size_t Print_println_i(writefunc_p writefunc, long n);
 
-size_t Print_printFloat(writefunc_p writefunc, double number, uint8_t digits);
 
 #endif
