@@ -9,8 +9,7 @@
  This sketch prints "I <heart> Arduino!" and a little dancing man
  to the LCD.
 
-  The circuit:
-  lcd_connection_4bit_r(PA2,PA3, PD2,PD3,PD6,PA1);
+ The circuit:
  * LCD RS pin to PA1 (digital pin 0)
  * LCD Enable pin to PA2 (digital pin 1)
  * LCD D4 pin to PA3 (digital pin 2)
@@ -20,10 +19,10 @@
  * LCD R/W pin to ground
  * LCD VSS pin to ground
  * LCD VCC pin to 5V
- * 10K resistor:
+ * 10K potentiometer:
  * ends to +5V and ground
  * wiper to LCD VO pin (pin 3)
- * 10K poterntiometer on PC4 (analog pin A0/digital pin 6)
+ * 10K poterntiometer on pin A0 (PC4, digital pin 6)
 
  created 21 Mar 2011
  by Tom Igoe
@@ -47,6 +46,8 @@
 #include <Arduino.h>
 #include <LiquidCrystal.h>
 
+// initialize the library with the numbers of the interface pins
+LiquidCrystal_4bit_r(lcd,PA1,PA2, PA3,PD2,PD3,PD4);
 
 // make some custom characters:
 byte heart[8] = {
@@ -105,8 +106,6 @@ byte armsUp[8] = {
 };
 
 void setup() {
-  // initialize the library with the numbers of the interface pins
-  lcd_connection_4bit_r(PA1,PA2, PA3,PD2,PD3,PD4);
   // initialize LCD and set up the number of columns and rows:
   lcd_begin(16, 2);
 

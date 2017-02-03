@@ -9,8 +9,7 @@
  This sketch prints "Hello World!" to the LCD
  and shows the time.
 
-  The circuit:
-  lcd_connection_4bit_r(PA2,PA3, PD2,PD3,PD6,PA1);
+ The circuit:
  * LCD RS pin to PA1 (digital pin 0)
  * LCD Enable pin to PA2 (digital pin 1)
  * LCD D4 pin to PA3 (digital pin 2)
@@ -20,7 +19,7 @@
  * LCD R/W pin to ground
  * LCD VSS pin to ground
  * LCD VCC pin to 5V
- * 10K resistor:
+ * 10K potentiometer:
  * ends to +5V and ground
  * wiper to LCD VO pin (pin 3)
 
@@ -44,10 +43,10 @@
 #include <Arduino.h>
 #include <LiquidCrystal.h>
 
+// initialize the library with the numbers of the interface pins
+LiquidCrystal_4bit_r(lcd,PA1,PA2, PA3,PD2,PD3,PD4);
 
 void setup() {
-  // initialize the library with the numbers of the interface pins
-  lcd_connection_4bit_r(PA1,PA2, PA3,PD2,PD3,PD4);
   // set up the LCD's number of columns and rows:
   lcd_begin(16, 2);
   // Print a message to the LCD.
@@ -60,5 +59,5 @@ void loop() {
   // (note: line 1 is the second row, since counting begins with 0):
   lcd_setCursor(0, 1);
   // print the number of seconds since reset:
-  lcd_print_u(millis() / 100);
+  lcd_print_u(millis() / 1000);
 }
