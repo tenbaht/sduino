@@ -2,6 +2,12 @@
  * This is an example for using the i2c library with a monochrome OLED
  * display based on SSD1306 drivers.
  *
+ * It shows the Adafruit splash screen and blinks a pixel pattern once per
+ * second. On CPUs with only 1kB RAM the display buffer overlaps with the
+ * stack and you will see it as a wild pattern in the lower left corner of
+ * the display. For this reason the blinking loop does not touch the lower
+ * 8 rows of the display memory buffer.
+ *
  * The display has 128x64 pixel and uses only SCL and SDA for communication,
  * there is no reset pin.
  *
@@ -36,32 +42,28 @@ BSD license, check license.txt for more information
 All text above, and the splash screen must be included in any redistribution
 *********************************************************************/
 
-#include "ssd1306.h"
+
+// I2C is included here to let the build system automatically be aware of this
+// second-level dependency. Ofterwise you would need to list it in the Makefile:
+// ARDUINO_LIBS = I2C
+#include "I2C.h"
+#include "Mini_SSD1306.h"
 
 #define OLED_RESET -1
 
-#if (SSD1306_LCDHEIGHT != 64)
-#error("Height incorrect, please fix Adafruit_SSD1306.h!");
-#endif
+Mini_SSD1306(display,OLED_RESET);
 
-// empty IRQ handler just to keep the linker happy as we are not using the
-// Hardware_Serial library
-void UART1_RX_IRQHandler(void) __interrupt(ITC_IRQ_UART1_RX){}
-void UART1_TX_IRQHandler(void) __interrupt(ITC_IRQ_UART1_TX){}
+#if (SSD1306_LCDHEIGHT != 64)
+#error("Height incorrect, please fix Mini_SSD1306.h!");
+#endif
 
 
 void setup()
 {
-	display_init(OLED_RESET);
-
-	// by default, we'll generate the high voltage from the 3.3v line internally! (neat!)
-	display_begin(SSD1306_SWITCHCAPVCC, 0x3C,0);  // initialize with the I2C addr 0x3C
-	// init done
-  
-	// Show image buffer on the display hardware.
-	// Since the buffer is intialized with an Adafruit splashscreen
-	// internally, this will display the splashscreen.
-	// display_display();
+	// The Nokia 5110 display generates the high voltage from the 3.3v
+	// line internally! (neat!)
+	// Initialize with the I2C addr 0x3C. Some displays use 0x3D instead.
+	display_begin(SSD1306_SWITCHCAPVCC, 0x3C,0);
 }
 
 
@@ -69,18 +71,19 @@ void loop()
 {
 	uint8_t x,y;
 
-	display_display();	// show the splash screen
-	//display_startscrollright(4,6);
+	// Show image buffer on the display hardware.
+	// Since the buffer is intialized with an Adafruit splashscreen
+	// internally, this will display the splashscreen.
+	display_display();
 
 	delay (1000);
 
 	// draw some dots in an 8x8 pattern
 	for (x=0; x<WIDTH; x+=8)
 	{
-//		for (y=0; y<HEIGHT; y+=8)
-		for (y=0; y<56; y+=8)	// don't mess with the stack!
+		for (y=0; y<HEIGHT-8; y+=8)	// don't alter the stack!
 		{
-			drawPixel(x,y,INVERSE);
+			display_drawPixel(x,y,INVERSE);
 		}
 	}
 }

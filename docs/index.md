@@ -41,12 +41,13 @@ http://www.aliexpress.com/ .
 with github pages and the preinstalled jekyll-themes?)
 
 1. [Introduction and Overview](index.html)
-2. [API and migration guidelines](api.html)
+2. [API descriptions and migration guidelines](api.html)
   * [LiquidCrystal character LCD library](api/LiquidCrystal.html)
   * [PCD8544 libray for Nokia 5110-like graphical LCDs](api/PCD8544.html)
+  * [Mini_SSD1306 library for monochrome OLED-displays](api/Mini_SSD1306.html)
   * [Stepper library](api/Stepper.html)
   * [Servo library](api/Servo.html)
-3. [Supported Boards]()
+3. [Supported Boards](hardware.html)
   * [stm8blue: simple breakout board, STM8S103](hardware/stm8blue.html)
   * [ESP14: Wifi board, STM8S003](hardware/esp14.html)
   * [STM8S105Discovery: Evaluation board made my ST](hardware/stm8disco.html)
@@ -299,12 +300,13 @@ Supports monochrome graphical LCD based on the PCD8544 controller like the
 popular Nokia N5110 display. Only SPI mode supported. The library is a very
 much simpified version of the Adafruit library optimized for a minimal memory
 footprint. Uses soft-SPI, does not need the SPI pins.
+[API description](api/PCD8544.html)
 
 
-#### ssd1306
+#### Mini_SSD1306
 Driver for SSD1306-based monochrome OLED display with 128x64
-pixels. I2C support only. Based on the Adafruit-libray.
-
+pixels. I2C support only. Based on the Adafruit-libray Adafruit_SSD1306.
+[API description](api/Mini_SSD.html)
 
 
 ### Motor

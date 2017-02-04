@@ -12,27 +12,6 @@
  * the stack contents and would result in an immediate crash. So don't
  * use the lower lines on low memory devices!
  *
- * This code is adopted from the Adafruit example code contained in the
- * Adafruit_SSD1306 library.
- *
- * modified 2017 by Michael Mayer
- */
-
-
-/*
- * This is an example for using the i2c library with a monochrome OLED
- * display based on SSD1306 drivers.
- *
- * The display has 128x64 pixel and uses only SCL and SDA for communication,
- * there is no reset pin.
- *
- * The framebuffer needs to be kept in RAM as reading the display is not
- * supported by the driver chips. Since the STM8S103F3 has only 1kB RAM
- * total, we will see the stack contents in the lower part of the display
- * as a wild bit pattern. Using drawPixel() on this memory would mess up
- * the stack contents and would result in an immediate crash. So don't
- * use the lower lines on low memory devices!
- *
  * This code is a stripped down version of the Adafruit_SSD1306 library
  * adoped for use with the STM8S.
  *
@@ -78,7 +57,7 @@ All text above, and the splash screen below must be included in any redistributi
 # define i2c_write(A,C,D)	I2C_write_c(A,C,D)
 # define i2c_write_sn(A,C,B,N)	I2C_write_sn(A,C,B,N)
 #endif
-#include "ssd1306.h"
+#include "Mini_SSD1306.h"
 
 // private:
   static int8_t _i2caddr, _vccstate, sid, sclk, dc, rst, cs;
@@ -171,7 +150,7 @@ static void ssd1306_command(uint8_t c);
 
 
 // the most basic function, set a single pixel
-void drawPixel(int16_t x, int16_t y, uint8_t color) {
+void Mini_SSD1306_drawPixel(int16_t x, int16_t y, uint8_t color) {
 //  if ((x < 0) || (x >= width()) || (y < 0) || (y >= height()))
 //    return;
 
@@ -202,13 +181,13 @@ void drawPixel(int16_t x, int16_t y, uint8_t color) {
 }
 
 // initializer for I2C - we only indicate the reset pin!
-void display_init(int8_t reset) {
+void Mini_SSD1306_init(int8_t reset) {
   sclk = dc = cs = sid = -1;
   rst = reset;
 }
 
 #if 1
-void display_begin(uint8_t vccstate, uint8_t i2caddr, bool reset) {
+void Mini_SSD1306_begin(uint8_t vccstate, uint8_t i2caddr, bool reset) {
   _vccstate = vccstate;
   _i2caddr = i2caddr;
 
@@ -295,7 +274,7 @@ void display_begin(uint8_t vccstate, uint8_t i2caddr, bool reset) {
 }
 #endif
 
-void display_invertDisplay(uint8_t i) {
+void Mini_SSD1306_invertDisplay(uint8_t i) {
   if (i) {
     ssd1306_command(SSD1306_INVERTDISPLAY);
   } else {
@@ -324,7 +303,7 @@ static void ssd1306_command(uint8_t c) {
 // Activate a right handed scroll for rows start through stop
 // Hint, the display is 16 rows tall. To scroll the whole display, run:
 // display.scrollright(0x00, 0x0F)
-void display_startscrollright(uint8_t start, uint8_t stop){
+void Mini_SSD1306_startscrollright(uint8_t start, uint8_t stop){
   ssd1306_command(SSD1306_RIGHT_HORIZONTAL_SCROLL);
   ssd1306_command(0X00);
   ssd1306_command(start);
@@ -339,7 +318,7 @@ void display_startscrollright(uint8_t start, uint8_t stop){
 // Activate a right handed scroll for rows start through stop
 // Hint, the display is 16 rows tall. To scroll the whole display, run:
 // display.scrollright(0x00, 0x0F)
-void display_startscrollleft(uint8_t start, uint8_t stop){
+void Mini_SSD1306_startscrollleft(uint8_t start, uint8_t stop){
   ssd1306_command(SSD1306_LEFT_HORIZONTAL_SCROLL);
   ssd1306_command(0X00);
   ssd1306_command(start);
@@ -354,7 +333,7 @@ void display_startscrollleft(uint8_t start, uint8_t stop){
 // Activate a diagonal scroll for rows start through stop
 // Hint, the display is 16 rows tall. To scroll the whole display, run:
 // display.scrollright(0x00, 0x0F)
-void display_startscrolldiagright(uint8_t start, uint8_t stop){
+void Mini_SSD1306_startscrolldiagright(uint8_t start, uint8_t stop){
   ssd1306_command(SSD1306_SET_VERTICAL_SCROLL_AREA);
   ssd1306_command(0X00);
   ssd1306_command(SSD1306_LCDHEIGHT);
@@ -371,7 +350,7 @@ void display_startscrolldiagright(uint8_t start, uint8_t stop){
 // Activate a diagonal scroll for rows start through stop
 // Hint, the display is 16 rows tall. To scroll the whole display, run:
 // display.scrollright(0x00, 0x0F)
-void display_startscrolldiagleft(uint8_t start, uint8_t stop){
+void Mini_SSD1306_startscrolldiagleft(uint8_t start, uint8_t stop){
   ssd1306_command(SSD1306_SET_VERTICAL_SCROLL_AREA);
   ssd1306_command(0X00);
   ssd1306_command(SSD1306_LCDHEIGHT);
@@ -384,14 +363,14 @@ void display_startscrolldiagleft(uint8_t start, uint8_t stop){
   ssd1306_command(SSD1306_ACTIVATE_SCROLL);
 }
 
-void display_stopscroll(void){
+void Mini_SSD1306_stopscroll(void){
   ssd1306_command(SSD1306_DEACTIVATE_SCROLL);
 }
 
 // Dim the display
 // dim = true: display is dimmed
 // dim = false: display is normal
-void display_dim(boolean dim) {
+void Mini_SSD1306_dim(boolean dim) {
   uint8_t contrast;
 
   if (dim) {
@@ -410,7 +389,7 @@ void display_dim(boolean dim) {
 }
 
 
-void display_display(void) {
+void Mini_SSD1306_display(void) {
   ssd1306_command(SSD1306_COLUMNADDR);
   ssd1306_command(0);   // Column start address (0 = reset)
   ssd1306_command(SSD1306_LCDWIDTH-1); // Column end address (127 = reset)
@@ -449,6 +428,6 @@ void display_display(void) {
 }
 
 // clear everything
-void display_clearDisplay(void) {
+void Mini_SSD1306_clearDisplay(void) {
   memset(buffer, 0, (SSD1306_LCDWIDTH*SSD1306_LCDHEIGHT/8));
 }

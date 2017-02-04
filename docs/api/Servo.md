@@ -158,3 +158,4 @@ timer TIM1. Monitoring the repetion period might become a little complex, as
 it must be ensured that all servos on all channels have finshed before.
 
 
+[Back to the main page](../index.html)
