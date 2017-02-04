@@ -124,31 +124,8 @@ class PCD8544: public Print {
 
 #else
 
-// we want to "inherit" the output functions, so include it
-#include "Print.h"
-
 // plain C interface for use with SDCC
-/*
-// use #defines to emulate the polymorph class constructor in C++
-#define lcd_connection_8bit_rw(RS,RW,EN,D0,D1,D2,D3,D4,D5,D6,D7) \
-  lcd_init(0,RS,RW,EN,D0,D1,D2,D3,D4,D5,D6,D7)
-#define lcd_connection_8bit_r(RS,EN,D0,D1,D2,D3,D4,D5,D6,D7) \
-  lcd_init(0,RS,255,EN,D0,D1,D2,D3,D4,D5,D6,D7)
-#define lcd_connection_4bit_rw(RS,RW,EN,D0,D1,D2,D3) \
-  lcd_init(1,RS,RW,EN,D0,D1,D2,D3,0,0,0,0)
-#define lcd_connection_4bit_r(RS,EN,D0,D1,D2,D3) \
-  lcd_init(1,RS,255,EN,D0,D1,D2,D3,0,0,0,0)
 
-  void lcd_init(uint8_t fourbitmode, uint8_t rs, uint8_t rw, uint8_t enable,
-	    uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
-	    uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
-
-// use another #define to emulate the polymorph method begin()
-#define lcd_begin(C,R) lcd_begin_charsize(C,R,LCD_5x8DOTS)
-  void lcd_begin_charsize(uint8_t cols, uint8_t rows, uint8_t charsize);
-*/
-
-// All the pins can be changed from the default values...
 void PCD8544_connection(
     unsigned char sclk,	/* clock       (display pin 2) */
     unsigned char sdin,	/* data-in     (display pin 3) */
@@ -206,57 +183,103 @@ void PCD8544_drawColumn(unsigned char lines, unsigned char value);
 
 
 
-/*
- * define alternative names for the functions that look similar to the
- * standard instance name when using the C++ interface with
- * PCD855 lcd();
- */
-#define lcd_connection		PCD8544_connection
-#define lcd_begin()		PCD8544_begin_full(84,48, CHIP_PCD8544)
-#define lcd_begin_wh(W,H)	PCD8544_begin_full(W,H, CHIP_PCD8544)
-#define lcd_begin_full		PCD8544_begin_full
-#define lcd_clear		PCD8544_clear
-#define lcd_clearLine		PCD8544_clearLine
-#define lcd_setPower		PCD8544_setPower
-#define lcd_display		PCD8544_display
-#define lcd_noDisplay		PCD8544_noDisplay
-#define lcd_setInverse		PCD8544_setInverse
-#define lcd_setContrast		PCD8544_setContrast
-#define lcd_home		PCD8544_home
-#define lcd_setCursor		PCD8544_setCursor
-#define lcd_createChar		PCD8544_createChar
-#define lcd_write(C)		PCD8544_write(C)
-#define lcd_drawBitmap		PCD8544_drawBitmap
-#define lcd_drawColumn		PCD8544_drawColumn
+// Pseudo-OO interface: Plain C disguised as almost-C++, thanks to X-Macros
+//
+// We want to "inherit" the output functions from Print, so include that
+// header file as well before we start calling any macros.
 
-/*
- * simulate the inheritance from class Print:
- * define some function names with similar names to the methods
- * "inheritated" from "class" Print
+#include <xmacro.h>
+#include <Print.h>
+
+
+/* usage:
+ * Instantiation:
+ *   Typically as a global definition. Has to be at the placed in the source
+ *   file before any of the "methods" can be used.
+ *     Servo(instancename);
+ * Constructors (typically in the setup() function):
+ *   Different constructors to emulate the polymorph class constructor
+ *     instancename_attach(pin);
+ *     instancename_attach_minmax(pin, min, max);
+ * Methods:
+ *     instancename_write(val);
+ *     int instancename_read();
  */
 
-// variants of the standard lcd.print() function: Separate impementations
-// for string, char, unsigned, signed int
-#define lcd_print_s(S)		printStr(PCD8544_write,S)
-#define lcd_print_c(C)		PCD8544_write(C)
-
-// print signed/unsigned integer values (char, short, int, long) as decimal values
-#define lcd_print_i(I)		Print_print_i(PCD8544_write,I)
-#define lcd_print_u(U)		Print_print_u(PCD8544_write,U)
-
-// print signed/unsigned integer values (char, short, int, long) to base B
-#define lcd_print_ib(I,B)	printInt(PCD8544_write,I,B)
-#define lcd_print_ub(U,B)	printNumber(PCD8544_write,U,B)
 
 
-#define lcd_println_s(S)	Print_println_s(PCD8544_write,S)
-#define lcd_println_u(U)	Print_println_u(PCD8544_write,U)
-#define lcd_println_i(I)	Print_println_i(PCD8544_write,I)
+// special macros specific to this "class"
+//
+// The first macro XLCDinst defines a function to remember the pin
+// connections for later use with begin().
+//
+// The next few macros are the different functions to mimic the polymorph
+// begin() method.
+//
+// The last, big macro lists all methods specific to this "class" for easier
+// inclusion into the different versions of the final macro later.
 
-// float (not implemented yet)
-#define lcd_print_f(F,D)	Print_printFloat(PCD8544_write,F,D)
+#define XLCDinst(instance,sclk,sdin,dc,reset,sce) inline \
+        void instance##_inst(void){\
+            PCD8544_connection(sclk,sdin,dc,reset,sce);\
+        }
+
+#define XLCDbegin(instance) inline \
+        void instance##_begin(void){\
+            instance##_inst(); \
+            PCD8544_begin_full(84,48,CHIP_PCD8544);\
+        }
+
+#define XLCDbegin2(instance) inline \
+        void instance##_begin_wh(unsigned char width, unsigned char height){\
+            instance##_inst(); \
+            PCD8544_begin_full(width,height,CHIP_PCD8544);\
+        }
+
+#define XLCDbegin3(instance) inline \
+        void instance##_begin_full(unsigned char width, unsigned char height, unsigned char chip){\
+            instance##_inst(); \
+            PCD8544_begin_full(width,height,chip);\
+        }
+
+#define XPCD8544Methods(instance) \
+	XLCDbegin	(instance) \
+	XLCDbegin2	(instance) \
+	XLCDbegin3	(instance) \
+	\
+	XPreMethod0	(PCD8544,instance,stop) \
+	XPreMethod0	(PCD8544,instance,clear) \
+	XPreMethod0	(PCD8544,instance,clearLine) \
+	XPreMethod1	(PCD8544,instance,setPower,bool) \
+	XPreMethod0	(PCD8544,instance,display) \
+	XPreMethod0	(PCD8544,instance,noDisplay) \
+	XPreMethod1	(PCD8544,instance,setInverse,bool) \
+	XPreMethod1	(PCD8544,instance,setContrast,unsigned char) \
+	XPreMethod0	(PCD8544,instance,home) \
+	XPreMethod2	(PCD8544,instance,setCursor,unsigned char,unsigned char) \
+	XPreMethod2	(PCD8544,instance,createChar,unsigned char,const unsigned char*) \
+	XPreMethod1return (PCD8544,instance,size_t,write,uint8_t) \
+	XPreMethod3	(PCD8544,instance,drawBitmap,const unsigned char*,unsigned char,unsigned char) \
+	XPreMethod2	(PCD8544,instance,drawColumn,unsigned char,unsigned char)
 
 
+
+// There is an unneeded external declaration at the beginning and the end of
+// the list to consume a possible "static" before the declaration and the
+// semicolon following at the end of line after the macro call.
+//
+// Calling the 'XLCDMethos' macro defines all functions specific for this
+// "class". Avoids duplication in case of a polymorph instantiation method.
+//
+// Calling the 'XPrintMethods' macro defines all functions needed for the
+// the pseudo-inheritence of all output functions from Print "class".
+
+#define PCD8544(instance,sclk,sdin,dc,reset,sce) \
+	extern int 	PCD8544; \
+	XLCDinst	(instance,sclk,sdin,dc,reset,sce) \
+	XPCD8544Methods	(instance) \
+	XPrintMethods	(PCD8544,instance) \
+	extern int 	PCD8544
 
 
 #endif /* c interface */

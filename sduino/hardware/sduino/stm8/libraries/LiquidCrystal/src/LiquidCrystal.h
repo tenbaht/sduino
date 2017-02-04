@@ -1,7 +1,6 @@
 #ifndef LiquidCrystal_h
 #define LiquidCrystal_h
 
-#include "Print.h"
 
 // commands
 #define LCD_CLEARDISPLAY 0x01
@@ -41,6 +40,11 @@
 #define LCD_5x10DOTS 0x04
 #define LCD_5x8DOTS 0x00
 
+#ifdef __cplusplus
+
+// C++ interface for use with regular gcc compiler
+
+#else
 
 // plain C interface for use with SDCC
 
@@ -76,94 +80,67 @@
 
 
 // Pseudo-OO interface: Plain C disguised as almost-C++, thanks to X-Macros
+//
+// We want to "inherit" the output functions from Print, so include that
+// header file as well before we start calling any macros.
+
 #include <xmacro.h>
+#include <Print.h>
+
 
 /* usage:
  * Instantiation:
  *   Typically as a global definition. Has to be at the placed in the source
  *   file before any of the "methods" can be used.
- *     Servo(instancename);
+ *     LiquidCrystal_8bit_rw(instancename,RS,RW,EN,D0,D1,D2,D3,D4,D5,D6,D7)
+ *     LiquidCrystal_8bit_r (instancename,RS,EN,D0,D1,D2,D3,D4,D5,D6,D7)
+ *     LiquidCrystal_4bit_rw(instancename,RS,RW,EN,D0,D1,D2,D3)
+ *     LiquidCrystal_4bit_r (instancename,RS,EN,D0,D1,D2,D3)
  * Constructors (typically in the setup() function):
  *   Different constructors to emulate the polymorph class constructor
- *     instancename_attach(pin);
- *     instancename_attach_minmax(pin, min, max);
+ *     instancename_begin(cols, lines);
+ *     instancename_begin_charsize(cols, lines, charsize);
  * Methods:
- *     instancename_detach();
+ *     instancename_home();
  *     instancename_write(val);
- *     instancename_writeMicroseconds(val);
  *     int instancename_read();
- *     int instancename_readMicroseconds();
- *     bool instancename_attached();
  */
 
+
+
+// special macros specific to this "class"
+//
+// The first macro XLCDinst defines a function to remember the pin
+// connections for later use with begin().
+//
+// The next few macros are the different functions to mimic the polymorph
+// begin() method.
+//
+// The last, big macro lists all methods specific to this "class" for easier
+// inclusion into the different versions of the final macro later.
+
 #define XLCDinst(instance,mode,rs,rw,en,d0,d1,d2,d3,d4,d5,d6,d7) inline \
-        void instance##_inst(void)\
-        {LiquidCrystal_init(mode,rs,rw,en,d0,d1,d2,d3,d4,d5,d6,d7);}
+        void instance##_inst(void){\
+		LiquidCrystal_init(mode,rs,rw,en,d0,d1,d2,d3,d4,d5,d6,d7);\
+	}
 
 #define XLCDbegin2(instance) inline \
-        void instance##_begin(uint8_t cols, uint8_t lines)\
-        {instance##_inst(); LiquidCrystal_begin_charsize(cols,lines,LCD_5x8DOTS);}
+        void instance##_begin(uint8_t cols, uint8_t lines){\
+		instance##_inst(); \
+		LiquidCrystal_begin_charsize(cols,lines,LCD_5x8DOTS);\
+	}
 
 #define XLCDbegin3(instance) inline \
-        void instance##_begin_charsize(uint8_t cols, uint8_t lines, uint8_t charsize)\
-        {instance##_inst(); LiquidCrystal_begin_charsize(cols,lines,charsize);}
+        void instance##_begin_charsize(uint8_t cols, uint8_t lines, uint8_t charsize){\
+		instance##_inst(); \
+		LiquidCrystal_begin_charsize(cols,lines,charsize);\
+	}
 
 
-// The instantiation macro *must* be first in the list to allow for a
-// extern declaration if the global "object" is used in different source code
-// modules.
-//
-// And it is duplicated as an external declaration at the end of the list to
-// avoid a compiler syntax error with the following ';'
-
-// The instantiation macro *must* be the last in the list as it is the only
-// macro that does not result in a syntax error with the following ';'
-#define LiquidCrystal_8bit_rw(instance,RS,RW,EN,D0,D1,D2,D3,D4,D5,D6,D7) \
-	XLCDinst	(instance,0,RS,RW,EN,D0,D1,D2,D3,D4,D5,D6,D7) \
+#define XLiquidCrystalMethods(instance) \
 	XLCDbegin2	(instance)\
 	XLCDbegin3	(instance)\
-	XPreMethod0	(LiquidCrystal,instance,clear) \
-	XPreMethod0	(LiquidCrystal,instance,home) \
-	XPreMethod1return (LiquidCrystal,instance,size_t,write,uint8_t,value) \
-	XPreMethod1	(LiquidCrystal,instance,command,uint8_t,value) \
-	extern int LiquidCrystal
-
-#define LiquidCrystal_8bit_r(RS,EN,D0,D1,D2,D3,D4,D5,D6,D7) \
-	XLCDinst	(instance,0,RS,255,EN,D0,D1,D2,D3,D4,D5,D6,D7) \
-	XLCDbegin2	(instance)\
-	XLCDbegin3	(instance)\
-	XPreMethod0	(LiquidCrystal,instance,clear) \
-	XPreMethod0	(LiquidCrystal,instance,home) \
-	XPreMethod1return (LiquidCrystal,instance,size_t,write,uint8_t,value) \
-	XPreMethod1	(LiquidCrystal,instance,command,uint8_t,value) \
-	extern int LiquidCrystal
-
-#define LiquidCrystal_4bit_rw(RS,RW,EN,D0,D1,D2,D3) \
-	XLCDinst	(instance,1,RS,RW,EN,D0,D1,D2,D3,0,0,0,0) \
-	XLCDbegin2	(instance)\
-	XLCDbegin3	(instance)\
-	XPreMethod0	(LiquidCrystal,instance,clear) \
-	XPreMethod0	(LiquidCrystal,instance,home) \
-	XPreMethod1return (LiquidCrystal,instance,size_t,write,uint8_t,value) \
-	XPreMethod1	(LiquidCrystal,instance,command,uint8_t,value) \
-	extern int LiquidCrystal
-
-#if 0
-#define Xprinthelper0(class,instance,name) inline \
-        size_t instance##_##name(void)\
-        {return Print_##name(class##_write);}
-#define Xprinthelper1(class,instance,name,atype1) inline \
-        size_t instance##_##name(atype1 arg1)\
-        {return Print_##name(class##_write,arg1);}
-#define Xprinthelper2(class,instance,name,atype1,atype2) inline \
-        size_t instance##_##name(atype1 arg1,atype2 arg2)\
-        {return Print_##name(class##_write,arg1,arg2);}
-#endif
-
-#define LiquidCrystal_4bit_r(instance,RS,EN,D0,D1,D2,D3) \
-	XLCDinst	(instance,1,RS,255,EN,D0,D1,D2,D3,0,0,0,0) \
-	XLCDbegin2	(instance)\
-	XLCDbegin3	(instance)\
+	\
 	XPreMethod0	(LiquidCrystal,instance,clear) \
 	XPreMethod0	(LiquidCrystal,instance,home) \
 	XPreMethod0	(LiquidCrystal,instance,noDisplay) \
@@ -181,51 +158,49 @@
 	XPreMethod4	(LiquidCrystal,instance,setRowOffsets,uint8_t,uint8_t,uint8_t,uint8_t) \
 	XPreMethod2	(LiquidCrystal,instance,createChar,uint8_t,uint8_t*) \
 	XPreMethod2	(LiquidCrystal,instance,setCursor,uint8_t,uint8_t) \
-	XPreMethod1return (LiquidCrystal,instance,size_t,write,uint8_t,value) \
-	XPreMethod1	(LiquidCrystal,instance,command,uint8_t,value) \
-        Xprinthelper1	(LiquidCrystal,instance,print_s,const char*) \
-        Xprinthelper2	(LiquidCrystal,instance,print_sn,const uint8_t*,size_t) \
-        Xprinthelper1	(LiquidCrystal,instance,print_i,long) \
-        Xprinthelper1	(LiquidCrystal,instance,print_u,unsigned long) \
-        Xprinthelper2	(LiquidCrystal,instance,print_ib,long,uint8_t) \
-        Xprinthelper2	(LiquidCrystal,instance,print_ub,unsigned long,uint8_t) \
-        Xprinthelper0	(LiquidCrystal,instance,println) \
-        Xprinthelper1	(LiquidCrystal,instance,println_s,const char*) \
-        Xprinthelper1	(LiquidCrystal,instance,println_i,long) \
-        Xprinthelper1	(LiquidCrystal,instance,println_u,unsigned long) \
-	extern int LiquidCrystal
+	XPreMethod1return (LiquidCrystal,instance,size_t,write,uint8_t) \
+	XPreMethod1	(LiquidCrystal,instance,command,uint8_t)
 
 
+// There is an unneeded external declaration at the beginning and the end of
+// the list to consume a possible "static" before the declaration and the
+// semicolon following at the end of line after the macro call.
+//
+// Calling the 'XLCDMethos' macro defines all functions specific for this
+// "class". Avoids duplication in case of a polymorph instantiation method.
+//
+// Calling the 'XPrintMethods' macro defines all functions needed for the
+// the pseudo-inheritence of all output functions from Print "class".
 
-/*
- * simulate the inheritance of Print class:
- * define some function names with similar names to the methods
- * "inheritated" from "class" Print
- */
+#define LiquidCrystal_8bit_rw(instance,RS,RW,EN,D0,D1,D2,D3,D4,D5,D6,D7) \
+	extern int 		LiquidCrystal; \
+	XLCDinst		(instance,0,RS,RW,EN,D0,D1,D2,D3,D4,D5,D6,D7) \
+	XLiquidCrystalMethods	(instance)\
+	XPrintMethods		(LiquidCrystal,instance) \
+	extern int 		LiquidCrystal
 
-#if 0
-// variants of the standard lcd.print() function: Separate impementations
-// for string, char, unsigned, signed int
-#define lcd_print_s(S)	printStr(lcd_write,S)
-#define lcd_print_c(C)	printChr(lcd_write,C)
+#define LiquidCrystal_8bit_r(instance,RS,EN,D0,D1,D2,D3,D4,D5,D6,D7) \
+	extern int 		LiquidCrystal; \
+	XLCDinst		(instance,0,RS,255,EN,D0,D1,D2,D3,D4,D5,D6,D7) \
+	XLiquidCrystalMethods	(instance)\
+	XPrintMethods		(LiquidCrystal,instance) \
+	extern int 		LiquidCrystal
 
-// print signed/unsigned integer values (char, short, int, long) as decimal values
-#define lcd_print_i(I)	Print_print_i(lcd_write,I)
-#define lcd_print_u(U)	Print_print_u(lcd_write,U)
+#define LiquidCrystal_4bit_rw(instance,RS,RW,EN,D0,D1,D2,D3) \
+	extern int 		LiquidCrystal; \
+	XLCDinst		(instance,1,RS,RW,EN,D0,D1,D2,D3,0,0,0,0) \
+	XLiquidCrystalMethods	(instance)\
+	XPrintMethods		(LiquidCrystal,instance) \
+	extern int 		LiquidCrystal
 
-// print signed/unsigned integer values (char, short, int, long) to base B
-#define lcd_print_ib(I,B)	printInt(lcd_write,I,B)
-#define lcd_print_ub(U,B)	printNumber(lcd_write,U,B)
-
-
-#define lcd_println_s(S)	Print_println_s(lcd_write,S)
-#define lcd_println_u(U)	Print_println_u(lcd_write,U)
-#define lcd_println_i(I)	Print_println_i(lcd_write,I)
-
-// float (not implemented yet)
-#define lcd_print_f(F,D)	Print_printFloat(lcd_write,F,D)
-#endif
-
+#define LiquidCrystal_4bit_r(instance,RS,EN,D0,D1,D2,D3) \
+	extern int 		LiquidCrystal; \
+	XLCDinst		(instance,1,RS,255,EN,D0,D1,D2,D3,0,0,0,0) \
+	XLiquidCrystalMethods	(instance)\
+	XPrintMethods		(LiquidCrystal,instance) \
+	extern int 		LiquidCrystal
 
 
-#endif
+#endif /* c interface */
+
+#endif /* LiquidCrystal */

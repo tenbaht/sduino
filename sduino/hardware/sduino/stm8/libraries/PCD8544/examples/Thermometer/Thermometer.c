@@ -61,11 +61,7 @@
 
 static const byte sensorPin = A1;
 
-#ifndef PIN_LED_BUILDIN
-  static const byte ledPin = 13;
-#else
-  static const byte ledPin = PIN_LED_BUILDIN;
-#endif
+static const byte ledPin = 3;
 
 // The dimensions of the LCD (in pixels)...
 #define LCD_WIDTH	84
@@ -84,16 +80,10 @@ static const byte degrees_glyph[] = { 0x00, 0x07, 0x05, 0x07, 0x00 };
 static const byte thermometer[] = { 0x00, 0x00, 0x48, 0xfe, 0x01, 0xfe, 0x00, 0x02, 0x05, 0x02,
                                     0x00, 0x00, 0x62, 0xff, 0xfe, 0xff, 0x60, 0x00, 0x00, 0x00};
 
+PCD8544 (lcd, PC5, PC6, PC4, PC7, PD1);	// sclk,sdin,dc,reset,sce
 
 
 void setup() {
-  PCD8544_connection(
-    PC5,	// sclk (SCK)
-    PC6,	// sdin (MOSI)
-    PC4,	// dc
-    PC7,        // reset
-    PD1		// sce
-  );
   lcd_begin_wh(LCD_WIDTH, LCD_HEIGHT);
 
   // Register the custom symbol...

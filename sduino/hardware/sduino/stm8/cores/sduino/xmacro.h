@@ -60,10 +60,10 @@
 	type instance##_##name()\
 	{return class##_##name();}
 // method with one argument
-#define XPreMethod1(class,instance,name,atype1,arg1) inline \
+#define XPreMethod1(class,instance,name,atype1) inline \
 	void instance##_##name(atype1 arg1)\
 	{class##_##name(arg1);}
-#define XPreMethod1return(class,instance,type,name,atype1,arg1) inline \
+#define XPreMethod1return(class,instance,type,name,atype1) inline \
 	type instance##_##name(atype1 arg1)\
 	{return class##_##name(arg1);}
 // method with two arguments
@@ -73,6 +73,13 @@
 #define XPreMethod2return(class,instance,type,name,atype1,atype2) inline \
 	type instance##_##name(atype1 arg1, atype2 arg2)\
 	{return class##_##name(arg1,arg2);}
+// method with three arguments
+#define XPreMethod3(class,instance,name,atype1,atype2,atype3) inline \
+	void instance##_##name(atype1 arg1, atype2 arg2, atype3 arg3)\
+	{class##_##name(arg1,arg2,arg3);}
+#define XPreMethod3return(class,instance,type,name,atype1,atype2,atype3) inline \
+	type instance##_##name(atype1 arg1, atype2 arg2, atype3 arg3)\
+	{return class##_##name(arg1,arg2,arg3);}
 // method with four arguments
 #define XPreMethod4(class,instance,name,atype1,atype2,atype3,atype4) inline \
 	void instance##_##name(atype1 arg1, atype2 arg2, atype3 arg3, atype4 arg4)\
@@ -85,10 +92,17 @@
 
 // specialized set of X-Macros to add the Print methods to an output "class".
 //
-// Used to mimic the inhertance from the Print class.
+// Used to mimic the inhertance from the Print class. Calling the single
+// macro 'XPrintMethods' brings in all the Print-Methods listed here.
 //
 // name scheme: INSTANCE_NAME(...) -> Print_NAME(CLASS_write,...)
 // example:     lcd_print_s(str)   -> Print_print_s(LiquidCristal_write, str)
+
+// just an alias for the class_write() function
+#define Xprintchar(class,instance) inline \
+        size_t instance##_print_c(uint8_t arg1)\
+        {return class##_write(arg1);}
+
 #define Xprinthelper0(class,instance,name) inline \
         size_t instance##_##name(void)\
         {return Print_##name(class##_write);}
@@ -98,6 +112,19 @@
 #define Xprinthelper2(class,instance,name,atype1,atype2) inline \
         size_t instance##_##name(atype1 arg1,atype2 arg2)\
         {return Print_##name(class##_write,arg1,arg2);}
+
+#define XPrintMethods(class,instance) \
+        Xprintchar	(class,instance) \
+        Xprinthelper1	(class,instance,print_s,const char*) \
+        Xprinthelper2	(class,instance,print_sn,const uint8_t*,size_t) \
+        Xprinthelper1	(class,instance,print_i,long) \
+        Xprinthelper1	(class,instance,print_u,unsigned long) \
+        Xprinthelper2	(class,instance,print_ib,long,uint8_t) \
+        Xprinthelper2	(class,instance,print_ub,unsigned long,uint8_t) \
+        Xprinthelper0	(class,instance,println) \
+        Xprinthelper1	(class,instance,println_s,const char*) \
+        Xprinthelper1	(class,instance,println_i,long) \
+        Xprinthelper1	(class,instance,println_u,unsigned long)
 
 
 

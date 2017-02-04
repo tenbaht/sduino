@@ -35,13 +35,36 @@ http://www.aliexpress.com/ .
 *Amazing!*
 
 
+## Sitemap
+
+(This really should be the navigation menu on the side. Any way to do that
+with github pages and the preinstalled jekyll-themes?)
+
+1. [Introduction and Overview](index.html)
+2. [API and migration guidelines](api.html)
+  * [LiquidCrystal character LCD library](api/LiquidCrystal.html)
+  * [PCD8544 libray for Nokia 5110-like graphical LCDs](api/PCD8544.html)
+  * [Stepper library](api/Stepper.html)
+  * [Servo library](api/Servo.html)
+3. [Supported Boards]()
+  * [stm8blue: simple breakout board, STM8S103](hardware/stm8blue.html)
+  * [ESP14: Wifi board, STM8S003](hardware/esp14.html)
+  * [STM8S105Discovery: Evaluation board made my ST](hardware/stm8disco.html)
+4. [Ways to define a pin mapping](pin_mapping.html)
+5. [Installing and using the SDCC compiler](sdcc.html)
+6. [Using the SPL with SDCC and sduino](spl.html)
+7. [c preprocessor macro magic](macro.html).
+
+
+
 
 ## Usage
 
 If you have ever used the Arduino environment before you will feel at home
-right away. The compilation is controlled by a makefile based on the amazing
-[Arduino.mk makefile](https://github.com/sudar/Arduino-Makefile) by
-[Sudar](http://sudarmuthu.com>).
+right away. The compilation is done on the command line, but thanks to the
+amazing [Arduino.mk makefile](https://github.com/sudar/Arduino-Makefile) by
+[Sudar](http://sudarmuthu.com>) you don't have to fiddle around, it is just
+one simple command.
 
 Let's blink an LED using the Blink example from Arduino:
 
@@ -240,23 +263,13 @@ still very close to the C++ version and porting an existing application is
 not hard. Check out the [API migration guidelines](api.html) for details.
 
 
-### LiquidCrystal
-Supports text LCD based on the HD44780 and compatibles, that includes almost
-all character LCDs up to 4x40 Characters.
+### General communication
 
-
-### PCD8544
-Supports monochrome graphical LCD based on the PCD8544 controller like the
-popular Nokia N5110 display. Only SPI mode supported. The library is a very
-much simpified version of the Adafruit library optimized for a minimal memory
-footprint. Uses soft-SPI, does not need the SPI pins.
-
-
-### SPI
+#### SPI
 Real hardware-SPI up to 10MHz.
 
 
-### I2C
+#### I2C
 The
 [I2C master library](http://www.dsscircuits.com/articles/arduino-i2c-master-library)
 by Wayne Truchsess offers some significant advantages over the Wire/TWI
@@ -269,19 +282,41 @@ The current state of the port does not include the deadlock protection,
 though.
 
 
-### ssd1306
+#### HardwareSerial
+The standard serial interface.
+
+
+
+### Display
+
+#### LiquidCrystal
+Supports text LCD based on the HD44780 and compatibles, that includes almost
+all character LCDs up to 4x40 Characters.
+
+
+#### PCD8544
+Supports monochrome graphical LCD based on the PCD8544 controller like the
+popular Nokia N5110 display. Only SPI mode supported. The library is a very
+much simpified version of the Adafruit library optimized for a minimal memory
+footprint. Uses soft-SPI, does not need the SPI pins.
+
+
+#### ssd1306
 Driver for SSD1306-based monochrome OLED display with 128x64
 pixels. I2C support only. Based on the Adafruit-libray.
 
 
-### Stepper
+
+### Motor
+
+#### Stepper
 For stepper motors with 2, 4 or 5 phases. This library has a slightly
 diffent user interface than the usual singleton libraries. This allow it to
 handle more than one stepper per Sketch.
 [API description](api/Stepper.html)
 
 
-### Servo
+#### Servo
 This library can control a great number of servos. It makes careful use
 of timers: the library can control 12 servos using only 1 timer.
 [API description](api/Servo.html)
@@ -397,11 +432,6 @@ Migration guideline within the STM8L familiy
 
 
 
-
-
-
-
-
 ## Modifications for the sdcc example programs
 
 blinky.c: LED pin assignment
@@ -436,3 +466,5 @@ a library.
 |ReadAnalogVoltage	|	|	|float not yet implemented
 |02. Digital/		|
 |Debounce		|192	|2016	|digital
+
+

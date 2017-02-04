@@ -50,14 +50,10 @@
 static const byte glyph[] = { B00010000, B00110100, B00110000, B00110100, B00010000 };
 
 
+PCD8544 (lcd, PC5, PC6, PC4, PC7, PD1);	// sclk,sdin,dc,reset,sce
+
+
 void setup() {
-  PCD8544_connection(
-    PC5,	// sclk (SCK)
-    PC6,	// sdin (MOSI)
-    PC4,	// dc
-    PC7,        // reset
-    PD1		// sce
-  );
   // PCD8544-compatible displays may have a different resolution...
   lcd_begin_wh(84, 48);
 
@@ -76,12 +72,12 @@ void loop() {
 
   // Write the counter on the second line...
   lcd_setCursor(0, 1);
-  lcd_print_ub(counter, DEC);
+  lcd_print_u(counter);
   lcd_write(' ');
   lcd_write(0);  // write the smiley
 
   // Use a potentiometer to set the LCD contrast...
-  // short level = map(analogRead(A0), 0, 1023, 0, 127);
+  // short level = map(analogRead(A1), 0, 1023, 0, 127);
   // lcd_setContrast(level);
 
   delay(200);
