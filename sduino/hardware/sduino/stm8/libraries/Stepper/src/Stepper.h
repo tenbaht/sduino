@@ -125,7 +125,6 @@ class Stepper {
 #else
 
 // plain C interface for use with SDCC
-#include <xmacro.h>
 
 // the descriptor structure for one motor
 struct Stepper_s {
@@ -145,92 +144,100 @@ struct Stepper_s {
     unsigned long last_step_time; // time stamp in us of when the last step was taken
 };
 
-// use a pointer to struct Stepper_s as a class instance aquivalent
-typedef struct Stepper_s *Stepper;
-
-// "constructor" function
-Stepper	Stepper_5phase(
-        unsigned int number_of_steps,
-        unsigned char motor_pin_1,
-        unsigned char motor_pin_2,
-        unsigned char motor_pin_3,
-        unsigned char motor_pin_4,
-        unsigned char motor_pin_5);
-
-// use #defines to emulate the polymorph class constructor in C++
-#define Stepper_2phase(N,A,B)		Stepper_5phase((N),(A),(B),0,0,0)
-#define Stepper_4phase(N,A,B,C,D)	Stepper_5phase((N),(A),(B),(C),(D),0)
-
 // speed setter method:
-void Stepper_setSpeed(Stepper this, long whatSpeed);
+void Stepper_setSpeed(struct Stepper_s *this, long whatSpeed);
 
 // mover method:
-void Stepper_step(Stepper this, int number_of_steps);
+void Stepper_step(struct Stepper_s *this, int number_of_steps);
 
 // replace the version() method with a simple define
-inline int Stepper_version(void){return 5;}
-//#define Stepper_version()       5
+inline int Stepper_version(struct Stepper_s *this){(void)this; return 5;}
 
 // (not so) private:
-void Stepper_stepMotor(Stepper s, int this_step);
+void Stepper_stepMotor(struct Stepper_s *this, int this_step);
 
 
-//////// X-Macro magic to "OO-ify" the external user API
+// Pseudo-OO interface: Plain C disguised as almost-C++, thanks to X-Macros
+
+#include <xmacro.h>
+
+
 /* usage:
- * Instantiation:
- *   Typically as a global definition. Has to be at the placed in the source
- *   file before any of the "methods" can be used.
- *     Stepper(instancename);
- * Constructors (typically in the setup() function):
- *   Different constructors to emulate the polymorph class constructor
- *     instancename_2phase(number_of_steps, motor_pin_1, motor_pin_2);
- *     instancename_4phase(number_of_steps, pin1, pin2, pin3, pin4);
- *     instancename_5phase(number_of_steps, pin1, pin2, pin3, pin4, pin5);
- * Methods:
- *     instancename_setSpeed(whatSpeed);
- *     instancename_step(number_of_steps);
+ *
+ * Instantiation
+ * -------------
+ *
+ * Typically as a global declaration, but a local declaration would be
+ * possible as well. Has to be at the placed in the source file before any
+ * of the "methods" can be used. Supports polymorphism.
+ *
+ * Variants are
+ *	2 phase (bipolar) motor
+ *	4 phase (unipolar) motor
+ *	5 phase motor
+ *
+ * Syntax:
+ *	Stepper (instancename,NumSteps,Pin1,Pin2);
+ *	Stepper (instancename,NumSteps,Pin1,Pin2,Pin3,Pin4);
+ *	Stepper (instancename,NumSteps,Pin1,Pin2,Pin3,Pin4,Pin5);
+ *
+ *
+ * Constructors (typically in the setup() function)
+ * ------------------------------------------------
+ *
+ * There is no explicit constructor method. The output mode is set
+ * automatically right before the very first motor step.
+[A *
+ * This means that the driver pins stay in input mode and are left floating
+ * until the first step is requested. This won't be a problem in most cases
+ * as most motor drivers are using pull-up or pull-down resistors to ensure
+ * definite signal levels.
+ *
+ * If needed, the application could call the stepMotor(0) method in the
+ * setup() function to force an immediate port pin initialization:
+ *
+ * setup() {
+ *   myStepper_stepMotor(0);	// sets the motor pins to output mode
+ * }
+ *
+ *
+ * Methods
+ * -------
+ *
+ *      instancename_setSpeed(speed);     // set speed in rpm
+ *      instancename_step(numberOfSteps); // mover method
+ *      instancename_version();           // return the library version
+ *      instancename_stepMotor(stepid);   // internal, use for output init
+ *
  */
 
-/// specific X-Macros
-#define XStepper2(instance) inline \
-        void instance##_2phase(\
-            unsigned int n,\
-            unsigned char pin1,\
-            unsigned char pin2)\
-        {instance=Stepper_5phase(n,pin1,pin2,0,0,0);}
-#define XStepper4(instance) inline \
-        void instance##_4phase(\
-            unsigned int n,\
-            unsigned char pin1,\
-            unsigned char pin2,\
-            unsigned char pin3,\
-            unsigned char pin4)\
-        {instance=Stepper_5phase(n,pin1,pin2,pin3,pin4,0);}
-#define XStepper5(instance) inline \
-        void instance##_5phase(\
-            unsigned int n,\
-            unsigned char pin1,\
-            unsigned char pin2,\
-            unsigned char pin3,\
-            unsigned char pin4,\
-            unsigned char pin5)\
-        {instance=Stepper_5phase(n,pin1,pin2,pin3,pin4,pin5);}
+
+
+// special macros specific to this "class"
+
+// The first macro is the instantiation macro. It allocates and initializes
+// a 'struct stepper_s' data stucture directly. This breaks the module
+// encapsulation of the data structures, but it is the only way to get away
+// without the need to call a begin() method in the setup() function.
+// A pointer to this struct is used as the instance reference later.
+#define XStepperInst(instance,N,P1,P2,P3,P4,P5,...) \
+        struct Stepper_s instance = {0,0,N,0,0,P1,P2,P3,P4,P5,0};
+
 
 // The instantiation macro *must* be first in the list to allow for a
 // extern declaration if the global "object" is used in different source code
 // modules.
 //
-// And it is duplicated as an external declaration at the end of the list to
-// avoid a compiler syntax error with the following ';'
-#define Stepper(instance) \
-	XInstanciation	(Stepper,instance); \
-	XStepper2	(instance) \
-	XStepper4	(instance) \
-	XStepper5	(instance) \
-	XMethod1	(Stepper,instance,setSpeed,long, whatSpeed) \
-	XMethod1	(Stepper,instance,step,int, number_of_steps) \
+// The (unneeded) extern declaration at the end of the list consumes the
+// semicolon following at the end of line after the macro call.
+#define Stepper(instance,...) \
+	XStepperInst	(instance,__VA_ARGS__,0,0,0) \
+        \
+	XMethod1	(Stepper,instance,setSpeed,long) \
+	XMethod1	(Stepper,instance,step,int) \
+	XMethod1	(Stepper,instance,stepMotor,int) \
 	XMethod0return	(Stepper,instance,int,version) \
-	extern XInstanciation	(Stepper,instance)
+	extern struct stepper_s instance##_dummy
 
 
 #endif // ifdef __cplusplus

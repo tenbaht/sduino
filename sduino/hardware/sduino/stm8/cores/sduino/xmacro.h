@@ -155,29 +155,41 @@
 #define XInstanciation(type,instance) \
 	type instance
 // constructor with one argument
-#define XConstructor1(class,instance,name,atype,arg) inline \
-	void instance##_##name(atype arg)\
-	{instance=class##_##name(arg);}
-#define XConstructor2(class,instance,name,atype1,arg1,atype2,arg2) inline \
+#define XConstructor1(class,instance,name,atype1) inline \
+	void instance##_##name(atype1 arg1)\
+	{class##_##name(&instance,arg1);}
+#define XConstructor2(class,instance,name,atype1,atype2) inline \
+	void instance##_##name(atype1 arg1,atype2 arg2)\
+	{class##_##name(&instance,arg1,arg2);}
+#define XConstructor3(class,instance,name,atype1,atype2,atype3) inline \
+	void instance##_##name(atype1 arg1,atype2 arg2,atype3 arg3)\
+	{class##_##name(&instance,arg1,arg2,arg3);}
+/* old system wher instance was a pointer
+// constructor with one argument
+#define XConstructor1(class,instance,name,atype1) inline \
+	void instance##_##name(atype1 arg1)\
+	{instance=class##_##name(arg1);}
+#define XConstructor2(class,instance,name,atype1,atype2) inline \
 	void instance##_##name(atype1 arg1,atype2 arg2)\
 	{instance=class##_##name(arg1,arg2);}
-#define XConstructor3(class,instance,name,atype1,arg1,atype2,arg2,atype3,arg3) inline \
+#define XConstructor3(class,instance,name,atype1,atype2,atype3) inline \
 	void instance##_##name(atype1 arg1,atype2 arg2,atype3 arg3)\
 	{instance=class##_##name(arg1,arg2,arg3);}
+*/
 // simple method without arguments
 #define XMethod0(class,instance,name) inline \
 	void instance##_##name()\
-	{class##_##name(instance);}
+	{class##_##name(&instance);}
 #define XMethod0return(class,instance,type,name) inline \
 	type instance##_##name()\
-	{return class##_##name(instance);}
+	{return class##_##name(&instance);}
 // method with one argument
-#define XMethod1(class,instance,name,atype1,arg1) inline \
+#define XMethod1(class,instance,name,atype1) inline \
 	void instance##_##name(atype1 arg1)\
-	{class##_##name(instance,arg1);}
-#define XMethod1return(class,instance,type,name,atype1,arg1) inline \
+	{class##_##name(&instance,arg1);}
+#define XMethod1return(class,instance,type,name,atype1) inline \
 	type instance##_##name(atype1 arg1)\
-	{return class##_##name(instance,arg1);}
+	{return class##_##name(&instance,arg1);}
 
 
 #endif

@@ -44,7 +44,7 @@ All text above, and the splash screen must be included in any redistribution
 
 
 // I2C is included here to let the build system automatically be aware of this
-// second-level dependency. Ofterwise you would need to list it in the Makefile:
+// second-level dependency. Otherwise you would need to list it in the Makefile:
 // ARDUINO_LIBS = I2C
 #include "I2C.h"
 #include "Mini_SSD1306.h"

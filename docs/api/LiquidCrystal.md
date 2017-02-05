@@ -55,7 +55,7 @@ The LCD interface mode can be changed at run time by calling the
 
 ## Example
 
-Output some Text and count the time since the last reset. Mind the
+Output some Text and count the time since the last reset. Notice the
 slightly different position of the opening parenthesis at the "class
 constructor" function LiquidCrystal compared to the C++ instatiation.
 
@@ -103,7 +103,8 @@ void loop() {
 
 ## Possible improvements
 
-This is not a to-do-list, just a collection of random thoughts.
+This is not a to-do-list, just brainstorming and a collection of random
+thoughts.
 
 ### Direct port access
 As long as the pin numberings are known at compile time it would be possible

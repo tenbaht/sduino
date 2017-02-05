@@ -142,66 +142,17 @@ Stepper::Stepper(int number_of_steps, int motor_pin_1, int motor_pin_2,
 #endif
 
 /*
- *   constructor for five phase motor with five wires
- *   Sets which wires should control the motor.
+ * There is no constructor function left, as the stepper data struct is
+ * initialized right away at instantiation time. This breaks the module
+ * encapsulation of the data structures, but it allows for a more C++-like
+ * look.
  */
-Stepper Stepper_5phase(
-        unsigned int number_of_steps,
-        unsigned char motor_pin_1,
-        unsigned char motor_pin_2,
-        unsigned char motor_pin_3,
-        unsigned char motor_pin_4,
-        unsigned char motor_pin_5)
-{
-  Stepper this;	// pointer to struct Stepper_s
 
-  // reserve memory for motor data, init all to zero:
-  this = calloc(1, sizeof(struct Stepper_s));
-
-//  this->step_number = 0;    // which step the motor is on
-//  this->direction = 0;      // motor direction
-//  this->last_step_time = 0; // time stamp in us of the last step taken
-  this->number_of_steps = number_of_steps; // total number of steps for this motor
-
-  // set Arduino pins for the first two phases:
-  this->motor_pin_1 = motor_pin_1;
-  this->motor_pin_2 = motor_pin_2;
-
-  pinMode(this->motor_pin_1, OUTPUT);
-  pinMode(this->motor_pin_2, OUTPUT);
-
-  // check if there are more phases:
-  if (motor_pin_3 == 0) {
-    // no, just two phases
-    // pin_count is used by the stepMotor() method:
-    this->pin_count = 2;
-  } else {
-    // we have at least 4 phases, maybe even 5.
-    // start by setting Arduino pins for phases 3 and 4:
-    this->motor_pin_3 = motor_pin_3;
-    this->motor_pin_4 = motor_pin_4;
-    pinMode(this->motor_pin_3, OUTPUT);
-    pinMode(this->motor_pin_4, OUTPUT);
-    // check for 5 phases:
-    if (motor_pin_5 == 0) {
-      // pin_count is used by the stepMotor() method:
-      this->pin_count = 4;
-    } else {
-      // set Arduino pin for phase 5:
-      this->motor_pin_5 = motor_pin_5;
-      pinMode(this->motor_pin_5, OUTPUT);
-      // pin_count is used by the stepMotor() method:
-      this->pin_count = 5;
-    }
-  }
-
-  return this;
-}
 
 /*
  * Sets the speed in revs per minute
  */
-void Stepper_setSpeed(Stepper this, long whatSpeed)
+void Stepper_setSpeed(struct Stepper_s *this, long whatSpeed)
 {
   this->step_delay = 60L * 1000L * 1000L / this->number_of_steps / whatSpeed;
 }
@@ -210,7 +161,7 @@ void Stepper_setSpeed(Stepper this, long whatSpeed)
  * Moves the motor steps_to_move steps.  If the number is negative,
  * the motor moves in the reverse direction.
  */
-void Stepper_step(Stepper this, int steps_to_move)
+void Stepper_step(struct Stepper_s *this, int steps_to_move)
 {
   int steps_left = abs(steps_to_move);  // how many steps to take
 
@@ -258,8 +209,38 @@ void Stepper_step(Stepper this, int steps_to_move)
 /*
  * Moves the motor forward or backwards.
  */
-void Stepper_stepMotor(Stepper this, int thisStep)
+void Stepper_stepMotor(struct Stepper_s *this, int thisStep)
 {
+  if (this->pin_count == 0) {
+    // initialize the outputs before the very first step.
+    // pin_count == 0 is the flag for the uninitialized state.
+
+    // set Arduino pins for the first two phases:
+    pinMode(this->motor_pin_1, OUTPUT);
+    pinMode(this->motor_pin_2, OUTPUT);
+
+    // check if there are more phases:
+    if (this->motor_pin_3 == 0) {
+      // no, just two phases
+      // pin_count is used by the stepMotor() method:
+      this->pin_count = 2;
+    } else {
+      // we have at least 4 phases, maybe even 5.
+      // start by setting Arduino pins for phases 3 and 4:
+      pinMode(this->motor_pin_3, OUTPUT);
+      pinMode(this->motor_pin_4, OUTPUT);
+      // check for 5 phases:
+      if (this->motor_pin_5 == 0) {
+        // pin_count is used by the stepMotor() method:
+        this->pin_count = 4;
+      } else {
+        // set Arduino pin for phase 5:
+        pinMode(this->motor_pin_5, OUTPUT);
+        // pin_count is used by the stepMotor() method:
+        this->pin_count = 5;
+      }
+    }
+  }
   if (this->pin_count == 2) {
     switch (thisStep) {
       case 0:  // 01
@@ -388,7 +369,7 @@ void Stepper_stepMotor(Stepper this, int thisStep)
 /*
   version() returns the version of the library:
 */
-/* replaced with a simple #define
+/* replaced with an inline function in Stepper.h
 int Stepper_version(void)
 {
   return 5;

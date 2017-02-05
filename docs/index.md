@@ -42,6 +42,10 @@ with github pages and the preinstalled jekyll-themes?)
 
 1. [Introduction and Overview](index.html)
 2. [API descriptions and migration guidelines](api.html)
+  * [Standard Arduino functions]()
+  * [HardwareSerial]()
+  * [SPI]()
+  * [I2C]()
   * [LiquidCrystal character LCD library](api/LiquidCrystal.html)
   * [PCD8544 libray for Nokia 5110-like graphical LCDs](api/PCD8544.html)
   * [Mini_SSD1306 library for monochrome OLED-displays](api/Mini_SSD1306.html)
@@ -54,7 +58,7 @@ with github pages and the preinstalled jekyll-themes?)
 4. [Ways to define a pin mapping](pin_mapping.html)
 5. [Installing and using the SDCC compiler](sdcc.html)
 6. [Using the SPL with SDCC and sduino](spl.html)
-7. [c preprocessor macro magic](macro.html).
+7. [C preprocessor macro magic](macro.html)
 
 
 
@@ -281,10 +285,12 @@ structure is easier to understand.
 
 The current state of the port does not include the deadlock protection,
 though.
+[API description](api/I2C.html)
 
 
 #### HardwareSerial
 The standard serial interface.
+[API description](api/HardwareSerial.html)
 
 
 

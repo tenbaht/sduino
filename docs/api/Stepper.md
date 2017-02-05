@@ -1,36 +1,58 @@
 # Stepper Library
 
-For driving stepper motors with 2, 4 or 5 phases.
+A Library for driving stepper motors with 2, 4 or 5 phases.
 Derived from the Arduino Stepper library v1.8.0.
 
-This library has a slightly diffent user interface than the usual singleton
-libraries. This allows for handling more than one stepper per Sketch but it
-requires some more attention when porting an existing sketch from C++ to C.
 
-Each Stepper instance is represented by a file-descriptor-like structure.
-This structure is initialized by a constructor-like function returning a
-pointer to this stucture. This pointer needs to be given as the first
-argument for ever other function call to identify the stepper instance.
+## API
 
-## API table
+This library is a multi-instance library, it supports an arbitrary number of
+stepper motors per sketch.
+
+The API syntax is very similar to the original C++ syntax, thanks to some
+[c preprocessor macro magic](macro.html).
+
+The declaration supports polymorphism, so all that is needed to adopt an
+existing sketch for use with sduino is moving the opening bracket at
+the class declarator line and replacing the dots in the method names for
+underscores.
+
 
 Arduino method			| sduino function
 --------------			| ---------------
-				| Stepper myStepper; // global variable
-Stepper myStepper(steps, pin1,pin2);		| myStepper = Stepper_2phase(steps, pin1,pin2);
-Stepper myStepper(steps, pin1,pin2,pin3,pin4);	| myStepper = Stepper_4phase(steps,pin1,pin2,pin3,pin4);
-Stepper myStepper(steps, pin1,pin2,pin3,pin4,pin5);| myStepper = Stepper_5phase(steps,pin1,pin2,pin3,pin4,pin5);
-myStepper.setSpeed(speed);	| Stepper_setSpeed(myStepper, speed);
-myStepper.step(n);		| Stepper_step(myStepper, n);
-myStepper.version();		| Stepper_version();
+`Stepper myStepper(steps, pin1,pin2);`		| `Stepper (myStepper,steps,pin1,pin2);`
+`Stepper myStepper(steps, pin1,pin2,pin3,pin4);`| `Stepper (myStepper,steps,pin1,pin2,pin3,pin4);`
+`Stepper myStepper(steps, pin1,pin2,pin3,pin4,pin5);`| `Stepper (myStepper,steps,pin1,pin2,pin3,pin4,pin5);`
+`myStepper.setSpeed(speed);`	| `myStepper_setSpeed(speed);`
+`myStepper.step(n);`		| `myStepper_step(n);`
+`myStepper.version();`		| `myStepper_version();`
+
+
+There is no explicit constructor method. The output mode is set
+automatically right before the very first motor step.
+
+This means that the driver pins stay uninitialized (in input mode) and are
+left floating until the first step is requested. This won't be a problem in
+most cases as most motor drivers are using pull-up or pull-down resistors to
+ensure definite signal levels.
+
+If needed, the application could call the (internal) `stepMotor(0)` method
+in the setup() function to force an immediate port pin initialization:
+
+```c
+setup() {
+  myStepper_stepMotor(0);    // sets the motor pins to output mode
+}
+```
 
 
 
 ## Example
 
+Notice the slightly different position of the opening parenthesis at the
+"class constructor" 'function' Stepper compared to the C++ instantiation.
 (available in the examples folder as `stepper_oneRevolution.c`)
-Notice the Variable `myStepper` of type `Stepper` that is intialized by a
-constructor-like function `Stepper_4phase`:
+
 
 C-Version for use with sduino:
 
@@ -38,25 +60,24 @@ C-Version for use with sduino:
 #include <Arduino.h>
 #include <Stepper.h>
 
-const int stepsPerRevolution = 200;  // change this to fit the number of steps p
-// for your motor
+// change this to fit the number of steps per revolution for your motor
+#define stepsPerRevolution 200
 
-Stepper myStepper;
+// initialize the stepper library on pins 8 through 11:
+Stepper (myStepper,stepsPerRevolution, 8, 9, 10, 11);
 
 void setup() {
-  // initialize the stepper library on pins 8 through 11:
-  myStepper = Stepper_4phase(stepsPerRevolution, 8, 9, 10, 11);
   // set the speed at 60 rpm:
-  Stepper_setSpeed(myStepper, 60);
+  myStepper_setSpeed(60);
 }
 
 void loop() {
   // step one revolution  in one direction:
-  Stepper_step(myStepper, stepsPerRevolution);
+  myStepper_step(stepsPerRevolution);
   delay(500);
 
   // step one revolution in the other direction:
-  Stepper_step(myStepper, -stepsPerRevolution);
+  myStepper_step(-stepsPerRevolution);
   delay(500);
 }
 ```
@@ -89,40 +110,64 @@ void loop() {
 ```
 
 
-## API
+## Implementation details
+
+Technically, each Stepper instance is represented by a file-descriptor-like
+structure. This structure is initialized by the instantiation macro
+`Stepper`. This means that all values are required to be constant values,
+known at compile time. A `const` qualifier is not enough for SDCC, it
+requires either a `#define` or an `enum`:
+
+```c
+const int numOfSteps = 1;	// does not work with SDCC
+#define MotorPin1  10		// ok, works
+enum { MotorPin2 = 11 };	// ok, works
+
+Stepper (myStepper, numOfSteps, MotorPin1, MotorPin2);
+```
+
+If you really need to (re-) configure the pin connections at run time you could
+initialize a data structure with `0` for the unknown pin numbers and set them
+later by directy accessing the structure before the first use of that
+instance:
+
+```c
+Stepper (myStepper,0,0);
+
+setup() {
+	... do some calculations for the pin numbers ...
+	myStepper.motor_pin_1 = pin[0];
+	myStepper.motor_pin_2 = pin[1];
+	myStepper.motor_pin_3 = pin[2];
+	myStepper.motor_pin_4 = pin[3];
+	...
+}
+
+loop () {
+	...
+	myStepper_setSpeed(60);
+	myStepper_step(100);
+	...
+}
 
 ```
-#include <Stepper.h>
 
-// plain C interface for use with SDCC
+All functions require a pointer to the stepper data structur as their first
+argument to identify the stepper instance. All this pointer handling is
+hidden by preprocessor magic, but it is still real and pure C. If you
+insist, you can still call the 'real' functions yourself (but you gain
+nothing, the compiler produces exactly the same output).
 
-// use a pointer to struct Stepper_s as a class instance aquivalent
-typedef struct Stepper_s *Stepper;
 
-// "constructor" function
-Stepper	Stepper_5phase(
-        unsigned int number_of_steps,
-        unsigned char motor_pin_1,
-        unsigned char motor_pin_2,
-        unsigned char motor_pin_3,
-        unsigned char motor_pin_4,
-        unsigned char motor_pin_5);
 
-// use #defines to emulate the polymorph class constructor in C++
-#define Stepper_2phase(N,A,B)		Stepper_5phase((N),(A),(B),0,0,0)
-#define Stepper_4phase(N,A,B,C,D)	Stepper_5phase((N),(A),(B),(C),(D),0)
 
-// speed setter method:
-void Stepper_setSpeed(Stepper this, long whatSpeed);
+## Possible impovements
 
-// mover method:
-void Stepper_step(Stepper this, int number_of_steps);
+This is not a to-do-list, just brainstorming and a collection of random
+thoughts.
 
-// replace the version() method with a simple define
-#define Stepper_version()	5
+Nothing yet.
 
-// (not so) private:
-void Stepper_stepMotor(Stepper s, int this_step);
-```
+
 
 [Back to the main page](../index.html)
