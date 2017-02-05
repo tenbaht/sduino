@@ -89,41 +89,84 @@
 
 
 /* usage:
- * Instantiation:
- *   Typically as a global definition. Has to be at the placed in the source
- *   file before any of the "methods" can be used.
- *     LiquidCrystal_8bit_rw(instancename,RS,RW,EN,D0,D1,D2,D3,D4,D5,D6,D7)
- *     LiquidCrystal_8bit_r (instancename,RS,EN,D0,D1,D2,D3,D4,D5,D6,D7)
- *     LiquidCrystal_4bit_rw(instancename,RS,RW,EN,D0,D1,D2,D3)
- *     LiquidCrystal_4bit_r (instancename,RS,EN,D0,D1,D2,D3)
- * Constructors (typically in the setup() function):
- *   Different constructors to emulate the polymorph class constructor
- *     instancename_begin(cols, lines);
- *     instancename_begin_charsize(cols, lines, charsize);
- * Methods:
- *     instancename_home();
- *     instancename_write(val);
- *     int instancename_read();
+ *
+ * Instantiation
+ * -------------
+ *
+ * Typically as a global definition. Has to be at the placed in the source
+ * file before any of the "methods" can be used. Supports polymorphism.
+ *
+ * Variants are
+ *	8 bit mode, R/W access
+ *	8 bit mode, write only access
+ *	4 bit mode, R/W access
+ *	4 bit mode, write only access
+ *
+ * Syntax:
+ *	LiquidCrystal (instancename,RS,RW,EN,D0,D1,D2,D3,D4,D5,D6,D7)
+ *	LiquidCrystal (instancename,RS,EN,D0,D1,D2,D3,D4,D5,D6,D7)
+ *	LiquidCrystal (instancename,RS,RW,EN,D0,D1,D2,D3)
+ *	LiquidCrystal (instancename,RS,EN,D0,D1,D2,D3)
+ *
+ *
+ * Constructors (typically in the setup() function)
+ * ------------------------------------------------
+ *
+ * Different constructors to emulate the polymorph class constructor
+ *
+ *      instancename_begin(cols, lines);
+ *      instancename_begin_charsize(cols, lines, charsize);
+ *
+ *
+ * Methods
+ * -------
+ *
+ *      instancename_home();
+ *      instancename_write(val);
+ *      etc.
+ *
  */
 
 
 
 // special macros specific to this "class"
+
+// The first set of macros defines the polymorph variants of the
+// constructor function. The names differ only by the number of arguments,
+// this way they can be easily called by the instantiation function.
 //
-// The first macro XLCDinst defines a function to remember the pin
-// connections for later use with begin().
+// The macro XLiquidCrystalinst acts as a instantiation function. It defines
+// a function to remember the pin connections for later use with begin().
+// Depending on the number of arguments this function calls the right
+// polymorph variant of the constructor function.
 //
 // The next few macros are the different functions to mimic the polymorph
 // begin() method.
-//
-// The last, big macro lists all methods specific to this "class" for easier
-// inclusion into the different versions of the final macro later.
 
-#define XLCDinst(instance,mode,rs,rw,en,d0,d1,d2,d3,d4,d5,d6,d7) inline \
-        void instance##_inst(void){\
-		LiquidCrystal_init(mode,rs,rw,en,d0,d1,d2,d3,d4,d5,d6,d7);\
+// The constructor functions sorted by the number of arguments.
+// For a singleton class these simple #define statements are sufficient.
+#define XLiquidCrystal_inst11(RS,RW,EN,D0,D1,D2,D3,D4,D5,D6,D7) \
+	LiquidCrystal_init(0,RS,RW,EN,D0,D1,D2,D3,D4,D5,D6,D7)
+
+#define XLiquidCrystal_inst10(RS,EN,D0,D1,D2,D3,D4,D5,D6,D7) \
+	LiquidCrystal_init(0,RS,255,EN,D0,D1,D2,D3,D4,D5,D6,D7)
+
+#define XLiquidCrystal_inst7(RS,RW,EN,D0,D1,D2,D3) \
+	LiquidCrystal_init(1,RS,RW,EN,D0,D1,D2,D3,0,0,0,0)
+
+#define XLiquidCrystal_inst6(RS,EN,D0,D1,D2,D3) \
+	LiquidCrystal_init(1,RS,255,EN,D0,D1,D2,D3,0,0,0,0)
+
+
+// The instantiation function remembers the pin mapping and the name of the
+// needed constructor function in a function definition.
+#define XLiquidCrystalinst(instance,...) \
+        inline void instance##_inst(void){\
+		VARFUNC(XLiquidCrystal_inst,__VA_ARGS__);\
 	}
 
+
+// The variants of the polymorph begin() method.
 #define XLCDbegin2(instance) inline \
         void instance##_begin(uint8_t cols, uint8_t lines){\
 		instance##_inst(); \
@@ -137,7 +180,21 @@
 	}
 
 
-#define XLiquidCrystalMethods(instance) \
+// There are unneeded char declarations at the beginning the end of the
+// list. The declaration at the beginning is to consume a possible "static"
+// or "extern" before the macro call. The "extern char" at the end consumes
+// the semicolon following at the end of line after the macro call.
+//
+// As a useful side effect this declaration will throw a compiler error
+// message if the user tries to define two instances within one sketch.
+//
+// Calling the 'XPrintMethods' macro defines all functions needed for the
+// the pseudo-inheritence of all output functions from Print "class".
+
+#define LiquidCrystal(instance,...) \
+	char	 	LiquidCrystal; \
+	XLiquidCrystalinst	(instance,__VA_ARGS__) \
+	\
 	XLCDbegin2	(instance)\
 	XLCDbegin3	(instance)\
 	\
@@ -159,46 +216,10 @@
 	XPreMethod2	(LiquidCrystal,instance,createChar,uint8_t,uint8_t*) \
 	XPreMethod2	(LiquidCrystal,instance,setCursor,uint8_t,uint8_t) \
 	XPreMethod1return (LiquidCrystal,instance,size_t,write,uint8_t) \
-	XPreMethod1	(LiquidCrystal,instance,command,uint8_t)
-
-
-// There is an unneeded external declaration at the beginning and the end of
-// the list to consume a possible "static" before the declaration and the
-// semicolon following at the end of line after the macro call.
-//
-// Calling the 'XLCDMethos' macro defines all functions specific for this
-// "class". Avoids duplication in case of a polymorph instantiation method.
-//
-// Calling the 'XPrintMethods' macro defines all functions needed for the
-// the pseudo-inheritence of all output functions from Print "class".
-
-#define LiquidCrystal_8bit_rw(instance,RS,RW,EN,D0,D1,D2,D3,D4,D5,D6,D7) \
-	extern int 		LiquidCrystal; \
-	XLCDinst		(instance,0,RS,RW,EN,D0,D1,D2,D3,D4,D5,D6,D7) \
-	XLiquidCrystalMethods	(instance)\
-	XPrintMethods		(LiquidCrystal,instance) \
-	extern int 		LiquidCrystal
-
-#define LiquidCrystal_8bit_r(instance,RS,EN,D0,D1,D2,D3,D4,D5,D6,D7) \
-	extern int 		LiquidCrystal; \
-	XLCDinst		(instance,0,RS,255,EN,D0,D1,D2,D3,D4,D5,D6,D7) \
-	XLiquidCrystalMethods	(instance)\
-	XPrintMethods		(LiquidCrystal,instance) \
-	extern int 		LiquidCrystal
-
-#define LiquidCrystal_4bit_rw(instance,RS,RW,EN,D0,D1,D2,D3) \
-	extern int 		LiquidCrystal; \
-	XLCDinst		(instance,1,RS,RW,EN,D0,D1,D2,D3,0,0,0,0) \
-	XLiquidCrystalMethods	(instance)\
-	XPrintMethods		(LiquidCrystal,instance) \
-	extern int 		LiquidCrystal
-
-#define LiquidCrystal_4bit_r(instance,RS,EN,D0,D1,D2,D3) \
-	extern int 		LiquidCrystal; \
-	XLCDinst		(instance,1,RS,255,EN,D0,D1,D2,D3,0,0,0,0) \
-	XLiquidCrystalMethods	(instance)\
-	XPrintMethods		(LiquidCrystal,instance) \
-	extern int 		LiquidCrystal
+	XPreMethod1	(LiquidCrystal,instance,command,uint8_t) \
+	\
+	XPrintMethods	(LiquidCrystal,instance) \
+	extern char	LiquidCrystal
 
 
 #endif /* c interface */

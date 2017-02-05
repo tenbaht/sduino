@@ -47,7 +47,7 @@
 
 
 // initialize the library with the numbers of the interface pins
-LiquidCrystal_4bit_r(lcd,PA1,PA2, PA3,PD2,PD3,PD4);
+LiquidCrystal (lcd,PA1,PA2, PA3,PD2,PD3,PD4);
 
 void setup() {
   // set up the LCD's number of columns and rows:

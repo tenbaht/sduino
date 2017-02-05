@@ -26,6 +26,27 @@
          19,18,17,16,15,14,13,12,11,10, \
          9,8,7,6,5,4,3,2,1,0
 
+// a macro to generate a function call depending on the number of arguments.
+// Format of the function call: PREFIXn(...)
+// PREFIX is the first parameter to VARFUNC()
+// n is the number of arguments after PREFIX
+// example: 'VARFUNC(init,a,b,c)' expands to 'init3(a,b,c)'
+//
+// used for polymorph instantiation calls.
+#define VARFUNC(PREFIX,...) \
+         PRE_NARG_(PREFIX,__VA_ARGS__,PP_RSEQ_N())(__VA_ARGS__)
+#define PRE_NARG_(PREFIX,...) \
+         PRE_ARG_N(PREFIX,__VA_ARGS__)
+#define PRE_ARG_N(PREFIX, \
+          _1, _2, _3, _4, _5, _6, _7, _8, _9,_10, \
+         _11,_12,_13,_14,_15,_16,_17,_18,_19,_20, \
+         _21,_22,_23,_24,_25,_26,_27,_28,_29,_30, \
+         _31,_32,_33,_34,_35,_36,_37,_38,_39,_40, \
+         _41,_42,_43,_44,_45,_46,_47,_48,_49,_50, \
+         _51,_52,_53,_54,_55,_56,_57,_58,_59,_60, \
+         _61,_62,_63,N,...) PREFIX##N
+
+
 
 
 /////// X-Macro like magic
