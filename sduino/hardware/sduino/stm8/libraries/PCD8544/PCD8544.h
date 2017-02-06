@@ -210,7 +210,7 @@ void PCD8544_drawColumn(unsigned char lines, unsigned char value);
 
 // special macros specific to this "class"
 //
-// The first macro XLCDinst defines a function to remember the pin
+// The first macro XPCD8544inst defines a function to remember the pin
 // connections for later use with begin().
 //
 // The next few macros are the different functions to mimic the polymorph
@@ -219,48 +219,48 @@ void PCD8544_drawColumn(unsigned char lines, unsigned char value);
 // The last, big macro lists all methods specific to this "class" for easier
 // inclusion into the different versions of the final macro later.
 
-#define XLCDinst(instance,sclk,sdin,dc,reset,sce) inline \
+#define XPCD8544inst(instance,sclk,sdin,dc,reset,sce) inline \
         void instance##_inst(void){\
             PCD8544_connection(sclk,sdin,dc,reset,sce);\
         }
 
-#define XLCDbegin(instance) inline \
+#define XPCD8544begin(instance) inline \
         void instance##_begin(void){\
             instance##_inst(); \
             PCD8544_begin_full(84,48,CHIP_PCD8544);\
         }
 
-#define XLCDbegin2(instance) inline \
+#define XPCD8544begin2(instance) inline \
         void instance##_begin_wh(unsigned char width, unsigned char height){\
             instance##_inst(); \
             PCD8544_begin_full(width,height,CHIP_PCD8544);\
         }
 
-#define XLCDbegin3(instance) inline \
+#define XPCD8544begin3(instance) inline \
         void instance##_begin_full(unsigned char width, unsigned char height, unsigned char chip){\
             instance##_inst(); \
             PCD8544_begin_full(width,height,chip);\
         }
 
 #define XPCD8544Methods(instance) \
-	XLCDbegin	(instance) \
-	XLCDbegin2	(instance) \
-	XLCDbegin3	(instance) \
+	XPCD8544begin	(instance) \
+	XPCD8544begin2	(instance) \
+	XPCD8544begin3	(instance) \
 	\
-	XPreMethod0	(PCD8544,instance,stop) \
-	XPreMethod0	(PCD8544,instance,clear) \
-	XPreMethod0	(PCD8544,instance,clearLine) \
-	XPreMethod1	(PCD8544,instance,setPower,bool) \
-	XPreMethod0	(PCD8544,instance,display) \
-	XPreMethod0	(PCD8544,instance,noDisplay) \
-	XPreMethod1	(PCD8544,instance,setInverse,bool) \
-	XPreMethod1	(PCD8544,instance,setContrast,unsigned char) \
-	XPreMethod0	(PCD8544,instance,home) \
-	XPreMethod2	(PCD8544,instance,setCursor,unsigned char,unsigned char) \
-	XPreMethod2	(PCD8544,instance,createChar,unsigned char,const unsigned char*) \
-	XPreMethod1return (PCD8544,instance,size_t,write,uint8_t) \
-	XPreMethod3	(PCD8544,instance,drawBitmap,const unsigned char*,unsigned char,unsigned char) \
-	XPreMethod2	(PCD8544,instance,drawColumn,unsigned char,unsigned char)
+	X2Method0	(PCD8544,instance,stop) \
+	X2Method0	(PCD8544,instance,clear) \
+	X2Method0	(PCD8544,instance,clearLine) \
+	X2Method1	(PCD8544,instance,setPower,bool) \
+	X2Method0	(PCD8544,instance,display) \
+	X2Method0	(PCD8544,instance,noDisplay) \
+	X2Method1	(PCD8544,instance,setInverse,bool) \
+	X2Method1	(PCD8544,instance,setContrast,unsigned char) \
+	X2Method0	(PCD8544,instance,home) \
+	X2Method2	(PCD8544,instance,setCursor,unsigned char,unsigned char) \
+	X2Method2	(PCD8544,instance,createChar,unsigned char,const unsigned char*) \
+	X2Method1return (PCD8544,instance,size_t,write,uint8_t) \
+	X2Method3	(PCD8544,instance,drawBitmap,const unsigned char*,unsigned char,unsigned char) \
+	X2Method2	(PCD8544,instance,drawColumn,unsigned char,unsigned char)
 
 
 
@@ -268,7 +268,7 @@ void PCD8544_drawColumn(unsigned char lines, unsigned char value);
 // the list to consume a possible "static" before the declaration and the
 // semicolon following at the end of line after the macro call.
 //
-// Calling the 'XLCDMethos' macro defines all functions specific for this
+// Calling the 'XPCD8544Methods' macro defines all functions specific for this
 // "class". Avoids duplication in case of a polymorph instantiation method.
 //
 // Calling the 'XPrintMethods' macro defines all functions needed for the
@@ -276,7 +276,7 @@ void PCD8544_drawColumn(unsigned char lines, unsigned char value);
 
 #define PCD8544(instance,sclk,sdin,dc,reset,sce) \
 	extern int 	PCD8544; \
-	XLCDinst	(instance,sclk,sdin,dc,reset,sce) \
+	XPCD8544inst	(instance,sclk,sdin,dc,reset,sce) \
 	XPCD8544Methods	(instance) \
 	XPrintMethods	(PCD8544,instance) \
 	extern int 	PCD8544

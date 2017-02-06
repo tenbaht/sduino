@@ -118,10 +118,9 @@ private:
 #else
 
 // plain C interface for use with SDCC
-#include <xmacro.h>
 
 typedef unsigned char Servo;		// used as a class instance aquivalent
-
+/* does not need to be exported
 typedef struct  {
   uint8_t nbr        :6 ;             // a pin number from 0 to 63
   uint8_t isActive   :1 ;             // true if this channel is enabled, pin not pulsed if false 
@@ -133,7 +132,7 @@ typedef struct {
   int8_t min;                       // minimum is this value times 4 added to MIN_PULSE_WIDTH    
   int8_t max;                       // maximum is this value times 4 added to MAX_PULSE_WIDTH   
 } servo_t;
-
+*/
 
 uint8_t Servo_attach(int pin);           // attach the given pin to the next free channel, sets pinMode, returns channel number or 0 if failure
 uint8_t Servo_attach_minmax(int pin, int min, int max); // as above but also sets min and max values for writes. 
@@ -177,11 +176,11 @@ bool Servo_attached(byte channel);         // return true if this servo is attac
 // macro that does not result in a syntax error with the following ';'
 #define Servo(instance) \
 	XInstanciation	(Servo,instance); \
-	XConstructor1	(Servo,instance,attach,int,pin) \
-	XConstructor3	(Servo,instance,attach_minmax,int,pin,int,min,int,max) \
+	XConstructor1	(Servo,instance,attach,int) \
+	XConstructor3	(Servo,instance,attach_minmax,int,int,int) \
 	XMethod0	(Servo,instance,detach) \
-	XMethod1	(Servo,instance,write,int,val) \
-	XMethod1	(Servo,instance,writeMicroseconds,int,val) \
+	XMethod1	(Servo,instance,write,int) \
+	XMethod1	(Servo,instance,writeMicroseconds,int) \
 	XMethod0return	(Servo,instance,int,read) \
 	XMethod0return	(Servo,instance,int,readMicroseconds) \
 	XMethod0return	(Servo,instance,bool,attached) \

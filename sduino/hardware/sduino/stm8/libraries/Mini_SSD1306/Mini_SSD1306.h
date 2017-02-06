@@ -264,16 +264,16 @@ All text above, and the splash screen below must be included in any redistributi
 #define XMini_SSD1306Methods(instance) \
 	XMini_SSD1306Begin	(instance)\
 	\
-	XPreMethod0	(Mini_SSD1306,instance,clearDisplay) \
-	XPreMethod1	(Mini_SSD1306,instance,invertDisplay,uint8_t) \
-	XPreMethod0	(Mini_SSD1306,instance,display) \
-	XPreMethod2	(Mini_SSD1306,instance,startscrollright,uint8_t,uint8_t) \
-	XPreMethod2	(Mini_SSD1306,instance,startscrollleft,uint8_t,uint8_t) \
-	XPreMethod2	(Mini_SSD1306,instance,startscrolldiagright,uint8_t,uint8_t) \
-	XPreMethod2	(Mini_SSD1306,instance,startscrolldiagleft,uint8_t,uint8_t) \
-	XPreMethod0	(Mini_SSD1306,instance,stopscroll) \
-	XPreMethod1	(Mini_SSD1306,instance,dim,boolean) \
-	XPreMethod3	(Mini_SSD1306,instance,drawPixel,int16_t,int16_t,uint8_t)
+	X2Method0	(Mini_SSD1306,instance,clearDisplay) \
+	X2Method1	(Mini_SSD1306,instance,invertDisplay,uint8_t) \
+	X2Method0	(Mini_SSD1306,instance,display) \
+	X2Method2	(Mini_SSD1306,instance,startscrollright,uint8_t,uint8_t) \
+	X2Method2	(Mini_SSD1306,instance,startscrollleft,uint8_t,uint8_t) \
+	X2Method2	(Mini_SSD1306,instance,startscrolldiagright,uint8_t,uint8_t) \
+	X2Method2	(Mini_SSD1306,instance,startscrolldiagleft,uint8_t,uint8_t) \
+	X2Method0	(Mini_SSD1306,instance,stopscroll) \
+	X2Method1	(Mini_SSD1306,instance,dim,boolean) \
+	X2Method3	(Mini_SSD1306,instance,drawPixel,int16_t,int16_t,uint8_t)
 
 
 // There is an unneeded external declaration at the beginning and the end of

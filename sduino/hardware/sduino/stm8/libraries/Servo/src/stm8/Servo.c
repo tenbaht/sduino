@@ -32,6 +32,18 @@
 
 //#define NBR_TIMERS        (MAX_SERVOS / SERVOS_PER_TIMER)
 
+typedef struct  {
+  uint8_t nbr        :6 ;             // a pin number from 0 to 63
+  uint8_t isActive   :1 ;             // true if this channel is enabled, pin not pulsed if false 
+} ServoPin_t   ;  
+
+typedef struct {
+  ServoPin_t Pin;
+  volatile unsigned int ticks;
+  int8_t min;                       // minimum is this value times 4 added to MIN_PULSE_WIDTH    
+  int8_t max;                       // maximum is this value times 4 added to MAX_PULSE_WIDTH   
+} servo_t;
+
 static servo_t servos[MAX_SERVOS];                          // static array of servo structures
 static volatile int8_t Channel[_Nbr_16timers ];             // counter for the servo being pulsed for each timer (or -1 if refresh interval)
 

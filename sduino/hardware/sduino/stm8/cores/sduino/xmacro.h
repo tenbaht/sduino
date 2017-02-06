@@ -57,10 +57,10 @@
 // The instantiation macro *must* be the last in the list as it is the only
 // macro that does not result in a syntax error with the following ';'
 #define CLASSNAME(instance) \
-	XConstructor1	(CLASSNAME,instance,attach,byte,pin) \
-	XConstructor3	(CLASSNAME,instance,attach_minmax,byte,pin,int,min,int,max) \
+	XConstructor1	(CLASSNAME,instance,attach,byte) \
+	XConstructor3	(CLASSNAME,instance,attach_minmax,byte,int,int) \
 	XMethod0	(CLASSNAME,instance,detach) \
-	XMethod1	(CLASSNAME,instance,write,unsigned int, val) \
+	XMethod1	(CLASSNAME,instance,write,unsigned int) \
 	XMethod0return	(CLASSNAME,instance,int,read) \
 	XInstanciation	(CLASSNAME,instance)
 
@@ -68,46 +68,108 @@
 
 
 
-// generic X-Macros for use with preinstantiated "classes"
+// generic X-Macros for use with single instance "classes"
 //
-// preinstantiated "classes" don't need a instance identifier as first
-// parameter.
+// case 2: single instance, using a constructor
+//
+// No instance identifier required, only function name alias are needed.
 
 // simple method without arguments
-#define XPreMethod0(class,instance,name) inline \
+#define X2Method0(class,instance,name) inline \
 	void instance##_##name()\
 	{class##_##name();}
-#define XPreMethod0return(class,instance,type,name) inline \
+#define X2Method0return(class,instance,type,name) inline \
 	type instance##_##name()\
 	{return class##_##name();}
 // method with one argument
-#define XPreMethod1(class,instance,name,atype1) inline \
+#define X2Method1(class,instance,name,atype1) inline \
 	void instance##_##name(atype1 arg1)\
 	{class##_##name(arg1);}
-#define XPreMethod1return(class,instance,type,name,atype1) inline \
+#define X2Method1return(class,instance,type,name,atype1) inline \
 	type instance##_##name(atype1 arg1)\
 	{return class##_##name(arg1);}
 // method with two arguments
-#define XPreMethod2(class,instance,name,atype1,atype2) inline \
+#define X2Method2(class,instance,name,atype1,atype2) inline \
 	void instance##_##name(atype1 arg1, atype2 arg2)\
 	{class##_##name(arg1,arg2);}
-#define XPreMethod2return(class,instance,type,name,atype1,atype2) inline \
+#define X2Method2return(class,instance,type,name,atype1,atype2) inline \
 	type instance##_##name(atype1 arg1, atype2 arg2)\
 	{return class##_##name(arg1,arg2);}
 // method with three arguments
-#define XPreMethod3(class,instance,name,atype1,atype2,atype3) inline \
+#define X2Method3(class,instance,name,atype1,atype2,atype3) inline \
 	void instance##_##name(atype1 arg1, atype2 arg2, atype3 arg3)\
 	{class##_##name(arg1,arg2,arg3);}
-#define XPreMethod3return(class,instance,type,name,atype1,atype2,atype3) inline \
+#define X2Method3return(class,instance,type,name,atype1,atype2,atype3) inline \
 	type instance##_##name(atype1 arg1, atype2 arg2, atype3 arg3)\
 	{return class##_##name(arg1,arg2,arg3);}
 // method with four arguments
-#define XPreMethod4(class,instance,name,atype1,atype2,atype3,atype4) inline \
+#define X2Method4(class,instance,name,atype1,atype2,atype3,atype4) inline \
 	void instance##_##name(atype1 arg1, atype2 arg2, atype3 arg3, atype4 arg4)\
 	{class##_##name(arg1,arg2,arg3,arg4);}
-#define XPreMethod4return(class,instance,type,name,atype1,atype2,atype3,atype4) inline \
+#define X2Method4return(class,instance,type,name,atype1,atype2,atype3,atype4) inline \
 	type instance##_##name(atype1 arg1, atype2 arg2, atype3 arg3, atype4 arg4)\
 	{return class##_##name(arg1,arg2,arg3,arg4);}
+
+
+
+
+// generic X-Macros for use with multiple instance "classes"
+
+// case 3: multiple instance, using a constructor returning an instance ID
+//
+// "Methods" receive an instance identifier as first parameter.
+
+// instanciation
+#define XInstanciation(type,instance) \
+	type instance
+
+// constructor with one argument
+#define XConstructor1(class,instance,name,atype1) inline \
+	void instance##_##name(atype1 arg1)\
+	{instance=class##_##name(arg1);}
+#define XConstructor2(class,instance,name,atype1,atype2) inline \
+	void instance##_##name(atype1 arg1,atype2 arg2)\
+	{instance=class##_##name(arg1,arg2);}
+#define XConstructor3(class,instance,name,atype1,atype2,atype3) inline \
+	void instance##_##name(atype1 arg1,atype2 arg2,atype3 arg3)\
+	{instance=class##_##name(arg1,arg2,arg3);}
+
+// simple method without arguments
+#define XMethod0(class,instance,name) inline \
+	void instance##_##name()\
+	{class##_##name(instance);}
+#define XMethod0return(class,instance,type,name) inline \
+	type instance##_##name()\
+	{return class##_##name(instance);}
+// method with one argument
+#define XMethod1(class,instance,name,atype1) inline \
+	void instance##_##name(atype1 arg1)\
+	{class##_##name(instance,arg1);}
+#define XMethod1return(class,instance,type,name,atype1) inline \
+	type instance##_##name(atype1 arg1)\
+	{return class##_##name(instance,arg1);}
+
+
+
+
+// case 4: multiple instance, no constructor, instance data in user space
+//
+// "Methods" receive a pointer to the instance data as first parameter.
+
+// simple method without arguments
+#define X4Method0(class,instance,name) inline \
+	void instance##_##name()\
+	{class##_##name(&instance);}
+#define X4Method0return(class,instance,type,name) inline \
+	type instance##_##name()\
+	{return class##_##name(&instance);}
+// method with one argument
+#define X4Method1(class,instance,name,atype1) inline \
+	void instance##_##name(atype1 arg1)\
+	{class##_##name(&instance,arg1);}
+#define X4Method1return(class,instance,type,name,atype1) inline \
+	type instance##_##name(atype1 arg1)\
+	{return class##_##name(&instance,arg1);}
 
 
 
@@ -147,49 +209,6 @@
         Xprinthelper1	(class,instance,println_i,long) \
         Xprinthelper1	(class,instance,println_u,unsigned long)
 
-
-
-// generic X-Macros for use with multiple instance "classes"
-//
-// Multiple instance "classes" need a instance identifier as first parameter.
-#define XInstanciation(type,instance) \
-	type instance
-// constructor with one argument
-#define XConstructor1(class,instance,name,atype1) inline \
-	void instance##_##name(atype1 arg1)\
-	{class##_##name(&instance,arg1);}
-#define XConstructor2(class,instance,name,atype1,atype2) inline \
-	void instance##_##name(atype1 arg1,atype2 arg2)\
-	{class##_##name(&instance,arg1,arg2);}
-#define XConstructor3(class,instance,name,atype1,atype2,atype3) inline \
-	void instance##_##name(atype1 arg1,atype2 arg2,atype3 arg3)\
-	{class##_##name(&instance,arg1,arg2,arg3);}
-/* old system wher instance was a pointer
-// constructor with one argument
-#define XConstructor1(class,instance,name,atype1) inline \
-	void instance##_##name(atype1 arg1)\
-	{instance=class##_##name(arg1);}
-#define XConstructor2(class,instance,name,atype1,atype2) inline \
-	void instance##_##name(atype1 arg1,atype2 arg2)\
-	{instance=class##_##name(arg1,arg2);}
-#define XConstructor3(class,instance,name,atype1,atype2,atype3) inline \
-	void instance##_##name(atype1 arg1,atype2 arg2,atype3 arg3)\
-	{instance=class##_##name(arg1,arg2,arg3);}
-*/
-// simple method without arguments
-#define XMethod0(class,instance,name) inline \
-	void instance##_##name()\
-	{class##_##name(&instance);}
-#define XMethod0return(class,instance,type,name) inline \
-	type instance##_##name()\
-	{return class##_##name(&instance);}
-// method with one argument
-#define XMethod1(class,instance,name,atype1) inline \
-	void instance##_##name(atype1 arg1)\
-	{class##_##name(&instance,arg1);}
-#define XMethod1return(class,instance,type,name,atype1) inline \
-	type instance##_##name(atype1 arg1)\
-	{return class##_##name(&instance,arg1);}
 
 
 #endif

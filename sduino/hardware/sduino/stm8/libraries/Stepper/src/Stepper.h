@@ -312,10 +312,10 @@ void Stepper_stepMotor(struct Stepper_s *this, int this_step);
 	XStepperBegin4	(instance) \
 	XStepperBegin5	(instance) \
         \
-	XMethod1	(Stepper,instance,setSpeed,long) \
-	XMethod1	(Stepper,instance,step,int) \
-	XMethod0	(Stepper,instance,activateOutputs) \
-	XMethod0return	(Stepper,instance,int,version) \
+	X4Method1	(Stepper,instance,setSpeed,long) \
+	X4Method1	(Stepper,instance,step,int) \
+	X4Method0	(Stepper,instance,activateOutputs) \
+	X4Method0return	(Stepper,instance,int,version) \
 	extern struct stepper_s instance##_dummy
 
 

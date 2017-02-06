@@ -198,25 +198,25 @@
 	XLCDbegin2	(instance)\
 	XLCDbegin3	(instance)\
 	\
-	XPreMethod0	(LiquidCrystal,instance,clear) \
-	XPreMethod0	(LiquidCrystal,instance,home) \
-	XPreMethod0	(LiquidCrystal,instance,noDisplay) \
-	XPreMethod0	(LiquidCrystal,instance,display) \
-	XPreMethod0	(LiquidCrystal,instance,noBlink) \
-	XPreMethod0	(LiquidCrystal,instance,blink) \
-	XPreMethod0	(LiquidCrystal,instance,noCursor) \
-	XPreMethod0	(LiquidCrystal,instance,cursor) \
-	XPreMethod0	(LiquidCrystal,instance,scrollDisplayLeft) \
-	XPreMethod0	(LiquidCrystal,instance,scrollDisplayRight) \
-	XPreMethod0	(LiquidCrystal,instance,leftToRight) \
-	XPreMethod0	(LiquidCrystal,instance,rightToLeft) \
-	XPreMethod0	(LiquidCrystal,instance,autoscroll) \
-	XPreMethod0	(LiquidCrystal,instance,noAutoscroll) \
-	XPreMethod4	(LiquidCrystal,instance,setRowOffsets,uint8_t,uint8_t,uint8_t,uint8_t) \
-	XPreMethod2	(LiquidCrystal,instance,createChar,uint8_t,uint8_t*) \
-	XPreMethod2	(LiquidCrystal,instance,setCursor,uint8_t,uint8_t) \
-	XPreMethod1return (LiquidCrystal,instance,size_t,write,uint8_t) \
-	XPreMethod1	(LiquidCrystal,instance,command,uint8_t) \
+	X2Method0	(LiquidCrystal,instance,clear) \
+	X2Method0	(LiquidCrystal,instance,home) \
+	X2Method0	(LiquidCrystal,instance,noDisplay) \
+	X2Method0	(LiquidCrystal,instance,display) \
+	X2Method0	(LiquidCrystal,instance,noBlink) \
+	X2Method0	(LiquidCrystal,instance,blink) \
+	X2Method0	(LiquidCrystal,instance,noCursor) \
+	X2Method0	(LiquidCrystal,instance,cursor) \
+	X2Method0	(LiquidCrystal,instance,scrollDisplayLeft) \
+	X2Method0	(LiquidCrystal,instance,scrollDisplayRight) \
+	X2Method0	(LiquidCrystal,instance,leftToRight) \
+	X2Method0	(LiquidCrystal,instance,rightToLeft) \
+	X2Method0	(LiquidCrystal,instance,autoscroll) \
+	X2Method0	(LiquidCrystal,instance,noAutoscroll) \
+	X2Method4	(LiquidCrystal,instance,setRowOffsets,uint8_t,uint8_t,uint8_t,uint8_t) \
+	X2Method2	(LiquidCrystal,instance,createChar,uint8_t,uint8_t*) \
+	X2Method2	(LiquidCrystal,instance,setCursor,uint8_t,uint8_t) \
+	X2Method1return (LiquidCrystal,instance,size_t,write,uint8_t) \
+	X2Method1	(LiquidCrystal,instance,command,uint8_t) \
 	\
 	XPrintMethods	(LiquidCrystal,instance) \
 	extern char	LiquidCrystal
