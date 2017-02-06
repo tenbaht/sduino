@@ -8,7 +8,7 @@
  * High-speed stepping mod         by Eugene Kozlenko
  * Timer rollover fix              by Eugene Kozlenko
  * Five phase five wire    (1.1.0) by Ryan Orendorff
- * Ported to C syntax      (1.1.0) by Michael Mayer
+ * Ported to C syntax      (1.1.1) by Michael Mayer
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -74,79 +74,103 @@
  * The circuits can be found at
  *
  * http://www.arduino.cc/en/Reference/Stepper
+ *
+ * 5 phase motors are not very common, but supporting them increases the
+ * code size significantly. By defining the compiler flag NO_5PHASE it is
+ * possible to deactivate the support for 5 phase motors. (added by MM)
+ * 
  */
 
 #include "Arduino.h"
 #include "Stepper.h"
 
-#if 0
+
 /*
- * two-wire constructor.
- * Sets which wires should control the motor.
+ * There is no real constructor function now, as the stepper data struct is
+ * initialized right away at instantiation time. This breaks the module
+ * encapsulation concept of the data structures, but it allows for a more
+ * C++-like look. Pick your poison.
  */
-Stepper::Stepper(int number_of_steps, int motor_pin_1, int motor_pin_2)
-{
-  this->step_number = 0;    // which step the motor is on
-  this->direction = 0;      // motor direction
-  this->last_step_time = 0; // time stamp in us of the last step taken
-  this->number_of_steps = number_of_steps; // total number of steps for this motor
 
-  // Arduino pins for the motor control connection:
-  this->motor_pin_1 = motor_pin_1;
-  this->motor_pin_2 = motor_pin_2;
-
-  // setup the pins on the microcontroller:
-  pinMode(this->motor_pin_1, OUTPUT);
-  pinMode(this->motor_pin_2, OUTPUT);
-
-  // When there are only 2 pins, set the others to 0:
-  this->motor_pin_3 = 0;
-  this->motor_pin_4 = 0;
-  this->motor_pin_5 = 0;
-
-  // pin_count is used by the stepMotor() method:
-  this->pin_count = 2;
-}
+/*
+ *   This used to be the constructor for five phase motor with five wires
+ *   It is needed only if the pin mapping should be changed at run time.
+ */
+#ifdef NO_5PHASE
+void Stepper_4phase(
+        struct Stepper_s *this,
+        unsigned int number_of_steps,
+        unsigned char motor_pin_1,
+        unsigned char motor_pin_2,
+        unsigned char motor_pin_3,
+        unsigned char motor_pin_4
+)
+#else
+void Stepper_5phase(
+        struct Stepper_s *this,
+        unsigned int number_of_steps,
+        unsigned char motor_pin_1,
+        unsigned char motor_pin_2,
+        unsigned char motor_pin_3,
+        unsigned char motor_pin_4,
+        unsigned char motor_pin_5
+)
 #endif
-#if 0
-/*
- *   constructor for four-pin version
- *   Sets which wires should control the motor.
- */
-Stepper::Stepper(int number_of_steps, int motor_pin_1, int motor_pin_2,
-                                      int motor_pin_3, int motor_pin_4)
 {
   this->step_number = 0;    // which step the motor is on
   this->direction = 0;      // motor direction
   this->last_step_time = 0; // time stamp in us of the last step taken
   this->number_of_steps = number_of_steps; // total number of steps for this motor
 
-  // Arduino pins for the motor control connection:
   this->motor_pin_1 = motor_pin_1;
   this->motor_pin_2 = motor_pin_2;
   this->motor_pin_3 = motor_pin_3;
   this->motor_pin_4 = motor_pin_4;
-
-  // setup the pins on the microcontroller:
-  pinMode(this->motor_pin_1, OUTPUT);
-  pinMode(this->motor_pin_2, OUTPUT);
-  pinMode(this->motor_pin_3, OUTPUT);
-  pinMode(this->motor_pin_4, OUTPUT);
-
-  // When there are 4 pins, set the others to 0:
-  this->motor_pin_5 = 0;
-
-  // pin_count is used by the stepMotor() method:
-  this->pin_count = 4;
-}
+#ifndef NO_5PHASE
+  this->motor_pin_5 = motor_pin_5;
 #endif
 
+  Stepper_activateOutputs(this);
+}
+
+
 /*
- * There is no constructor function left, as the stepper data struct is
- * initialized right away at instantiation time. This breaks the module
- * encapsulation of the data structures, but it allows for a more C++-like
- * look.
+ * added an optional begin-like method to activate the output pin modes on
+ * demand
  */
+void Stepper_activateOutputs(struct Stepper_s *this)
+{
+  // set Arduino pins for the first two phases:
+  pinMode(this->motor_pin_1, OUTPUT);
+  pinMode(this->motor_pin_2, OUTPUT);
+
+  // check if there are more phases:
+  if (this->motor_pin_3 == 0) {
+    // no, just two phases
+    // pin_count is used by the stepMotor() method:
+    this->pin_count = 2;
+  } else {
+    // we have at least 4 phases, maybe even 5.
+    // start by setting Arduino pins for phases 3 and 4:
+    pinMode(this->motor_pin_3, OUTPUT);
+    pinMode(this->motor_pin_4, OUTPUT);
+#ifdef NO_5PHASE
+    this->pin_count = 4;
+#else
+    // check for 5 phases:
+    if (this->motor_pin_5 == 0) {
+      // pin_count is used by the stepMotor() method:
+      this->pin_count = 4;
+    } else {
+      // set Arduino pin for phase 5:
+      pinMode(this->motor_pin_5, OUTPUT);
+      // pin_count is used by the stepMotor() method:
+      this->pin_count = 5;
+    }
+#endif
+  }
+}
+
 
 
 /*
@@ -198,9 +222,11 @@ void Stepper_step(struct Stepper_s *this, int steps_to_move)
       // decrement the steps left:
       steps_left--;
       // step the motor to step number 0, 1, ..., {3 or 10}
+#ifndef NO_5PHASE
       if (this->pin_count == 5)
         Stepper_stepMotor(this, this->step_number % 10);
       else
+#endif
         Stepper_stepMotor(this, this->step_number % 4);
     }
   }
@@ -212,34 +238,9 @@ void Stepper_step(struct Stepper_s *this, int steps_to_move)
 void Stepper_stepMotor(struct Stepper_s *this, int thisStep)
 {
   if (this->pin_count == 0) {
-    // initialize the outputs before the very first step.
     // pin_count == 0 is the flag for the uninitialized state.
-
-    // set Arduino pins for the first two phases:
-    pinMode(this->motor_pin_1, OUTPUT);
-    pinMode(this->motor_pin_2, OUTPUT);
-
-    // check if there are more phases:
-    if (this->motor_pin_3 == 0) {
-      // no, just two phases
-      // pin_count is used by the stepMotor() method:
-      this->pin_count = 2;
-    } else {
-      // we have at least 4 phases, maybe even 5.
-      // start by setting Arduino pins for phases 3 and 4:
-      pinMode(this->motor_pin_3, OUTPUT);
-      pinMode(this->motor_pin_4, OUTPUT);
-      // check for 5 phases:
-      if (this->motor_pin_5 == 0) {
-        // pin_count is used by the stepMotor() method:
-        this->pin_count = 4;
-      } else {
-        // set Arduino pin for phase 5:
-        pinMode(this->motor_pin_5, OUTPUT);
-        // pin_count is used by the stepMotor() method:
-        this->pin_count = 5;
-      }
-    }
+    // initialize the outputs before the very first step.
+    Stepper_activateOutputs(this);
   }
   if (this->pin_count == 2) {
     switch (thisStep) {
@@ -289,7 +290,7 @@ void Stepper_stepMotor(struct Stepper_s *this, int thisStep)
       break;
     }
   }
-
+#ifndef NO_5PHASE
   if (this->pin_count == 5) {
     switch (thisStep) {
       case 0:  // 01101
@@ -364,6 +365,7 @@ void Stepper_stepMotor(struct Stepper_s *this, int thisStep)
         break;
     }
   }
+#endif
 }
 
 /*

@@ -144,6 +144,31 @@ struct Stepper_s {
     unsigned long last_step_time; // time stamp in us of when the last step was taken
 };
 
+// re-Initialize the motor connections at run time (optional)
+#ifdef NO_5PHASE
+void Stepper_4phase(
+        struct Stepper_s *this,
+        unsigned int number_of_steps,
+        unsigned char motor_pin_1,
+        unsigned char motor_pin_2,
+        unsigned char motor_pin_3,
+        unsigned char motor_pin_4
+);
+#else
+void Stepper_5phase(
+        struct Stepper_s *this,
+        unsigned int number_of_steps,
+        unsigned char motor_pin_1,
+        unsigned char motor_pin_2,
+        unsigned char motor_pin_3,
+        unsigned char motor_pin_4,
+        unsigned char motor_pin_5
+);
+#endif
+
+// set the pin mode for the motor pins (optional)
+void Stepper_activateOutputs(struct Stepper_s *this);
+
 // speed setter method:
 void Stepper_setSpeed(struct Stepper_s *this, long whatSpeed);
 
@@ -224,6 +249,56 @@ void Stepper_stepMotor(struct Stepper_s *this, int this_step);
         struct Stepper_s instance = {0,0,N,0,0,P1,P2,P3,P4,P5,0};
 
 
+// These macros define an equivalent to the begin() method. Not part of the
+// original library design, these functions offer a possiblility to change
+// the motor configuration at run time.
+
+#ifdef NO_5PHASE
+// without 5 phase support: use Stepper_4phase for re-Init
+#define XStepperBegin2(instance) inline \
+        void instance##_2phase( \
+            unsigned arg1, \
+            uint8_t arg2, uint8_t arg3 \
+        ){ \
+            Stepper_4phase(&instance,arg1,arg2,arg3,0,0); \
+        }
+#define XStepperBegin4(instance) inline \
+        void instance##_4phase( \
+            unsigned arg1, \
+            uint8_t arg2, uint8_t arg3, uint8_t arg4, uint8_t arg5 \
+        ){ \
+            Stepper_4phase(&instance,arg1,arg2,arg3,arg4,arg5); \
+        }
+#define XStepperBegin5(instance)
+        // empty define, no 5 phase support
+
+#else
+// with 5 phase support: use Stepper_5phase for re-Init
+#define XStepperBegin2(instance) inline \
+        void instance##_2phase( \
+            unsigned arg1, \
+            uint8_t arg2, uint8_t arg3 \
+        ){ \
+            Stepper_5phase(&instance,arg1,arg2,arg3,0,0,0); \
+        }
+#define XStepperBegin4(instance) inline \
+        void instance##_4phase( \
+            unsigned arg1,\
+            uint8_t arg2, uint8_t arg3, uint8_t arg4, uint8_t arg5 \
+        ){ \
+            Stepper_5phase(&instance,arg1,arg2,arg3,arg4,arg5,0); \
+        }
+#define XStepperBegin5(instance) inline \
+        void instance##_5phase( \
+            unsigned arg1,\
+            uint8_t arg2, uint8_t arg3, uint8_t arg4, uint8_t arg5, uint8_t arg6 \
+        ){ \
+            Stepper_5phase(&instance,arg1,arg2,arg3,arg4,arg5,arg6); \
+        }
+
+#endif
+
+
 // The instantiation macro *must* be first in the list to allow for a
 // extern declaration if the global "object" is used in different source code
 // modules.
@@ -232,10 +307,14 @@ void Stepper_stepMotor(struct Stepper_s *this, int this_step);
 // semicolon following at the end of line after the macro call.
 #define Stepper(instance,...) \
 	XStepperInst	(instance,__VA_ARGS__,0,0,0) \
+	\
+	XStepperBegin2	(instance) \
+	XStepperBegin4	(instance) \
+	XStepperBegin5	(instance) \
         \
 	XMethod1	(Stepper,instance,setSpeed,long) \
 	XMethod1	(Stepper,instance,step,int) \
-	XMethod1	(Stepper,instance,stepMotor,int) \
+	XMethod0	(Stepper,instance,activateOutputs) \
 	XMethod0return	(Stepper,instance,int,version) \
 	extern struct stepper_s instance##_dummy
 
