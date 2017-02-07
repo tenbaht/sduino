@@ -25,11 +25,6 @@ Find more in detail information about the supported boards, needed tools and
 the library APIs on the
 [project website](https://tenbaht.github.io/sduino/).
 
-This whole thing is far from being a finished product. It is in alpha stage,
-but still already useful. It solved its purpose for me, it might me useful
-for others as well. The documentation is incomplete and written in a wild
-mix of English and German, but hopefully you can still figure it out.
-
 All you need to get stated is a simple STM8S103F breakout board and a
 ST-Link V2 compatible flash programmer. Three boards and one flash
 programmer together are available for well under five dollars on
