@@ -94,14 +94,16 @@ void HardwareSerial_end(void);
 #define Serial_print_ib(I,B)	Print_print_ib(HardwareSerial_write,I,B)
 #define Serial_print_ub(U,B)	Print_print_ub(HardwareSerial_write,U,B)
 
+// print float value
+#define Serial_print_f(F)	Print_printFloat(HardwareSerial_write,F,2)
+#define Serial_printFloat(F,D)	Print_printFloat(HardwareSerial_write,F,D)
 
 #define Serial_println()	Print_println(HardwareSerial_write)
 #define Serial_println_s(S)	Print_println_s(HardwareSerial_write,S)
 #define Serial_println_u(U)	Print_println_u(HardwareSerial_write,U)
 #define Serial_println_i(I)	Print_println_i(HardwareSerial_write,I)
-
-// float (not implemented yet)
-#define Serial_print_f(F,D)	Print_print_f(HardwareSerial_write,F,D)
+#define Serial_println_f(F)	 Print_printlnFloat(HardwareSerial_write,F,2)
+#define Serial_printlnFloat(F,D) Print_printlnFloat(HardwareSerial_write,F,D)
 
 
 #endif

@@ -1,7 +1,11 @@
 /*
- Print.cpp - Base class that provides print() and println()
+ Print.c - Base class that provides print() and println()
  Copyright (c) 2008 David A. Mellis.  All right reserved.
- 
+
+ The float functions are moved to a separate file Print-float.c. This way
+ we can keep the linker from pulling in all the float functions even when no
+ floats are used in the sketch.
+
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
  License as published by the Free Software Foundation; either
@@ -18,6 +22,7 @@
  
  Modified 23 November 2006 by David A. Mellis
  Modified 03 August 2015 by Chuck Todd
+ Modified 30 December 2016 by Michael Mayer
  */
 
 #ifdef _GCC_

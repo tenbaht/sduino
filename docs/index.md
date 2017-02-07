@@ -22,11 +22,6 @@ Arduino libraries porting parts of the Arduino environment was the logical
 first step. After doing that porting the firmware was finished in a
 couple of days.
 
-This whole thing is far from being a finished product. It is in alpha stage,
-but still already useful. It solved its purpose for me, it might me useful
-for others as well. The documentation is incomplete and written in a wild
-mix of English and German, but hopefully you can still figure it out.
-
 All you need to get stated is a simple STM8S103F breakout board and a
 ST-Link V2 compatible flash programmer. Three boards and one flash
 programmer together are available for well under five dollars on
@@ -181,23 +176,23 @@ protocol for the STM32 CPUs.
 
 Pinout of Chinese ST-Link V2-clone with green plasic housing:
 
-		+-----+
-	T_JRST	| 1  2|	3V3
-	5V	| 3  4|	T_JTCK/T_SWCLK
-	SWIM	  5  6|	T_JTMS/T_SWDIO
-	GND	| 7  8|	T_JTDO
-	SWIM RST| 9 10|	T_JTDI
-		+-----+
+                +-----+
+        T_JRST  | 1  2|	3V3
+        5V      | 3  4|	T_JTCK/T_SWCLK
+        SWIM      5  6|	T_JTMS/T_SWDIO
+        GND     | 7  8|	T_JTDO
+        SWIM RST| 9 10|	T_JTDI
+                +-----+
 
 Pinout of Chinese ST-Link V2-clone with metal housing:
 
-		+-----+
-	RST	| 1  2|	SWDIO
-	GND	| 3  4|	GND
-	SWIM	  5  6|	SWCLK
-	3V3	| 7  8|	3V3
-	5V	| 9 10|	5V
-		+-----+
+                +-----+
+        RST     | 1  2|	SWDIO
+        GND     | 3  4|	GND
+        SWIM      5  6|	SWCLK
+        3V3     | 7  8|	3V3
+        5V      | 9 10|	5V
+                +-----+
 
 For Linux: required lines in /etc/udev/rules.d/99-stlink.rules:
 
@@ -215,7 +210,7 @@ For Linux: required lines in /etc/udev/rules.d/99-stlink.rules:
 The pinout of the SWIM connector P3 on my board fits the pinout of the flash
 tool in the metal housing perfectly:
 
-| STM8-Board	| SWIM-Verbinder P3
+| STM8 board	| SWIM connector P3
 | ----------	| -----------------
 | 1		| 3V3
 | 2		| SWIM (PD1)
@@ -329,6 +324,30 @@ This library can control a great number of servos. It makes careful use
 of timers: the library can control 12 servos using only 1 timer.
 [API description](api/Servo.html)
 
+
+
+## Float arithmetics
+
+Floating point arithmetics is supported by the SDCC standard library, but it
+comes at a pretty high cost in terms of code space and CPU load. This is how
+much the generated code grows by add one single float operation instead of
+using a long int:
+
+Floating point operation	|approx. code size
+--------------------		|---------
+addition			| 736 Bytes
+subtraction			| 754 Bytes
+division			| 673 Bytes
+multiplication			| 907 Bytes
+sinf() or cosf()		| 3346 Bytes
+log10f()			| 3437 Bytes
+
+The Arduino standard example '01. Basics/ReadAnalogVoltage' does not much,
+it already occupies 7336 bytes. A similar sketch using integer arithmetics
+result in only 3791 bytes.
+
+Float does work, but better try to avoid it and use fixed point arithmetics
+whenever possible.
 
 
 

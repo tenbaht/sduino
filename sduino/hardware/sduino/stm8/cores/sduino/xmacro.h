@@ -73,6 +73,9 @@
 // case 2: single instance, using a constructor
 //
 // No instance identifier required, only function name alias are needed.
+//
+// name scheme: INSTANCE_NAME(...) -> CLASS_NAME(...)
+// example:     Serial_begin(baud) -> HardwareSerial_begin(baud)
 
 // simple method without arguments
 #define X2Method0(class,instance,name) inline \
@@ -204,10 +207,15 @@
         Xprinthelper1	(class,instance,print_u,unsigned long) \
         Xprinthelper2	(class,instance,print_ib,long,uint8_t) \
         Xprinthelper2	(class,instance,print_ub,unsigned long,uint8_t) \
+        Xprinthelper1	(class,instance,print_f,double) \
+        Xprinthelper2	(class,instance,printFloat,double,uint8_t) \
         Xprinthelper0	(class,instance,println) \
         Xprinthelper1	(class,instance,println_s,const char*) \
         Xprinthelper1	(class,instance,println_i,long) \
-        Xprinthelper1	(class,instance,println_u,unsigned long)
+        Xprinthelper1	(class,instance,println_u,unsigned long) \
+        Xprinthelper1	(class,instance,println_f,double)
+        Xprinthelper2	(class,instance,printFloatln,double,uint8_t)
+
 
 
 
