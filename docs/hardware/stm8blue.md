@@ -64,6 +64,8 @@ In the end I chose a simple geometric numbering for the square UFQFPN20
 package starting with port pin PA1 and counting up from 0. This results in
 this mapping:
 
+![STM8S103 breakout board pin mapping](stm8blue.png)
+
 sduino pin	| STM8S103 CPU port pin
 ----------	| ---------------------
  0-2		| PA1-PA3
@@ -88,8 +90,8 @@ PWM: 2,5,6,12 plus either only 13 or 7-9 but not 13 (via alternate mapping)
 I am still not really happy with this mapping. Instead of simplifing things
 it only adds another layer of abstraction and confusion. To avoid this I
 added definitions for the regular CPU pin names like `PA1` and `PD2`. In the
-end, this notation seem a lot easier to me. I am open for suggestions for a
-better pin number mapping.
+end, this notation seems to be a lot easier to me. I am open for suggestions
+for a better pin number mapping.
 
 The chosen pin mapping for the STM8S103 (possible alternate function in
 paratheses):
