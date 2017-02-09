@@ -9,7 +9,7 @@ powerful and very similar to the one used for the STM32 CPU series offering
 a relatively easy upgrade path in case a project outgrows the capabilities
 of the 8-bit STM8 series. But using that library is not very intuitive and
 still requires a fairly detailed knowledge of the CPU internals.
-[compiling the SPL with SDCC](spl.html)
+[compiling the SPL with SDCC](spl.md)
 
 The Arduino project was very successful in offering a simplified API hiding
 most of the complexity of embedded system programming while still allowing
@@ -35,25 +35,25 @@ http://www.aliexpress.com/ .
 (This really should be the navigation menu on the side. Any way to do that
 with github pages and the preinstalled jekyll-themes?)
 
-1. [Introduction and Overview](index.html)
-2. [API descriptions and migration guidelines](api.html)
+1. [Introduction and Overview](index.md)
+2. [API descriptions and migration guidelines](api.md)
   * [Standard Arduino functions]()
   * [HardwareSerial]()
   * [SPI]()
   * [I2C]()
-  * [LiquidCrystal character LCD library](api/LiquidCrystal.html)
-  * [PCD8544 libray for Nokia 5110-like graphical LCDs](api/PCD8544.html)
-  * [Mini_SSD1306 library for monochrome OLED-displays](api/Mini_SSD1306.html)
-  * [Stepper library](api/Stepper.html)
-  * [Servo library](api/Servo.html)
-3. [Supported Boards](hardware.html)
-  * [stm8blue: simple breakout board, STM8S103](hardware/stm8blue.html)
-  * [ESP14: Wifi board, STM8S003](hardware/esp14.html)
-  * [STM8S105Discovery: Evaluation board made my ST](hardware/stm8disco.html)
-4. [Ways to define a pin mapping](pin_mapping.html)
-5. [Installing and using the SDCC compiler](sdcc.html)
-6. [Using the SPL with SDCC and sduino](spl.html)
-7. [C preprocessor macro magic](macro.html)
+  * [LiquidCrystal character LCD library](api/LiquidCrystal.md)
+  * [PCD8544 libray for Nokia 5110-like graphical LCDs](api/PCD8544.md)
+  * [Mini_SSD1306 library for monochrome OLED-displays](api/Mini_SSD1306.md)
+  * [Stepper library](api/Stepper.md)
+  * [Servo library](api/Servo.md)
+3. [Supported Boards](hardware.md)
+  * [stm8blue: simple breakout board, STM8S103](hardware/stm8blue.md)
+  * [ESP14: Wifi board, STM8S003](hardware/esp14.md)
+  * [STM8S105Discovery: Evaluation board made my ST](hardware/stm8disco.md)
+4. [Ways to define a pin mapping](pin_mapping.md)
+5. [Installing and using the SDCC compiler](sdcc.md)
+6. [Using the SPL with SDCC and sduino](spl.md)
+7. [C preprocessor macro magic](macro.md)
 
 
 
@@ -128,7 +128,7 @@ improves significantly from version to version. Be sure to use
 version that might be included in your distribution. Version 3.5.0 as
 included with ubuntu 16.04 is definitly too old and compilation will fail
 due to some compiler errors.
-[More information on installing and using SDCC](sdcc.html)
+[More information on installing and using SDCC](sdcc.md)
 
 Support for the Cosmic compiler under Windows and integration into the ST
 visual developer IDE might be possible, but is not done (yet?).
@@ -144,18 +144,18 @@ The build process is controlled by a makefile based on the amazing
 ### STM8S boards
 
 So far only the the
-[simple STM8S103 breakout board](hardware/stm8blue.html)
+[simple STM8S103 breakout board](hardware/stm8blue.md)
 is supported. This board is build around a CPU STM8S103F3P6 and costs less
 than a dollar. The CPU features a 16MHz internal oscillator, 8kB flash, 1kB
 RAM, 640 byte EEPROM. It includes an UART, SPI, I2C, PWM, 10 bit ADC, 3
 timer, and up to 14 I/O pins - quite similar to an Atmel ATmega8.
 
-It is very similar to the [ESP14 Wifi-boards](hardware/esp14.html). Most
-programs should run on those chinese Wifi-enabled gems as well, but that is
-still untested.
+The [ESP14 Wifi-boards](hardware/esp14.md) are very basically a variant of
+these boards with an added ESP-01 Wifi-module. Almost all programs should
+run on those chinese Wifi-enabled gems as well. still untested.
 
 Support for the more powerful
-[STM8S105Discovery-boards](hardware/stm8disco.html) is planned, but not
+[STM8S105Discovery-boards](hardware/stm8disco.md) is planned, but not
 started yet. These are very similar to an Arduino Uno with an ATmega328 CPU.
 
 
@@ -260,7 +260,7 @@ an option.
 ## Included libraries
 Some Arduino libraries are already ported to C-syntax. The resulting API is
 still very close to the C++ version and porting an existing application is
-not hard. Check out the [API migration guidelines](api.html) for details.
+not hard. Check out the [API migration guidelines](api.md) for details.
 
 
 ### General communication
@@ -280,12 +280,12 @@ structure is easier to understand.
 
 The current state of the port does not include the deadlock protection,
 though.
-[API description](api/I2C.html)
+[API description](api/I2C.md)
 
 
 #### HardwareSerial
 The standard serial interface.
-[API description](api/HardwareSerial.html)
+[API description](api/HardwareSerial.md)
 
 
 
@@ -301,13 +301,13 @@ Supports monochrome graphical LCD based on the PCD8544 controller like the
 popular Nokia N5110 display. Only SPI mode supported. The library is a very
 much simpified version of the Adafruit library optimized for a minimal memory
 footprint. Uses soft-SPI, does not need the SPI pins.
-[API description](api/PCD8544.html)
+[API description](api/PCD8544.md)
 
 
 #### Mini_SSD1306
 Driver for SSD1306-based monochrome OLED display with 128x64
 pixels. I2C support only. Based on the Adafruit-libray Adafruit_SSD1306.
-[API description](api/Mini_SSD.html)
+[API description](api/Mini_SSD.md)
 
 
 ### Motor
@@ -316,13 +316,13 @@ pixels. I2C support only. Based on the Adafruit-libray Adafruit_SSD1306.
 For stepper motors with 2, 4 or 5 phases. This library has a slightly
 diffent user interface than the usual singleton libraries. This allow it to
 handle more than one stepper per Sketch.
-[API description](api/Stepper.html)
+[API description](api/Stepper.md)
 
 
 #### Servo
 This library can control a great number of servos. It makes careful use
 of timers: the library can control 12 servos using only 1 timer.
-[API description](api/Servo.html)
+[API description](api/Servo.md)
 
 
 
@@ -342,12 +342,13 @@ multiplication			| 907 Bytes
 sinf() or cosf()		| 3346 Bytes
 log10f()			| 3437 Bytes
 
-The Arduino standard example '01. Basics/ReadAnalogVoltage' does not much,
-it already occupies 7336 bytes. A similar sketch using integer arithmetics
-result in only 3791 bytes.
+The Arduino standard example '01. Basics/ReadAnalogVoltage' is a very simple
+simple program with only very little floating point arithmetics. But it
+already uses 7336 bytes of flash. A similar sketch using integer arithmetics
+result in much shorter code of only 3791 bytes.
 
-Float does work, but better try to avoid it and use fixed point arithmetics
-whenever possible.
+Float does work, but is better to be avoided and replaced by fixed point
+arithmetics whenever possible.
 
 
 
@@ -363,11 +364,12 @@ whenever possible.
 WMath: `map()`  
 HardwareSerial  
 Print (without float)  
-SPI: working, no interrupt support  
-LiquidCrystal (for text LCD based on the HD44780 controller)  
-PCD8544 (for Nokia 5110 type displays)  
-[Stepper](api/Stepper.html) (multi-instance design for more than one stepper at a time)  
-[Servo](api/Servo.html) (multi-instance design for more than one servo at a time)  
+[SPI](docs/SPI.md): working, no interrupt support  
+[LiquidCrystal](api/LiquidCrystal.md): Text LCD based on the HD44780 controller  
+[PCD8544](api/PCD8544.md): Nokia 5110 type displays  
+[Mini_SSD1306](api/Mini_SSD1306.md): Monochrome OLED displays based on the SSD1306 controller
+[Stepper](api/Stepper.md): Multi-instance design for more than one stepper at a time  
+[Servo](api/Servo.md): Multi-instance design for more than one servo at a time)  
 
 #### implemented and partly working
 Wire/I2C  
@@ -381,7 +383,6 @@ Wire/I2C
 `srandom()`  
 
 #### not implemented
-`yield()`  
 `tone()`  
 `noTone()`  
 `pulseIn()`  

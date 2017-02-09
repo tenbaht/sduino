@@ -23,7 +23,7 @@ couple of days.
 
 Find more in detail information about the supported boards, needed tools and
 the library APIs on the
-[project website](https://tenbaht.github.io/sduino/).
+[project documentation files](https://github.com/tenbaht/sduino/blob/master/docs/index.md).
 
 All you need to get stated is a simple STM8S103F breakout board and a
 ST-Link V2 compatible flash programmer. Three boards and one flash
@@ -103,7 +103,7 @@ improves significantly from version to version. Be sure to use
 version that might be included in your distribution. Version 3.5.0 as
 included with ubuntu 16.04 is definitly too old and compilation will fail
 due to some compiler errors.
-[More information on installing SDCC](sdcc.md)
+[More information on installing SDCC](blob/master/docs/sdcc.md)
 
 Support for the Cosmic compiler under Windows and integration into the ST
 visual developer IDE might be possible, but is not done (yet?).
@@ -112,13 +112,13 @@ visual developer IDE might be possible, but is not done (yet?).
 
 ## Supported hardware
 
-[STM8S103 breakout board](https://tenbaht.github.io/sduino/hardware/stm8blue.html):
+[STM8S103 breakout board](blob/master/docs/hardware/stm8blue.md):
 works  
 
-[ESP14 Wifi board](https://tenbaht.github.io/sduino/hardware/esp14.html):
+[ESP14 Wifi board](blob/master/docs/hardware/esp14.md):
 untested, but expected to work.
 
-[STM8S105 Discovery board](https://tenbaht.github.io/sduino/hardware/stm8disco.html):
+[STM8S105 Discovery board](blob/master/docs/hardware/stm8disco.md):
 not supported yet, but work in progress.
 
 
@@ -149,6 +149,8 @@ an option.
 
 ## Current status and to-do list
 
+## Current status and to-do list
+
 #### tested and working
 `pinMode()`  
 `digitalWrite()`  
@@ -157,16 +159,23 @@ an option.
 `analogWrite()`  
 `ShiftOut()`  
 WMath: `map()`  
-HardwareSerial  
+[HardwareSerial]  
 Print (without float)  
-SPI: working, no interrupt support  
-LiquidCrystal (for text LCD based on the HD44780 controller)  
-PCD8544 (for Nokia 5110 type displays)  
-[Stepper](Stepper.md) (multi-instance design for more than one stepper at a time)  
-ssd1306 (for monochrome OLED displays based on SSD1306 controller)  
+[SPI](https://github.com/tenbaht/sduino/blob/master/docs/SPI.md):
+  working, no interrupt support  
+[LiquidCrystal](https://github.com/tenbaht/sduino/blob/master/docs/api/LiquidCrystal.md):
+  Text LCD based on the HD44780 controller  
+[PCD8544](https://github.com/tenbaht/sduino/blob/master/docs/api/PCD8544.md):
+  Nokia 5110 type displays  
+[Mini_SSD1306](https://github.com/tenbaht/sduino/blob/master/docs/api/Mini_SSD1306.md):
+  Monochrome OLED displays based on the SSD1306 controller
+[Stepper](https://github.com/tenbaht/sduino/blob/master/docs/api/Stepper.md):
+  Multi-instance design for more than one stepper at a time  
+[Servo](https://github.com/tenbaht/sduino/blob/master/docs/api/Servo.md):
+  Multi-instance design for more than one servo at a time)  
 
 #### implemented and partly working
-Wire/I2C: no deadlock protection yet  
+Wire/I2C  
 
 #### tested, but not working
 `alternateFunctions()`  
@@ -184,6 +193,7 @@ Wire/I2C: no deadlock protection yet
 `pulseInLong()`  
 module WCharacter  
 module WString  
+
 
 
 The compile environment needs to detect which interrupts are actively used
@@ -227,7 +237,7 @@ $1.60-$3.00 for an ATmega8.
 
 ## Further reading and application notes
 
-[sduino project website](https://tenbaht.github.io/sduino/):
+[project documentation files](https://github.com/tenbaht/sduino/blob/master/docs/index.md).
 More in detail information about supported boards, tools and the API.
 
 [PM0051](http://www.st.com/resource/en/programming_manual/cd00191343.pdf):
@@ -261,87 +271,8 @@ hard-coded assumptions about the number of pins with special functions.
 Ideally, all these numbers would be the same and all programs could be
 compiled without changes.
 
-[Here](https://tenbaht.github.io/sduino/pin_mapping.md)
+[Here](blob/master/docs/pin_mapping.md)
 I discuss some possible pin mapping strategies and check how close we could
 get the the ideal mapping. Unfortunatly, it turns out that a perfect mapping
 is not possible.
-
-In the end I chose a simple geometric numbering for the square UFQFPN20
-package starting with port pin PA1 and counting up from 0. This results in
-this mapping:
-
-sduino pin	| STM8S103 CPU port pin
-----------	| ---------------------
- 0-2		| PA1-PA3
- 3-4		| PB5-PB4 (reverse order)
- 5-9		| PC3-PC7
-10-15		| PD1-PD6
-
-serial: 14,15  
-SPI: 2,7,8,9  
-I2C: 3,4  
-Analog: 6,11,12,14,15  
-PWM: 2,5,6,12 plus either only 13 or 7-9 but not 13 (via alternate mapping)  
-
- + Easy and logical for use on a breadboard
- + Very clear and logical port pin ordering
- - Analog pins are still scattered around
- + TX and RX would be the rarely used analog pin numbers A3/A4 at
-   the end of the analog pin number list
- + At least the analog pins are in data sheet order
- - All functions use totally different pin numbers than Arduino
-
-I am still not really happy with this mapping. Instead of simplifing things
-it only adds another layer of abstraction and confusion. To avoid this I
-added definitions for the regular CPU pin names like `PA1` and `PD2`. In the
-end, this notation seem a lot easier to me. I am open for suggestions for a
-better pin number mapping.
-
-The chosen pin mapping for the STM8S103 (possible alternate function in
-paratheses):
-
-|Phys. STM8 pin|Name	|Functions	|Geometrical mapping|special funcion
-|---:	|---	|---			| ---	|---
-|1	|PD4	|UART_CLK/T2-1/beep	|13	|PWM
-|2	|PD5	|TX/Ain5		|14	|Analog A3
-|3	|PD6	|RX/Ain6		|15	|Analog A4
-|5	|PA1	|(OscIn, kein HS)	|0	|
-|6	|PA2	|(OscIn, kein HS)	|1	|
-|10	|PA3	|SS/T2-3		|2	|PWM
-|11	|PB5	|SDA	LED		|3	|
-|12	|PB4	|SCL			|4	|
-|13	|PC3	|T1-3/[T1-n1]		|5	|PWM, (n~)
-|14	|PC4	|T1-4/Ain2/[T1-n2]	|6	|PWM, Analog A0, (n~)
-|15	|PC5	|SCK/[T2-1]		|7	|(~)
-|16	|PC6	|MOSI/[T1-1]		|8	|(~)
-|17	|PC7	|MISO/[T1-2]		|9	|(~)
-|18	|PD1	|(SWIM)			|10	|
-|19	|PD2	|Ain3/[T2-3]		|11	|Analog A1, (~~)
-|20	|PD3	|Ain4/T2-2		|12	|PWM, Analog A2
-
-
-
-
-
-### Performance compared with the original Arduino environment
-
-Benchmarking the original Arduino examples from Arduino 1.0.5. The simple
-Blinky compiles to 57 bytes of code, the total binary including the sduino
-libraries is 1868 Bytes (0x74c).
-
-So far, wiring_analog depends on wiring_digital, even when analogWrite is not
-used. This could be solved by compiling the sduino functions separately into
-a library.
-
-|Name			|Code	|Total	|Linked files other than main and wiring
-|---------------------	|------	|-----	|-----------------------------
-|01. Basics/		|
-|BareMinimum		|2	|1238	|-
-|Blink			|57	|1870	|wiring_digital
-|AnalogReadSerial	|205	|3452	|digital, analog, serial, print
-|DigitalReadSerial	|57	|3160	|digital, serial, print
-|Fade			|226	|2189	|digital, analog
-|ReadAnalogVoltage	|	|	|float not yet implemented
-|02. Digital/		|
-|Debounce		|192	|2016	|digital
 
