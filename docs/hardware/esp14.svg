@@ -15,7 +15,10 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="esp14a.svg">
+   sodipodi:docname="esp14.svg"
+   inkscape:export-filename="/home/mmayer/rsync/stm8/docs/hardware/esp14.png"
+   inkscape:export-xdpi="100"
+   inkscape:export-ydpi="100">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -26,8 +29,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.3910096"
-     inkscape:cx="62.725795"
-     inkscape:cy="339.90315"
+     inkscape:cx="159.98964"
+     inkscape:cy="155.044"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -97,7 +100,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -727,7 +730,7 @@
            id="tspan4598"
            x="243.81367"
            y="506.7485"
-           style="font-size:12.5px;text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1">D3</tspan></text>
+           style="font-size:12.5px;text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1">D3*</tspan></text>
     </g>
     <g
        id="g4600"
@@ -752,7 +755,7 @@
            y="506.7485"
            x="243.81367"
            id="tspan4606"
-           sodipodi:role="line">D4</tspan></text>
+           sodipodi:role="line">D4*</tspan></text>
     </g>
     <g
        transform="translate(236.48518,19.971792)"

@@ -1,4 +1,4 @@
-#include "stm8l.h"
+#include "stm8s.h"
 
 int main() {
 	int d;

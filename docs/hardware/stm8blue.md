@@ -66,16 +66,26 @@ this mapping:
 
 ![STM8S103 breakout board pin mapping](stm8blue.png)
 
+The pins D3/D4 (SDA/SCL, PB5/PB4) are different from the others as they are
+true open drain pins. That means, they only can drive the output low or
+open. To drive it high, they require the of an external pull-up resistor.
+This is the reason why the LED on this breakout is connected between +3.3V
+and the pins and not between the pin GND as usual. This way it is possible
+to drive the LED by writing a zero to the output register.
+
+
+
 sduino pin	| STM8S103 CPU port pin
 ----------	| ---------------------
- 0-2		| PA1-PA3
+ 0-2		| PA1-PA3 (PA1 and PA2 only weak output drivers)
  3-4		| PB5-PB4 (reverse order)
  5-9		| PC3-PC7
 10-15		| PD1-PD6
 
 serial: 14,15  
 SPI: 2,7,8,9  
-I2C: 3,4  
+I2C: 3,4 (true open drain. can't drive a high signal without an external
+pull-up resistor)
 Analog: 6,11,12,14,15  
 PWM: 2,5,6,12 plus either only 13 or 7-9 but not 13 (via alternate mapping)  
 
