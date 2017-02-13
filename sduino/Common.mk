@@ -81,7 +81,7 @@ else
 endif
 
 ifeq ($(CURRENT_OS),WINDOWS)
-    ifneq ($(shell echo $(ARDUINO_DIR) | egrep '^(/|[a-zA-Z]:\\)'),)
+    ifneq ($(shell echo $(ARDUINO_DIR) | grep -E '^(/|[a-zA-Z]:\\)'),)
         echo $(error On Windows, ARDUINO_DIR must be a relative path)
     endif
 endif

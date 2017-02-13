@@ -36,7 +36,8 @@ http://www.aliexpress.com/ .
 with github pages and the preinstalled jekyll-themes?)
 
 1. [Introduction and Overview](index.md)
-2. [API descriptions and migration guidelines](api.md)
+2. [Installing the needed tools](install.md)
+3. [API descriptions and migration guidelines](api.md)
   * [Standard Arduino functions]()
   * [HardwareSerial]()
   * [SPI]()
@@ -46,14 +47,14 @@ with github pages and the preinstalled jekyll-themes?)
   * [Mini_SSD1306 library for monochrome OLED-displays](api/Mini_SSD1306.md)
   * [Stepper library](api/Stepper.md)
   * [Servo library](api/Servo.md)
-3. [Supported Boards](hardware.md)
+4. [Supported Boards](hardware.md)
   * [stm8blue: simple breakout board, STM8S103](hardware/stm8blue.md)
   * [ESP14: Wifi board, STM8S003](hardware/esp14.md)
   * [STM8S105Discovery: Evaluation board made my ST](hardware/stm8disco.md)
-4. [Ways to define a pin mapping](pin_mapping.md)
-5. [Installing and using the SDCC compiler](sdcc.md)
-6. [Using the SPL with SDCC and sduino](spl.md)
-7. [C preprocessor macro magic](macro.md)
+5. [Ways to define a pin mapping](pin_mapping.md)
+6. [Using the SDCC compiler](sdcc.md)
+7. [Using the SPL with SDCC and sduino](spl.md)
+8. [C preprocessor macro magic](macro.md)
 
 
 
@@ -117,18 +118,13 @@ Done! Your first STM8 based project is up and running!
 ## Tools used
 
 This project is based on free tools that are available for Linux, MacOS, and
-Windows. It uses the small devices C compiler (SDCC) for compiling,
+Windows. [Installation instructions](install.htmk)
+
+It uses the small devices C compiler (SDCC) for compiling,
 [stm8flash](https://github.com/vdudouyt/stm8flash) for uploading the binary
 to the CPU, and simple Makefiles for the build process.
 
-SDCC support for the STM8 is still quite fresh and not very mature. It
-improves significantly from version to version. Be sure to use
-[the latest snapshot build](http://sdcc.sourceforge.net/snap.php) from the
-[project site on sourceforge](http://sdcc.sourceforge.net/), not the older
-version that might be included in your distribution. Version 3.5.0 as
-included with ubuntu 16.04 is definitly too old and compilation will fail
-due to some compiler errors.
-[More information on installing and using SDCC](sdcc.md)
+[More information on using SDCC](sdcc.md)
 
 Support for the Cosmic compiler under Windows and integration into the ST
 visual developer IDE might be possible, but is not done (yet?).
@@ -263,7 +259,7 @@ still very close to the C++ version and porting an existing application is
 not hard. Check out the [API migration guidelines](api.md) for details.
 
 
-### General communication
+### Libraries for general communication
 
 #### SPI
 Real hardware-SPI up to 10MHz.
@@ -289,7 +285,7 @@ The standard serial interface.
 
 
 
-### Display
+### Libraries for displays
 
 #### LiquidCrystal
 Supports text LCD based on the HD44780 and compatibles, that includes almost
@@ -310,13 +306,11 @@ pixels. I2C support only. Based on the Adafruit-libray Adafruit_SSD1306.
 [API description](api/Mini_SSD.md)
 
 
-### Motor
+### Libraries for motor control
 
 #### Stepper
-For stepper motors with 2, 4 or 5 phases. This library has a slightly
-diffent user interface than the usual singleton libraries. This allow it to
-handle more than one stepper per Sketch.
-[API description](api/Stepper.md)
+For stepper motors with 2, 4 or 5 phases. This library can handle multiple
+steppers per Sketch. [API description](api/Stepper.md)
 
 
 #### Servo
@@ -330,7 +324,7 @@ of timers: the library can control 12 servos using only 1 timer.
 
 Floating point arithmetics is supported by the SDCC standard library, but it
 comes at a pretty high cost in terms of code space and CPU load. This is how
-much the generated code grows by add one single float operation instead of
+much the generated code grows by using a single float operation compared to 
 using a long int:
 
 Floating point operation	|approx. code size
@@ -345,7 +339,7 @@ log10f()			| 3437 Bytes
 The Arduino standard example '01. Basics/ReadAnalogVoltage' is a very simple
 simple program with only very little floating point arithmetics. But it
 already uses 7336 bytes of flash. A similar sketch using integer arithmetics
-result in much shorter code of only 3791 bytes.
+results in much more compact code occuping only 3791 bytes.
 
 Float does work, but is better to be avoided and replaced by fixed point
 arithmetics whenever possible.
@@ -434,6 +428,9 @@ $1.60-$3.00 for an ATmega8.
 
 [sduino project website](https://tenbaht.github.io/sduino/):
 More in detail information about supported boards, tools and the API.
+
+[Quick introduction to the Arduino.mk makefile]
+(http://hackaday.com/2015/10/01/arduino-development-theres-a-makefile-for-that/)
 
 [PM0051](http://www.st.com/resource/en/programming_manual/cd00191343.pdf):
 STM8AF Flash programming manual  

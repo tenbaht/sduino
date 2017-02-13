@@ -317,7 +317,11 @@ else
         ifeq ($(ARCHITECTURE),sam)
             ARDUINO_ARCH_FLAG = -DARDUINO_ARCH_SAM
         else
-            ARDUINO_ARCH_FLAG = -DARDUINO_ARCH_$(shell echo $(ARCHITECTURE) | tr '[:lower:]' '[:upper:]')
+            ifeq ($(ARCHITECTURE),stm8)
+                ARDUINO_ARCH_FLAG = -DARDUINO_ARCH_STM8
+            else
+                ARDUINO_ARCH_FLAG = -DARDUINO_ARCH_$(shell echo $(ARCHITECTURE) | tr '[:lower:]' '[:upper:]')
+            endif
         endif
     endif
 endif
@@ -867,7 +871,7 @@ endif
 ifeq ($(strip $(NO_CORE)),)
     ifndef MONITOR_BAUDRATE
         ifeq ($(words $(LOCAL_PDE_SRCS) $(LOCAL_INO_SRCS)), 1)
-            SPEED = $(shell egrep -h 'Serial[._]begin *\([0-9]+\)' $(LOCAL_PDE_SRCS) $(LOCAL_INO_SRCS) | sed -e 's/[^0-9]//g'| head -n1)
+            SPEED = $(shell grep -E -h 'Serial[._]begin *\([0-9]+\)' $(LOCAL_PDE_SRCS) $(LOCAL_INO_SRCS) | sed -e 's/[^0-9]//g'| head -n1)
             MONITOR_BAUDRATE = $(findstring $(SPEED),300 1200 2400 4800 9600 14400 19200 28800 38400 57600 115200)
         endif
 
