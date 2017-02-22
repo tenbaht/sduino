@@ -118,7 +118,7 @@ Done! Your first STM8 based project is up and running!
 ## Tools used
 
 This project is based on free tools that are available for Linux, MacOS, and
-Windows. [Installation instructions](install.htmk)
+Windows. [Installation instructions](install.md)
 
 It uses the small devices C compiler (SDCC) for compiling,
 [stm8flash](https://github.com/vdudouyt/stm8flash) for uploading the binary
@@ -139,16 +139,16 @@ The build process is controlled by a makefile based on the amazing
 
 ### STM8S boards
 
-So far only the the
+So far only the
 [simple STM8S103 breakout board](hardware/stm8blue.md)
 is supported. This board is build around a CPU STM8S103F3P6 and costs less
 than a dollar. The CPU features a 16MHz internal oscillator, 8kB flash, 1kB
 RAM, 640 byte EEPROM. It includes an UART, SPI, I2C, PWM, 10 bit ADC, 3
 timer, and up to 14 I/O pins - quite similar to an Atmel ATmega8.
 
-The [ESP14 Wifi-boards](hardware/esp14.md) are very basically a variant of
-these boards with an added ESP-01 Wifi-module. Almost all programs should
-run on those chinese Wifi-enabled gems as well. still untested.
+The [ESP14 Wifi-boards](hardware/esp14.md) are very similar. They are
+basically a variant of these boards with an added ESP-01 Wifi-module. Almost
+all programs should run on those chinese Wifi-enabled gems as well.
 
 Support for the more powerful
 [STM8S105Discovery-boards](hardware/stm8disco.md) is planned, but not
