@@ -45,6 +45,58 @@ Some examples of typical name changes:
 
 
 
+### The _Generic selection
+
+The C11 standard introduced the
+[`_Generic`](http://en.cppreference.com/w/c/language/generic)
+selection function. This function allows for automatic selection of
+different function variants at compile time depending on the type of the
+function arguments mimicing polymorph C++ functions.
+
+Recent versions of SDCC already support this function (command line argument
+`--std-sdcc99`), but it's usefulness is still limited to some special cases.
+
+```c
+#define Serial_print(X) _Generic((X), \
+    char*: Serial_print_s, \
+    signed long: Serial_print_i, \
+    signed int: Serial_print_i, \
+    signed char: Serial_print_c, \
+    unsigned long: Serial_print_u, \
+    unsigned int: Serial_print_u, \
+    unsigned char: Serial_print_u \
+    )(X)
+```
+
+This would unify some, but not all print function variants:
+
+|C++ name				| C name using _Generic	|
+|--------				| ------------------	|
+|`Serial.print(int)`			| `Serial_print`	|
+|`Serial.print(unsigned)`		| `Serial_print`	|
+|`Serial.print(char)`			| `Serial_print`	|
+|`Serial.print(char *)`			| `Serial_print_s`	|
+|`Serial.print(char *buf, int len)`	| `Serial_print_n`	|
+|`Serial.print(unsigned n, int base)`	| `Serial_print_ub`	|
+
+Unfortunately cpp does not match string constants and `char*` resulting in a
+very non-regular usage pattern:
+
+	char *string="Hello";
+
+	Serial_print(string);	// works
+	Serial_print("Hello");	// doesn't work
+	Serial_print_s("Hello");// works
+
+To avoid too much confusion it might be better to not use `_Generic` at all.
+
+Another problem using the `_Generic` selector is configurable instance
+names. The preprocessor does not allow for variable macro names. That means
+`_Generic` would work with fixed name like `Serial`, but it wouldn't work
+for `SoftwareSerial` with no standard instance name.
+
+
+
 
 ## Inheritance from Print class
 
