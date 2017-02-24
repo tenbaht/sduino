@@ -62,14 +62,15 @@ with github pages and the preinstalled jekyll-themes?)
 ## Usage
 
 If you have ever used the Arduino environment before you will feel at home
-right away. The compilation is done on the command line, but thanks to the
-amazing [Arduino.mk makefile](https://github.com/sudar/Arduino-Makefile) by
-[Sudar](http://sudarmuthu.com>) you don't have to fiddle around, it is just
-one simple command.
+right away, despite this project beeing based on a makefile rather than the
+full Arduino IDE. But don't be afraid, it is based on the amazing
+[Arduino.mk makefile](https://github.com/sudar/Arduino-Makefile) by
+[Sudar](http://sudarmuthu.com>) to control the build process, that makes
+everything very easy.
 
 Let's blink an LED using the Blink example from Arduino:
 
-```
+```c
 /*
   Blink
   Turns on an LED on for one second, then off for one second, repeatedly.
@@ -238,19 +239,18 @@ enviroment and integrate it with the Arduino IDE and build system as is
 has been done for the STM32 and the ESP8266.
 
 This is not a drop-in replacement for an AVR, but the programming API is
-still very, very similar. Adopting existing libraries from C++ to C for
-use with the simplified C API is often easy and can be done in a matter of
-minutes, depending on the degree of dependency on specific hardware
-features.
+still very, very similar. Adopting existing libraries from C++ to C for use
+with the simplified C API is often easy and can be done quite fast,
+depending on the degree of dependency on specific hardware features.
 
-The whole Arduino build system is deeply based on the assumption of C++
-source files. I am not sure if it would be even possible to configure a
-build process based only on C files. This makes a full IDE integration
-very unlikely.
+The whole Arduino build system is deeply based on the assumption of
+processing C++ source files. I am not sure if it would be even possible to
+configure a build process based only on C files without modifing the IDE
+sources. This makes a full IDE integration very unlikely.
 
-Using a converter/compiler like `cfront` to translate from C++ to C might be
-an option.
-
+Using a converter/compiler like
+[cfront](https://en.wikipedia.org/wiki/Cfront) to translate from C++ to C
+might be an option.
 
 
 ## Included libraries
@@ -358,12 +358,18 @@ arithmetics whenever possible.
 WMath: `map()`  
 HardwareSerial  
 Print (without float)  
-[SPI](docs/SPI.md): working, no interrupt support  
-[LiquidCrystal](api/LiquidCrystal.md): Text LCD based on the HD44780 controller  
-[PCD8544](api/PCD8544.md): Nokia 5110 type displays  
-[Mini_SSD1306](api/Mini_SSD1306.md): Monochrome OLED displays based on the SSD1306 controller
-[Stepper](api/Stepper.md): Multi-instance design for more than one stepper at a time  
-[Servo](api/Servo.md): Multi-instance design for more than one servo at a time)  
+[SPI](docs/SPI.md):
+  working, no interrupt support  
+[LiquidCrystal](api/LiquidCrystal.md):
+  Text LCD based on the HD44780 controller  
+[PCD8544](api/PCD8544.md):
+  Nokia 5110 type displays  
+[Mini_SSD1306](api/Mini_SSD1306.md):
+  Monochrome OLED displays based on the SSD1306 controller
+[Stepper](api/Stepper.md):
+  Multi-instance design for more than one stepper at a time  
+[Servo](api/Servo.md):
+  Multi-instance design for more than one servo at a time)  
 
 #### implemented and partly working
 Wire/I2C  
@@ -385,6 +391,8 @@ module WCharacter
 module WString  
 
 
+#### Unresolved problems
+
 The compile environment needs to detect which interrupts are actively used
 and link only the needed ones into the binary. See test/digitalWrite:
 Compiling with the straight Makefile.classic does not add UART interrupt
@@ -400,10 +408,18 @@ programmable I/O-CPU for just over two dollars - that might be the most
 compelling reason to get started on the STM8S series. Apart from pure
 curiosity and eagerness to learn something new, of course.
 
-The community support and the sheer number of existing libraries for all kinds
-of sensors and hardware is outstanding in the Arduino world. If you just
-want to get something done, go for an Arduino board. Nothing will give you
-faster and easier results.
+The simple STM8S103F breakout boards are powerful and dirt cheap. They cost
+well under one dollar. You can get three boards and one flash programmer
+together for well under five dollars on http://www.aliexpress.com/ ,
+including shipping from China.
+
+*Amazing!*
+
+The major downside is the lack of information and community support for the
+STM8. The community support and the sheer number of existing libraries for
+all kinds of sensors and hardware is outstanding in the Arduino world. If
+you just want to get something done, go for an Arduino board. Nothing will
+give you faster and easier results.
 
 For commercial use the STM8S offers some interesting advantages:
 
@@ -421,12 +437,18 @@ very careful programming required).
 **Value for the money**: 40 to 60 cents for a STM8 with 14 I/O pins compared to
 $1.60-$3.00 for an ATmega8.
 
+**Upgrade path**: The peripheral units of the STM8 are identical or at least
+very, very similar to the ones used with the STM32 family of 32 bit
+ARM-Cortex CPUs. This makes it is relatively easy to migrate existing
+software between the 8- and the 32-bit world. This is quite unique among the
+other CPUs.
+
 
 
 
 ## Further reading and application notes
 
-[sduino project website](https://tenbaht.github.io/sduino/):
+[project documentation files](https://github.com/tenbaht/sduino/blob/master/docs/index.md)
 More in detail information about supported boards, tools and the API.
 
 [Quick introduction to the Arduino.mk makefile]
@@ -441,6 +463,7 @@ Using the analog-to-digital converter of the STM8S microcontroller
 
 Many examples and presentations about the STM8S:  
 https://github.com/VincentYChen/STM8teach  
+It contains the SPL examples from ST, the most useful resource on the STM8:  
 https://github.com/VincentYChen/STM8teach/tree/master/code/Project/STM8S_StdPeriph_Examples
 
 Using the ADC:  

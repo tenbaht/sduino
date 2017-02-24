@@ -1,33 +1,37 @@
-# sduino
+## Sduino: Small Devices Arduino
 
 Getting started on the STM8 CPU the easy way by using an Arduino-like
 programming API.
 
 This project makes the most important features of the Arduino API available
-for the STM8S. It is based on free tools that are available for Linux, MacOS, and
-Windows.
+for the STM8S. It is based on free tools that are available for Linux,
+MacOS, and Windows: SDCC, make, and stm8flash.
+
+Since it's based on the SDCC Small Devices compiler, I called it "Small
+Devices -uino" or "Small-duino".
+
+This project is not supposed to be “better than Arduino”. It’s purpose
+is to give you a head start into a different CPU architecture if you happen
+to have a professional need or a private desire for it.
 
 Please find more detailed information about the supported boards, the needed tools
 and the library APIs on the
 [project documentation files](https://github.com/tenbaht/sduino/blob/master/docs/index.md).
 
 
-
-
 ## Table of Contents
 
    * [Project Website](blob/master/docs/index.md)
    * [Usage example](#usage)
-   * [Installation](#installation)
    * [Supported hardware](#supported-hardware)
    * [Why use a STM8 instead of an ATmega?](#why-use-a-stm8-instead-of-an-atmega)
+   * [Library support](#library-support)
    * [Compatibility with the Arduino world](#compatibility-with-the-arduino-world)
-   * [Current status and to-do list](#current-status-and-to-do-list)
-   * [Further reading and application notes](#further-reading-and-application-notes)
 
 
 
-## Usage
+
+## Usage example
 
 If you have ever used the Arduino environment before you will feel at home
 right away, despite this project beeing based on a makefile rather than the
@@ -36,7 +40,7 @@ full Arduino IDE. But don't be afraid, it is based on the amazing
 [Sudar](http://sudarmuthu.com>) to control the build process, that makes
 everything very easy.
 
-Let's blink an LED using the Blink example from Arduino:
+First, let's make an LED blink using the Blink example from Arduino:
 
 ```c
 /*
@@ -83,56 +87,32 @@ Compile and upload it:
 Done! Your first STM8 based project is up and running!
 
 
-
-
-## Installation
-
-This project uses the small devices C compiler (SDCC) for compiling,
-[stm8flash](https://github.com/vdudouyt/stm8flash) for uploading the binary
-to the CPU, and simple Makefiles for the build process. Support for the
-Cosmic compiler under Windows and integration into the ST visual developer
-IDE might be possible, but is not done (yet?).
-
-This is a quick overview for the installation on a Linux system. Check the
-[installation instructions](https://github.com/tenbaht/sduino/blob/master/docs/install.md)
-for other systems.
-
-
-Download and extract the
-[lastest snapshot build for SDCC](http://sdcc.sourceforge.net/snap.php) to
-`/opt`:
-
-	sudo mkdir /opt
-	sudo tar xvjf ~/Downloads/sdcc-snapshot* -C /opt
-
-Make sure make is available:
-
-	sudo apt-get install make
-
-Download/clone this repository somewhere convinient (but separate from your
-existing Arduino files, at least for now):
-
-	git clone git@github.com:tenbaht/sduino.git
-
-compile an example sketch:
-
-	cd sduino/sduino/examples/01.Basics/Blink
-	make
-
-
-More details and instructions for MacOS and Windows in the
-[installation instructions](https://github.com/tenbaht/sduino/blob/master/docs/install.md).
-
-
-
-
 ## Supported hardware
 
-[STM8S103 breakout board](blob/master/docs/hardware/stm8blue.md):
-works.  
-[ESP14 Wifi board](blob/master/docs/hardware/esp14.md): works.  
-[STM8S105 Discovery board](blob/master/docs/hardware/stm8disco.md):
-not supported yet, but work in progress.  
+Anything with an STM8S103 or STM8S003 should work. For example, the
+70-cent-[STM8S103 breakout boards](blob/master/docs/hardware/stm8blue.md),
+[ESP14 Wifi boards](blob/master/docs/hardware/esp14.md),
+or even the [W1209 thermostat boards](https://www.aliexpress.com/wholesale?SearchText=w1209)
+that are abundant on aliexpress and Amazon. All you need to get started is a
+simple ST-Link/V2 compatible flash programmer, available for less then $3
+from China.
+
+The STM8 series by ST might be the cheapest CPUs on the market while still
+being as powerful as the ATmega series. That makes them every Chinese
+engineer's darling and chances are pretty good that you will find an '003 if
+you crack open any cheap appliance like an irrigation, temperature, or
+charging controller.
+
+The '003 or '103 CPUs feature a 16MHz internal oscillator, 8kB flash, 1kB
+RAM and 128 or 640 byte EEPROM. They both include a UART, SPI, I2C, PWM,
+five 10 bit ADC inputs, 3 timers, and up to 14 I/O pins - quite similar to
+an Atmel ATmega8 as it was used on the first Arduino boards.
+
+Support for the more powerful
+[STM8S105 Discovery board](blob/master/docs/hardware/stm8disco.md)
+is planned, but not available yet. These amazing $9 boards offer even more
+resources, come with a build-in flash programmer and are very similar to an
+Arduino Uno with an ATmega328 CPU.
 
 Find more information here: [Supported Boards](blob/master/docs/hardware.md)
 
@@ -149,8 +129,6 @@ The simple STM8S103F breakout boards are powerful and dirt cheap. They cost
 well under one dollar. You can get three boards and one flash programmer
 together for well under five dollars on http://www.aliexpress.com/ ,
 including shipping from China.
-
-*Amazing!*
 
 The major downside is the lack of information and community support for the
 STM8. The community support and the sheer number of existing libraries for
@@ -182,120 +160,39 @@ other CPUs.
 
 
 
+## Library support
+
+The most important libraries and parts of the Arduino core system are
+ported for the STM8 already: analog input and output, digital input and
+output, delay(), millis(), Serial, SPI, and I2C.
+
+There are ported versions of the standard libraries Servo, Stepper, and
+LiquidCrystal for motor control and the popular text LCDs based on the
+HD44780 controller.
+
+For more sophisticated output there are libraries for Nokia-5110-type
+graphical LCDs and SSD1306-based graphical OLED displays.
+
+
+
 ## Compatibility with the Arduino world
 
 I adopted the Arduino core functionality for the STM8S to set up a simple
 programming environment. But unfortunatly there is no free C++ compiler
 for these CPUs. This makes it impossible to do a full port of the whole
-enviroment and integrate it with the Arduino IDE and build system as is
+enviroment and integrate it with the Arduino IDE and build system as it
 has been done for the STM32 and the ESP8266.
 
 This is not a drop-in replacement for an AVR, but the programming API is
-still very, very similar. Adopting existing libraries from C++ to C for use
-with the simplified C API is often easy and can be done quite fast,
-depending on the degree of dependency on specific hardware features.
+still very, very similar. Thanks to some C preprocessor magic it is often
+enough to just move over the opening bracket of the class instanciation
+statement and to replace the dot in a method call for an underscore.
 
 The whole Arduino build system is deeply based on the assumption of
 processing C++ source files. I am not sure if it would be even possible to
 configure a build process based only on C files without modifing the IDE
 sources. This makes a full IDE integration very unlikely.
 
-Using a converter/compiler like
-[cfront](https://en.wikipedia.org/wiki/Cfront) to translate from C++ to C
-might be an option.
 
 
 
-## Current status and to-do list
-
-#### tested and working
-`pinMode()`  
-`digitalWrite()`  
-`analogRead()`  
-`delay()`  
-`analogWrite()`  
-`ShiftOut()`  
-WMath: `map()`  
-[HardwareSerial]  
-Print (without float)  
-[SPI](https://github.com/tenbaht/sduino/blob/master/docs/SPI.md):
-  working, no interrupt support  
-[LiquidCrystal](https://github.com/tenbaht/sduino/blob/master/docs/api/LiquidCrystal.md):
-  Text LCD based on the HD44780 controller  
-[PCD8544](https://github.com/tenbaht/sduino/blob/master/docs/api/PCD8544.md):
-  Nokia 5110 type displays  
-[Mini_SSD1306](https://github.com/tenbaht/sduino/blob/master/docs/api/Mini_SSD1306.md):
-  Monochrome OLED displays based on the SSD1306 controller
-[Stepper](https://github.com/tenbaht/sduino/blob/master/docs/api/Stepper.md):
-  Multi-instance design for more than one stepper at a time  
-[Servo](https://github.com/tenbaht/sduino/blob/master/docs/api/Servo.md):
-  Multi-instance design for more than one servo at a time)  
-
-#### implemented and partly working
-Wire/I2C  
-
-#### tested, but not working
-`alternateFunctions()`  
-
-#### not tested
-`ShiftIn()`  
-`random()`  
-`srandom()`  
-
-#### not implemented
-`yield()`  
-`tone()`  
-`noTone()`  
-`pulseIn()`  
-`pulseInLong()`  
-module WCharacter  
-module WString  
-
-
-#### Unresolved problems
-
-The compile environment needs to detect which interrupts are actively used
-and link only the needed ones into the binary. See test/digitalWrite:
-Compiling with the straight Makefile.classic does not add UART interrupt
-routines. But when using the sduino.mk Makefile the two UART interrupt
-routines are pulled into the binary by the interrupt table in main.c.
-
-
-
-## Alternative solutions
-
-The SPL (standard peripheral library) [offered by
-ST](http://www.st.com/en/embedded-software/stsw-stm8069.html) is very
-powerful and very similar to the one used for the STM32 CPU series offering
-a relatively easy upgrade path in case a project outgrows the capabilities
-of the 8-bit STM8 series. But using that library is not very intuitive and
-still requires a fairly detailed knowledge of the CPU internals.
-
-
-
-
-## Further reading and application notes
-
-[project documentation files](https://github.com/tenbaht/sduino/blob/master/docs/index.md).
-More in detail information about supported boards, tools and the API.
-
-[PM0051](http://www.st.com/resource/en/programming_manual/cd00191343.pdf):
-STM8AF Flash programming manual  
-[UM0470](http://www.st.com/resource/en/user_manual/cd00173911.pdf):
-STM8 SWIM protocol and debug manual  
-[AN2658](http://www.st.com/resource/en/application_note/cd00176594.pdf):
-Using the analog-to-digital converter of the STM8S microcontroller  
-
-Many examples and presentations about the STM8S:  
-https://github.com/VincentYChen/STM8teach  
-It contains the SPL examples from ST, the most useful resource on the STM8:  
-https://github.com/VincentYChen/STM8teach/tree/master/code/Project/STM8S_StdPeriph_Examples
-
-Using the ADC:  
-http://blog.mark-stevens.co.uk/2012/09/single-scan-adc-on-the-stm8s/  
-
-Example for RS-232 handling with SPL:  
-https://sourceforge.net/p/oggstreamer/oggs-stm8-firmware-001/ci/master/tree/rx_ringbuffer.c  
-
-[AN3139](http://www.st.com/resource/en/application_note/cd00262293.pdf):
-Migration guideline within the STM8L familiy  
