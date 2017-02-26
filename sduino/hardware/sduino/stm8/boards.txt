@@ -9,7 +9,7 @@ stm8sblue.upload.protocol=stlinkv2
 stm8sblue.upload.mcu=stm8s103?3
 stm8sblue.upload.maximum_size=8192
 
-stm8sblue.build.mcu=stm8
+stm8sblue.build.mcu=STM8S103
 stm8sblue.build.f_cpu=16000000L
 stm8sblue.build.core=sduino
 stm8sblue.build.variant=standard
@@ -17,10 +17,3 @@ stm8sblue.build.variant=standard
 # meaningless variables just to keep the makefile happy
 
 stm8sblue.upload.speed=1
-stm8blue.bootloader.low_fuses=0xff
-stm8blue.bootloader.high_fuses=0xde
-stm8blue.bootloader.extended_fuses=0x05
-stm8blue.bootloader.path=optiboot
-stm8blue.bootloader.file=optiboot_atmega328.hex
-stm8blue.bootloader.unlock_bits=0x3F
-stm8blue.bootloader.lock_bits=0x0F
