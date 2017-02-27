@@ -83,7 +83,7 @@ Let's blink an LED using the Blink example from Arduino:
 // Pin 13 has an LED connected on most Arduino boards.
 // Pin 3 for the STM8S103 break out board
 // give it a name:
-int led = PIN_LED_BUILDIN;
+int led = LED_BUILDIN;
 
 // the setup routine runs once when you press reset:
 void setup() {
@@ -151,9 +151,10 @@ The [ESP14 Wifi-boards](hardware/esp14.md) are very similar. They are
 basically a variant of these boards with an added ESP-01 Wifi-module. Almost
 all programs should run on those chinese Wifi-enabled gems as well.
 
-Support for the more powerful
-[STM8S105Discovery-boards](hardware/stm8disco.md) is planned, but not
-started yet. These are very similar to an Arduino Uno with an ATmega328 CPU.
+The [STM8S105Discovery-boards](hardware/stm8disco.md) are very similar to an
+Arduino Uno with an ATmega328 CPU. The support for the used STM8S105 CPU is
+still very fresh and not thoroughly tested but it should work now. At least
+Blink.c is known to be fine already.
 
 
 
