@@ -55,7 +55,7 @@ First, let's make an LED blink using the Blink example from Arduino:
 // Pin 13 has an LED connected on most Arduino boards.
 // Pin 3 for the STM8S103 break out board
 // give it a name:
-int led = PIN_LED_BUILDIN;
+int led = LED_BUILDIN;
 
 // the setup routine runs once when you press reset:
 void setup() {
@@ -110,9 +110,9 @@ an Atmel ATmega8 as it was used on the first Arduino boards.
 
 Support for the more powerful
 [STM8S105 Discovery board](blob/master/docs/hardware/stm8disco.md)
-is planned, but not available yet. These amazing $9 boards offer even more
-resources, come with a build-in flash programmer and are very similar to an
-Arduino Uno with an ATmega328 CPU.
+is very fresh, but should work now. At least Blink.c works already. These
+amazing $9 boards offer even more resources, come with a build-in flash
+programmer and are very similar to an Arduino Uno with an ATmega328 CPU.
 
 Find more information here: [Supported Boards](blob/master/docs/hardware.md)
 
