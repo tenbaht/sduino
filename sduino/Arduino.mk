@@ -1486,7 +1486,7 @@ pre-build:
 $(TARGET_HEX): 	$(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS)
 	$(CC) $(LDFLAGS) $(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS) \
 		$(filter %/core/main.c.$(OBJSUFFIX),$(CORE_OBJS)) \
-		$(OTHER_LIBS) -lstm8s103 -lstm8 $(LINKER_SCRIPTS) -o $@
+		$(OTHER_LIBS) -lstm8 $(LINKER_SCRIPTS) -o $@
 	$(call avr_size,$<,$@)
 ifneq ($(strip $(HEX_MAXIMUM_SIZE)),)
 	@if [ `$(SIZE) $@ | awk 'FNR == 2 {print $$2}'` -le $(HEX_MAXIMUM_SIZE) ]; then touch $@.sizeok; fi

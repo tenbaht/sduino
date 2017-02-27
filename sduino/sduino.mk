@@ -90,13 +90,15 @@ ARCHITECTURE	= stm8
 CPPFLAGS	+= -I. -I$(ARDUINO_DIR)/../STM8S_StdPeriph_Driver/inc -I/opt/sdcc/share/sdcc/include/
 #CFLAGS		= -I ../STM8S_StdPeriph_Driver/inc
 #LDFLAGS		= --out-fmt-elf 
-LDFLAGS		+= -L $(ARDUINO_DIR)/../STM8S_StdPeriph_Driver/src -L/opt/sdcc/share/sdcc/lib/stm8
+LDFLAGS		+= -L $(ARDUINO_DIR)/../STM8S_StdPeriph_Driver/lib -L/opt/sdcc/share/sdcc/lib/stm8
 
 
 
 # include Common.mk now we know where it is
 include $(ARDMK_DIR)/Arduino.mk
 
+# link the cpu-specific version of the ST spl
+OTHER_LIBS += -l$(MCU)
 
 STM8FLASH = stm8flash
 STM8FLASH_COM_OPTS =

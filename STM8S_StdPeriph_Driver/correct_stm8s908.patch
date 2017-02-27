@@ -1,0 +1,21 @@
+diff --git a/STM8S_StdPeriph_Driver/src/stm8s_conf.h b/STM8S_StdPeriph_Driver/src/stm8s_conf.h
+index 111047b..152fdfb 100644
+--- a/STM8S_StdPeriph_Driver/src/stm8s_conf.h
++++ b/STM8S_StdPeriph_Driver/src/stm8s_conf.h
+@@ -56,14 +56,14 @@
+ #include "stm8s_rst.h"
+ #include "stm8s_spi.h"
+ #include "stm8s_tim1.h"
+-#if !defined(STM8S903) || !defined(STM8AF622x)
++#if !defined(STM8S903) && !defined(STM8AF622x)
+  #include "stm8s_tim2.h"
+ #endif /* (STM8S903) || (STM8AF622x) */
+ #if defined(STM8S208) || defined(STM8S207) || defined(STM8S007) ||defined(STM8S105) ||\
+     defined(STM8S005) ||  defined (STM8AF52Ax) || defined (STM8AF62Ax) || defined (STM8AF626x)
+  #include "stm8s_tim3.h"
+ #endif /* (STM8S208) ||defined(STM8S207) || defined(STM8S007) ||defined(STM8S105) */ 
+-#if !defined(STM8S903) || !defined(STM8AF622x)
++#if !defined(STM8S903) && !defined(STM8AF622x)
+  #include "stm8s_tim4.h"
+ #endif /* (STM8S903) || (STM8AF622x) */
+ #if defined(STM8S903) || defined(STM8AF622x)
