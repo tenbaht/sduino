@@ -288,14 +288,14 @@ inline unsigned int makeWord(unsigned char h, unsigned char l) { return (h << 8)
  * The new interrupt numbers are a combination of the position in the
  * internal jump table (value in LSB) and the real STM8S-Interrupt number (MSB)
  */
-#define INT_PORTA		(0 | (ITC_IRQ_PORTA << 8))
-#define INT_PORTB		(1 | (ITC_IRQ_PORTB << 8))
-#define INT_PORTC		(2 | (ITC_IRQ_PORTC << 8))
-#define INT_PORTD		(3 | (ITC_IRQ_PORTD << 8))
-#define INT_TIM1_CAPCOM		(4 | (ITC_IRQ_TIM1_CAPCOM << 8))
-#define INT_TIM1_OVF		(5 | (ITC_IRQ_TIM1_OVF << 8))
-#define INT_TIM2_CAPCOM		(6 | (ITC_IRQ_TIM2_CAPCOM << 8))
-#define INT_TIM2_OVF		(7 | (ITC_IRQ_TIM2_OVF << 8))
+#define INT_PORTA		(0 | (uint16_t)(ITC_IRQ_PORTA << 8))
+#define INT_PORTB		(1 | (uint16_t)(ITC_IRQ_PORTB << 8))
+#define INT_PORTC		(2 | (uint16_t)(ITC_IRQ_PORTC << 8))
+#define INT_PORTD		(3 | (uint16_t)(ITC_IRQ_PORTD << 8))
+#define INT_TIM1_CAPCOM		(4 | (uint16_t)(ITC_IRQ_TIM1_CAPCOM << 8))
+#define INT_TIM1_OVF		(5 | (uint16_t)(ITC_IRQ_TIM1_OVF << 8))
+#define INT_TIM2_CAPCOM		(6 | (uint16_t)(ITC_IRQ_TIM2_CAPCOM << 8))
+#define INT_TIM2_OVF		(7 | (uint16_t)(ITC_IRQ_TIM2_OVF << 8))
 
 
 
