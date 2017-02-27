@@ -1,10 +1,17 @@
 # STM8S Discovery
 
+A widespread evaluation board made by ST. All CPU pin are easily accessible
+on 2x6 pin headers. It costs only $9 and includes a ST-Link/v1 flash
+programmer on board.
+
+It should work now, but the support is very fresh and not thoroughly tested. 
+At least Blink.c is known to work already.
+
 STM8S105C6T6 microcontroller, 32 KB Flash, 2 KB RAM, 1 KB EEPROM 
 
   - LED on PD0, active low.
   - Touch button on PC1, PC2.
-  - external cristal 16MHz on PA1/PA2
+  - external crystal 16MHz on PA1/PA2
 
 
 
@@ -23,26 +30,37 @@ Pin	| Signal
 ## Usage with Linux and stm8flash
 
 The discovery board implements two USB devices: A ST-LINK/V1 interface and a
-(not very useful) mass storage device with some links to the ST website. 
-The implementation of this mass storage device is very buggy and renders the
+(not very useful) mass storage device with some links to the ST website. The
+implementation of this mass storage device is very buggy and renders the
 hole board useless. You need to make modprobe to ignore it by adding this
 line to /etc/modprobe.conf or by adding a file
 /etc/modprobe.d/stdiscovery.conf with this line:
 
 	options usb-storage quirks=0483:3744:i
 
-Unplug the Discovery board, unload the usb mass storage driver with
+Unplug the Discovery board and unload the usb mass storage driver with
 
 	modprobe -r uas usb_storage
 
-and reconnect the board. If you can't unload the usb_storage drive because
-it is in use with other devices you can temporary trigger the same effect by
-this line:
+If you can't unload the usb_storage drive because it is in use with other
+devices you can temporary trigger the same effect by this line:
 
 	echo "0483:3744:i" >/sys/module/usb_storage/parameters/quirks
 
-Now dmesg should show that the mass storage device of the Discovery board is
-ignored:
+The second step is to add a new udev rule in order to access the USB port.
+Save this as root in in `/etc/udev/rules.d/99-stlink.rules`:
+
+	# ST-Link/V2 programming adapter
+
+	# ST-Link V1, if using a STM8S discovery board
+	# important: It needs a special entry in /etc/modprob/blacklist
+	ATTR{idVendor}=="0483", ATTR{idProduct}=="3744", MODE="0666", GROUP="plugdev"
+
+	# ST-Link/V2, the china adapter with the green plastic housing
+	ATTR{idVendor}=="0483", ATTR{idProduct}=="3748", MODE="0666", GROUP="plugdev"
+
+Finally, it is time to (re-) connect the board. Now dmesg should show that
+the mass storage device of the Discovery board is ignored:
 
 	[  815.228928] usbcore: deregistering interface driver uas
 	[  815.229201] usbcore: deregistering interface driver usb-storage

@@ -24,7 +24,7 @@ stm8sblue.upload.speed=1
 stm8sdisco.name=STM8S105C6 Discovery Board
 
 stm8sdisco.upload.using=stm8flash
-stm8sdisco.upload.protocol=stlinkv2
+stm8sdisco.upload.protocol=stlink
 stm8sdisco.upload.mcu=stm8s105?6
 stm8sdisco.upload.maximum_size=32768
 

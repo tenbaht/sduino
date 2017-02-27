@@ -223,7 +223,7 @@ void delayMicroseconds(unsigned int us)
 #else
 #warning "else"
 # define LOG_CLOCK (F_CPU * 1)
-# define LOG_CLOCK 16000000UL
+//# define LOG_CLOCK 16000000UL
 #endif
 
 	// 13 + (7+nop)*us
@@ -454,9 +454,23 @@ void init()
 	GPIO_DeInit(GPIOB);
 	GPIO_DeInit(GPIOC);
 	GPIO_DeInit(GPIOD);
-//	GPIO_DeInit(GPIOE);	// not present on STM8S103
+	GPIO_DeInit(GPIOE);	// not present on STM8S103
+	GPIO_DeInit(GPIOF);	// not present on STM8S103
+#if defined(GPIOG)
+	GPIO_DeInit(GPIOG);
+#endif
+#if defined(GPIOH)
+	GPIO_DeInit(GPIOH);
+#endif
+#if defined(GPIOI)
+	GPIO_DeInit(GPIOI);
+#endif
 
+#if defined(UART1)
 	UART1_DeInit();
+#else
+	UART2_DeInit();
+#endif
 
 	// set timer 4 prescale factor and period (typ. @16MHz: 64*250=1ms)
 	TIM4_DeInit();
@@ -555,6 +569,7 @@ void init()
 	TIM1->BKR = TIM1_BKR_MOE;	// TIM1_CtrlPWMOutputs(ENABLE);
 #endif
 
+#ifdef TIM2
 	TIM2_DeInit();
 	TIM2_TimeBaseInit(TIM2_PRESCALER_64, 255);
 
@@ -593,6 +608,7 @@ void init()
 
 	TIM2->CR1 = TIM2_CR1_CEN;	// TIM1_Cmd(ENABLE);
 #endif
+#endif // #ifdef (TIM2)
 
 	/* De-Init ADC peripheral, sets prescaler to 2 */
 	ADC1_DeInit();
@@ -617,16 +633,7 @@ void init()
 //	#else // minimum prescaler is 2, already set by ADC1_DeInit();
 //		ADC1->CR1 = 0 <<4;
 	#endif
-#if 0
-	// the bootloader connects pins 0 and 1 to the USART; disconnect them
-	// here so they can be used as normal digital i/o; they will be
-	// reconnected in Serial.begin()
-#if defined(UCSRB)
-	UCSRB = 0;
-#elif defined(UCSR0B)
-	UCSR0B = 0;
-#endif
-#endif //if 0
+
 	// this needs to be called before setup() or some functions won't
 	// work there
 	enableInterrupts();

@@ -71,10 +71,10 @@ is clearly one of the cheapest CPUs on the market, but the applications for
 this module are heavily restricted the the small flash memory.
 
 Why didn't they use an ATmega328? Just one dollar more and the whole Arduino
-universe opens up? Or at least an STM8S005K6T6C, offering 32kB flash and 2kB
+universe opens up. Or at least an STM8S005K6T6C, offering 32kB flash and 2kB
 RAM for only 40 cents more, if you want to go really cheap.
 
-And why would you need an additional PMOS to control the ESP power supply?
+And why would you need an external PMOS to control the ESP power supply?
 Why is this not included on the PCB already? This could the big killer
 feature of the current combination.
 

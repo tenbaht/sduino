@@ -125,10 +125,10 @@
  void EXTI_PORTB_IRQHandler(void) __interrupt(ITC_IRQ_PORTB); /* EXTI PORTB */
  void EXTI_PORTC_IRQHandler(void) __interrupt(ITC_IRQ_PORTC); /* EXTI PORTC */
  void EXTI_PORTD_IRQHandler(void) __interrupt(ITC_IRQ_PORTD); /* EXTI PORTD */
-// void EXTI_PORTE_IRQHandler(void) __interrupt(ITC_IRQ_PORTE); /* EXTI PORTE */
+ void EXTI_PORTE_IRQHandler(void) __interrupt(ITC_IRQ_PORTE); /* EXTI PORTE */
 
 #if defined(STM8S903) || defined(STM8AF622x)
-// void EXTI_PORTF_IRQHandler(void) __interrupt(ITC_IRQ_PORTF); /* EXTI PORTF */
+ void EXTI_PORTF_IRQHandler(void) __interrupt(ITC_IRQ_PORTF); /* EXTI PORTF */
 #endif /* (STM8S903) || (STM8AF622x) */
 
 #if defined (STM8S208) || defined (STM8AF52Ax)
@@ -168,8 +168,8 @@
 // void I2C_IRQHandler(void) __interrupt(ITC_IRQ_I2C); /* I2C */
 
 #if defined(STM8S105) || defined(STM8S005) ||  defined (STM8AF626x)
-// void UART2_RX_IRQHandler(void) __interrupt(ITC_IRQ_UART2_RX); /* UART2 RX */
-// void UART2_TX_IRQHandler(void) __interrupt(ITC_IRQ_UART2_TX); /* UART2 TX */
+ void UART2_RX_IRQHandler(void) __interrupt(ITC_IRQ_UART2_RX); /* UART2 RX */
+ void UART2_TX_IRQHandler(void) __interrupt(ITC_IRQ_UART2_TX); /* UART2 TX */
 #endif /* (STM8S105) || (STM8AF626x) */
 
 #if defined(STM8S207) || defined(STM8S007) || defined(STM8S208) || defined (STM8AF52Ax) || defined (STM8AF62Ax)

@@ -34,8 +34,11 @@ static void nothing(void) {
 }
 
 static volatile voidFuncPtr intFunc[EXTERNAL_NUM_INTERRUPTS] = {
+#if EXTERNAL_NUM_INTERRUPTS > 9
+    #warning There are more than 9 external interrupts. Some callbacks may not be initialized.
+    nothing,
+#endif
 #if EXTERNAL_NUM_INTERRUPTS > 8
-    #warning There are more than 8 external interrupts. Some callbacks may not be initialized.
     nothing,
 #endif
 #if EXTERNAL_NUM_INTERRUPTS > 7
@@ -301,6 +304,7 @@ IMPLEMENT_ISR(EXTI_PORTA_IRQHandler,		INT_PORTA) /* EXTI PORTA */
 IMPLEMENT_ISR(EXTI_PORTB_IRQHandler,		INT_PORTB) /* EXTI PORTB */
 IMPLEMENT_ISR(EXTI_PORTC_IRQHandler,		INT_PORTC) /* EXTI PORTC */
 IMPLEMENT_ISR(EXTI_PORTD_IRQHandler,		INT_PORTD) /* EXTI PORTD */
+IMPLEMENT_ISR(EXTI_PORTE_IRQHandler,		INT_PORTE) /* EXTI PORTE */
 IMPLEMENT_ISR(TIM1_CAP_COM_IRQHandler,		INT_TIM1_CAPCOM)
 //IMPLEMENT_ISR(TIM1_UPD_OVF_TRG_BRK_IRQHandler,	INT_TIM1_OVF)
 //IMPLEMENT_ISR(TIM2_CAP_COM_IRQHandler,		INT_TIM2_CAPCOM)

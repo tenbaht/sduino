@@ -44,6 +44,81 @@ static ring_buffer tx_buffer;// = { { 0 }, 0, 0};
 
 static volatile char	transmitting;//=0;
 
+// device dependent definitions ////////////////////////////////////////////
+
+#if defined(UART1)
+#warning "using uart1 for HardwareSerial"
+# define UARTx			UART1
+# define UARTx_RX_IRQHandler	UART1_RX_IRQHandler
+# define ITC_IRQ_UARTx_RX	ITC_IRQ_UART1_RX
+# define UARTx_TX_IRQHandler	UART1_TX_IRQHandler
+# define ITC_IRQ_UARTx_TX	ITC_IRQ_UART1_TX
+# define UARTx_CR2_TIEN		UART1_CR2_TIEN
+# define UARTx_CR2_RIEN		UART1_CR2_RIEN
+# define UARTx_CR2_TEN		UART1_CR2_TEN
+# define UARTx_CR2_REN		UART1_CR2_REN
+# define UARTx_FLAG_PE		UART1_FLAG_PE
+# define UARTx_FLAG_TC		UART1_FLAG_TC
+# define UARTx_DeInit		UART1_DeInit
+# ifdef USE_SPL
+#  define UARTx_ReceiveData8	UART1_ReceiveData8
+#  define UARTx_GetFlagStatus	UART1_GetFlagStatus
+#  define UARTx_ITConfig	UART1_ITConfig
+#  define UARTx_Init		UART1_Init
+#  define UARTx_IT_TXE		UART1_IT_TXE
+#  define UARTx_IT_RXNE		UART1_IT_RXNE
+#  define UARTx_WORDLENGTH_8D	UART1_WORDLENGTH_8D
+#  define UARTx_WORDLENGTH_9D	UART1_WORDLENGTH_9D
+#  define UARTx_STOPBITS_1	UART1_STOPBITS_1
+#  define UARTx_STOPBITS_2	UART1_STOPBITS_2
+#  define UARTx_SYNCMODE_CLOCK_DISABLE	UART1_SYNCMODE_CLOCK_DISABLE
+#  define UARTx_MODE_TXRX_ENABLE	UART1_MODE_TXRX_ENABLE
+#  define UARTx_PARITY_NO	UART1_PARITY_NO
+#  define UARTx_PARITY_EVEN	UART1_PARITY_EVEN
+#  define UARTx_PARITY_ODD	UART1_PARITY_ODD
+#  define UARTx_StopBits_TypeDef	UART1_StopBits_TypeDef
+#  define UARTx_Parity_TypeDef	UART1_Parity_TypeDef
+#  define UARTx_WordLength_TypeDef	UART1_WordLength_TypeDef
+# endif
+#elif defined(UART2)
+#warning "using uart2 for HardwareSerial"
+# define UARTx			UART2
+# define UARTx_RX_IRQHandler	UART2_RX_IRQHandler
+# define ITC_IRQ_UARTx_RX	ITC_IRQ_UART2_RX
+# define UARTx_TX_IRQHandler	UART2_TX_IRQHandler
+# define ITC_IRQ_UARTx_TX	ITC_IRQ_UART2_TX
+# define UARTx_CR2_TIEN		UART2_CR2_TIEN
+# define UARTx_CR2_RIEN		UART2_CR2_RIEN
+# define UARTx_CR2_TEN		UART2_CR2_TEN
+# define UARTx_CR2_REN		UART2_CR2_REN
+# define UARTx_FLAG_PE		UART2_FLAG_PE
+# define UARTx_FLAG_TC		UART2_FLAG_TC
+# define UARTx_DeInit		UART2_DeInit
+# ifdef USE_SPL
+#  define UARTx_ReceiveData8	UART2_ReceiveData8
+#  define UARTx_GetFlagStatus	UART2_GetFlagStatus
+#  define UARTx_ITConfig	UART2_ITConfig
+#  define UARTx_Init		UART2_Init
+#  define UARTx_IT_TXE		UART2_IT_TXE
+#  define UARTx_IT_RXNE		UART2_IT_RXNE
+#  define UARTx_WORDLENGTH_8D	UART2_WORDLENGTH_8D
+#  define UARTx_WORDLENGTH_9D	UART2_WORDLENGTH_9D
+#  define UARTx_STOPBITS_1	UART2_STOPBITS_1
+#  define UARTx_STOPBITS_2	UART2_STOPBITS_2
+#  define UARTx_SYNCMODE_CLOCK_DISABLE	UART2_SYNCMODE_CLOCK_DISABLE
+#  define UARTx_MODE_TXRX_ENABLE	UART2_MODE_TXRX_ENABLE
+#  define UARTx_PARITY_NO	UART2_PARITY_NO
+#  define UARTx_PARITY_EVEN	UART2_PARITY_EVEN
+#  define UARTx_PARITY_ODD	UART2_PARITY_ODD
+#  define UARTx_StopBits_TypeDef	UART2_StopBits_TypeDef
+#  define UARTx_Parity_TypeDef	UART2_Parity_TypeDef
+#  define UARTx_WordLength_TypeDef	UART2_WordLength_TypeDef
+# endif
+#else
+# error "no UART definition found."
+#endif
+
+
 // private functions  //////////////////////////////////////////////////////////
 
 static void store_char(unsigned char c, ring_buffer *buffer)
@@ -63,18 +138,18 @@ static void store_char(unsigned char c, ring_buffer *buffer)
 
 // Interrupt handler ///////////////////////////////////////////////////////////
 
-void UART1_RX_IRQHandler(void) __interrupt(ITC_IRQ_UART1_RX) /* UART1 RX */
+void UARTx_RX_IRQHandler(void) __interrupt(ITC_IRQ_UARTx_RX) /* UART1/2 RX */
 {
     unsigned char c;
 
 #ifdef USE_SPL
-    c = UART1_ReceiveData8();
+    c = UARTx_ReceiveData8();
     // check for parity error
-    if (!UART1_GetFlagStatus(UART1_FLAG_PE)) {
+    if (!UARTx_GetFlagStatus(UARTx_FLAG_PE)) {
 #else
-    c = UART1->DR;
+    c = UARTx->DR;
     // check for parity error
-    if (!(UART1->SR & UART1_FLAG_PE)) {
+    if (!(UARTx->SR & UARTx_FLAG_PE)) {
 #endif
         // no parity error, so store the data
         store_char(c, &rx_buffer);
@@ -82,33 +157,33 @@ void UART1_RX_IRQHandler(void) __interrupt(ITC_IRQ_UART1_RX) /* UART1 RX */
 }
 
 
-void UART1_TX_IRQHandler(void) __interrupt(ITC_IRQ_UART1_TX) /* UART1 TX */
+void UARTx_TX_IRQHandler(void) __interrupt(ITC_IRQ_UARTx_TX) /* UART1/2 TX */
 {
 #ifdef USE_SPL
   if (tx_buffer.head == tx_buffer.tail) {
 	// Buffer empty, so disable interrupts
         transmitting = 0;
-        UART1_ITConfig(UART1_IT_TXE, DISABLE);
+        UARTx_ITConfig(UARTx_IT_TXE, DISABLE);
   }
   else {
     // There is more data in the output buffer. Send the next byte
     unsigned char c = tx_buffer.buffer[tx_buffer.tail];
     tx_buffer.tail = (tx_buffer.tail + 1) % SERIAL_BUFFER_SIZE;
 	
-    UART1_SendData8(c);
+    UARTx_SendData8(c);
   }
 #else
   if (tx_buffer.head == tx_buffer.tail) {
 	// Buffer empty, so disable interrupts
         transmitting = 0;
-	UART1->CR2 &= ~UART1_CR2_TIEN;
+	UARTx->CR2 &= ~UARTx_CR2_TIEN;
   }
   else {
     // There is more data in the output buffer. Send the next byte
     unsigned char c = tx_buffer.buffer[tx_buffer.tail];
     tx_buffer.tail = (tx_buffer.tail + 1) % SERIAL_BUFFER_SIZE;
 
-    UART1->DR = c;
+    UARTx->DR = c;
   }
 #endif
 }
@@ -119,27 +194,27 @@ void HardwareSerial_begin(unsigned long baud)
 {
 #ifdef USE_SPL
   //set the data bits, parity, and stop bits
-  UART1_Init(baud,
-      UART1_WORDLENGTH_8D, UART1_STOPBITS_1, UART1_PARITY_NO,
-      UART1_SYNCMODE_CLOCK_DISABLE, UART1_MODE_TXRX_ENABLE);
+  UARTx_Init(baud,
+      UARTx_WORDLENGTH_8D, UARTx_STOPBITS_1, UARTx_PARITY_NO,
+      UARTx_SYNCMODE_CLOCK_DISABLE, UARTx_MODE_TXRX_ENABLE);
 
-  UART1_ITConfig(UART1_IT_RXNE, ENABLE);	// enable RXNE interrupt
+  UARTx_ITConfig(UARTx_IT_RXNE, ENABLE);	// enable RXNE interrupt
 #else
 	uint16_t divider;
 
-	/* Set the UART1 BaudRates in BRR1 and BRR2 registers according to UART1_BaudRate value */
+	/* Set the UARTx BaudRates in BRR1 and BRR2 registers according to UARTx_BaudRate value */
 	divider = (uint16_t) ((uint32_t)CLK_GetClockFreq() / (uint32_t) baud);
 
-	UART1->BRR2 = divider & 0x0f;
+	UARTx->BRR2 = divider & 0x0f;
 	divider >>= 4;
-	UART1->BRR1 = divider & 0xff;
+	UARTx->BRR1 = divider & 0xff;
 	divider >> 4;
-	UART1->BRR2 |= (uint8_t) divider & 0xf0;
+	UARTx->BRR2 |= (uint8_t) divider & 0xf0;
 
-	UART1->CR1 = 0;			// 8 Bit, no parity
-	UART1->CR3 = 0;			// one stop bit
+	UARTx->CR1 = 0;			// 8 Bit, no parity
+	UARTx->CR3 = 0;			// one stop bit
 	// enable RXNE interrupt, enable transmitter, enable receiver
-	UART1->CR2 = UART1_CR2_RIEN | UART1_CR2_TEN | UART1_CR2_REN;
+	UARTx->CR2 = UARTx_CR2_RIEN | UARTx_CR2_TEN | UARTx_CR2_REN;
 #endif
 }
 
@@ -147,38 +222,38 @@ void HardwareSerial_begin(unsigned long baud)
 void HardwareSerial_begin_config(unsigned long baud, uint8_t config)
 {
 #ifdef USE_SPL
-  UART1_StopBits_TypeDef	stopbits;
-  UART1_Parity_TypeDef		parity;
-  UART1_WordLength_TypeDef	wordlength;
+  UARTx_StopBits_TypeDef	stopbits;
+  UARTx_Parity_TypeDef		parity;
+  UARTx_WordLength_TypeDef	wordlength;
 
-  wordlength = (config & 0x10) ? UART1_WORDLENGTH_9D : UART1_WORDLENGTH_8D;
-  stopbits   = (config & 0x20) ? UART1_STOPBITS_2   : UART1_STOPBITS_1;
-  parity=UART1_PARITY_NO;	// default
+  wordlength = (config & 0x10) ? UARTx_WORDLENGTH_9D : UARTx_WORDLENGTH_8D;
+  stopbits   = (config & 0x20) ? UARTx_STOPBITS_2   : UARTx_STOPBITS_1;
+  parity=UARTx_PARITY_NO;	// default
   config &= 0x6;
-  if      (config == 0x4) parity=UART1_PARITY_EVEN;
-  else if (config == 0x6) parity=UART1_PARITY_ODD;
+  if      (config == 0x4) parity=UARTx_PARITY_EVEN;
+  else if (config == 0x6) parity=UARTx_PARITY_ODD;
   
   //set the data bits, parity, and stop bits
-  UART1_Init(baud, wordlength, stopbits, parity, 
-      UART1_SYNCMODE_CLOCK_DISABLE, UART1_MODE_TXRX_ENABLE);
+  UARTx_Init(baud, wordlength, stopbits, parity, 
+      UARTx_SYNCMODE_CLOCK_DISABLE, UARTx_MODE_TXRX_ENABLE);
 
-  UART1_ITConfig(UART1_IT_RXNE, ENABLE);	// enable RXNE interrupt
+  UARTx_ITConfig(UARTx_IT_RXNE, ENABLE);	// enable RXNE interrupt
 #else
 	uint16_t divider;
 
-	/* Set the UART1 BaudRates in BRR1 and BRR2 registers according to UART1_BaudRate value */
+	/* Set the UARTx BaudRates in BRR1 and BRR2 registers according to UARTx_BaudRate value */
 	divider = (uint16_t) ((uint32_t)CLK_GetClockFreq() / (uint32_t) baud);
 
-	UART1->BRR2 = divider & 0x0f;
+	UARTx->BRR2 = divider & 0x0f;
 	divider >>= 4;
-	UART1->BRR1 = divider & 0xff;
+	UARTx->BRR1 = divider & 0xff;
 	divider >> 4;
-	UART1->BRR2 |= (uint8_t) divider & 0xf0;
+	UARTx->BRR2 |= (uint8_t) divider & 0xf0;
 
-	UART1->CR1 = config & (MASK_DATABITS | MASK_PARITY);
-	UART1->CR3 = config & (MASK_STOPBITS);
+	UARTx->CR1 = config & (MASK_DATABITS | MASK_PARITY);
+	UARTx->CR3 = config & (MASK_STOPBITS);
 	// enable RXNE interrupt, enable transmitter, enable receiver
-	UART1->CR2 = UART1_CR2_RIEN | UART1_CR2_TEN | UART1_CR2_REN;
+	UARTx->CR2 = UARTx_CR2_RIEN | UARTx_CR2_TEN | UARTx_CR2_REN;
 #endif
 }
 
@@ -189,7 +264,7 @@ void HardwareSerial_end(void)
   while (tx_buffer.head != tx_buffer.tail)
     ;
 
-  UART1_DeInit();
+  UARTx_DeInit();
   
   // clear any received data
   rx_buffer.head = rx_buffer.tail;
@@ -227,11 +302,11 @@ void HardwareSerial_flush(void)
   // EMPTY && SENT
 
 //  while (transmitting && ! (*_ucsra & _BV(TXC0)));
-//  while (transmitting && ! (UART1_SR & UART1_SR_TC));
+//  while (transmitting && ! (UARTx_SR & UARTx_SR_TC));
 #ifdef USE_SPL
-  while (transmitting && ! UART1_GetFlagStatus(UART1_FLAG_TC));
+  while (transmitting && ! UARTx_GetFlagStatus(UARTx_FLAG_TC));
 #else
-  while (transmitting && !(UART1->SR & UART1_FLAG_TC));
+  while (transmitting && !(UARTx->SR & UARTx_FLAG_TC));
 #endif
   transmitting = 0;
 }
@@ -250,9 +325,9 @@ size_t HardwareSerial_write(uint8_t c)
   tx_buffer.head = i;
 
 #ifdef USE_SPL
-  UART1_ITConfig(UART1_IT_TXE, ENABLE);		// enable TXE interrupt
+  UARTx_ITConfig(UARTx_IT_TXE, ENABLE);		// enable TXE interrupt
 #else
-  UART1->CR2 |= UART1_CR2_TIEN;			// enable TXE interrupt
+  UARTx->CR2 |= UARTx_CR2_TIEN;			// enable TXE interrupt
 #endif
   transmitting = 1;
   //FIXME: unklar, ob das auf dem STM8 wirklich nötig ist.
