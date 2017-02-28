@@ -396,8 +396,10 @@ const uint8_t PROGMEM digital_pin_to_timer_PGM[] = {
 	NOT_ON_TIMER,
 };
 
-
 #endif
+
+#define NEED_TIMER_11_12
+#define NEED_TIMER_31_32
 
 // These serial port names are intended to allow libraries and architecture-neutral
 // sketches to automatically default to the correct port name for a particular type

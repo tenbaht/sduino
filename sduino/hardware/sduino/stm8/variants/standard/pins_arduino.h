@@ -285,7 +285,6 @@ const uint8_t PROGMEM digital_pin_to_timer_PGM[] = {
 	NOT_ON_TIMER,
 };
 
-
 #define NO_ANALOG	0xff
 
 const uint8_t digitalPinToAnalogChannelMap[] = {
@@ -302,6 +301,11 @@ const uint8_t digitalPinToAnalogChannelMap[] = {
 };
 
 #endif /* ARDUINO_MAIN */
+
+#ifdef SUPPORT_ALTERNATE_MAPPINGS
+# define NEED_TIMER_11_12
+#endif
+
 
 // These serial port names are intended to allow libraries and architecture-neutral
 // sketches to automatically default to the correct port name for a particular type

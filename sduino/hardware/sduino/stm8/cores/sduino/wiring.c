@@ -610,6 +610,39 @@ void init()
 #endif
 #endif // #ifdef (TIM2)
 
+#ifdef TIM3
+	TIM3_DeInit();
+	TIM3_TimeBaseInit(TIM3_PRESCALER_64, 255);
+
+#ifdef USE_SPL
+	TIM3_OC1Init(
+		TIM3_OCMODE_PWM1,
+		TIM3_OUTPUTSTATE_DISABLE,
+		0,
+		TIM3_OCPOLARITY_HIGH
+	);
+
+	TIM3_OC2Init(
+		TIM3_OCMODE_PWM1,
+		TIM3_OUTPUTSTATE_DISABLE,
+		0,
+		TIM3_OCPOLARITY_HIGH
+	);
+
+	TIM3_OC1PreloadConfig(ENABLE); // TIM3->CCMR1 |= (uint8_t)TIM3_CCMR_OCxPE;
+	TIM3_OC2PreloadConfig(ENABLE); // TIM3->CCMR2 |= (uint8_t)TIM3_CCMR_OCxPE;
+	TIM3_Cmd(ENABLE);	// TIM3->CR1 |= (uint8_t)TIM3_CR1_CEN;
+#else
+	TIM3->CCER1 = 0;	// channel 1 and 2 disabled
+//	TIM3->CCER2 = 0;	// channel 3 disabled
+
+	TIM3->CCMR1 = TIM3_OCMODE_PWM1 | TIM3_CCMR_OCxPE;
+	TIM3->CCMR2 = TIM3_OCMODE_PWM1 | TIM3_CCMR_OCxPE;
+
+	TIM3->CR1 = TIM3_CR1_CEN;	// TIM1_Cmd(ENABLE);
+#endif
+#endif // #ifdef (TIM3)
+
 	/* De-Init ADC peripheral, sets prescaler to 2 */
 	ADC1_DeInit();
 	// optional:

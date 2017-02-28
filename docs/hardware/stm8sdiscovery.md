@@ -10,9 +10,12 @@ At least Blink.c is known to work already.
 STM8S105C6T6 microcontroller, 32 KB Flash, 2 KB RAM, 1 KB EEPROM 
 
   - LED on PD0, active low.
-  - Touch button on PC1, PC2.
+  - Touch button on PC1, PC2, PC3
   - external crystal 16MHz on PA1/PA2
 
+The touch pins PC1 and PC3 (Arduino-Pin 24 and 26) are not connected to the
+pin header on the board. To use them as I/O-pins you need to modify some
+solder bridges (See STM8S-Discovery user manual).
 
 
 ## SWIM connector
