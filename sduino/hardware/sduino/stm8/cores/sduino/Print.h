@@ -69,6 +69,8 @@ size_t Print_println(writefunc_p writefunc);
 size_t Print_println_s(writefunc_p writefunc, const char *str);
 size_t Print_println_u(writefunc_p writefunc, unsigned long n);
 size_t Print_println_i(writefunc_p writefunc, long n);
+size_t Print_println_ub(writefunc_p writefunc, unsigned long n, uint8_t base);
+size_t Print_println_ib(writefunc_p writefunc, long n, uint8_t base);
 size_t Print_printlnFloat(writefunc_p writefunc, double number, uint8_t digits);
 
 

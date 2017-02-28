@@ -110,6 +110,22 @@ size_t Print_println_i(writefunc_p writefunc, long n)
 	return r + Print_println(writefunc);
 }
 
+size_t Print_println_ub(writefunc_p writefunc, unsigned long n, uint8_t base)
+{
+	size_t r;
+
+	r = printNumber(writefunc, n,base);
+	return r + Print_println(writefunc);
+}
+
+size_t Print_println_ib(writefunc_p writefunc, long n, uint8_t base)
+{
+	size_t r;
+
+	r = printInt(writefunc, n,base);
+	return r + Print_println(writefunc);
+}
+
 
 // (not so) Private Methods /////////////////////////////////////////////////////////////
 

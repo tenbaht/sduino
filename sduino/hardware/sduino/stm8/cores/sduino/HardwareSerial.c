@@ -43,6 +43,7 @@ static ring_buffer rx_buffer;// = { { 0 }, 0, 0};
 static ring_buffer tx_buffer;// = { { 0 }, 0, 0};
 
 static volatile char	transmitting;//=0;
+static unsigned char initialized;//=0 internal status. Returned on HardwareSerial()
 
 // device dependent definitions ////////////////////////////////////////////
 
@@ -190,6 +191,12 @@ void UARTx_TX_IRQHandler(void) __interrupt(ITC_IRQ_UARTx_TX) /* UART1/2 TX */
 
 // Public Methods //////////////////////////////////////////////////////////////
 
+uint8_t HardwareSerial(void)
+{
+    return initialized;
+}
+
+
 void HardwareSerial_begin(unsigned long baud)
 {
 #ifdef USE_SPL
@@ -216,6 +223,7 @@ void HardwareSerial_begin(unsigned long baud)
 	// enable RXNE interrupt, enable transmitter, enable receiver
 	UARTx->CR2 = UARTx_CR2_RIEN | UARTx_CR2_TEN | UARTx_CR2_REN;
 #endif
+  initialized = 1;
 }
 
 
@@ -255,6 +263,7 @@ void HardwareSerial_begin_config(unsigned long baud, uint8_t config)
 	// enable RXNE interrupt, enable transmitter, enable receiver
 	UARTx->CR2 = UARTx_CR2_RIEN | UARTx_CR2_TEN | UARTx_CR2_REN;
 #endif
+  initialized = 1;
 }
 
 
@@ -268,6 +277,7 @@ void HardwareSerial_end(void)
   
   // clear any received data
   rx_buffer.head = rx_buffer.tail;
+  initialized = 0;
 }
 
 int HardwareSerial_available(void)

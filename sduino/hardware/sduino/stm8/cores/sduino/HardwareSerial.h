@@ -29,7 +29,7 @@
 #define _HARDWARE_SERIAL_H_
 
 #include <stdlib.h>
-
+#include <Print.h>
 
 // Define config for Serial.begin(baud, config);
 /* coding of the bit field: 00sw .pp.
@@ -59,6 +59,7 @@
 
 // Public Methods //////////////////////////////////////////////////////////////
 
+uint8_t HardwareSerial(void);
 void HardwareSerial_begin(unsigned long baud);
 void HardwareSerial_begin_config(unsigned long baud, uint8_t config);
 
@@ -72,6 +73,7 @@ void HardwareSerial_end(void);
 
 // Alias Definitions for a more Arduino-like look ////////////////////////////
 
+#define Serial			HardwareSerial()
 #define Serial_begin		HardwareSerial_begin
 #define Serial_begin_config	HardwareSerial_begin_config
 #define Serial_available	HardwareSerial_available
@@ -102,6 +104,8 @@ void HardwareSerial_end(void);
 #define Serial_println_s(S)	Print_println_s(HardwareSerial_write,S)
 #define Serial_println_u(U)	Print_println_u(HardwareSerial_write,U)
 #define Serial_println_i(I)	Print_println_i(HardwareSerial_write,I)
+#define Serial_println_ib(I,B)	Print_println_ib(HardwareSerial_write,I,B)
+#define Serial_println_ub(U,B)	Print_println_ub(HardwareSerial_write,U,B)
 #define Serial_println_f(F)	 Print_printlnFloat(HardwareSerial_write,F,2)
 #define Serial_printlnFloat(F,D) Print_printlnFloat(HardwareSerial_write,F,D)
 
