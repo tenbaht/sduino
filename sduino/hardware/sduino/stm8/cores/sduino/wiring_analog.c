@@ -27,20 +27,6 @@
 #include "wiring_private.h"
 #include "pins_arduino.h"
 
-const uint8_t digitalPinToAnalogChannelMap[] = {
-	NO_ANALOG,	// PC3, 5
-	0,		// PC4, 6, Ain2 = A0
-	NO_ANALOG,	// PC5, 7
-	NO_ANALOG,	// PC6, 8
-	NO_ANALOG,	// PC7, 9
-	NO_ANALOG,	// PD1, 10
-	1,		// PD2, 11, Ain3 = A1
-	2,		// PD3, 12, Ain4 = A2
-	NO_ANALOG,	// PD4, 13
-	3,		// PD5, 14, Ain5 = A3
-	4		// PD6, 15, Ain6 = A4
-};
-
 /*
 uint8_t analog_reference = DEFAULT;
 
@@ -57,20 +43,26 @@ int analogRead(uint8_t pin)
 {
 	uint8_t low, high;
 
-	if (pin>=NUM_DIGITAL_PINS) return 0;	// illegal pin number
-	if (pin>=NUM_ANALOG_INPUTS)
-		pin = digitalPinToAnalogChannelMap[pin-NUM_ANALOG_INPUTS];
-	if (pin>=NUM_ANALOG_INPUTS) return 0;	// illegal pin number
+#if defined(analogPinToChannel)
+	pin = analogPinToChannel(pin);
+#else
+	// default case: use the last (NUM_ANALOG_INPUTS) pins for analog
+	if (pin >= NUM_ANALOG_INPUTS) {
+		pin -= NUM_DIGITAL_INPUTS - NUM_ANALOG_INPUTS;
+	}
+#endif
+	// note there is no range check anymore
+
 #ifdef USE_SPL
 	// using spl functions:
-	ADC1_ConversionConfig(ADC1_CONVERSIONMODE_SINGLE, pin+2, ADC1_ALIGN_RIGHT);
+	ADC1_ConversionConfig(ADC1_CONVERSIONMODE_SINGLE, pin & 15, ADC1_ALIGN_RIGHT);
 	ADC1_PrescalerConfig(ADC1_PRESSEL_FCPU_D18);
 	ADC1_ExternalTriggerConfig(ADC1_EXTTRIG_TIM, DISABLE);
-	ADC1_SchmittTriggerConfig(pin+2, DISABLE);
+	ADC1_SchmittTriggerConfig(pin, DISABLE);
 #else
 	// direct register access:
 	// select channel
-	ADC1->CSR = pin+2;	// arduino channel 0 is Ain2 on STM8S103
+	ADC1->CSR = pin & 15;
 	bitSet(ADC1->CR2, 3);	// right align
 #endif
 	// first write turns on the ADC

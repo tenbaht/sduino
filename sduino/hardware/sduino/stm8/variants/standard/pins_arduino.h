@@ -140,25 +140,13 @@ static const uint8_t A4 = PIN_A4;
 #define	A3	PIN_A3
 #define	A4	PIN_A4
 
-#define NO_ANALOG	0xff
+// Distinguish between ADC channel number and digital pin number.
+// Note that for value 6 both ranges overlap and it is used a pin number.
+//
+// values 0..5: ADC channel number, no conversion
+// values 6..15: digital pin numbers, convert to ADC channel number
+#define analogPinToChannel(P)	( (P)<6 ? (P) : digitalPinToAnalogChannelMap[(P-6)] )
 extern const uint8_t digitalPinToAnalogChannelMap[];
-//FIXME: the actual definition is now in wiring_analog.c,
-// but it really should be here
-/*
- = {
-	NO_ANALOG,	// PC3, 5
-	0,		// PC4, 6, Ain2 = A0
-	NO_ANALOG,	// PC5, 7
-	NO_ANALOG,	// PC6, 8
-	NO_ANALOG,	// PC7, 9
-	NO_ANALOG,	// PD1, 10
-	1,		// PD2, 11, Ain3 = A1
-	2,		// PD3, 12, Ain4 = A2
-	NO_ANALOG,	// PD4, 13
-	3,		// PD5, 14, Ain5 = A3
-	4		// PD6, 15, Ain6 = A4
-};
-*/
 
 /*FIXME
 #define digitalPinToPCICR(p)    (((p) >= 0 && (p) <= 21) ? (&PCICR) : ((uint8_t *)0))
@@ -298,7 +286,22 @@ const uint8_t PROGMEM digital_pin_to_timer_PGM[] = {
 };
 
 
-#endif
+#define NO_ANALOG	0xff
+
+const uint8_t digitalPinToAnalogChannelMap[] = {
+	2,		// A0	D6	PC4	Ain2
+	NO_ANALOG,	//	D7	PC5
+	NO_ANALOG,	//	D8	PC6
+	NO_ANALOG,	//	D9	PC7
+	NO_ANALOG,	//	D10	PD1
+	3,		// A1	D11	PD2	Ain3
+	4,		// A2	D12	PD3	Ain4
+	NO_ANALOG,	//	D13	PD4
+	5,		// A3	D14	PD5	Ain5
+	6		// A4	D15	PD6	Ain6
+};
+
+#endif /* ARDUINO_MAIN */
 
 // These serial port names are intended to allow libraries and architecture-neutral
 // sketches to automatically default to the correct port name for a particular type

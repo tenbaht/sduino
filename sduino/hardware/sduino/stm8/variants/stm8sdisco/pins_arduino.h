@@ -162,25 +162,17 @@ static const uint8_t A4 = PIN_A4;
 #define	A8	PIN_A8
 #define	A9	PIN_A9
 
-#define NO_ANALOG	0xff
-extern const uint8_t digitalPinToAnalogChannelMap[];
-//FIXME: the actual definition is now in wiring_analog.c,
-// but it really should be here
-/*
- = {
-	NO_ANALOG,	// PC3, 5
-	0,		// PC4, 6, Ain2 = A0
-	NO_ANALOG,	// PC5, 7
-	NO_ANALOG,	// PC6, 8
-	NO_ANALOG,	// PC7, 9
-	NO_ANALOG,	// PD1, 10
-	1,		// PD2, 11, Ain3 = A1
-	2,		// PD3, 12, Ain4 = A2
-	NO_ANALOG,	// PD4, 13
-	3,		// PD5, 14, Ain5 = A3
-	4		// PD6, 15, Ain6 = A4
-};
-*/
+//#define NO_ANALOG	0xff
+
+// map the logical pin numbers to the physical ADC channels:
+// pin 28,29  -> channel 9,8 (reverse order!)
+// pin 30..38 -> channel 0-7
+// smaller numbers are not modified but used as channel numbers directly.
+#define analogPinToChannel(P) ( (P)>=30 ? (P)-30 : ( \
+				(P)>=28 ? 37-(P) : \
+					  (P) \
+				))
+
 
 /*FIXME
 #define digitalPinToPCICR(p)    (((p) >= 0 && (p) <= 21) ? (&PCICR) : ((uint8_t *)0))
@@ -219,7 +211,7 @@ extern const uint8_t digitalPinToAnalogChannelMap[];
 //  1  PA5  |11 12| PA6   0		26~ PC1  | 2 *1| PE5  27 SS
 //          +-----+				 +-----+
 //
-//			     A9  A7  A5  A3  A1
+//			     A8  A6  A4  A2  A0
 //		 Pin	  -  36  34  32  30  28
 //		 Port	 VssAPB6 PB4 PB2 PB0 PE6
 //			+-----------------------+
@@ -228,7 +220,7 @@ extern const uint8_t digitalPinToAnalogChannelMap[];
 //			+--------       --------+
 //		 Port	 VddAPB7 PB5 PB3 PB1 PE7
 //		 Pin	  -  37  35  33  31  29
-//			     A8  A6  A4  A2  A0
+//			     A9  A7  A5  A3  A1
 
 // these arrays map port names (e.g. port B) to the
 // appropriate addresses for various functions (e.g. reading
