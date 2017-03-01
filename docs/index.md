@@ -153,8 +153,7 @@ all programs should run on those chinese Wifi-enabled gems as well.
 
 The [STM8S105Discovery-boards](hardware/stm8disco.md) are very similar to an
 Arduino Uno with an ATmega328 CPU. The support for the used STM8S105 CPU is
-still very fresh and not thoroughly tested but it should work now. At least
-Blink.c is known to be fine already.
+still quite fresh but it should work now.
 
 
 
@@ -166,13 +165,17 @@ communication protocol. But this is not a problem, as these tools are are
 easily available and unbeliveably cheap (well under $3 on aliexpress).
 
 There are to versions of the ST-Link V2 compatible flash tool available: One
-in a green plastic housing and one in a USB-Drive-like (pink) metal housing.
-Both work equally well, but they use a different pinout.
+made by Baite in a green plastic housing and one in a USB-Drive-like (often
+pink) metal housing. Both work well, but they use a different pinout.
 
-Both flash tools support both, the SWIM protocol for STM8 CPUs and the SWD
-protocol for the STM32 CPUs.
+Both flash tools support the SWIM protocol for STM8 CPUs and the SWD
+protocol for the STM32 CPUs. The programmer from Baite additionally supports
+JTAG and is superior to the more common one in the metal housing. More
+information on the hardware and the pinouts:
+https://wiki.cuvoodoo.info/doku.php?id=jtag
 
-Pinout of Chinese ST-Link V2-clone with green plasic housing:
+Pinout of Chinese ST-Link V2-clone made by Baite with green plasic housing
+(supports SWIM, SWD and JTAG):
 
                 +-----+
         T_JRST  | 1  2|	3V3
@@ -182,7 +185,8 @@ Pinout of Chinese ST-Link V2-clone with green plasic housing:
         SWIM RST| 9 10|	T_JTDI
                 +-----+
 
-Pinout of Chinese ST-Link V2-clone with metal housing:
+Pinout of Chinese ST-Link V2-clone with metal housing (supports SWIM and
+SWD):
 
                 +-----+
         RST     | 1  2|	SWDIO
@@ -205,15 +209,15 @@ For Linux: required lines in /etc/udev/rules.d/99-stlink.rules:
 	ATTR{idVendor}=="0483", ATTR{idProduct}=="3748", MODE="0666", GROUP="plugdev"
 
 
-The pinout of the SWIM connector P3 on my board fits the pinout of the flash
-tool in the metal housing perfectly:
+The pinout of the SWIM connector P3 on my STM8S103 breakout board fits the
+pinout of the flash tool in the metal housing perfectly:
 
-| STM8 board	| SWIM connector P3
-| ----------	| -----------------
-| 1		| 3V3
-| 2		| SWIM (PD1)
-| 3		| GND
-| 4		| NRST
+| Signal | SWIM connector P3 | Baite ST-Link | Metal ST-Link
+| ------ | :---------------: | :-----------: | :-----------:
+| 3V3	 | 1		     |	2	     |	7
+| SWIM	 | 2		     |	5	     |	5
+| GND	 | 3		     |	7	     |	3
+| NRST	 | 4		     |	9	     |	1
 
 
 The Discovery boards made by ST all feature a ST-Link interface as well, but
@@ -358,7 +362,8 @@ arithmetics whenever possible.
 `ShiftOut()`  
 WMath: `map()`  
 HardwareSerial  
-Print (without float)  
+Print  
+`pulseInLong()`  
 [SPI](docs/SPI.md):
   working, no interrupt support  
 [LiquidCrystal](api/LiquidCrystal.md):
@@ -387,7 +392,6 @@ Wire/I2C
 `tone()`  
 `noTone()`  
 `pulseIn()`  
-`pulseInLong()`  
 module WCharacter  
 module WString  
 
@@ -466,6 +470,9 @@ Many examples and presentations about the STM8S:
 https://github.com/VincentYChen/STM8teach  
 It contains the SPL examples from ST, the most useful resource on the STM8:  
 https://github.com/VincentYChen/STM8teach/tree/master/code/Project/STM8S_StdPeriph_Examples
+
+Hardware and pinouts of several ST-Link compatible flash tools:
+https://wiki.cuvoodoo.info/doku.php?id=jtag
 
 Using the ADC:  
 http://blog.mark-stevens.co.uk/2012/09/single-scan-adc-on-the-stm8s/  
