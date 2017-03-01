@@ -27,6 +27,8 @@
 #include "wiring_private.h"
 #include "pins_arduino.h"
 
+
+#ifndef NO_ANALOG_IN
 /*
 uint8_t analog_reference = DEFAULT;
 
@@ -87,8 +89,10 @@ int analogRead(uint8_t pin)
 	// combine the two bytes
 	return (high << 8) | low;
 }
+#endif //ifndef NO_ANALOG_IN
 
 
+#ifndef NO_ANALOG_OUT
 // Right now, PWM output only works on the pins with
 // hardware support.  These are defined in the appropriate
 // pins_*.c file.  For the rest of the pins, we default
@@ -300,4 +304,4 @@ void analogWrite(uint8_t pin, int val)
 		}
 	}
 }
-
+#endif // ifndef NO_ANALOG_OUT

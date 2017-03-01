@@ -161,6 +161,28 @@ timer2: PWM for PA3, PD3, PD4 or PC5 (mutual exclusive)
 timer4: millis()  
 
 
+### Leaving out unused parts
+
+Some functions of the core Arduino system can be left out on compilation to
+save code space. This is done by compiler flags that can be defined in the
+Makefile:
+
+```make
+BOARD_TAG = stm8sblue
+CFLAGS = -DNO_SERIAL -DNO_ANALOG_IN -DNO_ANALOG_OUT
+
+include ../../../sduino.mk
+```
+
+These flags are supported:
+
+Flag		| Bytes saved	| Functions lost
+-----		| -------:	| ---------
+NO_SERIAL	| 765		| all serial communication
+NO_ANALOG_OUT	| 406		| analogWrite()
+NO_ANALOG_IN	| 56		| analogRead()
+
+
 
 ### Other modifications
 

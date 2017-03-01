@@ -31,20 +31,6 @@
 #include "HardwareSerial.h"
 
 
-#define SERIAL_BUFFER_SIZE 16
-typedef struct ring_buffer
-{
-  unsigned char buffer[SERIAL_BUFFER_SIZE];
-  volatile unsigned int head;
-  volatile unsigned int tail;
-} ring_buffer;
-
-static ring_buffer rx_buffer;// = { { 0 }, 0, 0};
-static ring_buffer tx_buffer;// = { { 0 }, 0, 0};
-
-static volatile char	transmitting;//=0;
-static unsigned char initialized;//=0 internal status. Returned on HardwareSerial()
-
 // device dependent definitions ////////////////////////////////////////////
 
 #if defined(UART1)
@@ -120,7 +106,34 @@ static unsigned char initialized;//=0 internal status. Returned on HardwareSeria
 #endif
 
 
-// private functions  //////////////////////////////////////////////////////////
+#ifdef NO_SERIAL
+/*
+ * empty default IRQ functions to make the linker happy if the
+ * respective module is not to linked.
+ */
+
+void UARTx_TX_IRQHandler(void) __interrupt(ITC_IRQ_UARTx_TX){}
+void UARTx_RX_IRQHandler(void) __interrupt(ITC_IRQ_UARTx_RX){}
+#else // ifdef NO_SERIAL
+
+
+// private data //////////////////////////////////////////////////////////////
+
+#define SERIAL_BUFFER_SIZE 16
+typedef struct ring_buffer
+{
+  unsigned char buffer[SERIAL_BUFFER_SIZE];
+  volatile unsigned int head;
+  volatile unsigned int tail;
+} ring_buffer;
+
+static ring_buffer rx_buffer;// = { { 0 }, 0, 0};
+static ring_buffer tx_buffer;// = { { 0 }, 0, 0};
+
+static volatile char	transmitting;//=0;
+static unsigned char initialized;//=0 internal status. Returned on HardwareSerial()
+
+// private functions  ////////////////////////////////////////////////////////
 
 static void store_char(unsigned char c, ring_buffer *buffer)
 //inline void store_char(unsigned char c, ring_buffer *buffer)
@@ -347,3 +360,5 @@ size_t HardwareSerial_write(uint8_t c)
   
   return 1;
 }
+
+#endif // ifdef NO_SERIAL

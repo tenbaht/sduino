@@ -501,7 +501,7 @@ void init()
 	// this is better for motors as it ensures an even waveform
 	// note, however, that fast pwm mode can achieve a frequency of up
 	// 8 MHz (with a 16 MHz clock) at 50% duty cycle
-
+#ifndef NO_ANALOG_OUT
 	TIM1_DeInit();	// keep this
 	// actual prescaler is (n+1)
 	TIM1_TimeBaseInit(63, TIM1_COUNTERMODE_UP, 255, 0);	// keep this
@@ -642,7 +642,9 @@ void init()
 	TIM3->CR1 = TIM3_CR1_CEN;	// TIM1_Cmd(ENABLE);
 #endif
 #endif // #ifdef (TIM3)
+#endif // ifndef NO_ANALOG_OUT
 
+#ifndef NO_ANALOG_IN
 	/* De-Init ADC peripheral, sets prescaler to 2 */
 	ADC1_DeInit();
 	// optional:
@@ -666,6 +668,7 @@ void init()
 //	#else // minimum prescaler is 2, already set by ADC1_DeInit();
 //		ADC1->CR1 = 0 <<4;
 	#endif
+#endif // ifndef NO_ANALOG_IN
 
 	// this needs to be called before setup() or some functions won't
 	// work there
