@@ -249,16 +249,23 @@ void alternateFunction(uint8_t val);
 #define PL 12
 #endif
 
-#define NOT_ON_TIMER 0
-#define TIMER11 1
-#define TIMER12 2
-#define TIMER13 3
-#define TIMER14 4
-#define TIMER21 5
-#define TIMER22 6
-#define TIMER23 7
-#define TIMER31 8
-#define TIMER32 9
+enum {
+    NOT_ON_TIMER = 0,
+#ifdef NEED_TIMER_11_12
+    TIMER11,
+    TIMER12,
+#endif
+    TIMER13,
+    TIMER14,
+    TIMER21,
+    TIMER22,
+    TIMER23,
+#ifdef NEED_TIMER_31_32
+    TIMER31,
+    TIMER32,
+#endif
+    NUM_TIMERS
+};
 
 
 //FIXME#include "WCharacter.h"
