@@ -90,8 +90,8 @@ Done! Your first STM8 based project is up and running!
 ## Supported hardware
 
 Anything with an STM8S103 or STM8S003 should work. For example, the
-70-cent-[STM8S103 breakout boards](https://tenbaht.github.io/sduino/hardware/stm8blue.md),
-[ESP14 Wifi boards](https://tenbaht.github.io/sduino/hardware/esp14.md),
+70-cent-[STM8S103 breakout boards](https://tenbaht.github.io/sduino/hardware/stm8blue),
+[ESP14 Wifi boards](https://tenbaht.github.io/sduino/hardware/esp14),
 or even the [W1209 thermostat boards](https://www.aliexpress.com/wholesale?SearchText=w1209)
 that are abundant on aliexpress and Amazon. All you need to get started is a
 simple ST-Link/V2 compatible flash programmer, available for less then $3
@@ -109,12 +109,12 @@ five 10 bit ADC inputs, 3 timers, and up to 14 I/O pins - quite similar to
 an Atmel ATmega8 as it was used on the first Arduino boards.
 
 Support for the more powerful
-[STM8S105 Discovery board](https://tenbaht.github.io/sduino/hardware/stm8sdiscovery.md)
+[STM8S105 Discovery board](https://tenbaht.github.io/sduino/hardware/stm8sdiscovery)
 is very fresh, but should work now. At least Blink.c works already. These
 amazing $9 boards offer even more resources, come with a build-in flash
 programmer and are very similar to an Arduino Uno with an ATmega328 CPU.
 
-Find more information here: [Supported Boards](https://tenbaht.github.io/sduino/hardware.md)
+Find more information here: [Supported Boards](https://tenbaht.github.io/sduino/hardware)
 
 
 
