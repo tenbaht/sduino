@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+	<title>LiquidCrystal character LCD library - Sduino</title>
+
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">Sduino</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../..">Overview</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../install/">Installation</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../sdcc/">Using the SDCC compiler</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../spl/">Using the SPL with SDCC and sduino</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../macro/">C preprocessor macro magic</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Libraries <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../">API description and migration guidelines</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../HardwareSerial/">HardwareSerial</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../SPI/">SPI</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../I2C/">I2C</a>
+</li>
+
+                        
+                            
+<li class="active">
+    <a href="./">LiquidCrystal character LCD library</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../PCD8544/">PCD8544 libray for Nokia 5110-like graphical LCDs</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../Mini_SSD1306/">Mini_SSD1306 library for monochrome OLED-displays</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../Stepper/">Stepper library</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../Servo/">Servo library</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hardware <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../../hardware/flashtool/">Flash tool</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../hardware/">List of supported boards</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../pin_mapping/">Ways to define a pin mapping</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../hardware/stm8blue/">Generic STM8S103 breakout board (stm8blue)</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../hardware/esp14/">ESP14: Wifi board, STM8S003</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../hardware/stm8sdiscovery/">STM8S105Discovery: Evaluation board made my ST</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../../about/">About</a>
+                    </li>
+                
+                
+                </ul>
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li >
+                        <a rel="next" href="../I2C/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../PCD8544/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#liquidcrystal-library">LiquidCrystal Library</a></li>
+        
+            <li><a href="#api">API</a></li>
+        
+            <li><a href="#example">Example</a></li>
+        
+            <li><a href="#possible-improvements">Possible improvements</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="liquidcrystal-library">LiquidCrystal Library</h1>
+<p>This library is for character LCDs based on the HD44780 controller.
+Derived from the Arduino LiquidCrystal library v1.8.0.</p>
+<h2 id="api">API</h2>
+<p>This library is a singleton library, it is not possible to use more than one
+instance per sketch.</p>
+<p>The API syntax is very similar to the original C++ syntax, thanks to some
+<a href="../macro.html">c preprocessor macro magic</a>.</p>
+<p>Apart from the usual name mangeling for polymorph functions (mostly the
+different variants of the Print::print method) moving the opening bracket at
+the class declarator line and replacing the dots in the method names for
+underscores is all it needs.</p>
+<table>
+<thead>
+<tr>
+<th>Arduino syntax</th>
+<th>sduino syntax</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LiquidCrystal lcd(rs,en,d0,d1,d2,d3)</code></td>
+<td><code>LiquidCrystal (lcd,rs,en,d0,d1,d2,d3)</code></td>
+</tr>
+<tr>
+<td><code>LiquidCrystal lcd(rs,rw,en,d0,d1,d2,d3)</code></td>
+<td><code>LiquidCrystal (lcd,rs,rw,en,d0,d1,d2,d3)</code></td>
+</tr>
+<tr>
+<td><code>LiquidCrystal lcd(rs,en,d0,d1,d2,d3,d4,d5,d6,d7)</code></td>
+<td><code>LiquidCrystal (lcd,rs,en,d0,d1,d2,d3,d4,d5,d6,d7)</code></td>
+</tr>
+<tr>
+<td><code>LiquidCrystal lcd(rs,rw,en,d0,d1,d2,d3,d4,d5,d6,d7)</code></td>
+<td><code>LiquidCrystal (lcd,rs,rw,en,d0,d1,d2,d3,d4,d5,d6,d7)</code></td>
+</tr>
+<tr>
+<td><code>lcd.init(rs,rw,en,d0,d1,d2,d3,d4,d5,d6,d7)</code></td>
+<td><code>lcd_init(mode,rs,rw,en,d0,d1,d2,d3,d4,d5,d6,d7)</code></td>
+</tr>
+<tr>
+<td><code>lcd.begin(cols,lines)</code></td>
+<td><code>lcd_begin(cols,lines)</code></td>
+</tr>
+<tr>
+<td><code>lcd.begin(cols,lines,charsize)</code></td>
+<td><code>lcd_begin_charsize(cols,lines,charsize)</code></td>
+</tr>
+<tr>
+<td><code>lcd.clear()</code></td>
+<td><code>lcd_clear()</code></td>
+</tr>
+<tr>
+<td><code>lcd.home()</code></td>
+<td><code>lcd_home()</code></td>
+</tr>
+<tr>
+<td><code>lcd.noDisplay()</code></td>
+<td><code>lcd_noDisplay()</code></td>
+</tr>
+<tr>
+<td><code>lcd.display()</code></td>
+<td><code>lcd_display()</code></td>
+</tr>
+<tr>
+<td><code>lcd.noBlink()</code></td>
+<td><code>lcd_noBlink()</code></td>
+</tr>
+<tr>
+<td><code>lcd.blink()</code></td>
+<td><code>lcd_blink()</code></td>
+</tr>
+<tr>
+<td><code>lcd.noCursor()</code></td>
+<td><code>lcd_noCursor()</code></td>
+</tr>
+<tr>
+<td><code>lcd.cursor()</code></td>
+<td><code>lcd_cursor()</code></td>
+</tr>
+<tr>
+<td><code>lcd.scrollDisplayLeft()</code></td>
+<td><code>lcd_scrollDisplayLeft()</code></td>
+</tr>
+<tr>
+<td><code>lcd.scrollDisplayRight()</code></td>
+<td><code>lcd_scrollDisplayRight()</code></td>
+</tr>
+<tr>
+<td><code>lcd.leftToRight()</code></td>
+<td><code>lcd_leftToRight()</code></td>
+</tr>
+<tr>
+<td><code>lcd.rightToLeft()</code></td>
+<td><code>lcd_rightToLeft()</code></td>
+</tr>
+<tr>
+<td><code>lcd.noAutoscroll()</code></td>
+<td><code>lcd_noAutoscroll()</code></td>
+</tr>
+<tr>
+<td><code>lcd.autoscroll()</code></td>
+<td><code>lcd_autoscroll()</code></td>
+</tr>
+<tr>
+<td><code>lcd.setRowOffsets(row0,row1,row2,row3)</code></td>
+<td><code>lcd_setRowOffsets(row0,row1,row2,row3)</code></td>
+</tr>
+<tr>
+<td><code>lcd.createChar(number, data[])</code></td>
+<td><code>lcd_createChar(number, data[])</code></td>
+</tr>
+<tr>
+<td><code>lcd.setCursor(col,row)</code></td>
+<td><code>lcd_setCursor(col,row)</code></td>
+</tr>
+<tr>
+<td><code>result = lcd.write(value)</code></td>
+<td><code>result = lcd_write(value)</code></td>
+</tr>
+<tr>
+<td><code>lcd.command(value)</code></td>
+<td><code>lcd_command(value)</code></td>
+</tr>
+</tbody>
+</table>
+<p>The LCD interface mode can be changed at run time by calling the
+<code>lcd_init(...)</code> function.</p>
+<h2 id="example">Example</h2>
+<p>Output some Text and count the time since the last reset. Notice the
+slightly different position of the opening parenthesis at the "class
+constructor" function LiquidCrystal compared to the C++ instatiation.</p>
+<pre><code class="c">#include &lt;Arduino.h&gt;
+#include &lt;LiquidCrystal.h&gt;
+
+// initialize the library with the numbers of the interface pins
+// The instance name &quot;lcd&quot; is *within* the brackets
+LiquidCrystal (lcd,PA1,PA2, PA3,PD2,PD3,PD4);
+
+void setup() {
+  lcd_begin(16, 2);
+  lcd_print_s(&quot;hello, world!&quot;);
+}
+
+
+void loop() {
+  lcd_setCursor(0, 1);
+  lcd_print_u(millis() / 1000);
+}
+</code></pre>
+
+<p>Compare it to the original Arduino C++-Sytax:</p>
+<pre><code class="c">#include &lt;LiquidCrystal.h&gt;
+
+// initialize the library with the numbers of the interface pins
+// The instance name &quot;lcd&quot; is *before* the brackets
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
+void setup() {
+  lcd.begin(16, 2);
+  lcd.print(&quot;hello, world!&quot;);
+}
+
+void loop() {
+  lcd.setCursor(0, 1);
+  lcd.print(millis() / 1000);
+}
+</code></pre>
+
+<h2 id="possible-improvements">Possible improvements</h2>
+<p>This is not a to-do-list, just brainstorming and a collection of random
+thoughts.</p>
+<h3 id="direct-port-access">Direct port access</h3>
+<p>As long as the pin numberings are known at compile time it would be possible
+use direct port register access and the access pattern could be optimized if
+all data pins are on the same port.</p>
+<h3 id="auto-detect-4-bit-mode">Auto-detect 4-bit mode</h3>
+<p>The parameter <code>fourbitmode</code> of the init() function/method is not needed. It
+would be sufficient to check <code>d5</code> for a valid value. If it is not valid,
+assume 4-bit mode.</p>
+<p>As init() is not called very frequently the possible advantage would be small
+compared to the downside of breaking the Arduino compatibility.</p></div>
+            
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script>var base_url = '../..';</script>
+        <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
+        <script src="../../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            From here you can search these documents. Enter
+                            your search terms below.
+                        </p>
+                        <form role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                            </div>
+                        </form>
+                        <div id="mkdocs-search-results"></div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

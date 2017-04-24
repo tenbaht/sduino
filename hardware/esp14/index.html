@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+	<title>ESP14: Wifi board, STM8S003 - Sduino</title>
+
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">Sduino</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../..">Overview</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../install/">Installation</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../sdcc/">Using the SDCC compiler</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../spl/">Using the SPL with SDCC and sduino</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../macro/">C preprocessor macro magic</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Libraries <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../../api/">API description and migration guidelines</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../api/HardwareSerial/">HardwareSerial</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../api/SPI/">SPI</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../api/I2C/">I2C</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../api/LiquidCrystal/">LiquidCrystal character LCD library</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../api/PCD8544/">PCD8544 libray for Nokia 5110-like graphical LCDs</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../api/Mini_SSD1306/">Mini_SSD1306 library for monochrome OLED-displays</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../api/Stepper/">Stepper library</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../api/Servo/">Servo library</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hardware <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../flashtool/">Flash tool</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../">List of supported boards</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../pin_mapping/">Ways to define a pin mapping</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../stm8blue/">Generic STM8S103 breakout board (stm8blue)</a>
+</li>
+
+                        
+                            
+<li class="active">
+    <a href="./">ESP14: Wifi board, STM8S003</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../stm8sdiscovery/">STM8S105Discovery: Evaluation board made my ST</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../../about/">About</a>
+                    </li>
+                
+                
+                </ul>
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li >
+                        <a rel="next" href="../stm8blue/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../stm8sdiscovery/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#esp-14">ESP-14</a></li>
+        
+            <li><a href="#differences-between-the-003-and-the-103-cpus">Differences between the '003 and the '103 CPUs</a></li>
+        
+            <li><a href="#using-the-wifi-connection">Using the Wifi connection</a></li>
+        
+            <li><a href="#poor-design-choice">Poor design choice</a></li>
+        
+            <li><a href="#the-upside">The upside</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="esp-14">ESP-14</h1>
+<p>An ESP-8266 Wifi-Controller together with a STM8S003 CPU for about $2 -
+incredible.  Since the STM8S003 is almost identical to the STM8S103 used on
+the <a href="../stm8blue.html">STM8S103 breakout boards</a> all software runs here as well.</p>
+<p>Using the same pin numbering scheme as with the stm8blue boards it looks
+like this:</p>
+<p><img alt="ESP14 sduino pin numbering" src="../esp14.png" /></p>
+<h2 id="differences-between-the-003-and-the-103-cpus">Differences between the '003 and the '103 CPUs</h2>
+<p>Very slim. All differences that I could find so far:</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>STM8S003</th>
+<th>STM8S103</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EEPROM size</td>
+<td>128 Bytes</td>
+<td>640 Bytes</td>
+</tr>
+</tbody>
+</table>
+<p>I am not sure why the '003 is sold for half the price, or, to but it the
+other way around, why anybody should choose the '103 at all. Did I miss an
+important difference?</p>
+<h2 id="using-the-wifi-connection">Using the Wifi connection</h2>
+<p>The ESP-14 is basically an ESP-01 Wifi-module together with a STM8S breakout
+board combined into one PCB. The ESP part comes preprogrammed with the
+usual ESP AT-Firmware and is connected to the RX/TX pins of the STM8S.</p>
+<p>It feels like having a classic ATmega8-Arduino with a build-in ESP-01
+module. Using the <a href="https://github.com/bportaluri/WiFiEsp">WiFiEsp library</a>
+we could have a programming experience very similar to using an Arduino with
+a Wifi-shield.</p>
+<p>Problem is the limited flash space of the '003. Even the very basic
+WebServer example that comes with the WiFiEsp library needs more then 14kB
+flash and more than 1kB RAM when compiled for an Arduino Uno. Even if the
+library could be carefully optimized to fit into the 8kB flash of an '003 -
+there would be no space left for the actual user code.</p>
+<p>It is still possible to do very simple task by just sending AT-strings to
+the ESP. But here we are definitly leaving Ardunio territory. Here we have
+to start from scratch and do it all by ourself. This is not going to be
+beginner-friendly anymore.</p>
+<p>The major remaining advantage of the STM8S over the ESP is power efficiency.
+The STM8S runs on almost nothing, while the ESP draws anything between 50
+and 200mA even for the simplest tasks.</p>
+<p>In most cases you might want to implement the external communication part of
+the application on the ESP, using the
+<a href="https://github.com/esp8266/Arduino">ESP8266 Arduino port</a>.</p>
+<p>The STM8S is better suited to local control and measurement and other
+energy- and time-critical tasks. Both CPUs use separate power supply inputs.
+Using an additional PMOS transistor the STM8S could control the power supply
+for the ESP and help extending battery life by activating the big brother
+only when its services are actually required.</p>
+<h2 id="poor-design-choice">Poor design choice</h2>
+<p>Overall, the '003 is a very questionable CPU choice by AI Thinker. The '003
+is clearly one of the cheapest CPUs on the market, but the applications for
+this module are heavily restricted the the small flash memory.</p>
+<p>Why didn't they use an ATmega328? Just one dollar more and the whole Arduino
+universe opens up. Or at least an STM8S005K6T6C, offering 32kB flash and 2kB
+RAM for only 40 cents more, if you want to go really cheap.</p>
+<p>And why would you need an external PMOS to control the ESP power supply?
+Why is this not included on the PCB already? This could the big killer
+feature of the current combination.</p>
+<h2 id="the-upside">The upside</h2>
+<p>Having a beefy 32 bit CPU and using it as an I/O-coprocessor while running
+the main application on an resticted 8-bitter is a weired concept. Things
+like the Arduino Yun or the Arduino WiFi-shield don't make too much sense.</p>
+<p>It is much more sensible to use the big CPU to control the small one than
+the other way around. Maybe this board can help to promote that concept.</p></div>
+            
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script>var base_url = '../..';</script>
+        <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
+        <script src="../../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            From here you can search these documents. Enter
+                            your search terms below.
+                        </p>
+                        <form role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                            </div>
+                        </form>
+                        <div id="mkdocs-search-results"></div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

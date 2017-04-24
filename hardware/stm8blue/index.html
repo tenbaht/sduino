@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+	<title>Generic STM8S103 breakout board (stm8blue) - Sduino</title>
+
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">Sduino</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../..">Overview</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../install/">Installation</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../sdcc/">Using the SDCC compiler</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../spl/">Using the SPL with SDCC and sduino</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../macro/">C preprocessor macro magic</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Libraries <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../../api/">API description and migration guidelines</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../api/HardwareSerial/">HardwareSerial</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../api/SPI/">SPI</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../api/I2C/">I2C</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../api/LiquidCrystal/">LiquidCrystal character LCD library</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../api/PCD8544/">PCD8544 libray for Nokia 5110-like graphical LCDs</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../api/Mini_SSD1306/">Mini_SSD1306 library for monochrome OLED-displays</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../api/Stepper/">Stepper library</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../api/Servo/">Servo library</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hardware <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../flashtool/">Flash tool</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../">List of supported boards</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../pin_mapping/">Ways to define a pin mapping</a>
+</li>
+
+                        
+                            
+<li class="active">
+    <a href="./">Generic STM8S103 breakout board (stm8blue)</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../esp14/">ESP14: Wifi board, STM8S003</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../stm8sdiscovery/">STM8S105Discovery: Evaluation board made my ST</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../../about/">About</a>
+                    </li>
+                
+                
+                </ul>
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li >
+                        <a rel="next" href="../../pin_mapping/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../esp14/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#generic-stm8s103-breakout-board">Generic STM8S103 breakout board</a></li>
+        
+            <li><a href="#connection-to-the-flash-tool">Connection to the flash tool</a></li>
+        
+            <li><a href="#pin-number-mappings">Pin number mappings</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="generic-stm8s103-breakout-board">Generic STM8S103 breakout board</h1>
+<p>These simple breakout boards are available on aliexpress for well under one
+Dollar (I got mine for 67 cent each, including shipping from China). They
+are my original development platform.</p>
+<p><img alt="Image of the STM8S103 board" src="../stm8board-pinout.jpg" /></p>
+<p>They are very similar the <a href="../hardware/esp14.html">ESP14 Wifi-boards</a>, most
+programs should run on those chinese gems as well, but that is still
+untested.</p>
+<p>The STM8S103 breakout boards are build around a CPU STM8S103F3P6 with 16MHz
+internal oscillator, 8kB flash, 1kB RAM, and 640 byte EEPROM. The CPU
+includes a UART, SPI, I2C, PWM, 10 bit ADC, 3 timer, and up to 14 I/O pins -
+quite similar to an Atmel ATmega8.</p>
+<p>One (red) LED is connected to GPIO PB5 (CPU pin 11). The push button is for
+reset. The CPU runs on 3.3V, a linear regulator is integrated on the
+board. The micro USB connector is only for (5V) power supply, the data lines
+are not connected.</p>
+<p>All CPU pins are easily accessible on (optional) pin headers (pitch 2.54mm,
+perfect for breadboards).</p>
+<p><img alt="Schematic of the STMS103 board" src="../Schematic1.png" /></p>
+<p>My breakout boards came preprogrammed with a blink program and with active
+write protection bits. For unlocking before first use:</p>
+<pre><code>stm8flash -cstlinkv2 -pstm8s103?3 -u
+</code></pre>
+<h2 id="connection-to-the-flash-tool">Connection to the flash tool</h2>
+<p>I am using the ST-Link V2 compatible flash tool in the green plastic
+housing. The one in the metal housing uses a different pinout.</p>
+<p>Connection to the flashtool:</p>
+<table>
+<thead>
+<tr>
+<th>Signal name</th>
+<th>P3 on CPU board</th>
+<th>Green flash tool</th>
+<th align="right">Metal flash tool</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3V3</td>
+<td>1</td>
+<td>2</td>
+<td align="right">7</td>
+</tr>
+<tr>
+<td>SWIM</td>
+<td>2</td>
+<td>5</td>
+<td align="right">5</td>
+</tr>
+<tr>
+<td>GND</td>
+<td>3</td>
+<td>7</td>
+<td align="right">3</td>
+</tr>
+<tr>
+<td>NRST</td>
+<td>4</td>
+<td>9</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<h2 id="pin-number-mappings">Pin number mappings</h2>
+<p>The Arduino environment uses its own pin numbering scheme independent from
+the physical CPU pin numbers. Many Arduino sketches and libraries contain
+hard-coded assumptions about the number of pins with special functions.
+Ideally, all these numbers would be the same and all programs could be
+compiled without changes.</p>
+<p><a href="../pin_mapping.html">Here</a> I discuss some possible pin mapping and check
+how close we could get the the ideal mapping. Unfortunatly, it turns out
+that a perfect mapping is not possible.</p>
+<p>In the end I chose a simple geometric numbering for the square UFQFPN20
+package starting with port pin PA1 and counting up from 0. This results in
+this mapping:</p>
+<p><img alt="STM8S103 breakout board pin mapping" src="../stm8blue.png" /></p>
+<p>The pins D3/D4 (SDA/SCL, PB5/PB4) are different from the others as they are
+true open drain pins. That means, they only can drive the output low or
+open. To drive it high, they require the of an external pull-up resistor.
+This is the reason why the LED on this breakout is connected between +3.3V
+and the pins and not between the pin GND as usual. This way it is possible
+to drive the LED by writing a zero to the output register.</p>
+<table>
+<thead>
+<tr>
+<th>sduino pin</th>
+<th>STM8S103 CPU port pin</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0-2</td>
+<td>PA1-PA3 (PA1 and PA2 only weak output drivers)</td>
+</tr>
+<tr>
+<td>3-4</td>
+<td>PB5-PB4 (reverse order)</td>
+</tr>
+<tr>
+<td>5-9</td>
+<td>PC3-PC7</td>
+</tr>
+<tr>
+<td>10-15</td>
+<td>PD1-PD6</td>
+</tr>
+</tbody>
+</table>
+<p>serial: 14,15<br />
+SPI: 2,7,8,9<br />
+I2C: 3,4 (true open drain. can't drive a high signal without an external
+pull-up resistor)
+Analog: 6,11,12,14,15<br />
+PWM: 2,5,6,12 plus either only 13 or 7-9 but not 13 (via alternate mapping)  </p>
+<ul>
+<li>Easy and logical for use on a breadboard</li>
+<li>Very clear and logical port pin ordering</li>
+<li>Analog pins are still scattered around</li>
+<li>TX and RX would be the rarely used analog pin numbers A3/A4 at
+   the end of the analog pin number list</li>
+<li>At least the analog pins are in data sheet order</li>
+<li>All functions use totally different pin numbers than Arduino</li>
+</ul>
+<p>I am still not really happy with this mapping. Instead of simplifing things
+it only adds another layer of abstraction and confusion. To avoid this I
+added definitions for the regular CPU pin names like <code>PA1</code> and <code>PD2</code>. In the
+end, this notation seems to be a lot easier to me. I am open for suggestions
+for a better pin number mapping.</p>
+<p>The chosen pin mapping for the STM8S103 (possible alternate function in
+paratheses):</p>
+<table>
+<thead>
+<tr>
+<th>Phys. STM8 pin</th>
+<th>Name</th>
+<th>Functions</th>
+<th>Geometrical mapping</th>
+<th>special funcion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>PD4</td>
+<td>UART_CLK/T2-1/beep</td>
+<td>13</td>
+<td>PWM</td>
+</tr>
+<tr>
+<td>2</td>
+<td>PD5</td>
+<td>TX/Ain5</td>
+<td>14</td>
+<td>Analog A3</td>
+</tr>
+<tr>
+<td>3</td>
+<td>PD6</td>
+<td>RX/Ain6</td>
+<td>15</td>
+<td>Analog A4</td>
+</tr>
+<tr>
+<td>5</td>
+<td>PA1</td>
+<td>(OscIn, kein HS)</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>PA2</td>
+<td>(OscIn, kein HS)</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>10</td>
+<td>PA3</td>
+<td>SS/T2-3</td>
+<td>2</td>
+<td>PWM</td>
+</tr>
+<tr>
+<td>11</td>
+<td>PB5</td>
+<td>SDA    LED</td>
+<td>3</td>
+<td></td>
+</tr>
+<tr>
+<td>12</td>
+<td>PB4</td>
+<td>SCL</td>
+<td>4</td>
+<td></td>
+</tr>
+<tr>
+<td>13</td>
+<td>PC3</td>
+<td>T1-3/[T1-n1]</td>
+<td>5</td>
+<td>PWM, (n~)</td>
+</tr>
+<tr>
+<td>14</td>
+<td>PC4</td>
+<td>T1-4/Ain2/[T1-n2]</td>
+<td>6</td>
+<td>PWM, Analog A0, (n~)</td>
+</tr>
+<tr>
+<td>15</td>
+<td>PC5</td>
+<td>SCK/[T2-1]</td>
+<td>7</td>
+<td>(~)</td>
+</tr>
+<tr>
+<td>16</td>
+<td>PC6</td>
+<td>MOSI/[T1-1]</td>
+<td>8</td>
+<td>(~)</td>
+</tr>
+<tr>
+<td>17</td>
+<td>PC7</td>
+<td>MISO/[T1-2]</td>
+<td>9</td>
+<td>(~)</td>
+</tr>
+<tr>
+<td>18</td>
+<td>PD1</td>
+<td>(SWIM)</td>
+<td>10</td>
+<td></td>
+</tr>
+<tr>
+<td>19</td>
+<td>PD2</td>
+<td>Ain3/[T2-3]</td>
+<td>11</td>
+<td>Analog A1, (~~)</td>
+</tr>
+<tr>
+<td>20</td>
+<td>PD3</td>
+<td>Ain4/T2-2</td>
+<td>12</td>
+<td>PWM, Analog A2</td>
+</tr>
+</tbody>
+</table></div>
+            
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script>var base_url = '../..';</script>
+        <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
+        <script src="../../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            From here you can search these documents. Enter
+                            your search terms below.
+                        </p>
+                        <form role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                            </div>
+                        </form>
+                        <div id="mkdocs-search-results"></div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+	<title>Stepper library - Sduino</title>
+
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">Sduino</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../..">Overview</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../install/">Installation</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../sdcc/">Using the SDCC compiler</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../spl/">Using the SPL with SDCC and sduino</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../macro/">C preprocessor macro magic</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Libraries <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../">API description and migration guidelines</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../HardwareSerial/">HardwareSerial</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../SPI/">SPI</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../I2C/">I2C</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../LiquidCrystal/">LiquidCrystal character LCD library</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../PCD8544/">PCD8544 libray for Nokia 5110-like graphical LCDs</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../Mini_SSD1306/">Mini_SSD1306 library for monochrome OLED-displays</a>
+</li>
+
+                        
+                            
+<li class="active">
+    <a href="./">Stepper library</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../Servo/">Servo library</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hardware <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../../hardware/flashtool/">Flash tool</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../hardware/">List of supported boards</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../pin_mapping/">Ways to define a pin mapping</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../hardware/stm8blue/">Generic STM8S103 breakout board (stm8blue)</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../hardware/esp14/">ESP14: Wifi board, STM8S003</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../hardware/stm8sdiscovery/">STM8S105Discovery: Evaluation board made my ST</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../../about/">About</a>
+                    </li>
+                
+                
+                </ul>
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li >
+                        <a rel="next" href="../Mini_SSD1306/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../Servo/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#stepper-library">Stepper Library</a></li>
+        
+            <li><a href="#api">API</a></li>
+        
+            <li><a href="#example">Example</a></li>
+        
+            <li><a href="#implementation-details">Implementation details</a></li>
+        
+            <li><a href="#possible-impovements">Possible impovements</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="stepper-library">Stepper Library</h1>
+<p>A Library for driving stepper motors with 2, 4 or 5 phases.
+Derived from the Arduino Stepper library v1.8.0.</p>
+<h2 id="api">API</h2>
+<p>This library is a multi-instance library, it supports an arbitrary number of
+stepper motors per sketch.</p>
+<p>The API syntax is very similar to the original C++ syntax, thanks to some
+<a href="../macro.html">c preprocessor macro magic</a>.</p>
+<p>The declaration supports polymorphism, so all that is needed to adopt an
+existing sketch for use with sduino is moving the opening bracket at
+the class declarator line and replacing the dots in the method names for
+underscores.</p>
+<table>
+<thead>
+<tr>
+<th>Arduino method</th>
+<th>sduino function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Stepper myStepper(steps, pin1,pin2);</code></td>
+<td><code>Stepper (myStepper,steps,pin1,pin2);</code></td>
+</tr>
+<tr>
+<td><code>Stepper myStepper(steps, pin1,pin2,pin3,pin4);</code></td>
+<td><code>Stepper (myStepper,steps,pin1,pin2,pin3,pin4);</code></td>
+</tr>
+<tr>
+<td><code>Stepper myStepper(steps, pin1,pin2,pin3,pin4,pin5);</code></td>
+<td><code>Stepper (myStepper,steps,pin1,pin2,pin3,pin4,pin5);</code></td>
+</tr>
+<tr>
+<td><code>myStepper.setSpeed(speed);</code></td>
+<td><code>myStepper_setSpeed(speed);</code></td>
+</tr>
+<tr>
+<td><code>myStepper.step(n);</code></td>
+<td><code>myStepper_step(n);</code></td>
+</tr>
+<tr>
+<td><code>myStepper.version();</code></td>
+<td><code>myStepper_version();</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="api-additions">API additions</h3>
+<p>The sduino implementation adds some extra methods to the stock Stepper
+library to allow to work arounds some limitations of C code vs. C++:</p>
+<table>
+<thead>
+<tr>
+<th>Arduino method</th>
+<th>sduino function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>done automatically on start up</td>
+<td><code>myStepper_activateOutputs();</code></td>
+</tr>
+<tr>
+<td>not impemented</td>
+<td><code>myStepper_2phase(steps,pin1,pin2);</code></td>
+</tr>
+<tr>
+<td>not impemented</td>
+<td><code>myStepper_4phase(steps,pin1,pin2,pin3,pin4);</code></td>
+</tr>
+<tr>
+<td>not impemented</td>
+<td><code>myStepper_5phase(steps,pin1,pin2,pin3,pin4,pin5);</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="initializing-the-output-pins-on-demand">Initializing the output pins on demand</h4>
+<p>In real C++ the internal class constructor method initializes the motor pins
+to output mode automatically at start up of the programm. In C this doesn't
+happen automatically. Most libraries implement a begin() method for exactly
+this purpose, but this one does not include an explicit constructor method.</p>
+<p>Instead, the output mode is set automatically right before the very first
+motor step. This means that the driver pins stay uninitialized and are left
+floating from the time of power up until the first step is requested. This
+won't be a problem in most cases as most motor drivers are using pull-up or
+pull-down resistors to ensure proper signal levels.</p>
+<p>If needed, the application could call the added <code>activateOutputs()</code> method
+in the setup() function to force an immediate port pin initialization:</p>
+<pre><code class="c">setup() {
+  myStepper_activateOutputs();    // initializes the motor pins to output mode
+}
+</code></pre>
+
+<h4 id="assigning-the-pin-connections-at-run-time">Assigning the pin connections at run time</h4>
+<p>The way the instantiation macro works requires compile-time constant values
+for all parameters (see below in section 'Implementation Details'). In order
+to be able to (re-) configure the pin connections at run time this version
+of the library implements the functions <code>2phase()</code>, <code>4phase()</code> and
+<code>5phase()</code>. These functions act like a constructor and allow for full
+re-initialisation of an already existing "object".</p>
+<p>If you need to (re-) configure the pin connections at run time (e.g. read it
+from a configuration EEPROM first) you can initialize a data structure with
+<code>0</code> for the unknown pin numbers and set them later by calling the right
+xphase()-function:</p>
+<pre><code class="c">Stepper (myStepper,0,0);
+
+setup() {
+    ... figure out the pin numbers somehow ...
+    myStepper_4phase(stepsPerRev, pin1, pin2, pin3, pin4);
+    ...
+}
+
+loop () {
+    ...
+    myStepper_setSpeed(60);
+    myStepper_step(100);
+    ...
+}
+
+</code></pre>
+
+<h4 id="5-phase-support-can-be-deactivated-to-save-code-space">5 phase support can be deactivated to save code space</h4>
+<p>5 phase motors are not very common, but supporting them increases the code
+size significantly. By defining the compiler flag NO_5PHASE it is possible
+to deactivate the support for 5 phase motors. This saves 736 bytes of code
+space. Add this line to your Makefile if you don't need 5 phase support:</p>
+<pre><code class="make">CFLAGS = -DNO_5PHASE
+</code></pre>
+
+<h2 id="example">Example</h2>
+<p>Notice the slightly different position of the opening parenthesis at the
+"class constructor" 'function' Stepper compared to the C++ instantiation.
+(available in the examples folder as <code>stepper_oneRevolution.c</code>)</p>
+<p>C-Version for use with sduino:</p>
+<pre><code class="c">#include &lt;Arduino.h&gt;
+#include &lt;Stepper.h&gt;
+
+// change this to fit the number of steps per revolution for your motor
+#define stepsPerRevolution 200
+
+// initialize the stepper library on pins 8 through 11:
+Stepper (myStepper,stepsPerRevolution, 8, 9, 10, 11);
+
+void setup() {
+  // set the speed at 60 rpm:
+  myStepper_setSpeed(60);
+}
+
+void loop() {
+  // step one revolution  in one direction:
+  myStepper_step(stepsPerRevolution);
+  delay(500);
+
+  // step one revolution in the other direction:
+  myStepper_step(-stepsPerRevolution);
+  delay(500);
+}
+</code></pre>
+
+<p>Original Arduino C++-Sytax:</p>
+<pre><code class="c++">#include &lt;Stepper.h&gt;
+
+const int stepsPerRevolution = 200;  // change this to fit the number of steps per revolution
+// for your motor
+
+// initialize the stepper library on pins 8 through 11:
+Stepper myStepper(stepsPerRevolution, 8, 9, 10, 11);
+
+void setup() {
+  // set the speed at 60 rpm:
+  myStepper.setSpeed(60);
+}
+
+void loop() {
+  // step one revolution  in one direction:
+  myStepper.step(stepsPerRevolution);
+  delay(500);
+
+  // step one revolution in the other direction:
+  myStepper.step(-stepsPerRevolution);
+  delay(500);
+}
+</code></pre>
+
+<h2 id="implementation-details">Implementation details</h2>
+<p>Technically, each Stepper instance is represented by a file-descriptor-like
+structure. This structure is initialized by the instantiation macro
+<code>Stepper</code>. This means that all values are required to be constant values,
+known at compile time. A <code>const</code> qualifier is not enough for SDCC, it
+requires either a <code>#define</code> or an <code>enum</code>:</p>
+<pre><code class="c">const int numOfSteps = 1;   // does not work with SDCC
+#define MotorPin1  10       // ok, works
+enum { MotorPin2 = 11 };    // ok, works
+
+Stepper (myStepper, numOfSteps, MotorPin1, MotorPin2);
+</code></pre>
+
+<p>All functions require a pointer to the stepper data structur as their first
+argument to identify the stepper instance. All this pointer handling is
+hidden by preprocessor magic, but it is still real and pure C. If you
+insist, you can still call the 'real' functions yourself (but you gain
+nothing, the compiler produces exactly the same output).</p>
+<h2 id="possible-impovements">Possible impovements</h2>
+<p>This is not a to-do-list, just brainstorming and a collection of random
+thoughts.</p>
+<p>Nothing yet.</p></div>
+            
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script>var base_url = '../..';</script>
+        <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
+        <script src="../../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            From here you can search these documents. Enter
+                            your search terms below.
+                        </p>
+                        <form role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                            </div>
+                        </form>
+                        <div id="mkdocs-search-results"></div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

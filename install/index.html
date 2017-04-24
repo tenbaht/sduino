@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+
+	<title>Installation - Sduino</title>
+
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../css/highlight.css">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="..">Sduino</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="..">Overview</a>
+</li>
+
+                        
+                            
+<li class="active">
+    <a href="./">Installation</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../sdcc/">Using the SDCC compiler</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../spl/">Using the SPL with SDCC and sduino</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../macro/">C preprocessor macro magic</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Libraries <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../api/">API description and migration guidelines</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../api/HardwareSerial/">HardwareSerial</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../api/SPI/">SPI</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../api/I2C/">I2C</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../api/LiquidCrystal/">LiquidCrystal character LCD library</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../api/PCD8544/">PCD8544 libray for Nokia 5110-like graphical LCDs</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../api/Mini_SSD1306/">Mini_SSD1306 library for monochrome OLED-displays</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../api/Stepper/">Stepper library</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../api/Servo/">Servo library</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hardware <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../hardware/flashtool/">Flash tool</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../hardware/">List of supported boards</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../pin_mapping/">Ways to define a pin mapping</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../hardware/stm8blue/">Generic STM8S103 breakout board (stm8blue)</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../hardware/esp14/">ESP14: Wifi board, STM8S003</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../hardware/stm8sdiscovery/">STM8S105Discovery: Evaluation board made my ST</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../about/">About</a>
+                    </li>
+                
+                
+                </ul>
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li >
+                        <a rel="next" href="..">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../sdcc/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#installing-the-needed-tools">Installing the needed tools</a></li>
+        
+            <li><a href="#linux">Linux</a></li>
+        
+            <li><a href="#macos">MacOS</a></li>
+        
+            <li><a href="#windows">Windows</a></li>
+        
+            <li><a href="#possible-improvements">Possible improvements</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="installing-the-needed-tools">Installing the needed tools</h1>
+<p>All tools are available for Linux, MacOS and Windows, most of them even for
+Raspbian on a RaspberryPi.</p>
+<p>SDCC support for the STM8 is still quite fresh and not very mature. It
+improves significantly from version to version. Be sure to use
+<a href="http://sdcc.sourceforge.net/snap.php">the latest snapshot build</a> from the
+<a href="http://sdcc.sourceforge.net/">project site on sourceforge</a>, not the older
+version that might be included in your distribution.</p>
+<h2 id="linux">Linux</h2>
+<p>Download the lastest snapshot build for SDCC from
+http://sdcc.sourceforge.net/snap.php and extract it under <code>/opt</code>.</p>
+<pre><code>mkdir /opt
+tar xvjf ~/Downloads/sdcc-snapshot* -C /opt
+</code></pre>
+<p><code>make</code> is part of the standard repository for any Linux distribution.
+Example for Debian-type systems (like Ubuntu, Mint, Elementary etc.):</p>
+<pre><code>apt-get install make
+</code></pre>
+<p><code>stm8flash</code> is included in the tools directory of this repository. Copy it
+to a convient place in your path, e.g. <code>/usr/local/bin</code>. To use it you might
+need to add a udev rule in order to access the USB port. Save this as root
+in in <code>/etc/udev/rules.d/99-stlink.rules</code>:</p>
+<pre><code># ST-Link/V2 programming adapter
+
+# ST-Link V1, if using a STM8S discovery board
+# important: It needs a special entry in /etc/modprob/blacklist
+ATTR{idVendor}=="0483", ATTR{idProduct}=="3744", MODE="0666", GROUP="plugdev"
+
+# ST-Link/V2, the china adapter with the green plastic housing
+ATTR{idVendor}=="0483", ATTR{idProduct}=="3748", MODE="0666", GROUP="plugdev"
+</code></pre>
+<h2 id="macos">MacOS</h2>
+<p>Quite similar. <a href="https://brew.sh/">Install Homebrew</a> if you haven't done it
+yet, than:</p>
+<pre><code>brew make
+mkdir /opt
+tar xvjf sdcc-snapshot* -C /opt
+</code></pre>
+<p>Not sure about stm8flash, I didn't try it. Have a look at the
+<a href="https://github.com/vdudouyt/stm8flash">stm8flash repository</a>.</p>
+<h2 id="windows">Windows</h2>
+<p>Harder, but still possible. It is lacking all the tools, a package system to
+install them and even a file system concept where to store them. For
+convinience, I collected the bare minimum of needed tools in a
+<a href="https://github.com/tenbaht/sduino-windowstools">separate repository</a>.
+Download it and copy the directory tree into the sduino
+directory. Add the sduino/tools/bin directory to your path or move the files
+in there to a directory that is already in your path.</p>
+<p>You are not bound to <code>stm8flash</code>, you can use the regular flash tool by ST
+as well.</p>
+<h3 id="the-individual-pieces">The individual pieces</h3>
+<p>All the tools in the convinience package are 32 bit. If you need the 64 bit
+versions you might have to collect them yourself.</p>
+<p>You need SDCC, <code>make</code> with some basic tools and maybe <code>stm8flash</code>. Get SDCC
+from the project website. <code>make</code> is a standard tool included in either
+MinGW/Msys or cygwin. Both are fine, MinGW/Msys is smaller. <code>stm8flash</code> from
+the <a href="https://github.com/vdudouyt/stm8flash">stm8flash repository</a>.</p>
+<h4 id="sdcc">SDCC</h4>
+<ol>
+<li>Download the lastest snapshot build from http://sdcc.sourceforge.net/snap.php</li>
+<li>unzip into c:\sdcc (use a path name without whitespace)</li>
+</ol>
+<p>You only need support for the stm8. You can safely delete all the files
+related to the pic1x CPUs (that safes more than 90% of the used disk space
+and leaves only 20MB out of 240MB)</p>
+<h4 id="mingw">MinGW</h4>
+<p><a href="http://www.mingw.org/wiki/MSYS">MinGW/MSys</a> and
+<a href="https://www.cygwin.com/">cygwin</a> are both fine. cygwin aims to be an almost
+complete POSIX environment (which is nice, but we don't need it here). MinGW
+wants to be more compact and works with the native Windows API. That is good
+enough for this purpose.</p>
+<ol>
+<li>Check the
+  <a href="http://www.mingw.org/wiki/Getting_Started">MinGW Installation Notes</a></li>
+<li>Download
+  <a href="https://sourceforge.net/projects/mingw/files/Installer/">mingw-get-setup.exe</a>
+  from https://sourceforge.net/projects/mingw/files/Installer/</li>
+<li>Start it. You can safely deactivate the graphical option.</li>
+<li>Add this at the end to your path: <code>;c:\mingw\bin;c:\mingw\msys\1.0\bin</code>
+  (follow the instructions in "Environment Setting" on the [Installation
+  Notes page[(http://www.mingw.org/wiki/Getting_Started))</li>
+<li>Open a command line and install the package msys-base by issuing this
+  command: <code>mingw-get install msys-base</code></li>
+<li>Now <code>ls</code> or <code>make</code> should work.</li>
+</ol>
+<p>For efficiency, the Makefile is configured to use dash instead of bash as a
+shell. <code>egrep</code> is replaced by <code>grep -E</code>. The bare minimum of tools you will
+need to run the Arduino.mk makefile:</p>
+<pre><code>dash make
+awk cat cut expr grep head ls mkdir sed tr uname which
+</code></pre>
+<h4 id="stm8flash">stm8flash</h4>
+<p>A precompiled windows binary was in the stm8flash repository for a while but
+got removed at one point. I used an
+<a href="https://github.com/vdudouyt/stm8flash/raw/39b1a9ec1dd26030065c3e476fc3b7b89626e21d/stm8flash.exe">old version</a>
+of the file. You might prefer to compile your own version from the
+<a href="https://github.com/vdudouyt/stm8flash">stm8flash repository</a> using either
+MinGW or cygwin. For compiling, you will need the libusb windows binary:
+http://libusb.info/ (I used the MinGW32 dll)</p>
+<h3 id="general-problems-using-windows">General problems using Windows</h3>
+<p>It works, but using the Arduino.mk makefile with Windows is slow. <strong>Very</strong>
+slow. Painfully slow. Compiling-the-Blink-example-takes-about-40-seconds
+kind of slow. Yes, seriously. No kidding. 40 seconds. Measured on a 3GHz
+machine with 4GB RAM.</p>
+<p>There is no easy fix, the underlying problem is a fundamental one. It is not
+about the compilation itself, it is the way Makefiles are written and
+executed. The whole concept relies on forking subprocesses for all the shell
+calls. Unfortunately, there is nothing like a fork in Windows and to work
+around that is painfully slow.</p>
+<p>It would be great if somebody could manage to modify the original Arduino
+build system to support non-C++-builds. Or to integrate it somehow into the
+STVD IDE. Or replace the painfully slow parameter checking part of the
+makefile (that causes the majority of forking) by a single shell script that
+gets called by the makefile and delivers the results in no time. Or use
+<a href="../www.cmake.org">cmake</a>. Or whatever.</p>
+<p>Until than the least annoying way out might be using a virtual machine
+running a simple Linux system. Ubuntu Mate or a basic Debian install for
+example. Virtual Box is great for this purpose and freely available.</p>
+<h2 id="possible-improvements">Possible improvements</h2>
+<h3 id="all-inclusive-packages">All-inclusive packages</h3>
+<p>One of the big convinience points of the Arduino project are the
+easy-to-install all-inclusive packages without any external dependencies.
+They don't require any prior knowledge to set up a full cross-compiler tool
+chain.</p>
+<p>Something like that would be very nice for the STM8 as well, but I didn't go
+that far. You still have to do some work yourself. You definitly need the
+compiler SDCC. <code>stm8flash</code> is a simple tool to transfer the compiled program
+to the CPU, but any other flash tool supporting the SWIM protocol will do.
+The build process is controlled by <code>make</code>. It is a standard tool with any
+UNIX system but available for windows as well.</p>
+<p>Alternative ways of controlling the build process exist, but then you are
+on your own to set it up.</p></div>
+            
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+
+        <script src="../js/jquery-1.10.2.min.js"></script>
+        <script src="../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../js/highlight.pack.js"></script>
+        <script>var base_url = '..';</script>
+        <script data-main="../mkdocs/js/search.js" src="../mkdocs/js/require.js"></script>
+        <script src="../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            From here you can search these documents. Enter
+                            your search terms below.
+                        </p>
+                        <form role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                            </div>
+                        </form>
+                        <div id="mkdocs-search-results"></div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>
