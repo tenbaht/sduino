@@ -14,14 +14,14 @@ This project is not supposed to be “better than Arduino”. It’s purpose
 is to give you a head start into a different CPU architecture if you happen
 to have a professional need or a private desire for it.
 
-Please find more detailed information about the supported boards, the needed tools
-and the library APIs on the
-[project documentation files](https://github.com/tenbaht/sduino/blob/master/docs/index.md).
+Please find more detailed information about the supported boards, the needed
+tools and the library APIs on the
+[project website](https://tenbaht.github.io/sduino/).
 
 
 ## Table of Contents
 
-   * [Project Website](blob/master/docs/index.md)
+   * [Project Website](https://tenbaht.github.io/sduino/)
    * [Usage example](#usage)
    * [Supported hardware](#supported-hardware)
    * [Why use a STM8 instead of an ATmega?](#why-use-a-stm8-instead-of-an-atmega)
@@ -90,8 +90,8 @@ Done! Your first STM8 based project is up and running!
 ## Supported hardware
 
 Anything with an STM8S103 or STM8S003 should work. For example, the
-70-cent-[STM8S103 breakout boards](blob/master/docs/hardware/stm8blue.md),
-[ESP14 Wifi boards](blob/master/docs/hardware/esp14.md),
+70-cent-[STM8S103 breakout boards](https://tenbaht.github.io/sduino/hardware/stm8blue.md),
+[ESP14 Wifi boards](https://tenbaht.github.io/sduino/hardware/esp14.md),
 or even the [W1209 thermostat boards](https://www.aliexpress.com/wholesale?SearchText=w1209)
 that are abundant on aliexpress and Amazon. All you need to get started is a
 simple ST-Link/V2 compatible flash programmer, available for less then $3
@@ -109,12 +109,12 @@ five 10 bit ADC inputs, 3 timers, and up to 14 I/O pins - quite similar to
 an Atmel ATmega8 as it was used on the first Arduino boards.
 
 Support for the more powerful
-[STM8S105 Discovery board](blob/master/docs/hardware/stm8disco.md)
+[STM8S105 Discovery board](https://tenbaht.github.io/sduino/hardware/stm8sdiscovery.md)
 is very fresh, but should work now. At least Blink.c works already. These
 amazing $9 boards offer even more resources, come with a build-in flash
 programmer and are very similar to an Arduino Uno with an ATmega328 CPU.
 
-Find more information here: [Supported Boards](blob/master/docs/hardware.md)
+Find more information here: [Supported Boards](https://tenbaht.github.io/sduino/hardware.md)
 
 
 
@@ -192,7 +192,4 @@ The whole Arduino build system is deeply based on the assumption of
 processing C++ source files. I am not sure if it would be even possible to
 configure a build process based only on C files without modifing the IDE
 sources. This makes a full IDE integration very unlikely.
-
-
-
 

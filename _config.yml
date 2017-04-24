@@ -1,5 +1,0 @@
-theme: jekyll-theme-slate
-markdown: kramdown
-kramdown:
-  input: GFM
-  hard_wrap: false

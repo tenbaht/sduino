@@ -207,7 +207,3 @@ This is not a to-do-list, just brainstorming and a collection of random
 thoughts.
 
 Nothing yet.
-
-
-
-[Back to the main page](../index.html)

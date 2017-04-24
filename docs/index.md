@@ -1,62 +1,17 @@
-# sduino
+# Sduino
 
-Getting started on the STM8 CPU the easy way by using an Arduino-like
-programming API.
+Porting the most important features of the Arduino API to the STM8S.
 
-The SPL (standard peripheral library) [offered by
-ST](http://www.st.com/en/embedded-software/stsw-stm8069.html) is very
-powerful and very similar to the one used for the STM32 CPU series offering
-a relatively easy upgrade path in case a project outgrows the capabilities
-of the 8-bit STM8 series. But using that library is not very intuitive and
-still requires a fairly detailed knowledge of the CPU internals.
-[compiling the SPL with SDCC](spl.md)
+Within a few minutes you are ready to compile and upload your first
+STM8S-based project while still retaining the flexibility to use ST's SPL
+functions.
 
-The Arduino project was very successful in offering a simplified API hiding
-most of the complexity of embedded system programming while still allowing
-for advanced programming technics.
-
-This project makes the most important features of the Arduino API available
-for the STM8S. I needed to port an existing project from an ATmega to a
-better suited (read: cheaper) platform. As the project is based on some
-Arduino libraries porting parts of the Arduino environment was the logical
-first step. After doing that porting the firmware was finished in a
-couple of days.
-
-All you need to get stated is a simple STM8S103F breakout board and a
-ST-Link V2 compatible flash programmer. Three boards and one flash
-programmer together are available for well under five dollars on
-http://www.aliexpress.com/ .
+All you need to get started is a simple STM8S103F breakout board for 70
+cents and a ST-Link V2 compatible flash programmer for $2.50. Three boards
+and one flash programmer together are available for well under five dollars
+including shipping on [aliexpress](http://www.aliexpress.com/).
 
 *Amazing!*
-
-
-## Sitemap
-
-(This really should be the navigation menu on the side. Any way to do that
-with github pages and the preinstalled jekyll-themes?)
-
-1. [Introduction and Overview](index.md)
-2. [Installing the needed tools](install.md)
-3. [API descriptions and migration guidelines](api.md)
-  * [Standard Arduino functions]()
-  * [HardwareSerial]()
-  * [SPI]()
-  * [I2C]()
-  * [LiquidCrystal character LCD library](api/LiquidCrystal.md)
-  * [PCD8544 libray for Nokia 5110-like graphical LCDs](api/PCD8544.md)
-  * [Mini_SSD1306 library for monochrome OLED-displays](api/Mini_SSD1306.md)
-  * [Stepper library](api/Stepper.md)
-  * [Servo library](api/Servo.md)
-4. [Supported Boards](hardware.md)
-  * [stm8blue: simple breakout board, STM8S103](hardware/stm8blue.md)
-  * [ESP14: Wifi board, STM8S003](hardware/esp14.md)
-  * [STM8S105Discovery: Evaluation board made my ST](hardware/stm8discovery.md)
-5. [Ways to define a pin mapping](pin_mapping.md)
-6. [Using the SDCC compiler](sdcc.md)
-7. [Using the SPL with SDCC and sduino](spl.md)
-8. [C preprocessor macro magic](macro.md)
-
-
 
 
 ## Usage
@@ -138,100 +93,20 @@ The build process is controlled by a makefile based on the amazing
 
 ## Supported hardware
 
-### STM8S boards
+* The [one-dollar-boards](hardware/stm8blue.md): A simple STM8S103 breakout
+  board build around a CPU STM8S103F3P6. It costs less than a dollar. The
+  CPU features a 16MHz internal oscillator, 8kB flash, 1kB RAM, 640 byte
+  EEPROM. It includes an UART, SPI, I2C, PWM, 10 bit ADC, 3 timer, and up to
+  14 I/O pins - quite similar to an Atmel ATmega8.
 
-So far only the
-[simple STM8S103 breakout board](hardware/stm8blue.md)
-is supported. This board is build around a CPU STM8S103F3P6 and costs less
-than a dollar. The CPU features a 16MHz internal oscillator, 8kB flash, 1kB
-RAM, 640 byte EEPROM. It includes an UART, SPI, I2C, PWM, 10 bit ADC, 3
-timer, and up to 14 I/O pins - quite similar to an Atmel ATmega8.
+* The [ESP14 Wifi-boards](hardware/esp14.md) are very similar. They are
+  basically a variant of these boards with an added ESP-01 Wifi-module. Almost
+  all programs should run on those chinese Wifi-enabled gems as well.
 
-The [ESP14 Wifi-boards](hardware/esp14.md) are very similar. They are
-basically a variant of these boards with an added ESP-01 Wifi-module. Almost
-all programs should run on those chinese Wifi-enabled gems as well.
+* The [STM8S105Discovery-boards](hardware/stm8sdiscovery.md) are very similar
+  to an Arduino Uno with an ATmega328 CPU. The support for the used STM8S105
+  CPU is still quite fresh but it should work now.
 
-The [STM8S105Discovery-boards](hardware/stm8disco.md) are very similar to an
-Arduino Uno with an ATmega328 CPU. The support for the used STM8S105 CPU is
-still quite fresh but it should work now.
-
-
-
-### Flash tool
-
-You need a special flash tools in order to program the CPU. As far as I know
-there is no third-party product or software that implements the needed
-communication protocol. But this is not a problem, as these tools are are
-easily available and unbeliveably cheap (well under $3 on aliexpress).
-
-There are to versions of the ST-Link V2 compatible flash tool available: One
-made by Baite in a green plastic housing and one in a USB-Drive-like (often
-pink) metal housing. Both work well, but they use a different pinout.
-
-Both flash tools support the SWIM protocol for STM8 CPUs and the SWD
-protocol for the STM32 CPUs. The programmer from Baite additionally supports
-JTAG and is superior to the more common one in the metal housing. More
-information on the hardware and the pinouts:
-https://wiki.cuvoodoo.info/doku.php?id=jtag
-
-Pinout of Chinese ST-Link V2-clone made by Baite with green plasic housing
-(supports SWIM, SWD and JTAG):
-
-                +-----+
-        T_JRST  | 1  2|	3V3
-        5V      | 3  4|	T_JTCK/T_SWCLK
-        SWIM      5  6|	T_JTMS/T_SWDIO
-        GND     | 7  8|	T_JTDO
-        SWIM RST| 9 10|	T_JTDI
-                +-----+
-
-Pinout of Chinese ST-Link V2-clone with metal housing (supports SWIM and
-SWD):
-
-                +-----+
-        RST     | 1  2|	SWDIO
-        GND     | 3  4|	GND
-        SWIM      5  6|	SWCLK
-        3V3     | 7  8|	3V3
-        5V      | 9 10|	5V
-                +-----+
-
-For Linux: required lines in /etc/udev/rules.d/99-stlink.rules:
-
-	# ST-Link/V2 programming adapter
-
-	# ST-Link V1
-	#SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device",
-	ATTR{idVendor}=="0483", ATTR{idProduct}=="3744", MODE="0666", GROUP="plugdev"
-
-	# ST-Link/V2, the china adapter with the green plastic housing
-	#SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="0483", ATTR{idProduct}=="3748", MODE="0666"
-	ATTR{idVendor}=="0483", ATTR{idProduct}=="3748", MODE="0666", GROUP="plugdev"
-
-
-The pinout of the SWIM connector P3 on my STM8S103 breakout board fits the
-pinout of the flash tool in the metal housing perfectly:
-
-| Signal | SWIM connector P3 | Baite ST-Link | Metal ST-Link
-| ------ | :---------------: | :-----------: | :-----------:
-| 3V3	 | 1		     |	2	     |	7
-| SWIM	 | 2		     |	5	     |	5
-| GND	 | 3		     |	7	     |	3
-| NRST	 | 4		     |	9	     |	1
-
-
-The Discovery boards made by ST all feature a ST-Link interface as well, but
-only the Discovery STM8S105 supports the SWIM protocol. The Discovery
-STM32F0308 implements SWD only and is not usable for the STM8:
-
-|Pin out CN3	| SWD
-|-----------	| --------------
-|1		| ? detect oder so?
-|2		|JTCK/SWCLK
-|3		|GND
-|4		|JTMS/SWDIO
-|5		|NRST
-|6		|SWO
 
 
 
@@ -263,65 +138,24 @@ Some Arduino libraries are already ported to C-syntax. The resulting API is
 still very close to the C++ version and porting an existing application is
 not hard. Check out the [API migration guidelines](api.md) for details.
 
+#### Communication
 
-### Libraries for general communication
+* [SPI](api/SPI.md): Real hardware-SPI up to 10MHz.
+* [I2C](api/I2C.md): Port of the I2C master library by Wayne Truchsess
+* HardwareSerial: The standard serial interface.
 
-#### SPI
-Real hardware-SPI up to 10MHz.
+#### Displays
 
+* [LiquidCrystal](api/LiquidCrystal.md): HD44780 based text LCDs
+* [PCD8544](api/PCD8544.md): Monochrome graphical LCD based on the PCD8544
+  controller like the Nokia 5110 display. SPI mode only.
+* [Mini_SSD1306](api/Mini_SSD1306.md): SSD1306-based monochrome OLED displays
+  with 128x64 pixels. I2C support only.
 
-#### I2C
-The
-[I2C master library](http://www.dsscircuits.com/articles/arduino-i2c-master-library)
-by Wayne Truchsess offers some significant advantages over the Wire/TWI
-library included in the standard arduino environment: It fixes some possible
-deadlock situations, it allows for communication using a repeated start
-condition as required by some devices, the code is much more compact and the
-structure is easier to understand.
+#### Motor control
 
-The current state of the port does not include the deadlock protection,
-though.
-[API description](api/I2C.md)
-
-
-#### HardwareSerial
-The standard serial interface.
-[API description](api/HardwareSerial.md)
-
-
-
-### Libraries for displays
-
-#### LiquidCrystal
-Supports text LCD based on the HD44780 and compatibles, that includes almost
-all character LCDs up to 4x40 Characters.
-
-
-#### PCD8544
-Supports monochrome graphical LCD based on the PCD8544 controller like the
-popular Nokia N5110 display. Only SPI mode supported. The library is a very
-much simpified version of the Adafruit library optimized for a minimal memory
-footprint. Uses soft-SPI, does not need the SPI pins.
-[API description](api/PCD8544.md)
-
-
-#### Mini_SSD1306
-Driver for SSD1306-based monochrome OLED display with 128x64
-pixels. I2C support only. Based on the Adafruit-libray Adafruit_SSD1306.
-[API description](api/Mini_SSD.md)
-
-
-### Libraries for motor control
-
-#### Stepper
-For stepper motors with 2, 4 or 5 phases. This library can handle multiple
-steppers per Sketch. [API description](api/Stepper.md)
-
-
-#### Servo
-This library can control a great number of servos. It makes careful use
-of timers: the library can control 12 servos using only 1 timer.
-[API description](api/Servo.md)
+* [Stepper](api/Stepper.md): Stepper motors with 2, 4 or 5 phases.
+* [Servo](api/Servo.md): Up to 12 servos using only 1 timer.
 
 
 
@@ -364,7 +198,7 @@ WMath: `map()`
 HardwareSerial  
 Print  
 `pulseInLong()`  
-[SPI](docs/SPI.md):
+[SPI](api/SPI.md):
   working, no interrupt support  
 [LiquidCrystal](api/LiquidCrystal.md):
   Text LCD based on the HD44780 controller  
@@ -418,13 +252,11 @@ well under one dollar. You can get three boards and one flash programmer
 together for well under five dollars on http://www.aliexpress.com/ ,
 including shipping from China.
 
-*Amazing!*
-
-The major downside is the lack of information and community support for the
-STM8. The community support and the sheer number of existing libraries for
-all kinds of sensors and hardware is outstanding in the Arduino world. If
-you just want to get something done, go for an Arduino board. Nothing will
-give you faster and easier results.
+The major downside of this CPU series is the lack of information and
+community support for the STM8. The community support and the sheer number
+of existing libraries for all kinds of sensors and hardware is outstanding
+in the Arduino world. If you just want to get something done, go for an
+Arduino board. Nothing will give you faster and easier results.
 
 For commercial use the STM8S offers some interesting advantages:
 

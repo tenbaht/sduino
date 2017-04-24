@@ -119,6 +119,3 @@ assume 4-bit mode.
 
 As init() is not called very frequently the possible advantage would be small
 compared to the downside of breaking the Arduino compatibility.
-
-
-[Back to the main page](../index.html)

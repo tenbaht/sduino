@@ -156,6 +156,3 @@ at the same time, attaching one servo group to each CC-channel. This way it
 would be possible to serve up to 48 servos using the four CC-channels of
 timer TIM1. Monitoring the repetion period might become a little complex, as
 it must be ensured that all servos on all channels have finshed before.
-
-
-[Back to the main page](../index.html)

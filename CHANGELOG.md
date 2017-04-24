@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 ### Changed
+- using mkdocs for building the project website
 ### Fixed
 
 ## [0.2.0 - 2017-03-01]
