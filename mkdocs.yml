@@ -1,4 +1,7 @@
 site_name: Sduino
+site_description: Programming the STM8S the Arduino way
+site_author: Michael Mayer
+repo_url: 'https://github.com/tenbaht/sduino'
 pages:
     - User Guide:
         - Overview: 'index.md'
@@ -31,14 +34,17 @@ pages:
 #+ theme: cerulean
 #+++ theme: cosmo		elegant, ausgewogen
 #- theme: cyborg		zu starker Kontrast
-#+ theme: flatly
+#++ theme: flatly		grau-blau
 #++ theme: journal		Überschriften evtl. etwas zu schwer
 #+++ theme: mkdocs		leicht, elegant. Wie Bootstrap. Mit Search
 #+ theme: readable
-#o theme: readthedocs
+#o theme: readthedocs		komplette Übersicht, Suche
 #++ theme: simplex		elegant, Schrift evtl. etwas zu klein
 #- theme: slate			zu starker Kontrast
-#++ theme: spacelab		elegant und leicht
+#++ theme: spacelab		elegant und leicht, grau
 #+++ theme: united		Orange. Ausgewogen.
-#+++ theme: yeti			sehr gut. Leicht, elegant
-theme: mkdocs
+#+++ theme: yeti		sehr gut. Leicht, elegant
+# best: flatly, yeti (light typeface), cosmo, united, spacelab
+# with search: mkdocs
+theme: flatly
+#theme: mkdocs

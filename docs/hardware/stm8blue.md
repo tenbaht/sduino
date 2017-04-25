@@ -6,9 +6,8 @@ are my original development platform.
 
 ![Image of the STM8S103 board](stm8board-pinout.jpg)
 
-They are very similar the [ESP14 Wifi-boards](hardware/esp14.html), most
-programs should run on those chinese gems as well, but that is still
-untested.
+They are very similar to the [ESP14 Wifi-boards](hardware/esp14.html) and
+most programs will work fine on those chinese gems as well.
 
 The STM8S103 breakout boards are build around a CPU STM8S103F3P6 with 16MHz
 internal oscillator, 8kB flash, 1kB RAM, and 640 byte EEPROM. The CPU
