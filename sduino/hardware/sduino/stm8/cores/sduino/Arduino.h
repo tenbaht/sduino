@@ -249,6 +249,8 @@ void alternateFunction(uint8_t val);
 #define PL 12
 #endif
 
+#include "pins_arduino.h"
+
 enum {
     NOT_ON_TIMER = 0,
 #ifdef NEED_TIMER_11_12
@@ -291,7 +293,6 @@ long map(long x, long in_min, long in_max, long out_min, long out_max);
 
 inline unsigned int makeWord(unsigned char h, unsigned char l) { return (h << 8) | l; }
 
-#include "pins_arduino.h"
 
 /*
  * The new interrupt numbers are a combination of the position in the
