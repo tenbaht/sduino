@@ -489,7 +489,7 @@ void init()
 	// set timer 4 autoreload value/period (typ. @16MHz: 250-1)
 	TIM4->ARR = (uint8_t)(T4PERIOD-1);
 	/* Clear TIM4 update flag by writing 0. Writing ones has no effect */
-	TIM4->SR1 = ~TIM4_FLAG_UPDATE;
+	TIM4->SR1 = (uint8_t)(~TIM4_FLAG_UPDATE);
 	/* Enable update interrupt */
 	TIM4->IER |= TIM4_IT_UPDATE;
 	/* Enable TIM4 */
