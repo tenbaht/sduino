@@ -211,6 +211,7 @@
         Xprinthelper2	(class,instance,printFloat,double,uint8_t) \
         Xprinthelper0	(class,instance,println) \
         Xprinthelper1	(class,instance,println_s,const char*) \
+        Xprinthelper2	(class,instance,println_sn,const uint8_t*,size_t) \
         Xprinthelper1	(class,instance,println_i,long) \
         Xprinthelper1	(class,instance,println_u,unsigned long) \
         Xprinthelper1	(class,instance,println_f,double) \

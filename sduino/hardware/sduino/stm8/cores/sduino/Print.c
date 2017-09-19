@@ -84,6 +84,16 @@ size_t Print_print_i(writefunc_p writefunc, long n)
 	return printInt(writefunc, n,10);
 }
 
+// Variants of the above functions with an added newline //////////////////////
+
+size_t Print_println_sn(writefunc_p writefunc, const uint8_t *buffer, size_t size)
+{
+	size_t r;
+
+	r = Print_print_sn(writefunc, buffer, size);
+	return r + Print_println(writefunc);
+}
+
 size_t Print_println_s(writefunc_p writefunc, const char *str)
 {
 	size_t r;
@@ -91,8 +101,6 @@ size_t Print_println_s(writefunc_p writefunc, const char *str)
 	r = Print_print_s(writefunc, str);
 	return r + Print_println(writefunc);
 }
-
-
 
 size_t Print_println_u(writefunc_p writefunc, unsigned long n)
 {

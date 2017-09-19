@@ -86,6 +86,7 @@ void HardwareSerial_end(void);
 // variants of the standard Serial.print() function: Separate implementations
 // for string, char, unsigned, signed int
 #define Serial_print_s(S)	Print_print_s(HardwareSerial_write,S)
+#define Serial_print_sn(S)	Print_print_sn(HardwareSerial_write,S,N)
 #define Serial_print_c(C)	HardwareSerial_write(C)
 
 // print signed/unsigned integer values (char, short, int, long) as decimal values
@@ -102,6 +103,7 @@ void HardwareSerial_end(void);
 
 #define Serial_println()	Print_println(HardwareSerial_write)
 #define Serial_println_s(S)	Print_println_s(HardwareSerial_write,S)
+#define Serial_println_sn(S,N)	Print_println_sn(HardwareSerial_write,S,N)
 #define Serial_println_u(U)	Print_println_u(HardwareSerial_write,U)
 #define Serial_println_i(I)	Print_println_i(HardwareSerial_write,I)
 #define Serial_println_ib(I,B)	Print_println_ib(HardwareSerial_write,I,B)
