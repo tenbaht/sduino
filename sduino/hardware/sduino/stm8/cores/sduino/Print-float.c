@@ -1,7 +1,7 @@
 /*
  Print.c - Base class that provides print() and println()
  Copyright (c) 2008 David A. Mellis.  All right reserved.
- 
+
  The float functions are moved to a separate file Print-float.c. This way
  we can keep the linker from pulling in all the float functions even when no
  floats are used in the sketch.
@@ -48,7 +48,7 @@
 // Public Methods //////////////////////////////////////////////////////////////
 
 
-size_t Print_printFloat(writefunc_p writefunc, double number, uint8_t digits) 
+size_t Print_print_fd(writefunc_p writefunc, double number, uint8_t digits)
 { 
   size_t n = 0;
   uint8_t i;
@@ -98,11 +98,11 @@ size_t Print_printFloat(writefunc_p writefunc, double number, uint8_t digits)
 }
 
 
-size_t Print_printlnFloat(writefunc_p writefunc, double number, uint8_t digits) 
+size_t Print_println_fd(writefunc_p writefunc, double number, uint8_t digits)
 {
 	size_t r;
 
-	r = Print_printFloat(writefunc, number, digits);
+	r = Print_print_fd(writefunc, number, digits);
 	return r + Print_println(writefunc);
 }
 

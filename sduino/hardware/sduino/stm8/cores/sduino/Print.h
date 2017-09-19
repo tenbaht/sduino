@@ -60,19 +60,26 @@ size_t Print_print_u(writefunc_p writefunc, unsigned long n);
 size_t Print_print_ib(writefunc_p writefunc, long n, uint8_t base);
 size_t Print_print_ub(writefunc_p writefunc, unsigned long n, uint8_t base);
 
-// print float values
-size_t Print_printFloat(writefunc_p writefunc, double number, uint8_t digits);
-
+// print float values with two digits precision/specified number of digits
+size_t Print_print_fd(writefunc_p writefunc, double number, uint8_t digits);
+//#define Print_print_f(W,N)	Print_print_fd(W,N,2)
+inline size_t Print_print_f(writefunc_p writefunc, double number) {
+  return Print_print_fd(writefunc, number, 2);
+}
 
 // Variants of the above with a newline added at the and:
 size_t Print_println(writefunc_p writefunc);
 size_t Print_println_s(writefunc_p writefunc, const char *str);
-size_t Print_println_u(writefunc_p writefunc, unsigned long n);
 size_t Print_println_sn(writefunc_p writefunc, const uint8_t *buffer, size_t size);
 size_t Print_println_i(writefunc_p writefunc, long n);
-size_t Print_println_ub(writefunc_p writefunc, unsigned long n, uint8_t base);
+size_t Print_println_u(writefunc_p writefunc, unsigned long n);
 size_t Print_println_ib(writefunc_p writefunc, long n, uint8_t base);
-size_t Print_printlnFloat(writefunc_p writefunc, double number, uint8_t digits);
+size_t Print_println_ub(writefunc_p writefunc, unsigned long n, uint8_t base);
+size_t Print_println_fd(writefunc_p writefunc, double number, uint8_t digits);
+//#define Print_println_f(W,N)	Print_println_fd(W,N,2)
+inline size_t Print_println_f(writefunc_p writefunc, double number) {
+  return Print_println_fd(writefunc, number, 2);
+}
 
 
 #endif

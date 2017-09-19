@@ -1,35 +1,32 @@
 #include "Arduino.h"
-#include "HardwareSerial.h"
-#include "Print.h"
+#include "Serial.h"
 
 void setup (void)
 {
-	HardwareSerial_begin(115200);
-	Print_println_s("\nPrint test");
+	Serial_begin(115200);
+	Serial_println_s("\nPrint test");
 
-	printNumber(1234,10);	printChr(10);
-	printNumber(1234,16);	printChr(10);
-	printNumber(1234,2);	printChr(10);
+	Serial_println_ib(1234,10);
+	Serial_println_ib(1234,16);
+	Serial_println_ib(1234,2);
 
-	Print_println_u(2345);
-	Print_println_u(-3);
-	Print_println_i(-3);
-/*
-	Print_printFloat(PI,10);	printChr(10);
-	Print_printFloat(PI,11);	printChr(10);
-	Print_printFloat(PI,12);	printChr(10);
-	Print_printFloat(-PI,13);	printChr(10);
-*/
+	Serial_println_u(2345);
+	Serial_println_u(-3);
+	Serial_println_i(-3);
+
+	Serial_println_fd(PI,10);
+	Serial_println_fd(PI,11);
+	Serial_println_fd(PI,12);
+	Serial_println_fd(-PI,13);
 }
 
 void loop()
 {
 	char c;
 
-	if (HardwareSerial_available()) {
-		c = HardwareSerial_read();
-		printStr("character read: 0x");
-		printNumber(c,HEX);
-		println();
+	if (Serial_available()) {
+		c = Serial_read();
+		Serial_print_s("character read: 0x");
+		Serial_println_ub(c,HEX);
 	}
 }

@@ -135,6 +135,7 @@ size_t Print_println_ib(writefunc_p writefunc, long n, uint8_t base)
 }
 
 
+
 // (not so) Private Methods /////////////////////////////////////////////////////////////
 
 size_t Print_println(writefunc_p writefunc)
@@ -183,53 +184,3 @@ size_t Print_print_ib(writefunc_p writefunc, long n, uint8_t base)
   }
 }
 
-/*
-size_t Print_print_f(writefunc_p writefunc, double number, uint8_t digits) 
-{ 
-  size_t n = 0;
-  uint8_t i;
-  unsigned long int_part;
-  double remainder, rounding;
-  unsigned int toPrint;
-
-  if (isnan(number)) return printStr("nan");
-  if (isinf(number)) return printStr("inf");
-  if (number > 4294967040.0) return printStr ("ovf");  // constant determined empirically
-  if (number <-4294967040.0) return printStr ("ovf");  // constant determined empirically
-
-  // Handle negative numbers
-  if (number < 0.0)
-  {
-     n += printChr('-');
-     number = -number;
-  }
-
-  // Round correctly so that print(1.999, 2) prints as "2.00"
-  rounding = 0.5;
-  for (i=0; i<digits; ++i)
-    rounding /= 10.0;
-
-  number += rounding;
-
-  // Extract the integer part of the number and print it
-  int_part = (unsigned long)number;
-  remainder = number - (double)int_part;
-  n += printNumber(int_part,10);
-
-  // Print the decimal point, but only if there are digits beyond
-  if (digits > 0) {
-    n += printChr('.'); 
-  }
-
-  // Extract digits from the remainder one at a time
-  while (digits-- > 0)
-  {
-    remainder *= 10.0;
-    toPrint = (unsigned int)(remainder);
-    n += printNumber(toPrint,10);
-    remainder -= toPrint; 
-  } 
-  
-  return n;
-}
-*/
