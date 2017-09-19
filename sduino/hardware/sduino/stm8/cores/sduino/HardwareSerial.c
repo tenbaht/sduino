@@ -28,7 +28,6 @@
 
 #include"stm8s.h"
 
-#include "Arduino.h"
 #include "HardwareSerial.h"
 
 

@@ -163,7 +163,6 @@ void yield(void);
 
 
 typedef unsigned int word;
-#define double float
 
 #define bit(b) (1UL << (b))
 

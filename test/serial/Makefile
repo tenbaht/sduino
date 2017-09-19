@@ -8,10 +8,11 @@ CC=$(BINDIR)/sdcc
 LD=$(BINDIR)/sdld
 
 LIBBASE=../../STM8S_StdPeriph_Driver
-SDUINO=../../sduino
+SDUINO=../../sduino/hardware/sduino/stm8/cores/sduino
+PINS=../../sduino/hardware/sduino/stm8/variants/standard
 
 CFLAGS= --debug -mstm8 -DF_CPU=2000000L -DSTM8S103 \
-	-I. -I$(SDUINO) -I$(LIBBASE)/inc -I/usr/share/sdcc/include/
+	-I. -I$(SDUINO) -I$(LIBBASE)/inc -I$(PINS) -I/usr/share/sdcc/include/
 
 LDFLAGS=-L$(LIBBASE)/src -L/opt/sdcc/share/sdcc/lib/stm8 -lstm8s
 
