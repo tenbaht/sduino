@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - using mkdocs for building the project website
 ### Fixed
+- changed method names for printing floats to xxx_print_f and xxx_print_fd
 
 ## [0.2.0 - 2017-03-01]
 ### Added
