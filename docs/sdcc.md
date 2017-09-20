@@ -89,69 +89,20 @@ Funktion gibt, ergibt einen Linkerfehler. Das erklärt den Sinn von stm8s_it.h
 im Projektverzeichniss. Eine Arduino-ähnliche Umgebung muss diese Datei also
 nach Analyse aller Sourcen selber erzeugen.
 
+
 #### Simulator sstm8
 
-Does not account for different cpu models (work in progress).
-base address for UART1 is 0x5240, not 0x5230
-TX and RX interrupt vectors 0x804C and 0x8050.
+Has improved a lot recently. The UART and timer part is usable now (as of
+rev. 9998) and the subtle differences in the memory layout of the I/O section
+for the different cpu subtypes are factored in.
 
+Make sure to use a recent snapshot build if you are planing to use simulator!
 
-Compilieren: braucht libboost-graph:
-libboost-graph1.54-dev - generic graph components and algorithms in C++  
-libboost-graph1.54.0 - generic graph components and algorithms in C++  
-libboost-graph1.55-dev - generic graph components and algorithms in C++  
-libboost-graph1.55.0 - generic graph components and algorithms in C++  
 
 #### Missing peephole optimisations
 
-Directly connected sequences of 'addw x,#' and 'subw x,#' should be
-combined into one operation.
+See discussion of issue 14: https://github.com/tenbaht/sduino/issues/14
 
-Multiplication by two is done by 'mul' instead of a bitshift. Important for
-array access.
-
-**Interrupt routine preamble**:
-Why is there a 'clr a/div x,a' sequence?
-
-**Indirect 16 bit access**:
-'ldw x,#addr/ldw x,(x)' should be 'ldw x,[addr]'
-
-**Indirect function call**:
-'ldw x,#addr/ldw x,(x)/call (x)' should be 'call [addr]'
-
-Example (Interrupt routine calls a function from a jump table):
-
-```c
-static volatile voidFuncPtr intFunc[EXTERNAL_NUM_INTERRUPTS] = {
-    nothing,
-    nothing,
-};
-
-void TIM1_CAP_COM_IRQHandler(void) __interrupt(ITC_IRQ_TIM1_CAPCOM)
-{
-    intFunc[1]();
-}
-```
-
-
-```asm
-;	-----------------------------------------
-;	 function TIM1_CAP_COM_IRQHandler
-;	-----------------------------------------
-_TIM1_CAP_COM_IRQHandler:
-	clr	a
-	div	x, a
-	ldw	x, #_intFunc+2
-	ldw	x, (x)
-	call	(x)
-	iret
-	.area CODE
-	.area INITIALIZER
-__xinit__intFunc:
-	.dw _nothing
-	.dw _nothing
-	.area CABS (ABS)
-```
 
 
 #### Missing compiler features
