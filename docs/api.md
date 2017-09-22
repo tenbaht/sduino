@@ -36,6 +36,7 @@ Some examples of typical name changes:
 |--------				| -------		|
 |`Serial.print(int)`			| `Serial_print_i`	|
 |`Serial.print(unsigned)`		| `Serial_print_u`	|
+|`Serial.print(float)`			| `Serial_print_f`	|
 |`Serial.print(char)`			| `Serial_print_c`	|
 |`Serial.print(char *)`			| `Serial_print_s`	|
 |`Serial.print(char *buf, int len)`	| `Serial_print_n`	|
@@ -237,10 +238,12 @@ complexity for the Arduino API. Not sure if it should stay. Has to be
 enabled by defining `SUPPORT_ALTERNATE_MAPPINGS`.
 
 
+
 ### Useful CPU features that are not supported by the Arduino API
 
-**Input-Capture-Mode:** Available for all four channels, at least for timer1. Would be great for precise time measurements. Maybe build a library?
+**Input-Capture-Mode:** Available for all four channels, at least for
+timer1. Would be great for precise time measurements. Maybe build a library?
 
-**Encoder interface mode:** Kann von Haus aus mit Quadratur-Encodern umgehen
-und in Hardware zählen -> perfekt für die Druckerschlitten-Motorsteuerung.
-
+**Encoder interface mode:** Hardware support for reading quadrature encoder
+and keeping track of the current (motor) position using a hardware timer
+counter. Perfectly suited to all kinds of position feedback.

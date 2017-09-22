@@ -196,6 +196,7 @@ arithmetics whenever possible.
 `ShiftOut()`  
 WMath: `map()`  
 HardwareSerial  
+`serialEvent()`
 Print  
 `pulseInLong()`  
 [SPI](api/SPI.md):
