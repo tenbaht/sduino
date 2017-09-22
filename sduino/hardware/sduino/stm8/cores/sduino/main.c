@@ -22,13 +22,7 @@
 // make sure to define prototypes for all used interrupts
 //#include "stm8s_it.h"
 
-// Declared weak in Arduino.h to allow user redefinitions.
-int atexit(void (*func)()) { return 0; }
-
-// Weak empty variant initialization function.
-// May be redefined by variant files.
-//void initVariant() __attribute__((weak));
-void initVariant() { }
+unsigned char runSerialEvent;
 
 int main(void)
 {
@@ -40,7 +34,7 @@ int main(void)
     
 	for (;;) {
 		loop();
-//FIXME		if (serialEventRun) serialEventRun();
+		if (runSerialEvent) serialEvent();
 	}
         
 //	return 0;

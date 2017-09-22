@@ -6,10 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+- support for serialEvent()
+
 ### Changed
 - using mkdocs for building the project website
+
 ### Fixed
 - changed method names for printing floats to xxx_print_f and xxx_print_fd
+
+
 
 ## [0.2.0 - 2017-03-01]
 ### Added
@@ -31,6 +36,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - corrected duplicate mapping of PWM-T21 for STM8S003/STM8S103
+
+
 
 ## [0.1.0 - 2016-02-20]
 ### Added

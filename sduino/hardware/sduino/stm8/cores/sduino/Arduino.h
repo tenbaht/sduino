@@ -171,9 +171,11 @@ typedef unsigned char byte;
 //typedef uint8_t byte;
 
 void init(void);
-void initVariant(void);
+void initVariant(void);		// weak
 
-//int atexit(void (*func)()) __attribute__((weak));
+int atexit(void (*func)());	// __attribute__((weak));
+void serialEvent(void);		// weak
+extern unsigned char runSerialEvent;
 
 void pinMode(uint8_t pin, uint8_t mode);
 void digitalWrite(uint8_t pin, uint8_t val);

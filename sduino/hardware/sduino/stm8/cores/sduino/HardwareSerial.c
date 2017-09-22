@@ -28,6 +28,7 @@
 
 #include"stm8s.h"
 
+#include "Arduino.h"
 #include "HardwareSerial.h"
 
 
@@ -147,6 +148,7 @@ static void store_char(unsigned char c, ring_buffer *buffer)
   if (i != buffer->tail) {
     buffer->buffer[buffer->head] = c;
     buffer->head = i;
+    runSerialEvent = 1;
   }
 }
 
@@ -237,6 +239,7 @@ void HardwareSerial_begin(unsigned long baud)
 	UARTx->CR2 = UARTx_CR2_RIEN | UARTx_CR2_TEN | UARTx_CR2_REN;
 #endif
   initialized = 1;
+  runSerialEvent = 0;
 }
 
 
@@ -277,6 +280,7 @@ void HardwareSerial_begin_config(unsigned long baud, uint8_t config)
 	UARTx->CR2 = UARTx_CR2_RIEN | UARTx_CR2_TEN | UARTx_CR2_REN;
 #endif
   initialized = 1;
+  runSerialEvent = 0;
 }
 
 
@@ -291,6 +295,7 @@ void HardwareSerial_end(void)
   // clear any received data
   rx_buffer.head = rx_buffer.tail;
   initialized = 0;
+  runSerialEvent = 0;
 }
 
 int HardwareSerial_available(void)
@@ -301,6 +306,7 @@ int HardwareSerial_available(void)
 int HardwareSerial_peek(void)
 {
   if (rx_buffer.head == rx_buffer.tail) {
+//  if (!runSerialEvent) {
     return -1;
   } else {
     return rx_buffer.buffer[rx_buffer.tail];
@@ -311,10 +317,12 @@ int HardwareSerial_read(void)
 {
   // if the head isn't ahead of the tail, we don't have any characters
   if (rx_buffer.head == rx_buffer.tail) {
+//  if (!runSerialEvent) {
     return -1;
   } else {
     unsigned char c = rx_buffer.buffer[rx_buffer.tail];
     rx_buffer.tail = (unsigned int)(rx_buffer.tail + 1) % SERIAL_BUFFER_SIZE;
+    runSerialEvent = (rx_buffer.head != rx_buffer.tail);
     return c;
   }
 }
