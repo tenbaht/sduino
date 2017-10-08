@@ -36,3 +36,22 @@ stm8sdisco.build.variant=stm8sdisco
 # meaningless variables just to keep the makefile happy
 
 stm8sdisco.upload.speed=1
+
+
+##############################################################
+
+s8uno.name=sduino_UNO Board with STM8S105K6 using stlink
+
+s8uno.upload.using=stm8flash
+s8uno.upload.protocol=stlink
+s8uno.upload.mcu=stm8s105?6
+s8uno.upload.maximum_size=32768
+
+s8uno.build.mcu=STM8S105
+s8uno.build.f_cpu=16000000L
+s8uno.build.core=sduino
+s8uno.build.variant=s8uno
+
+# meaningless variables just to keep the makefile happy
+
+s8uno.upload.speed=115200
