@@ -302,6 +302,7 @@ const uint8_t digitalPinToAnalogChannelMap[] = {
 
 #endif /* ARDUINO_MAIN */
 
+#define NEED_TIMER_23
 #ifdef SUPPORT_ALTERNATE_MAPPINGS
 # define NEED_TIMER_11_12
 #endif

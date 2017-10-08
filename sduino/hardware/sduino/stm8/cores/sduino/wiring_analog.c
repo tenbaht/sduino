@@ -257,6 +257,7 @@ void analogWrite(uint8_t pin, int val)
 				TIM2->CCR2L = (uint8_t)(val);
 #endif
 				break;
+#ifdef NEED_TIMER_23
 			case TIMER23:
 				// connect pwm to pin on timer 2, channel 3
 #ifdef USE_SPL
@@ -276,6 +277,7 @@ void analogWrite(uint8_t pin, int val)
 				TIM2->CCR3L = (uint8_t)(val);
 #endif
 				break;
+#endif // ifdef NEED_TIMER_23
 #ifdef NEED_TIMER_31_32
 			case TIMER31:
 				// connect pwm to pin on timer 3, channel 1

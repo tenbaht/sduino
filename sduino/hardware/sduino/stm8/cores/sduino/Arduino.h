@@ -263,7 +263,9 @@ enum {
     TIMER14,
     TIMER21,
     TIMER22,
+#ifdef NEED_TIMER_23
     TIMER23,
+#endif
 #ifdef NEED_TIMER_31_32
     TIMER31,
     TIMER32,
