@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-        
+        <meta name="author" content="Michael Mayer">
         
         <link rel="shortcut icon" href="../../img/favicon.ico">
 
@@ -13,8 +13,8 @@
 
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
-        <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="../../css/highlight.css">
+        <link href="../../css/base.css" rel="stylesheet">
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -32,7 +32,6 @@
 
         <!-- Collapsed navigation -->
         <div class="navbar-header">
-            
             <!-- Expander button -->
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -40,7 +39,6 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            
 
             <!-- Main title -->
             <a class="navbar-brand" href="../..">Sduino</a>
@@ -48,184 +46,145 @@
 
         <!-- Expanded navigation -->
         <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
             
-                <!-- Main navigation -->
-                <ul class="nav navbar-nav">
-                
-                
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                        
-                            
-<li >
-    <a href="../..">Overview</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../../install/">Installation</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../../sdcc/">Using the SDCC compiler</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../../spl/">Using the SPL with SDCC and sduino</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../../macro/">C preprocessor macro magic</a>
-</li>
-
-                        
-                        </ul>
-                    </li>
-                
-                
-                
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Libraries <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                        
-                            
-<li >
-    <a href="../../api/">API description and migration guidelines</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../../api/HardwareSerial/">HardwareSerial</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../../api/SPI/">SPI</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../../api/I2C/">I2C</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../../api/LiquidCrystal/">LiquidCrystal character LCD library</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../../api/PCD8544/">PCD8544 libray for Nokia 5110-like graphical LCDs</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../../api/Mini_SSD1306/">Mini_SSD1306 library for monochrome OLED-displays</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../../api/Stepper/">Stepper library</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../../api/Servo/">Servo library</a>
-</li>
-
-                        
-                        </ul>
-                    </li>
-                
-                
-                
-                    <li class="dropdown active">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hardware <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                        
-                            
-<li >
-    <a href="../flashtool/">Flash tool</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../">List of supported boards</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../../pin_mapping/">Ways to define a pin mapping</a>
-</li>
-
-                        
-                            
-<li class="active">
-    <a href="./">Generic STM8S103 breakout board (stm8blue)</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../esp14/">ESP14: Wifi board, STM8S003</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../stm8sdiscovery/">STM8S105Discovery: Evaluation board made my ST</a>
-</li>
-
-                        
-                        </ul>
-                    </li>
-                
-                
-                
-                    <li >
-                        <a href="../../about/">About</a>
-                    </li>
-                
-                
-                </ul>
             
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../..">Overview</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../install/">Installation</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../sdcc/">Using the SDCC compiler</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../spl/">Using the SPL with SDCC and sduino</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../macro/">C preprocessor macro magic</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Libraries <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../api/">API description and migration guidelines</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/HardwareSerial/">HardwareSerial</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/SPI/">SPI</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/I2C/">I2C</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/LiquidCrystal/">LiquidCrystal character LCD library</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/PCD8544/">PCD8544 libray for Nokia 5110-like graphical LCDs</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/Mini_SSD1306/">Mini_SSD1306 library for monochrome OLED-displays</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/Stepper/">Stepper library</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/Servo/">Servo library</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hardware <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../flashtool/">Flash tool</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../">List of supported boards</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../pin_mapping/">Ways to define a pin mapping</a>
+                        </li>
+                    
+                        <li class="active">
+                            <a href="./">Generic STM8S103 breakout board (stm8blue)</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../esp14/">ESP14: Wifi board, STM8S003</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../stm8sdiscovery/">STM8S105Discovery: Evaluation board made my ST</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../../about/">About</a>
+                </li>
+            
+            
+            </ul>
 
+            <!-- Search, Navigation and Repo links -->
             <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
-                        <i class="fa fa-search"></i> Search
+                <li >
+                    <a rel="next" href="../pin_mapping/">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="../esp14/">
+                        Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
                 
-                    <li >
-                        <a rel="next" href="../../pin_mapping/">
-                            <i class="fa fa-arrow-left"></i> Previous
-                        </a>
-                    </li>
-                    <li >
-                        <a rel="prev" href="../esp14/">
-                            Next <i class="fa fa-arrow-right"></i>
-                        </a>
-                    </li>
-                
+                <li>
+                    <a href="https://github.com/tenbaht/sduino">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
                 
             </ul>
         </div>
@@ -233,8 +192,7 @@
 </div>
 
         <div class="container">
-            
-                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
         <li class="main active"><a href="#generic-stm8s103-breakout-board">Generic STM8S103 breakout board</a></li>
@@ -246,16 +204,15 @@
     
     </ul>
 </div></div>
-                <div class="col-md-9" role="main">
+            <div class="col-md-9" role="main">
 
 <h1 id="generic-stm8s103-breakout-board">Generic STM8S103 breakout board</h1>
 <p>These simple breakout boards are available on aliexpress for well under one
 Dollar (I got mine for 67 cent each, including shipping from China). They
 are my original development platform.</p>
 <p><img alt="Image of the STM8S103 board" src="../stm8board-pinout.jpg" /></p>
-<p>They are very similar the <a href="../hardware/esp14.html">ESP14 Wifi-boards</a>, most
-programs should run on those chinese gems as well, but that is still
-untested.</p>
+<p>They are very similar to the <a href="../esp14/">ESP14 Wifi-boards</a> and
+most programs will work fine on those chinese gems as well.</p>
 <p>The STM8S103 breakout boards are build around a CPU STM8S103F3P6 with 16MHz
 internal oscillator, 8kB flash, 1kB RAM, and 640 byte EEPROM. The CPU
 includes a UART, SPI, I2C, PWM, 10 bit ADC, 3 timer, and up to 14 I/O pins -
@@ -317,7 +274,7 @@ the physical CPU pin numbers. Many Arduino sketches and libraries contain
 hard-coded assumptions about the number of pins with special functions.
 Ideally, all these numbers would be the same and all programs could be
 compiled without changes.</p>
-<p><a href="../pin_mapping.html">Here</a> I discuss some possible pin mapping and check
+<p><a href="../pin_mapping/">Here</a> I discuss some possible pin mapping and check
 how close we could get the the ideal mapping. Unfortunatly, it turns out
 that a perfect mapping is not possible.</p>
 <p>In the end I chose a simple geometric numbering for the square UFQFPN20
@@ -503,46 +460,17 @@ paratheses):</p>
 </tr>
 </tbody>
 </table></div>
-            
         </div>
 
         <footer class="col-md-12">
             <hr>
             
-            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+            <center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
         </footer>
 
         <script src="../../js/jquery-1.10.2.min.js"></script>
         <script src="../../js/bootstrap-3.0.3.min.js"></script>
         <script src="../../js/highlight.pack.js"></script>
-        <script>var base_url = '../..';</script>
-        <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
         <script src="../../js/base.js"></script>
-
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>
-                            From here you can search these documents. Enter
-                            your search terms below.
-                        </p>
-                        <form role="form">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
-                            </div>
-                        </form>
-                        <div id="mkdocs-search-results"></div>
-                    </div>
-                    <div class="modal-footer">
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </body>
 </html>
