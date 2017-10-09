@@ -6,7 +6,7 @@ are my original development platform.
 
 ![Image of the STM8S103 board](stm8board-pinout.jpg)
 
-They are very similar to the [ESP14 Wifi-boards](hardware/esp14.html) and
+They are very similar to the [ESP14 Wifi-boards](esp14.md) and
 most programs will work fine on those chinese gems as well.
 
 The STM8S103 breakout boards are build around a CPU STM8S103F3P6 with 16MHz
@@ -55,7 +55,7 @@ hard-coded assumptions about the number of pins with special functions.
 Ideally, all these numbers would be the same and all programs could be
 compiled without changes.
 
-[Here](pin_mapping.html) I discuss some possible pin mapping and check
+[Here](pin_mapping.md) I discuss some possible pin mapping and check
 how close we could get the the ideal mapping. Unfortunatly, it turns out
 that a perfect mapping is not possible.
 

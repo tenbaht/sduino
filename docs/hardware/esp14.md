@@ -2,7 +2,7 @@
 
 An ESP-8266 Wifi-Controller together with a STM8S003 CPU for about $2 -
 incredible.  Since the STM8S003 is almost identical to the STM8S103 used on
-the [STM8S103 breakout boards](stm8blue.html) all software runs here as well.
+the [STM8S103 breakout boards](stm8blue.md) all software runs here as well.
 
 
 Using the same pin numbering scheme as with the stm8blue boards it looks

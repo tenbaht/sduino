@@ -122,6 +122,6 @@ Other libraries:
 
 ### Faster I2C transfer
 
-Faster I2C transfer is supported by the [I2C.html](I2C library), but to use
+Faster I2C transfer is supported by the [I2C library](I2C.md), but to use
 it you have to modify the source code for the Mini_SSD1306 library. Make
 this configurable in the instantiation function.

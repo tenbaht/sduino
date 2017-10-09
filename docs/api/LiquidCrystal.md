@@ -11,7 +11,7 @@ This library is a singleton library, it is not possible to use more than one
 instance per sketch.
 
 The API syntax is very similar to the original C++ syntax, thanks to some
-[c preprocessor macro magic](macro.html).
+[c preprocessor macro magic](../macro.md).
 
 Apart from the usual name mangeling for polymorph functions (mostly the
 different variants of the Print::print method) moving the opening bracket at
