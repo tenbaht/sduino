@@ -18,6 +18,16 @@ Please find more detailed information about the supported boards, the needed
 tools and the library APIs on the
 [project website](https://tenbaht.github.io/sduino/).
 
+For bug reports and other issues tightly related to the repository content
+please use the
+[github issue tracker](https://github.com/tenbaht/sduino/issues).
+
+For general discussions and suggestions on Sduino it might be more
+convinient to open a thread on the
+[STM8 board](http://stm32duino.com/viewforum.php?f=52) of the stm32duino
+forum. It will help to catch my attention to prefix your topic with
+"[sduino]".
+
 
 ## Table of Contents
 
