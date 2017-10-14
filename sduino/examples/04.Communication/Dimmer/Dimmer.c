@@ -25,7 +25,7 @@
 
 #include <Arduino.h>
 
-const int ledPin = LED_BUILDIN;  // the pin that the LED is attached to
+const int ledPin = LED_BUILTIN;  // the pin that the LED is attached to
 
 void setup() {
   // initialize the serial communication:

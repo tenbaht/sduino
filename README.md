@@ -65,7 +65,7 @@ First, let's make an LED blink using the Blink example from Arduino:
 // Pin 13 has an LED connected on most Arduino boards.
 // Pin 3 for the STM8S103 break out board
 // give it a name:
-int led = LED_BUILDIN;
+int led = LED_BUILTIN;
 
 // the setup routine runs once when you press reset:
 void setup() {
