@@ -1,0 +1,178 @@
+
+# Arduino AVR Core and platform.
+# ------------------------------
+#
+# For more info:
+# https://github.com/arduino/Arduino/wiki/Arduino-IDE-1.5-3rd-party-Hardware-specification
+
+name=STM8 Testboards
+version=1.6.15
+
+# AVR compile variables
+# ---------------------
+
+compiler.warning_flags=
+compiler.warning_flags.none=--less-pedantic
+compiler.warning_flags.default=
+compiler.warning_flags.more=-Wall
+compiler.warning_flags.all=-Wall -Wextra
+
+# Default "compiler.path" is correct, change only if you want to override the initial value
+compiler.path={runtime.hardware.path}/tools/sdcc/bin/
+compiler.tools.path=/usr/bin/
+#compiler.tools.path={runtime.hardware.path}/tools/bin/
+compiler.path.emu={runtime.hardware.path}/tools/linux/
+compiler.path.emu.windows={runtime.hardware.path}/tools/win/
+compiler.path.emu.macos={runtime.hardware.path}/tools/macos/
+#/home/mmayer/stm8/abuild/
+
+compiler.c.cmd=sdcc-pseudo-g++
+compiler.c.cmd.windows=sdcc-pseudo-g++.bat
+compiler.c.flags=-c -Ddouble=float -D__PROG_TYPES_COMPAT__ {compiler.warning_flags}
+compiler.c.elf.flags=--code-size {upload.maximum_size} --iram-size {upload.maximum_data_size}
+
+compiler.c.elf.cmd=sdcc-link
+compiler.c.elf.cmd.windows=sdcc-link.bat
+compiler.S.flags=-c -g -x assembler-with-cpp -flto
+
+compiler.cpp.cmd=sdcc-pseudo-g++
+compiler.cpp.cmd.windows=sdcc-pseudo-g++.bat
+compiler.cpp.flags=-c -Ddouble=float -D__PROG_TYPES_COMPAT__ {compiler.warning_flags}
+
+compiler.ar.cmd=sdar
+compiler.ar.cmd.windows=sdar.exe
+compiler.ar.flags=rcs
+
+compiler.objcopy.cmd=objcopy
+#compiler.objcopy.eep.flags=-O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0
+#compiler.objcopy.eep.flags=-O ihex -j EEPROM EEPROM=0
+
+compiler.elf2hex.cmd=objcopy
+compiler.elf2hex.flags=-O ihex -R DATA -R INITIALIZED -R SSEG
+
+compiler.syslibs.stdlib.path={runtime.hardware.path}/tools/sdcc/share/sdcc/
+compiler.syslibs.spl.path={runtime.platform.path}/STM8S_StdPeriph_Driver/
+
+compiler.ldflags=
+#compiler.ld.stdlib=lib/stm8/
+
+compiler.size.cmd=size
+compiler.size.cmd.windows=size.exe
+
+# Meine Ergänzungen, müssen irgendwie automatisiert werden:
+#compiler.systemincludes=-I/home/mmayer/rsync/stm8/STM8S_StdPeriph_Driver/inc -I/opt/sdcc/share/sdcc/include
+#compiler.systemincludes=-I/home/mmayer/rsync/stm8/STM8S_StdPeriph_Driver/inc "-I{runtime.hardware.path}/tools/sdcc/share/sdcc/include"
+#compiler.systemincludes="-I{runtime.platform.path}/STM8S_StdPeriph_Driver/inc" "-I{runtime.hardware.path}/tools/sdcc/share/sdcc/include"
+compiler.systemincludes="-I{compiler.syslibs.spl.path}inc" "-I{compiler.syslibs.stdlib.path}include"
+
+# This can be overridden in boards.txt
+build.extra_flags=
+
+# These can be overridden in platform.local.txt
+compiler.c.extra_flags=
+compiler.c.elf.extra_flags=
+compiler.S.extra_flags=
+compiler.cpp.extra_flags=
+compiler.ar.extra_flags=
+compiler.objcopy.eep.extra_flags=
+compiler.elf2hex.extra_flags=
+
+# AVR compile patterns
+# --------------------
+
+## Compile c files (re1)
+#recipe.c.o.pattern="{compiler.path}{compiler.c.cmd}" re1 {compiler.c.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.c.extra_flags} {build.extra_flags} {includes} "{source_file}" -o "{object_file}"
+recipe.c.o.pattern="{compiler.path.emu}{compiler.c.cmd}" "{source_file}" "{object_file}" re2 "-Wp-MMD {object_file}.d" {compiler.c.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.c.extra_flags} {build.extra_flags} {includes} {compiler.systemincludes}
+
+## Compile c++ files (re2)
+#recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" re2 {compiler.cpp.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} "{source_file}" -o "{object_file}"
+recipe.cpp.o.pattern="{compiler.path.emu}{compiler.cpp.cmd}" "{source_file}" "{object_file}" re2 "-Wp-MMD {object_file}.d" {compiler.cpp.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} {compiler.systemincludes}
+
+# Soll-Aufruf .c.o:
+#/opt/sdcc/bin/sdcc "-Wp-MMD build-stm8sblue/Blink.c.d" -c -Ddouble=float -I.
+#-I/home/mmayer/rsync/stm8/sduino/../STM8S_StdPeriph_Driver/inc
+#-I/opt/sdcc/share/sdcc/include/ -mstm8 -DSTM8S103 -DF_CPU=16000000L
+#-DARDUINO=160 -DARDUINO_ARCH_STM8 -D__PROG_TYPES_COMPAT__
+#-I/home/mmayer/rsync/stm8/sduino/hardware/sduino/stm8/cores/sduino
+#-I/home/mmayer/rsync/stm8/sduino/hardware/sduino/stm8/variants/standard
+#Blink.c -o build-stm8sblue/Blink.c.rel
+
+##FIXME Compile S files
+recipe.S.o.pattern="{compiler.path}{compiler.c.cmd}" re3 {compiler.S.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.S.extra_flags} {build.extra_flags} {includes} "{source_file}" -o "{object_file}"
+
+## Create archives (re4)
+# archive_file_path is needed for backwards compatibility with IDE 1.6.5 or older, IDE 1.6.6 or newer overrides this value
+archive_file_path={build.path}/{archive_file}
+#recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compiler.ar.extra_flags} "{archive_file_path}" "{object_file}"
+recipe.ar.pattern="{compiler.path.emu}{compiler.ar.cmd}" "{archive_file_path}" "{object_file}" re4  {compiler.ar.flags} {compiler.ar.extra_flags}
+
+## Combine gc-sections, archives, and objects (re5)
+#recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" re5 {compiler.c.elf.flags} -mstm8 -D{build.mcu} {compiler.c.elf.extra_flags} -o "{build.path}/{build.project_name}.elf" {object_files} "{build.path}/{archive_file}" "-L{build.path}" -lm
+# produziert ihx:
+#recipe.c.combine.pattern="{compiler.path.emu}{compiler.c.elf.cmd}" "-L{runtime.platform.path}/STM8S_StdPeriph_Driver/lib" "-L{build.path}" "-L{compiler.ld.stdlib}" {compiler.c.elf.flags} -mstm8 -D{build.mcu} {compiler.c.elf.extra_flags} {object_files} "{build.path}/{archive_file}" "{build.path}/core/main.c.rel" -l{build.mcu} -lstm8 -o "{build.path}/{build.project_name}.ihx"
+# produziert elf:
+#recipe.c.combine.pattern="{compiler.path.emu}{compiler.c.elf.cmd}" "-L{runtime.platform.path}/STM8S_StdPeriph_Driver/lib" "-L{build.path}" "-L{compiler.ld.stdlib}" {compiler.c.elf.flags} -mstm8 -D{build.mcu} {compiler.c.elf.extra_flags} {object_files} "{build.path}/{archive_file}" "{build.path}/core/main.c.rel" -l{build.mcu} -lstm8 --out-fmt-elf -o "{build.path}/{build.project_name}.elf"
+recipe.c.combine.pattern="{compiler.path.emu}{compiler.c.elf.cmd}" "-L{compiler.syslibs.spl.path}lib" "-L{build.path}" "-L{compiler.syslibs.stdlib.path}lib/stm8" {compiler.c.elf.flags} -mstm8 -D{build.mcu} {compiler.c.elf.extra_flags} {object_files} "{build.path}/{archive_file}" "{build.path}/core/main.c.rel" -l{build.mcu} -lstm8 --out-fmt-elf -o "{build.path}/{build.project_name}.elf"
+
+# Soll-Wert:
+#/opt/sdcc/bin/sdcc 
+#	-L /home/mmayer/rsync/stm8/sduino/../STM8S_StdPeriph_Driver/lib
+#	-L/opt/sdcc/share/sdcc/lib/stm8 
+#	-mstm8 -DSTM8S103
+#	build-stm8sblue/Blink.c.rel build-stm8sblue/libcore.lib \
+#	build-stm8sblue/core/main.c.rel \
+#	-lSTM8S103 -lstm8  -o build-stm8sblue/Blink.ihx
+
+
+
+## Create output files (.eep and .hex)
+#recipe.objcopy.eep.pattern="{compiler.path}{compiler.objcopy.cmd}" re6 {compiler.objcopy.eep.flags} {compiler.objcopy.eep.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.eep"
+#recipe.objcopy.eep.pattern="{compiler.tools.path}{compiler.objcopy.cmd}" {compiler.objcopy.eep.flags} {compiler.objcopy.eep.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.eep"
+#recipe.objcopy.hex.pattern="{compiler.path}{compiler.elf2hex.cmd}" re7 {compiler.elf2hex.flags} {compiler.elf2hex.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.hex"
+recipe.objcopy.hex.pattern="{compiler.tools.path}{compiler.elf2hex.cmd}" {compiler.elf2hex.flags} {compiler.elf2hex.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.hex"
+
+## Save hex
+recipe.output.tmp_file={build.project_name}.hex
+recipe.output.save_file={build.project_name}.{build.variant}.hex
+
+## Compute size
+#recipe.size.pattern="{compiler.path}{compiler.size.cmd}" re10 -A "{build.path}/{build.project_name}.elf"
+recipe.size.pattern="{compiler.tools.path}{compiler.size.cmd}" -A "{build.path}/{build.project_name}.elf"
+#recipe.size.regex=^(?:\.text|\.data|\.bootloader)\s+([0-9]+).*
+#recipe.size.regex.data=^(?:\.data|\.bss|\.noinit)\s+([0-9]+).*
+#recipe.size.regex.eeprom=^(?:\.eeprom)\s+([0-9]+).*
+# flash usage = HOME + GSINIT + GSFINAL + CODE + INITIALIZER
+# RAM usage = DATA + INITIALIZED
+recipe.size.regex=^(?:HOME|GSINIT|GSFINAL|CODE|INITIALIZER)\s+([0-9]+).*
+recipe.size.regex.data=^(?:DATA|INITIALIZED)\s+([0-9]+).*
+recipe.size.regex.eeprom=^(?:EEPROM)\s+([0-9]+).*
+
+## Preprocessor
+#preproc.includes.flags=-w -x c++ -M -MG -MP
+preproc.includes.flags=-M -MG -MP
+recipe.preproc.includes="{compiler.path.emu}{compiler.cpp.cmd}" re11 {compiler.cpp.flags} {preproc.includes.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} "{source_file}"
+
+#preproc.macros.flags=-w -x c++ -E -CC
+preproc.macros.flags=-E -MC
+#recipe.preproc.macros="{compiler.path}{compiler.cpp.cmd}" re12 {compiler.cpp.flags} {preproc.macros.flags} -mmcu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} "{source_file}" -o "{preprocessed_file_path}"
+#recipe.preproc.macros="avr-g++" {compiler.cpp.flags} {preproc.macros.flags} -mmcu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} "{source_file}" -o "{preprocessed_file_path}"
+#recipe.preproc.macros="{compiler.path}{compiler.cpp.cmd}" re12 {compiler.cpp.flags} {preproc.macros.flags} -mmcu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} "{source_file}" -o "{preprocessed_file_path}"
+recipe.preproc.macros="{compiler.path.emu}{compiler.cpp.cmd}" "{source_file}" "{preprocessed_file_path}" re12 {compiler.cpp.flags} {preproc.macros.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} {compiler.systemincludes}
+
+
+# STlink/v2 Uploader
+# ------------------
+
+tools.stm8flash.cmd=stm8flash
+tools.stm8flash.cmd.windows=stm8flash.exe
+tools.stm8flash.path={runtime.hardware.path}/tools/win
+tools.stm8flash.path.macosx={runtime.hardware.path}/tools/macosx
+tools.stm8flash.path.linux={runtime.hardware.path}/tools/linux
+#tools.stm8flash.path.linux64={runtime.hardware.path}/tools/linux64
+
+#tools.stm8flash.upload.params.verify=
+tools.stm8flash.upload.params.verbose=
+tools.stm8flash.upload.params.quiet=
+tools.stm8flash.upload.pattern="{path}/{cmd}" -c{upload.protocol} -p{upload.mcu} -s flash -w "{build.path}/{build.project_name}.hex"
+# -cstlinkv2 -pstm8s103?3 -s flash -w build-stm8sblue/Blink.ihx
+#"-C{config.path}" {upload.verbose} {upload.verify} -p{build.mcu} -c{upload.protocol} -P{serial.port} -b{upload.speed} -D "-Uflash:w:{build.path}/{build.project_name}.hex:i"
