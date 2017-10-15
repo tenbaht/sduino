@@ -6,9 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+- integration into the Arduino IDE
 - support for serialEvent()
 
 ### Changed
+- adopted file layout to allow for IDE integration
 - using mkdocs for building the project website
 
 ### Fixed

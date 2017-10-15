@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# wrapper around SDCC to let the external interface look more gcc-alike
+#
+# Differences:
+# - if a .cpp files is given as input temporarly copy it to .c and compile it
+#   as a c file. This will break the dependency check, as it expects the the
+#   full original filename, but as this happens only for the original .ino
+#   file it is not a big loss.
+# - generate .rel files, but copy them as .o files as well to satisfy the
+#   dependency checker on following builds
+
+
 # ANSI color codes to beautify the output:
 BLACK='\E[0;30m'
 RED='\E[0;31m'
@@ -24,25 +35,25 @@ OFF='\E[0m'
 >&2 echo -e "${CYAN}${@}${OFF}"
 
 # echo the mark id in green and the compiler call in white:
+SDCC=/opt/sdcc/bin/sdcc
 SRC=$1
 OBJ=$2
 REL=${OBJ%.o}.rel
 MARK=$3
 shift 3
->&2 echo -e "${GREEN}Mark $MARK:${OFF}" /opt/sdcc/bin/sdcc "$@" "$SRC" -o "$OBJ"
+>&2 echo -e "${GREEN}Mark $MARK:${OFF}" "$SDCC" "$@" "$SRC" -o "$OBJ"
 
 if [[ $SRC == *.cpp ]]; then
 	>&2 echo -e "${RED}cpp gefunden${OFF}";
 	CSRC="${SRC%pp}"
 	cp -av "$SRC" "$CSRC"
-	/opt/sdcc/bin/sdcc "$@" "$CSRC" -o "$OBJ"
+	"$SDCC" "$@" "$CSRC" -o "$OBJ"
 	rm -f "$CSRC"
 else
-	/opt/sdcc/bin/sdcc "$@" "$SRC" -o "$OBJ"
+	"$SDCC" "$@" "$SRC" -o "$OBJ"
 fi
 
 # copy the generated .rel files as an .o file to avoid recompiling the next time
 if [ -e "${REL}" ]; then
 	cp -a "${REL}" "${OBJ}"
-	cp -a "${REL}" "${OBJ}.o"
 fi

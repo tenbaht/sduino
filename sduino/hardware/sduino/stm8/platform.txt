@@ -28,7 +28,7 @@ compiler.path.emu.macos={runtime.hardware.path}/tools/macos/
 
 compiler.c.cmd=sdcc-pseudo-g++
 compiler.c.cmd.windows=sdcc-pseudo-g++.bat
-compiler.c.flags=-c -Ddouble=float -D__PROG_TYPES_COMPAT__ {compiler.warning_flags}
+compiler.c.flags=-MMD -c -Ddouble=float -D__PROG_TYPES_COMPAT__ {compiler.warning_flags}
 compiler.c.elf.flags=--code-size {upload.maximum_size} --iram-size {upload.maximum_data_size}
 
 compiler.c.elf.cmd=sdcc-link
@@ -37,7 +37,7 @@ compiler.S.flags=-c -g -x assembler-with-cpp -flto
 
 compiler.cpp.cmd=sdcc-pseudo-g++
 compiler.cpp.cmd.windows=sdcc-pseudo-g++.bat
-compiler.cpp.flags=-c -Ddouble=float -D__PROG_TYPES_COMPAT__ {compiler.warning_flags}
+compiler.cpp.flags=-MMD -c -Ddouble=float -D__PROG_TYPES_COMPAT__ {compiler.warning_flags}
 
 compiler.ar.cmd=sdar
 compiler.ar.cmd.windows=sdar.exe
@@ -81,12 +81,10 @@ compiler.elf2hex.extra_flags=
 # --------------------
 
 ## Compile c files (re1)
-#recipe.c.o.pattern="{compiler.path}{compiler.c.cmd}" re1 {compiler.c.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.c.extra_flags} {build.extra_flags} {includes} "{source_file}" -o "{object_file}"
-recipe.c.o.pattern="{compiler.path.emu}{compiler.c.cmd}" "{source_file}" "{object_file}" re2 "-Wp-MMD {object_file}.d" {compiler.c.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.c.extra_flags} {build.extra_flags} {includes} {compiler.systemincludes}
+recipe.c.o.pattern="{compiler.path.emu}{compiler.c.cmd}" "{source_file}" "{object_file}" re2 {compiler.c.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.c.extra_flags} {build.extra_flags} {includes} {compiler.systemincludes}
 
 ## Compile c++ files (re2)
-#recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" re2 {compiler.cpp.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} "{source_file}" -o "{object_file}"
-recipe.cpp.o.pattern="{compiler.path.emu}{compiler.cpp.cmd}" "{source_file}" "{object_file}" re2 "-Wp-MMD {object_file}.d" {compiler.cpp.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} {compiler.systemincludes}
+recipe.cpp.o.pattern="{compiler.path.emu}{compiler.cpp.cmd}" "{source_file}" "{object_file}" re2 {compiler.cpp.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} {compiler.systemincludes}
 
 # Soll-Aufruf .c.o:
 #/opt/sdcc/bin/sdcc "-Wp-MMD build-stm8sblue/Blink.c.d" -c -Ddouble=float -I.
