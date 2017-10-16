@@ -1,0 +1,150 @@
+Nur in src-split: bak.
+Nur in src-split: doit.
+Nur in src-split: doit.bak.
+diff -ru src/Makefile src-split/Makefile
+--- src/Makefile	2016-12-15 20:36:53.146101008 +0100
++++ src-split/Makefile	2016-12-17 23:21:31.539563260 +0100
+@@ -1,9 +1,10 @@
+ CC=sdcc
+ AR=sdar
+-CFLAGS=-c -mstm8 -DSTM8S103 -I ../inc --opt-code-size -I.
++CFLAGS=-c -mstm8 -DSTM8S103 -I ../../inc -I../../src --opt-code-size -I.
+ LDFLAGS=-rc 
+-#SOURCES=$(wildcard stm8*.c)
+-SOURCES= \
++SOURCES=$(wildcard stm*.c)
++
++LIBSOURCES= \
+ stm8s_adc1.c \
+ stm8s_awu.c \
+ stm8s_beep.c \
+Nur in src-split: spl-splitprepare.patch.
+diff -ru src/stm8s_adc2.c src-split/stm8s_adc2.c
+--- src/stm8s_adc2.c	2016-12-15 20:36:53.150101020 +0100
++++ src-split/stm8s_adc2.c	2016-12-17 23:58:38.065995864 +0100
+@@ -1,4 +1,4 @@
+-/**
++/***
+   ******************************************************************************
+   * @file    stm8s_adc2.c
+   * @author  MCD Application Team
+diff -ru src/stm8s_can.c src-split/stm8s_can.c
+--- src/stm8s_can.c	2016-12-15 20:36:53.150101020 +0100
++++ src-split/stm8s_can.c	2016-12-18 00:00:53.858390814 +0100
+@@ -1,4 +1,4 @@
+-/**
++/***
+   ******************************************************************************
+   * @file    stm8s_can.c
+   * @author  MCD Application Team
+diff -ru src/stm8s_clk.c src-split/stm8s_clk.c
+--- src/stm8s_clk.c	2016-12-15 20:36:53.150101020 +0100
++++ src-split/stm8s_clk.c	2016-12-17 23:42:34.875237402 +0100
+@@ -40,7 +40,7 @@
+ 
+ /* Private Constants ---------------------------------------------------------*/
+ 
+-/**
++/** 
+   * @addtogroup CLK_Private_Constants
+   * @{
+   */
+Nur in src: stm8s_conf.h.
+diff -ru src/stm8s_flash.c src-split/stm8s_flash.c
+--- src/stm8s_flash.c	2016-12-15 20:36:53.150101020 +0100
++++ src-split/stm8s_flash.c	2016-12-17 23:57:30.841800646 +0100
+@@ -31,7 +31,7 @@
+ /** @addtogroup STM8S_StdPeriph_Driver
+   * @{
+   */
+-/**
++/***
+ @code
+  This driver provides functions to configure and program the Flash memory of all
+  STM8S devices.
+@@ -88,12 +88,13 @@
+ 
+ /* Private Constants ---------------------------------------------------------*/
+ 
+-/** @addtogroup FLASH_Private_functions
++/**
++  * @addtogroup FLASH_Private_functions
+   * @{
+   */
+ 
+ #if defined (_SDCC_)    
+-/**
++/***
+   * @brief  write single byte to address
+   * @note   is required for SDCC, which doesn't yet support far pointers.
+   *         For simplicity 16- and 24-bit pointers are treated identically.
+@@ -116,7 +117,7 @@
+ }
+ 
+ 
+-/**
++/***
+   * @brief  Reads any byte from flash memory
+   * @note   is required for SDCC, which doesn't yet support far pointers.
+   *         For simplicity 16- and 24-bit pointers are treated identically.
+Nur in src: stm8s_it.h.
+Binärdateien src/stm8s.lib und src-split/stm8s.lib sind verschieden.
+diff -ru src/stm8s_rst.c src-split/stm8s_rst.c
+--- src/stm8s_rst.c	2016-12-15 20:36:53.150101020 +0100
++++ src-split/stm8s_rst.c	2016-12-17 23:43:27.235385164 +0100
+@@ -39,7 +39,7 @@
+ /* Private function prototypes -----------------------------------------------*/
+ /* Private Constants ---------------------------------------------------------*/
+ /* Public functions ----------------------------------------------------------*/
+-/**
++/** 
+   * @addtogroup RST_Public_Functions
+   * @{
+   */
+Nur in src: stm8s_tim3.c.
+Nur in src: stm8s_tim5.c.
+diff -ru src/stm8s_tim6.c src-split/stm8s_tim6.c
+--- src/stm8s_tim6.c	2016-12-15 20:36:53.150101020 +0100
++++ src-split/stm8s_tim6.c	2016-12-18 00:00:39.314348474 +0100
+@@ -1,4 +1,4 @@
+-/**
++/***
+   ******************************************************************************
+   * @file    stm8s_tim6.c
+   * @author  MCD Application Team
+diff -ru src/stm8s_uart1.c src-split/stm8s_uart1.c
+--- src/stm8s_uart1.c	2016-12-15 20:36:53.150101020 +0100
++++ src-split/stm8s_uart1.c	2016-12-17 23:59:31.362150778 +0100
+@@ -1,4 +1,4 @@
+-/**
++/***
+   ********************************************************************************
+   * @file    stm8s_uart1.c
+   * @author  MCD Application Team
+diff -ru src/stm8s_uart2.c src-split/stm8s_uart2.c
+--- src/stm8s_uart2.c	2016-12-15 20:36:53.150101020 +0100
++++ src-split/stm8s_uart2.c	2016-12-17 23:59:27.090138356 +0100
+@@ -1,4 +1,4 @@
+-/**
++/***
+   ********************************************************************************
+   * @file    stm8s_uart2.c
+   * @author  MCD Application Team
+diff -ru src/stm8s_uart3.c src-split/stm8s_uart3.c
+--- src/stm8s_uart3.c	2016-12-15 20:36:53.150101020 +0100
++++ src-split/stm8s_uart3.c	2016-12-17 23:59:21.506122120 +0100
+@@ -1,4 +1,4 @@
+-/**
++/***
+   ********************************************************************************
+   * @file    stm8s_uart3.c
+   * @author  MCD Application Team
+diff -ru src/stm8s_uart4.c src-split/stm8s_uart4.c
+--- src/stm8s_uart4.c	2016-12-15 20:36:53.150101020 +0100
++++ src-split/stm8s_uart4.c	2016-12-17 23:59:01.358063551 +0100
+@@ -1,4 +1,4 @@
+-/**
++/***
+   ********************************************************************************
+   * @file    stm8s_uart4.c
+   * @author  MCD Application Team
