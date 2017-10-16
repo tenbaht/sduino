@@ -16,6 +16,9 @@ including shipping on [aliexpress](http://www.aliexpress.com/).
 
 ## Usage
 
+*Preview: IDE integration is on the way now! It already works for Linux (and
+probably MacOS), Windows is to follow soon*
+
 If you have ever used the Arduino environment before you will feel at home
 right away, despite this project beeing based on a makefile rather than the
 full Arduino IDE. But don't be afraid, it is based on the amazing
@@ -317,6 +320,18 @@ https://sourceforge.net/p/oggstreamer/oggs-stm8-firmware-001/ci/master/tree/rx_r
 Migration guideline within the STM8L familiy  
 
 
+
+## Similar or related projects
+
+None of these projects are related to or part of Sduino. They are written
+independently, but with a similar goal in mind: To simplify STM8 programming
+for the beginner.
+
+[STM8Sduino](https://github.com/dannyf00/STM8Sduino): A minimalistic
+approach to adopt parts of the Arduino-API to the STM8. Based on IAR and
+COSMIC compiler (Windows only). Port to SDCC shouldn't be too hard but is
+not done yet. Low overhead, but basic functions only. No support for porting
+Arduino libraries.
 
 
 

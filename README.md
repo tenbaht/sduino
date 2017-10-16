@@ -43,6 +43,9 @@ forum. It will help to catch my attention to prefix your topic with
 
 ## Usage example
 
+*Preview: IDE integration is on the way now! It already works for Linux (and
+probably MacOS), Windows is to follow soon*
+
 If you have ever used the Arduino environment before you will feel at home
 right away, despite this project beeing based on a makefile rather than the
 full Arduino IDE. But don't be afraid, it is based on the amazing

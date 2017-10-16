@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/dash
 
 # wrapper around SDCC to let the external interface look more gcc-alike
 #
@@ -12,46 +12,51 @@
 
 
 # ANSI color codes to beautify the output:
-BLACK='\E[0;30m'
-RED='\E[0;31m'
-GREEN='\E[0;32m'
-ORANGE='\E[0;33m'
-BLUE='\E[0;34m'
-PURPLE='\E[0;35m'
-CYAN='\E[0;36m'
-LGRAY='\E[0;37m'
-DGRAY='\E[1;30m'
-LRED='\E[1;31m'
-LGREEN='\E[1;32m'
-YELLOW='\E[1;33m'
-LBLUE='\E[1;34m'
-LPURPLE='\E[1;35m'
-LCYAN='\E[1;36m'
-WHITE='\E[1;37m'
-OFF='\E[0m'
+BLACK='\033[0;30m'
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+ORANGE='\033[0;33m'
+BLUE='\033[0;34m'
+PURPLE='\033[0;35m'
+CYAN='\033[0;36m'
+LGRAY='\033[0;37m'
+DGRAY='\033[1;30m'
+LRED='\033[1;31m'
+LGREEN='\033[1;32m'
+YELLOW='\033[1;33m'
+LBLUE='\033[1;34m'
+LPURPLE='\033[1;35m'
+LCYAN='\033[1;36m'
+WHITE='\033[1;37m'
+OFF='\033[0m'
 
 
 # echo the full command line in cyan:
->&2 echo -e "${CYAN}${@}${OFF}"
+>&2 echo "${CYAN}${@}${OFF}"
 
 # echo the mark id in green and the compiler call in white:
-SDCC=/opt/sdcc/bin/sdcc
-SRC=$1
-OBJ=$2
+SDCC=$1
+SRC=$2
+OBJ=$3
 REL=${OBJ%.o}.rel
-MARK=$3
-shift 3
->&2 echo -e "${GREEN}Mark $MARK:${OFF}" "$SDCC" "$@" "$SRC" -o "$OBJ"
+MARK=$4
+shift 4
+>&2 echo "${GREEN}Mark $MARK:${OFF}" "$SDCC" "$@" "$SRC" -o "$OBJ"
 
-if [[ $SRC == *.cpp ]]; then
-	>&2 echo -e "${RED}cpp gefunden${OFF}";
-	CSRC="${SRC%pp}"
-	cp -av "$SRC" "$CSRC"
-	"$SDCC" "$@" "$CSRC" -o "$OBJ"
-	rm -f "$CSRC"
-else
-	"$SDCC" "$@" "$SRC" -o "$OBJ"
-fi
+case "$SRC" in
+	*.cpp)
+		# rename .cpp to .c and compile
+		>&2 echo "${RED}cpp gefunden${OFF}";
+		CSRC="${SRC%pp}"
+		cp -av "$SRC" "$CSRC"
+		"$SDCC" "$@" "$CSRC" -o "$OBJ"
+		rm -f "$CSRC"
+		;;
+	*.c)
+		# compile a .c file
+		"$SDCC" "$@" "$SRC" -o "$OBJ"
+		;;
+esac
 
 # copy the generated .rel files as an .o file to avoid recompiling the next time
 if [ -e "${REL}" ]; then
