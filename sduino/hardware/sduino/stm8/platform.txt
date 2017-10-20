@@ -18,12 +18,15 @@ compiler.warning_flags.more=-Wall
 compiler.warning_flags.all=-Wall -Wextra
 
 # Default "compiler.path" is correct, change only if you want to override the initial value
-compiler.path=/opt/sdcc/bin/
-compiler.path.windows={runtime.hardware.path}/tools/sdcc/bin/
-compiler.wrapper.path={runtime.hardware.path}/tools/wrapper/
-compiler.wrapper.path.windows={runtime.hardware.path}/tools/win/bash" "{runtime.hardware.path}/tools/wrapper/
-compiler.tools.path=/usr/bin/
-compiler.tools.path.windows=hardware/tools/avr/bin/
+#compiler.path=/opt/sdcc/bin
+#compiler.path.windows={runtime.hardware.path}/tools/sdcc/bin
+compiler.path={runtime.tools.sdcc.path}/bin
+compiler.wrapper.path={runtime.tools.STM8Tools.path}/wrapper
+compiler.wrapper.path.windows={runtime.tools.STM8Tools.path}/win/bash" "{runtime.tools.STM8Tools.path}/wrapper
+#compiler.tools.path=/usr/bin
+compiler.tools.path={runtime.tools.avr-gcc.path}/bin
+#compiler.tools.path.windows=hardware/tools/avr/bin
+#compiler.tools.path.windows={runtime.tools.avr-gcc.path}/avr/bin
 
 compiler.c.cmd=sdcc
 compiler.c.wrapper=sdcc.sh
@@ -42,25 +45,26 @@ compiler.ar.cmd=sdar
 compiler.ar.wrapper=sdar.sh
 compiler.ar.flags=rcs
 
-compiler.objcopy.cmd=objcopy
-compiler.objcopy.cmd.windows=avr-objcopy
+compiler.objcopy.cmd=avr-objcopy
+#compiler.objcopy.cmd.windows=avr-objcopy
 #compiler.objcopy.eep.flags=-O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0
 #compiler.objcopy.eep.flags=-O ihex -j EEPROM EEPROM=0
 
-compiler.elf2hex.cmd=objcopy
-compiler.elf2hex.cmd.windows=avr-objcopy
+compiler.elf2hex.cmd=avr-objcopy
+#compiler.elf2hex.cmd.windows=avr-objcopy
 compiler.elf2hex.flags=-O ihex -R DATA -R INITIALIZED -R SSEG
 
-compiler.syslibs.stdlib.path=/opt/sdcc/share/sdcc/
-compiler.syslibs.stdlib.path.windows={runtime.hardware.path}/tools/sdcc/share/sdcc/
-compiler.syslibs.spl.path={runtime.platform.path}/STM8S_StdPeriph_Driver/
+#compiler.syslibs.stdlib.path=/opt/sdcc/share/sdcc
+#compiler.syslibs.stdlib.path.windows={runtime.hardware.path}/tools/sdcc/share/sdcc
+compiler.syslibs.stdlib.path={runtime.tools.sdcc.path}/share/sdcc
+compiler.syslibs.spl.path={runtime.platform.path}/STM8S_StdPeriph_Driver
 
 compiler.ldflags=
 
-compiler.size.cmd=size
-compiler.size.cmd.windows=avr-size
+compiler.size.cmd=avr-size
+#compiler.size.cmd.windows=avr-size
 
-compiler.systemincludes="-I{compiler.syslibs.spl.path}inc" "-I{compiler.syslibs.stdlib.path}include"
+compiler.systemincludes="-I{compiler.syslibs.spl.path}/inc" "-I{compiler.syslibs.stdlib.path}/include"
 
 # This can be overridden in boards.txt
 build.extra_flags=
@@ -78,24 +82,24 @@ compiler.elf2hex.extra_flags=
 # --------------------
 
 ## Compile c files (re1)
-#recipe.c.o.pattern="{compiler.path.wrapper}{compiler.c.cmd}" "{source_file}" "{object_file}" re2 {compiler.c.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.c.extra_flags} {build.extra_flags} {includes} {compiler.systemincludes}
-recipe.c.o.pattern="{compiler.wrapper.path}{compiler.c.wrapper}" "{compiler.path}{compiler.c.cmd}" "{source_file}" "{object_file}" re2 {compiler.c.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.c.extra_flags} {build.extra_flags} {includes} {compiler.systemincludes}
+#recipe.c.o.pattern="{compiler.path.wrapper}/{compiler.c.cmd}" "{source_file}" "{object_file}" re2 {compiler.c.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.c.extra_flags} {build.extra_flags} {includes} {compiler.systemincludes}
+recipe.c.o.pattern="{compiler.wrapper.path}/{compiler.c.wrapper}" "{compiler.path}/{compiler.c.cmd}" "{source_file}" "{object_file}" re2 {compiler.c.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.c.extra_flags} {build.extra_flags} {includes} {compiler.systemincludes}
 
 ## Compile c++ files (re2)
-#recipe.cpp.o.pattern="{compiler.path.wrapper}{compiler.cpp.cmd}" "{source_file}" "{object_file}" re2 {compiler.cpp.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} {compiler.systemincludes}
-recipe.cpp.o.pattern="{compiler.wrapper.path}{compiler.cpp.wrapper}" "{compiler.path}{compiler.cpp.cmd}" "{source_file}" "{object_file}" re2 {compiler.cpp.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} {compiler.systemincludes}
+#recipe.cpp.o.pattern="{compiler.path.wrapper}/{compiler.cpp.cmd}" "{source_file}" "{object_file}" re2 {compiler.cpp.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} {compiler.systemincludes}
+recipe.cpp.o.pattern="{compiler.wrapper.path}/{compiler.cpp.wrapper}" "{compiler.path}/{compiler.cpp.cmd}" "{source_file}" "{object_file}" re2 {compiler.cpp.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} {compiler.systemincludes}
 
 ##FIXME Compile S files (re3)
-recipe.S.o.pattern="{compiler.path}{compiler.c.cmd}" re3 {compiler.S.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.S.extra_flags} {build.extra_flags} {includes} "{source_file}" -o "{object_file}"
+recipe.S.o.pattern="{compiler.path}/{compiler.c.cmd}" re3 {compiler.S.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.S.extra_flags} {build.extra_flags} {includes} "{source_file}" -o "{object_file}"
 
 ## Create archives (re4)
 # archive_file_path is needed for backwards compatibility with IDE 1.6.5 or older, IDE 1.6.6 or newer overrides this value
 #archive_file_path={build.path}/{archive_file}
-#recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compiler.ar.extra_flags} "{archive_file_path}" "{object_file}"
-recipe.ar.pattern="{compiler.wrapper.path}{compiler.ar.wrapper}" "{compiler.path}{compiler.ar.cmd}" "{archive_file_path}" "{object_file}" re4  {compiler.ar.flags} {compiler.ar.extra_flags}
+#recipe.ar.pattern="{compiler.path}/{compiler.ar.cmd}" {compiler.ar.flags} {compiler.ar.extra_flags} "{archive_file_path}" "{object_file}"
+recipe.ar.pattern="{compiler.wrapper.path}/{compiler.ar.wrapper}" "{compiler.path}/{compiler.ar.cmd}" "{archive_file_path}" "{object_file}" re4  {compiler.ar.flags} {compiler.ar.extra_flags}
 
 ## Combine gc-sections, archives, and objects (re5)
-recipe.c.combine.pattern="{compiler.wrapper.path}{compiler.c.elf.wrapper}" "{compiler.path}{compiler.c.elf.cmd}" "-L{compiler.syslibs.spl.path}lib" "-L{build.path}" "-L{compiler.syslibs.stdlib.path}lib/stm8" {compiler.c.elf.flags} -mstm8 -D{build.mcu} {compiler.c.elf.extra_flags} {object_files} "{build.path}/{archive_file}" "{build.path}/core/main.c.rel" -l{build.mcu} -lstm8 --out-fmt-elf -o "{build.path}/{build.project_name}.elf"
+recipe.c.combine.pattern="{compiler.wrapper.path}/{compiler.c.elf.wrapper}" "{compiler.path}/{compiler.c.elf.cmd}" --nostdlib "-L{compiler.syslibs.spl.path}/lib" "-L{build.path}" "-L{compiler.syslibs.stdlib.path}/lib/stm8" {compiler.c.elf.flags} -mstm8 -D{build.mcu} {compiler.c.elf.extra_flags} {object_files} "{build.path}/{archive_file}" "{build.path}/core/main.c.rel" -l{build.mcu} -lstm8 --out-fmt-elf -o "{build.path}/{build.project_name}.elf"
 
 # Soll-Wert:
 #/opt/sdcc/bin/sdcc 
@@ -109,10 +113,10 @@ recipe.c.combine.pattern="{compiler.wrapper.path}{compiler.c.elf.wrapper}" "{com
 
 
 ## Create output files (.eep and .hex)
-#recipe.objcopy.eep.pattern="{compiler.path}{compiler.objcopy.cmd}" re6 {compiler.objcopy.eep.flags} {compiler.objcopy.eep.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.eep"
-#recipe.objcopy.eep.pattern="{compiler.tools.path}{compiler.objcopy.cmd}" {compiler.objcopy.eep.flags} {compiler.objcopy.eep.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.eep"
-#recipe.objcopy.hex.pattern="{compiler.path}{compiler.elf2hex.cmd}" re7 {compiler.elf2hex.flags} {compiler.elf2hex.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.hex"
-recipe.objcopy.hex.pattern="{compiler.tools.path}{compiler.elf2hex.cmd}" {compiler.elf2hex.flags} {compiler.elf2hex.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.hex"
+#recipe.objcopy.eep.pattern="{compiler.path}/{compiler.objcopy.cmd}" re6 {compiler.objcopy.eep.flags} {compiler.objcopy.eep.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.eep"
+#recipe.objcopy.eep.pattern="{compiler.tools.path}/{compiler.objcopy.cmd}" {compiler.objcopy.eep.flags} {compiler.objcopy.eep.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.eep"
+#recipe.objcopy.hex.pattern="{compiler.path}/{compiler.elf2hex.cmd}" re7 {compiler.elf2hex.flags} {compiler.elf2hex.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.hex"
+recipe.objcopy.hex.pattern="{compiler.tools.path}/{compiler.elf2hex.cmd}" {compiler.elf2hex.flags} {compiler.elf2hex.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.hex"
 
 ## Save hex
 recipe.output.tmp_file={build.project_name}.hex
@@ -121,7 +125,7 @@ recipe.output.save_file={build.project_name}.{build.variant}.hex
 ## Compute size
 # flash usage = HOME + GSINIT + GSFINAL + CODE + INITIALIZER
 # RAM usage = DATA + INITIALIZED
-recipe.size.pattern="{compiler.tools.path}{compiler.size.cmd}" -A "{build.path}/{build.project_name}.elf"
+recipe.size.pattern="{compiler.tools.path}/{compiler.size.cmd}" -A "{build.path}/{build.project_name}.elf"
 recipe.size.regex=^(?:HOME|GSINIT|GSFINAL|CODE|INITIALIZER)\s+([0-9]+).*
 recipe.size.regex.data=^(?:DATA|INITIALIZED)\s+([0-9]+).*
 recipe.size.regex.eeprom=^(?:EEPROM)\s+([0-9]+).*
@@ -129,25 +133,24 @@ recipe.size.regex.eeprom=^(?:EEPROM)\s+([0-9]+).*
 ## Preprocessor (re11, re12)
 #preproc.includes.flags=-w -x c++ -M -MG -MP
 preproc.includes.flags=-M -MG -MP
-recipe.preproc.includes="{compiler.path.wrapper}{compiler.cpp.wrapper}" "{compiler.path}{compiler.cpp.cmd}" re11 {compiler.cpp.flags} {preproc.includes.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} "{source_file}"
+recipe.preproc.includes="{compiler.path.wrapper}/{compiler.cpp.wrapper}" "{compiler.path}/{compiler.cpp.cmd}" re11 {compiler.cpp.flags} {preproc.includes.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} "{source_file}"
 
 #preproc.macros.flags=-w -x c++ -E -CC
 preproc.macros.flags=-E -MC
-#recipe.preproc.macros="{compiler.path}{compiler.cpp.cmd}" re12 {compiler.cpp.flags} {preproc.macros.flags} -mmcu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} "{source_file}" -o "{preprocessed_file_path}"
+#recipe.preproc.macros="{compiler.path}/{compiler.cpp.cmd}" re12 {compiler.cpp.flags} {preproc.macros.flags} -mmcu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} "{source_file}" -o "{preprocessed_file_path}"
 #recipe.preproc.macros="avr-g++" {compiler.cpp.flags} {preproc.macros.flags} -mmcu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} "{source_file}" -o "{preprocessed_file_path}"
-#recipe.preproc.macros="{compiler.path}{compiler.cpp.cmd}" re12 {compiler.cpp.flags} {preproc.macros.flags} -mmcu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} "{source_file}" -o "{preprocessed_file_path}"
-#recipe.preproc.macros="{compiler.path.emu}{compiler.cpp.cmd}" "{source_file}" "{preprocessed_file_path}" re12 {compiler.cpp.flags} {preproc.macros.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} {compiler.systemincludes}
-recipe.preproc.macros="{compiler.wrapper.path}{compiler.cpp.cmd}.sh" "{compiler.path}{compiler.cpp.cmd}" "{source_file}" "{preprocessed_file_path}" re12 {compiler.cpp.flags} {preproc.macros.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} {compiler.systemincludes}
+#recipe.preproc.macros="{compiler.path}/{compiler.cpp.cmd}" re12 {compiler.cpp.flags} {preproc.macros.flags} -mmcu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} "{source_file}" -o "{preprocessed_file_path}"
+#recipe.preproc.macros="{compiler.path.emu}/{compiler.cpp.cmd}" "{source_file}" "{preprocessed_file_path}" re12 {compiler.cpp.flags} {preproc.macros.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} {compiler.systemincludes}
+recipe.preproc.macros="{compiler.wrapper.path}/{compiler.cpp.cmd}.sh" "{compiler.path}/{compiler.cpp.cmd}" "{source_file}" "{preprocessed_file_path}" re12 {compiler.cpp.flags} {preproc.macros.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} {compiler.systemincludes}
 
 
 # STlink/v2 Uploader
 # ------------------
 
 tools.stm8flash.cmd=stm8flash
-tools.stm8flash.cmd.windows=stm8flash.exe
-tools.stm8flash.path={runtime.hardware.path}/tools/win
-tools.stm8flash.path.macosx={runtime.hardware.path}/tools/macosx
-tools.stm8flash.path.linux={runtime.hardware.path}/tools/linux
+tools.stm8flash.path={runtime.tools.STM8Tools.path}/linux
+tools.stm8flash.path.windows={runtime.tools.STM8Tools.path}/win
+tools.stm8flash.path.macos={runtime.tools.STM8Tools.path}/macosx
 #tools.stm8flash.path.linux64={runtime.hardware.path}/tools/linux64
 
 #tools.stm8flash.upload.params.verify=
