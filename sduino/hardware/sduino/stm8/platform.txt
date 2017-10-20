@@ -21,8 +21,9 @@ compiler.warning_flags.all=-Wall -Wextra
 compiler.path=/opt/sdcc/bin/
 compiler.path.windows={runtime.hardware.path}/tools/sdcc/bin/
 compiler.wrapper.path={runtime.hardware.path}/tools/wrapper/
+compiler.wrapper.path.windows={runtime.hardware.path}/tools/win/bash" "{runtime.hardware.path}/tools/wrapper/
 compiler.tools.path=/usr/bin/
-compiler.tools.path.windows={runtime.hardware.path}/tools/bin/
+compiler.tools.path.windows={runtime.hardware.path}/tools/mingw/
 
 compiler.c.cmd=sdcc
 compiler.c.wrapper=sdcc.sh
@@ -46,7 +47,7 @@ compiler.objcopy.cmd=objcopy
 #compiler.objcopy.eep.flags=-O ihex -j EEPROM EEPROM=0
 
 compiler.elf2hex.cmd=objcopy
-compiler.elf2hex.flags=-O ihex -R DATA -R INITIALIZED -R SSEG
+compiler.elf2hex.flags=-I elf32-i386 -O ihex -R DATA -R INITIALIZED -R SSEG
 
 compiler.syslibs.stdlib.path=/opt/sdcc/share/sdcc/
 compiler.syslibs.stdlib.path.windows={runtime.hardware.path}/tools/sdcc/share/sdcc/

@@ -33,6 +33,7 @@ while [ $# -gt 0 ]; do
 	FILE=$1
 	if [[ $FILE == *.a ]]; then
 		FILE=${FILE%.a}.lib
+		cp -a "$1" "$FILE"
 	fi
 	if [[ $FILE == *.o ]]; then
 		FILE=${FILE%.o}.rel
