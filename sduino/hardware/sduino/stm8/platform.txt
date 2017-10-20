@@ -23,7 +23,7 @@ compiler.path.windows={runtime.hardware.path}/tools/sdcc/bin/
 compiler.wrapper.path={runtime.hardware.path}/tools/wrapper/
 compiler.wrapper.path.windows={runtime.hardware.path}/tools/win/bash" "{runtime.hardware.path}/tools/wrapper/
 compiler.tools.path=/usr/bin/
-compiler.tools.path.windows={runtime.hardware.path}/tools/mingw/
+compiler.tools.path.windows=hardware/tools/avr/bin/
 
 compiler.c.cmd=sdcc
 compiler.c.wrapper=sdcc.sh
@@ -43,11 +43,13 @@ compiler.ar.wrapper=sdar.sh
 compiler.ar.flags=rcs
 
 compiler.objcopy.cmd=objcopy
+compiler.objcopy.cmd.windows=avr-objcopy
 #compiler.objcopy.eep.flags=-O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0
 #compiler.objcopy.eep.flags=-O ihex -j EEPROM EEPROM=0
 
 compiler.elf2hex.cmd=objcopy
-compiler.elf2hex.flags=-I elf32-i386 -O ihex -R DATA -R INITIALIZED -R SSEG
+compiler.elf2hex.cmd.windows=avr-objcopy
+compiler.elf2hex.flags=-O ihex -R DATA -R INITIALIZED -R SSEG
 
 compiler.syslibs.stdlib.path=/opt/sdcc/share/sdcc/
 compiler.syslibs.stdlib.path.windows={runtime.hardware.path}/tools/sdcc/share/sdcc/
@@ -56,7 +58,7 @@ compiler.syslibs.spl.path={runtime.platform.path}/STM8S_StdPeriph_Driver/
 compiler.ldflags=
 
 compiler.size.cmd=size
-compiler.size.cmd.windows=size.exe
+compiler.size.cmd.windows=avr-size
 
 compiler.systemincludes="-I{compiler.syslibs.spl.path}inc" "-I{compiler.syslibs.stdlib.path}include"
 
@@ -117,13 +119,9 @@ recipe.output.tmp_file={build.project_name}.hex
 recipe.output.save_file={build.project_name}.{build.variant}.hex
 
 ## Compute size
-#recipe.size.pattern="{compiler.path}{compiler.size.cmd}" re10 -A "{build.path}/{build.project_name}.elf"
-recipe.size.pattern="{compiler.tools.path}{compiler.size.cmd}" -A "{build.path}/{build.project_name}.elf"
-#recipe.size.regex=^(?:\.text|\.data|\.bootloader)\s+([0-9]+).*
-#recipe.size.regex.data=^(?:\.data|\.bss|\.noinit)\s+([0-9]+).*
-#recipe.size.regex.eeprom=^(?:\.eeprom)\s+([0-9]+).*
 # flash usage = HOME + GSINIT + GSFINAL + CODE + INITIALIZER
 # RAM usage = DATA + INITIALIZED
+recipe.size.pattern="{compiler.tools.path}{compiler.size.cmd}" -A "{build.path}/{build.project_name}.elf"
 recipe.size.regex=^(?:HOME|GSINIT|GSFINAL|CODE|INITIALIZER)\s+([0-9]+).*
 recipe.size.regex.data=^(?:DATA|INITIALIZED)\s+([0-9]+).*
 recipe.size.regex.eeprom=^(?:EEPROM)\s+([0-9]+).*
