@@ -12,17 +12,23 @@ fi
 FILE=$1
 
 case "$FILE" in
-	*.tar.bz2, *.tbz)
+	*.tar.bz2 | *.tbz)
 		TARFLAG=j
 		;;
-	*.tar.gz, *.tgz)
+	*.tar.gz | *.tgz)
 		TARFLAG=z
 esac
+
+# set to v for verbose mode
+VERBOSE=
 
 NAME=$(basename "$FILE")
 NAME=${NAME/snapshot/stm8}
 
-tar xv${TARFLAG}f "$FILE"							\
+TMP=$(mktemp -d sdcc-repack-XXXXXX --tmpdir)
+
+echo "Unpacking into temp. directory $TMP..."
+tar x${VERBOSE}${TARFLAG}f "$FILE" -C "$TMP"					\
 --exclude=doc		--exclude=src 		--exclude=non-free	\
 --exclude=stlcs		--exclude=ds80c390.h				\
 "--exclude=pic*"							\
@@ -31,4 +37,10 @@ tar xv${TARFLAG}f "$FILE"							\
 "--exclude=*gb"		"--exclude=*ka"		"--exclude=*.info"	\
 "--exclude=large*"	"--exclude=medium"	"--exclude=small*"
 
-tar cv${TARFLAG}f "$NAME" sdcc
+echo "Repacking into file $NAME"
+tar c${VERBOSE}${TARFLAG}f "$NAME" -C "$TMP" sdcc
+
+echo "cleaning up temporary files"
+rm -rf "$TMP"
+
+echo "done."

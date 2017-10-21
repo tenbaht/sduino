@@ -5,10 +5,18 @@
 # For more info:
 # https://github.com/arduino/Arduino/wiki/Arduino-IDE-1.5-3rd-party-Hardware-specification
 
-name=STM8 Testboards
+name=STM8S Boards
 version=1.6.15
 
-# AVR compile variables
+# General folder structure variables
+# ----------------------------------
+# For Board Manager installs this variable is already predefined and will
+# not be overwritten. This assignment is done only for manual installs.
+{runtime.tools.sdcc.path}="{runtime.hardware.path}/tools/sdcc"
+{runtime.tools.STM8Tools.path}="{runtime.hardware.path}/tools"
+
+
+# STM8 compile variables
 # ---------------------
 
 compiler.warning_flags=
@@ -78,7 +86,7 @@ compiler.ar.extra_flags=
 compiler.objcopy.eep.extra_flags=
 compiler.elf2hex.extra_flags=
 
-# AVR compile patterns
+# STM8 compile patterns
 # --------------------
 
 ## Compile c files (re1)
@@ -101,17 +109,6 @@ recipe.ar.pattern="{compiler.wrapper.path}/{compiler.ar.wrapper}" "{compiler.pat
 ## Combine gc-sections, archives, and objects (re5)
 recipe.c.combine.pattern="{compiler.wrapper.path}/{compiler.c.elf.wrapper}" "{compiler.path}/{compiler.c.elf.cmd}" --nostdlib "-L{compiler.syslibs.spl.path}/lib" "-L{build.path}" "-L{compiler.syslibs.stdlib.path}/lib/stm8" {compiler.c.elf.flags} -mstm8 -D{build.mcu} {compiler.c.elf.extra_flags} {object_files} "{build.path}/{archive_file}" "{build.path}/core/main.c.rel" -l{build.mcu} -lstm8 --out-fmt-elf -o "{build.path}/{build.project_name}.elf"
 
-# Soll-Wert:
-#/opt/sdcc/bin/sdcc 
-#	-L /home/mmayer/rsync/stm8/sduino/../STM8S_StdPeriph_Driver/lib
-#	-L/opt/sdcc/share/sdcc/lib/stm8 
-#	-mstm8 -DSTM8S103
-#	build-stm8sblue/Blink.c.rel build-stm8sblue/libcore.lib \
-#	build-stm8sblue/core/main.c.rel \
-#	-lSTM8S103 -lstm8  -o build-stm8sblue/Blink.ihx
-
-
-
 ## Create output files (.eep and .hex)
 #recipe.objcopy.eep.pattern="{compiler.path}/{compiler.objcopy.cmd}" re6 {compiler.objcopy.eep.flags} {compiler.objcopy.eep.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.eep"
 #recipe.objcopy.eep.pattern="{compiler.tools.path}/{compiler.objcopy.cmd}" {compiler.objcopy.eep.flags} {compiler.objcopy.eep.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.eep"
@@ -131,16 +128,9 @@ recipe.size.regex.data=^(?:DATA|INITIALIZED)\s+([0-9]+).*
 recipe.size.regex.eeprom=^(?:EEPROM)\s+([0-9]+).*
 
 ## Preprocessor (re11, re12)
-#preproc.includes.flags=-w -x c++ -M -MG -MP
 preproc.includes.flags=-M -MG -MP
 recipe.preproc.includes="{compiler.path.wrapper}/{compiler.cpp.wrapper}" "{compiler.path}/{compiler.cpp.cmd}" re11 {compiler.cpp.flags} {preproc.includes.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} "{source_file}"
-
-#preproc.macros.flags=-w -x c++ -E -CC
 preproc.macros.flags=-E -MC
-#recipe.preproc.macros="{compiler.path}/{compiler.cpp.cmd}" re12 {compiler.cpp.flags} {preproc.macros.flags} -mmcu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} "{source_file}" -o "{preprocessed_file_path}"
-#recipe.preproc.macros="avr-g++" {compiler.cpp.flags} {preproc.macros.flags} -mmcu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} "{source_file}" -o "{preprocessed_file_path}"
-#recipe.preproc.macros="{compiler.path}/{compiler.cpp.cmd}" re12 {compiler.cpp.flags} {preproc.macros.flags} -mmcu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} "{source_file}" -o "{preprocessed_file_path}"
-#recipe.preproc.macros="{compiler.path.emu}/{compiler.cpp.cmd}" "{source_file}" "{preprocessed_file_path}" re12 {compiler.cpp.flags} {preproc.macros.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} {compiler.systemincludes}
 recipe.preproc.macros="{compiler.wrapper.path}/{compiler.cpp.cmd}.sh" "{compiler.path}/{compiler.cpp.cmd}" "{source_file}" "{preprocessed_file_path}" re12 {compiler.cpp.flags} {preproc.macros.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} {compiler.systemincludes}
 
 

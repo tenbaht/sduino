@@ -1,5 +1,5 @@
 *~
-*.bak
+*bak
 .*.swp
 # ignore all kinds of binary files:
 *.o
