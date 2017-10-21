@@ -1,0 +1,32 @@
+NAME=Sduino
+VERSION=0.3.0-pre1
+
+
+PACKAGEFILE=package_sduino_stm8_index.json
+
+# Ignore all files matching one of these shell patterns:
+IGNORE=*~ *bak x build-* *.orig *.rej
+EXCLUDES=$(addprefix --exclude=, $(IGNORE))
+
+COREFILE=release/$(NAME)-core-$(VERSION).tar.bz2
+
+.PHONY: release add-platform-entry
+
+release: add-platform-entry
+
+# insert the new entry at first position of the platforms list:
+add-platform-entry: platform-entry
+	@SHA=$$(grep SHA-256 $^|cut -d\" -f4); \
+	grep -q $$SHA $(PACKAGEFILE); \
+	if [ $$? -ne 0 ]; then \
+		sed -i -e '/"platforms" : \[/r $^' $(PACKAGEFILE); \
+		echo "added new core definition to package file."; \
+	else echo "core definiton already included in package file."; fi
+
+# generate one platform entry for the new core file
+platform-entry: $(COREFILE)
+	./gen_platform_entry.sh $^ "$(VERSION)" > $@
+
+$(COREFILE):
+	echo "Generating the core archive file."
+	tar cjf $@ $(EXCLUDES) -C ../sduino/hardware/sduino/stm8 .
