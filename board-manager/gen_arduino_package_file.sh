@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PACKAGE_NAME=Sduino-test
+PACKAGE_NAME=Sduino
 
 packages_begin() {
 cat << EOF
@@ -69,9 +69,9 @@ list_boards() {
 
 print_filedata() {
 	URL=file://$(realpath $1)
-	FILENAME=$1
-	SIZE=$(stat --printf="%s" $FILENAME)
-	CHKSUM=$(shasum -a 256 $FILENAME|cut "-d " -f1)
+	FILENAME=$(basename "$1")
+	SIZE=$(stat --printf="%s" $1)
+	CHKSUM=$(shasum -a 256 $1|cut "-d " -f1)
 cat << EOF
                     "url": "$URL",
                     "archiveFileName": "$FILENAME",
@@ -91,9 +91,36 @@ cat << EOF
                     "version": "2017.10.20",
                     "systems": [
                         {
-                            "host": "x86_64-pc-linux-gnu",
 EOF
-	print_filedata test-tools-ohne.tar.gz
+n=0
+for i in release/sdcc-*; do
+	case $i in
+		*amd64-unknown-linux*)
+			HOST="x86_64-pc-linux-gnu"
+			;;
+		*i586-mingw32*)
+			HOST="i686-mingw32"
+			;;
+		*i386-unknown-linux*)
+			HOST="i686-pc-linux-gnu"
+			;;
+		*macosx*)
+			HOST="x86_64-apple-darwin"
+			;;
+	esac
+	if [ $n -gt 0 ]; then
+cat << EOF
+                        },
+                        {
+EOF
+	fi
+cat << EOF
+                            "host": "$HOST",
+EOF
+	print_filedata $i
+	n=$((n+1))
+done
+#	print_filedata test-tools-ohne.tar.gz
 cat << EOF
                         }
                     ]
@@ -105,7 +132,7 @@ cat << EOF
                         {
                             "host": "x86_64-pc-linux-gnu",
 EOF
-	print_filedata sdcc-stm8-amd64-unknown-linux2.5-20170919-9998.tar.bz2
+	print_filedata release/sdcc-stm8-amd64-unknown-linux2.5-20170919-9998.tar.bz2
 cat << EOF
                         }
                     ]

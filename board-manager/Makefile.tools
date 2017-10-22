@@ -1,23 +1,27 @@
-NAME=Sduino-tools
-VERSION=2017.10.21
+NAME=sduino-tools
+VERSION?=2017.10.21
 
-# The package file the information should be added to
-PACKAGEFILE=package_sduino_stm8_index.json
+# Where to find the tools directory
+BASEDIR=../sduino/hardware/sduino
 
-# The filename stem of the tools archives to be generated
-# (up to the first dash '-')
-TOOLS_STEM=release/$(NAME)
+# Ignore all files matching one of these shell patterns:
+IGNORE=*~ *bak x build-* *.orig *.rej
 
-# Where to find the tools to be included in the archive
-TOOLSDIR=../sduino/hardware/sduino/tools
-
-# filename for the new tools entries
-TOOLS_ENTRY=tools-entry-$(NAME)-$(VERSION).txt
+# where to put the generated files
+ARCHIVEDIR=release
+PARTSDIR=parts
 
 
 #
 ### No user serviceable part below here. Only generated content. ########
 #
+
+# The filename stem of the tools archives to be generated
+# (up to the first dash '-')
+TOOLS_STEM=$(ARCHIVEDIR)/$(NAME)
+
+# filename for the new tools entries
+TOOLS_ENTRY=$(PARTSDIR)/tools-entry-$(NAME)-$(VERSION).txt
 
 # The individual filenames for the different tools archives
 TOOLS_LINUX32=release/$(NAME)_linux32-$(VERSION).tar.bz2
@@ -25,43 +29,27 @@ TOOLS_LINUX64=release/$(NAME)_linux64-$(VERSION).tar.bz2
 TOOLS_WINDOWS=release/$(NAME)_mingw32-$(VERSION).tar.bz2
 
 TOOLS_TARS=$(TOOLS_LINUX32) $(TOOLS_LINUX64) $(TOOLS_WINDOWS)
-
-
-# Ignore all files matching one of these shell patterns:
-IGNORE=*~ *bak x build-* *.orig *.rej
 EXCLUDES=$(addprefix --exclude=, $(IGNORE))
-
 TARFLAGS=$(EXCLUDES) --show-transformed-names --transform
 
-.PHONY: release add-tools-entry
+#
+# The actual rules
+#
 
-release: add-tools-entry
-
-
-# insert the new entry at first position of the platforms list:
-add-tools-entry: $(TOOLS_ENTRY)
-	@SHA=$$(grep SHA-256 $^|head -1|cut -d\" -f4); \
-	grep -q $$SHA $(PACKAGEFILE); \
-	if [ $$? -ne 0 ]; then \
-		sed -ie '/"tools" : \[/r $^' $(PACKAGEFILE); \
-		echo "added new tools to package file."; \
-	else echo "tools definiton already included in package file."; fi
-
-# generate one tools entry for each new tools file
-
+# generate one tools entry for all matching tools files
 $(TOOLS_ENTRY) : $(TOOLS_TARS)
 	./gen_tools_entry.sh "$(TOOLS_STEM)" "$(VERSION)" > $@
 
 $(TOOLS_LINUX32):
 	@echo "Generating the tools archive file for Linux 32 bit."
-	tar cjf $@ $(EXCLUDES) -C $(TOOLSDIR) --transform s/linux32/linux/ \
-		wrapper linux32
+	tar cjf $@ $(EXCLUDES) -C $(BASEDIR) --transform s/linux32/linux/ \
+		tools/wrapper tools/linux32
 
 $(TOOLS_LINUX64):
 	@echo "Generating the tools archive file for Linux 64 bit."
-	tar cjf $@ $(EXCLUDES) -C $(TOOLSDIR) --transform s/linux64/linux/ \
-		wrapper linux64
+	tar cjf $@ $(EXCLUDES) -C $(BASEDIR) --transform s/linux64/linux/ \
+		tools/wrapper tools/linux64
 
 $(TOOLS_WINDOWS):
 	@echo "Generating the tools archive file for Windows."
-	tar cjf $@ $(EXCLUDES) -C $(TOOLSDIR) wrapper win
+	tar cjf $@ $(EXCLUDES) -C $(BASEDIR) tools/wrapper tools/win

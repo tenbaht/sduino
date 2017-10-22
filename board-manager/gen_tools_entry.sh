@@ -19,8 +19,8 @@ usage: $0 toolfile-stem version
 Lists info for all files matching the filename pattern
 [toolsfile-stem]*[version]*
 
-Example: $0 release/Sduino-tools 2017-10-21 prints information for all files
-matching the filename pattern release/Sduino-tools*2017-10-21*.
+Example: $0 release/sduino-tools 2017-10-21 prints information for all files
+matching the filename pattern release/sduino-tools*2017-10-21*.
 "
 	exit 1
 fi
@@ -71,11 +71,13 @@ detect_hosttype()
 detect_tooltype()
 {
 	case $1 in
-		*Sduino-tools* )
+		*sduino-tools* )
 			NAME=STM8Tools
+			VERSIONSTRING=$VERSION
 			;;
 		*sdcc* )
 			NAME=sdcc
+			VERSIONSTRING=build.$VERSION
 			;;
 	esac
 }
@@ -90,12 +92,12 @@ detect_tooltype "$TRUNK"
 cat << EOF
                 {
                     "name": "$NAME",
-                    "version": "$VERSION",
+                    "version": "$VERSIONSTRING",
                     "systems": [
                         {
 EOF
 n=0
-for FILE in $TRUNK*$VERSION*; do
+for FILE in $TRUNK*$VERSION.*; do
 	if [ $n -gt 0 ]; then
 	echo "                        },{"
 	fi

@@ -1,8 +1,8 @@
 {
     "packages": [
         {
-            "name": "Sduino",
-            "maintainer": "Michael Mayer",
+            "name": "sduino",
+            "maintainer": "Tenbaht",
             "websiteURL": "https://tenbaht.github.io/sduino/",
             "email": "michael-mayer@gmx.de",
             "help": {
@@ -12,7 +12,7 @@
 {
 	"name": "Sduino test core",
 	"architecture": "stm8",
-	"version": "0.3.0-pre1",
+	"version": "0.3.0-pre.1",
 	"category": "Contributed",
 	"boards": [
 		{"name": "STM8S103F3 Breakout Board"},
@@ -22,24 +22,49 @@
 		{
 			"name": "STM8Tools",
 			"version": "2017.10.21",
-			"packager": "Sduino"
+			"packager": "sduino"
 		},
 		{
 			"name": "sdcc",
 			"version": "build.10088",
-			"packager": "Sduino"
+			"packager": "sduino"
 		}
 	],
-	"url": "file:///home/mmayer/rsync/stm8/board-manager/release/Sduino-core-0.3.0-pre1.tar.bz2",
-	"archiveFileName": "Sduino-core-0.3.0-pre1.tar.bz2",
+	"url": "file:///home/mmayer/rsync/stm8/board-manager/release/sduino-core-0.3.0-pre.1.tar.bz2",
+	"archiveFileName": "sduino-core-0.3.0-pre.1.tar.bz2",
 	"checksum": "SHA-256:0f055844875f6c5b06f3a98fa0d556f8d06f5ea50560768d3a0d75532e7ccb85",
 	"size": "4261234"
-                }
+}
             ],
             "tools" : [
                 {
+                    "name": "STM8Tools",
+                    "version": "2017.10.21",
+                    "systems": [
+                        {
+                            "host": "i686-pc-linux-gnu",
+	"url": "file:///home/mmayer/rsync/stm8/board-manager/release/sduino-tools_linux32-2017.10.21.tar.bz2",
+	"archiveFileName": "sduino-tools_linux32-2017.10.21.tar.bz2",
+	"checksum": "SHA-256:5f10d3de3e044e03160e63252ed818754c177afe5e9b5ce73a656f779193cffe",
+	"size": "44516"
+                        },{
+                            "host": "x86_64-pc-linux-gnu",
+	"url": "file:///home/mmayer/rsync/stm8/board-manager/release/sduino-tools_linux64-2017.10.21.tar.bz2",
+	"archiveFileName": "sduino-tools_linux64-2017.10.21.tar.bz2",
+	"checksum": "SHA-256:0943f76ad2a7eef325e1ab858212c2413123521768ea9a06f946a2b238e0a100",
+	"size": "49065"
+                        },{
+                            "host": "i686-mingw32",
+	"url": "file:///home/mmayer/rsync/stm8/board-manager/release/sduino-tools_mingw32-2017.10.21.tar.bz2",
+	"archiveFileName": "sduino-tools_mingw32-2017.10.21.tar.bz2",
+	"checksum": "SHA-256:4a18f0ba2c07451772fb4fb755b543cbef3111be9f83d25d9daf4a1b2e9a4431",
+	"size": "52764"
+                        }
+                    ]
+                },
+                {
                     "name": "sdcc",
-                    "version": "10088",
+                    "version": "build.10088",
                     "systems": [
                         {
                             "host": "x86_64-pc-linux-gnu",
@@ -53,31 +78,12 @@
 	"archiveFileName": "sdcc-stm8-i386-unknown-linux2.5-20171020-10088.tar.bz2",
 	"checksum": "SHA-256:5237465f22f62beb69c62a14adf1e1140fe12fc29060329c61516c11fe4bacf2",
 	"size": "2606938"
-                        }
-                    ]
-                },
-                {
-                    "name": "STM8Tools",
-                    "version": "2017.10.21",
-                    "systems": [
-                        {
-                            "host": "i686-pc-linux-gnu",
-	"url": "file:///home/mmayer/rsync/stm8/board-manager/release/Sduino-tools_linux32-2017.10.21.tar.bz2",
-	"archiveFileName": "Sduino-tools_linux32-2017.10.21.tar.bz2",
-	"checksum": "SHA-256:e0e9462cec5daee6e4c0f33b709c7cbbc7b2d02993e13490d0f6b6197bfc1642",
-	"size": "44481"
-                        },{
-                            "host": "x86_64-pc-linux-gnu",
-	"url": "file:///home/mmayer/rsync/stm8/board-manager/release/Sduino-tools_linux64-2017.10.21.tar.bz2",
-	"archiveFileName": "Sduino-tools_linux64-2017.10.21.tar.bz2",
-	"checksum": "SHA-256:d794cbf79dc607544fe330ac9f6422024ea13e829d3a5e1f57133c9832234f1b",
-	"size": "49109"
                         },{
                             "host": "i686-mingw32",
-	"url": "file:///home/mmayer/rsync/stm8/board-manager/release/Sduino-tools_mingw32-2017.10.21.tar.bz2",
-	"archiveFileName": "Sduino-tools_mingw32-2017.10.21.tar.bz2",
-	"checksum": "SHA-256:a39c6c1fd66152de91e76486f29b00b01465b7064b7896f5612b5e2bfbcfd095",
-	"size": "52720"
+	"url": "file:///home/mmayer/rsync/stm8/board-manager/release/sdcc-stm8-i586-mingw32msvc-20171020-10088.tar.bz2",
+	"archiveFileName": "sdcc-stm8-i586-mingw32msvc-20171020-10088.tar.bz2",
+	"checksum": "SHA-256:2c9db6ff4d2f7b7b608f956adbc06e24ac8ec4dd4f41f26c79c48f9ddecb22a5",
+	"size": "2973875"
                         }
                     ]
                 }

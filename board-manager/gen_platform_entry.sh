@@ -6,20 +6,22 @@
 # package_*.json file.
 
 
-if [ $# -ne 2 ]; then
+if [ $# -ne 4 ]; then
 	echo
 	echo "helper script for automatic releases."
 	echo
 	echo "Prints one platform entry for the given file to be added to the"
 	echo "package_*_index.json file."
 	echo
-	echo "usage: $0 corefile version"
+	echo "usage: $0 corefile coreversion sdccversion toolsversion"
 	exit 1
 fi
 
 COREFILE=$1
-VERSION=$2
-PACKAGER=Sduino
+COREVERSION=$2
+SDCCVERSION=$3
+TOOLSVERSION=$4
+PACKAGER=sduino
 
 
 ### helper functions #####################################################
@@ -65,7 +67,7 @@ cat << EOF
 {
 	"name": "Sduino test core",
 	"architecture": "stm8",
-	"version": "$VERSION",
+	"version": "$COREVERSION",
 	"category": "Contributed",
 EOF
 list_boards
@@ -73,12 +75,12 @@ cat << EOF
 	"toolsDependencies": [
 		{
 			"name": "STM8Tools",
-			"version": "2017.10.21",
+			"version": "$TOOLSVERSION",
 			"packager": "$PACKAGER"
 		},
 		{
 			"name": "sdcc",
-			"version": "build.10088",
+			"version": "build.$SDCCVERSION",
 			"packager": "$PACKAGER"
 		}
 	],

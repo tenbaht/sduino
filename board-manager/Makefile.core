@@ -1,31 +1,36 @@
-NAME=Sduino
-VERSION=0.3.0-pre1
+NAME=sduino
+VERSION?=0.3.0-pre1
+SDCCVERSION?=10088
+TOOLSVERSION?=2017.10.21
 
+# where to put the generated files
+COREDIR?=release
+PARTSDIR?=parts
 
-PACKAGEFILE=package_sduino_stm8_index.json
-
-# Ignore all files matching one of these shell patterns:
+# Ignore all files matching one of these shell patterns when building the
+# core archive.
 IGNORE=*~ *bak x build-* *.orig *.rej
+
+
+#
+### No user serviceable part below here. ################################
+#
+
+# filename for the generated core file
+COREFILE=$(COREDIR)/$(NAME)-core-$(VERSION).tar.bz2
+
+# filename for the new platform entry
+PLATFORM_ENTRY=$(PARTSDIR)/platform-entry-$(NAME)-$(VERSION).txt
+
 EXCLUDES=$(addprefix --exclude=, $(IGNORE))
 
-COREFILE=release/$(NAME)-core-$(VERSION).tar.bz2
-
-.PHONY: release add-platform-entry
-
-release: add-platform-entry
-
-# insert the new entry at first position of the platforms list:
-add-platform-entry: platform-entry
-	@SHA=$$(grep SHA-256 $^|cut -d\" -f4); \
-	grep -q $$SHA $(PACKAGEFILE); \
-	if [ $$? -ne 0 ]; then \
-		sed -i -e '/"platforms" : \[/r $^' $(PACKAGEFILE); \
-		echo "added new core definition to package file."; \
-	else echo "core definiton already included in package file."; fi
+#
+# The actual rules
+#
 
 # generate one platform entry for the new core file
-platform-entry: $(COREFILE)
-	./gen_platform_entry.sh $^ "$(VERSION)" > $@
+$(PLATFORM_ENTRY): $(COREFILE)
+	./gen_platform_entry.sh $^ "$(VERSION)" "$(SDCCVERSION)" "$(TOOLSVERSION)" > $@
 
 $(COREFILE):
 	echo "Generating the core archive file."
