@@ -1,0 +1,93 @@
+{
+    "packages": [
+        {
+            "name": "sduino",
+            "maintainer": "Tenbaht",
+            "websiteURL": "https://tenbaht.github.io/sduino/",
+            "email": "michael-mayer@gmx.de",
+            "help": {
+                "online": "http://www.stm32duino.com/viewforum.php?f=52"
+            },
+            "platforms" : [
+{
+	"name": "Sduino STM8 plain C core (non-C++)",
+	"architecture": "stm8",
+	"version": "0.3.0-pre.1",
+	"category": "Contributed",
+	"boards": [
+		{"name": "STM8S103F3 Breakout Board"},
+		{"name": "STM8S105C6 Discovery Board"}
+	],
+	"toolsDependencies": [
+		{
+			"name": "STM8Tools",
+			"version": "2017.10.21",
+			"packager": "sduino"
+		},
+		{
+			"name": "sdcc",
+			"version": "build.10088",
+			"packager": "sduino"
+		}
+	],
+	"url": "https://github.com/tenbaht/just_a_test/releases/download/v0.1/sduino-core-0.3.0-pre.1.tar.bz2",
+	"archiveFileName": "sduino-core-0.3.0-pre.1.tar.bz2",
+	"checksum": "SHA-256:5e3b2b950954e1004ef78084063374c59b37f682ba43f1789bc40d66d88e9994",
+	"size": "4261038"
+}
+            ],
+            "tools" : [
+                {
+                    "name": "STM8Tools",
+                    "version": "2017.10.21",
+                    "systems": [
+                        {
+                            "host": "i686-pc-linux-gnu",
+                            "url": "https://github.com/tenbaht/just_a_test/releases/download/v0.1/sduino-tools_linux32-2017.10.21.tar.bz2",
+                            "archiveFileName": "sduino-tools_linux32-2017.10.21.tar.bz2",
+                            "checksum": "SHA-256:5f10d3de3e044e03160e63252ed818754c177afe5e9b5ce73a656f779193cffe",
+                            "size": "44516"
+                        },{
+                            "host": "x86_64-pc-linux-gnu",
+                            "url": "https://github.com/tenbaht/just_a_test/releases/download/v0.1/sduino-tools_linux64-2017.10.21.tar.bz2",
+                            "archiveFileName": "sduino-tools_linux64-2017.10.21.tar.bz2",
+                            "checksum": "SHA-256:0943f76ad2a7eef325e1ab858212c2413123521768ea9a06f946a2b238e0a100",
+                            "size": "49065"
+                        },{
+                            "host": "i686-mingw32",
+                            "url": "https://github.com/tenbaht/just_a_test/releases/download/v0.1/sduino-tools_mingw32-2017.10.21.tar.bz2",
+                            "archiveFileName": "sduino-tools_mingw32-2017.10.21.tar.bz2",
+                            "checksum": "SHA-256:dfdc7364a0d6749d3d1693ce5b5311ace4d80425225c98a90c5c527e375d1ecd",
+                            "size": "5541472"
+                        }
+                    ]
+                },
+                {
+                    "name": "sdcc",
+                    "version": "build.10088",
+                    "systems": [
+                        {
+                            "host": "x86_64-pc-linux-gnu",
+                            "url": "https://github.com/tenbaht/just_a_test/releases/download/v0.1/sdcc-stm8-amd64-unknown-linux2.5-20171020-10088.tar.bz2",
+                            "archiveFileName": "sdcc-stm8-amd64-unknown-linux2.5-20171020-10088.tar.bz2",
+                            "checksum": "SHA-256:dce37df6f57f6264e6b705cf7ce394d9b4407dba53c4071e77bfa34f746599a6",
+                            "size": "2486676"
+                        },{
+                            "host": "i686-pc-linux-gnu",
+                            "url": "https://github.com/tenbaht/just_a_test/releases/download/v0.1/sdcc-stm8-i386-unknown-linux2.5-20171020-10088.tar.bz2",
+                            "archiveFileName": "sdcc-stm8-i386-unknown-linux2.5-20171020-10088.tar.bz2",
+                            "checksum": "SHA-256:5237465f22f62beb69c62a14adf1e1140fe12fc29060329c61516c11fe4bacf2",
+                            "size": "2606938"
+                        },{
+                            "host": "i686-mingw32",
+                            "url": "https://github.com/tenbaht/just_a_test/releases/download/v0.1/sdcc-stm8-i586-mingw32msvc-20171020-10088.tar.bz2",
+                            "archiveFileName": "sdcc-stm8-i586-mingw32msvc-20171020-10088.tar.bz2",
+                            "checksum": "SHA-256:2c9db6ff4d2f7b7b608f956adbc06e24ac8ec4dd4f41f26c79c48f9ddecb22a5",
+                            "size": "2973875"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

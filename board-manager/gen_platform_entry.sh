@@ -65,7 +65,7 @@ list_boards()
 
 cat << EOF
 {
-	"name": "Sduino test core",
+	"name": "Sduino STM8 plain C core (non-C++)",
 	"architecture": "stm8",
 	"version": "$COREVERSION",
 	"category": "Contributed",

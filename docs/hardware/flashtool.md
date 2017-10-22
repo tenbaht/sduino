@@ -48,7 +48,7 @@ SWD):
 
 ## Installation for Linux
 
-For Linux: required lines in /etc/udev/rules.d/99-stlink.rules:
+Required lines in /etc/udev/rules.d/99-stlink.rules:
 
 	# ST-Link/V2 programming adapter
 
@@ -57,6 +57,16 @@ For Linux: required lines in /etc/udev/rules.d/99-stlink.rules:
 
 	# ST-Link/V2, the china adapter with the green plastic housing
 	ATTR{idVendor}=="0483", ATTR{idProduct}=="3748", MODE="0666", GROUP="plugdev"
+
+
+
+## Installation for Windows
+
+Download and install the ST-Link/v2 driver **before you plug in the flash
+tool**:
+[STSW-LINK009 driver download](http://www.st.com/en/development-tools/stsw-link009.html)
+(Registration required, but very easy)
+
 
 
 ## Connection to the CPU board

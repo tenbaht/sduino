@@ -32,17 +32,20 @@ VERSION=$2
 ### helper functions #####################################################
 
 # format ID information for a file
+#
+# usage: print_filedata filename
+#
 print_filedata()
 {
 	URL=file://$(realpath $1)
 	FILENAME=$(basename "$1")
 	SIZE=$(stat --printf="%s" $1)
 	CHKSUM=$(shasum -a 256 $1|cut "-d " -f1)
-cat << EOF
-	"url": "$URL",
-	"archiveFileName": "$FILENAME",
-	"checksum": "SHA-256:$CHKSUM",
-	"size": "$SIZE"
+	cat << EOF
+                            "url": "$URL",
+                            "archiveFileName": "$FILENAME",
+                            "checksum": "SHA-256:$CHKSUM",
+                            "size": "$SIZE"
 EOF
 }
 
