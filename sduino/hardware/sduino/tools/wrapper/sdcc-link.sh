@@ -43,3 +43,6 @@ while [ $# -gt 0 ]; do
 done
 echo "$SDCC" "${OBJS[@]}"
 "$SDCC" "${OBJS[@]}"
+
+# propagate the sdcc exit code
+exit $?

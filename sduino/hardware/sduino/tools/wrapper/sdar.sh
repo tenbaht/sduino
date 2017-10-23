@@ -32,4 +32,8 @@ shift 4
 
 >&2 echo "${GREEN}Mark $MARK:${OFF}" "$SDAR" "$@" "$LIB" "$OBJ"
 "$SDAR" "$@" "$LIB" "$OBJ"
+ERR=$?
 cp -a "$LIB" "${LIB%.a}.lib"
+
+# propagate the sdar exit code
+exit $ERR

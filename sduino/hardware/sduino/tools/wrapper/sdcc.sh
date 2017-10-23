@@ -50,11 +50,13 @@ case "$SRC" in
 		CSRC="${SRC%pp}"
 		cp -av "$SRC" "$CSRC"
 		"$SDCC" "$@" "$CSRC" -o "$OBJ"
+		ERR=$?
 		rm -f "$CSRC"
 		;;
 	*.c)
 		# compile a .c file
 		"$SDCC" "$@" "$SRC" -o "$OBJ"
+		ERR=$?
 		;;
 esac
 
@@ -62,3 +64,6 @@ esac
 if [ -e "${REL}" ]; then
 	cp -a "${REL}" "${OBJ}"
 fi
+
+# propagate the sdcc exit code
+exit $ERR
