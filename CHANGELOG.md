@@ -5,8 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [0.3.0 - 2017-10-23]
 ### Added
 - integration into the Arduino IDE
+- support for easy installing via the Arduino Board Manger
 - support for serialEvent()
 
 ### Changed

@@ -31,3 +31,15 @@ final package index file.
 
 
 
+## Package URLs
+
+If using attached files to github releases:
+
+URLs of the auto-generated repository archive files: 
+
+- https://github.com/tenbaht/sduino/archive/<tagname>.zip
+- https://github.com/tenbaht/sduino/archive/<tagname>.tar.gz
+
+URL of files attached to github releases:
+
+https://github.com/tenbaht/sduino/releases/download/<tagname>/<filename>

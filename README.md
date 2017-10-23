@@ -42,6 +42,7 @@ Arduino IDE versions 1.8.5 and 1.6.13 are tested, but any version >=1.6.6
 should work.
 
 Supported Systems:
+
 * Linux 64 bit: Tested on Ubuntu 16.04
 * Linux 32 bit: Tested on Ubuntu 16.04
 * Windows: Tested on Windows 7. Sduino might work on XP (not tested), but
@@ -50,7 +51,9 @@ Supported Systems:
   install, but IDE integration should be easy now. Any volunteers?
 
 Start the Arduino-IDE. In File->Preferences, Settings tab, enter
-https://github.com/tenbaht/sduino/raw/master/package_sduino_stm8_index.json
+
+	https://github.com/tenbaht/sduino/raw/master/package_sduino_stm8_index.json
+
 as an Additional Boards Manager URL.
 
 Open Tools->Board:...->Boards Manager. Find Sduino by typing 'sd' into

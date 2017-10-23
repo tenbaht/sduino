@@ -48,15 +48,20 @@ SWD):
 
 ## Installation for Linux
 
-Required lines in /etc/udev/rules.d/99-stlink.rules:
+Save this as root in in `/etc/udev/rules.d/99-stlink.rules`:
 
 	# ST-Link/V2 programming adapter
 
-	# ST-Link V1, ST-Discovery boards
+	# ST-Link V1, if using a STM8S discovery board
+	# important: It needs a special entry in /etc/modprob/blacklist
 	ATTR{idVendor}=="0483", ATTR{idProduct}=="3744", MODE="0666", GROUP="plugdev"
 
 	# ST-Link/V2, the china adapter with the green plastic housing
 	ATTR{idVendor}=="0483", ATTR{idProduct}=="3748", MODE="0666", GROUP="plugdev"
+
+Using the STM8S-Discovery board as a flash programmer is a special case and
+requires [some additional
+blacklisting](Dstm8sdiscovery#usage-with-linux-and-stm8flash).
 
 
 
