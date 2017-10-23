@@ -13,8 +13,8 @@ version=1.6.15
 # ----------------------------------
 # For Board Manager installs these variables are already predefined and will
 # not be overwritten. This assignment is done only for manual installs.
-{runtime.tools.sdcc.path}="{runtime.hardware.path}/tools/sdcc"
-{runtime.tools.STM8Tools.path}="{runtime.hardware.path}/tools"
+runtime.tools.sdcc.path={runtime.hardware.path}/tools/sdcc
+runtime.tools.STM8Tools.path={runtime.hardware.path}/tools
 
 
 # STM8 compile variables
