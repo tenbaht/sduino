@@ -3,14 +3,14 @@
 Getting started on the STM8 CPU the easy way by using an Arduino-like
 programming API.
 
-This project is based on free tools that are available for Linux, MacOS, and
-Windows: SDCC, make, and stm8flash. Since it's based on the SDCC Small
-Devices compiler, I called it "Small Devices -uino" or "Small-duino".
-
-It fully integrates with the Arduino IDE or can be used
+It fully integrates with the Arduino IDE or it can be used
 independently (GUI-less) with very easy Makefiles based on the amazing
 [Arduino.mk makefile](https://github.com/sudar/Arduino-Makefile) by
 [Sudar](http://sudarmuthu.com>).
+
+This project is based on free tools that are available for Linux, MacOS, and
+Windows: SDCC, make, and stm8flash. Since it's based on the SDCC Small
+Devices C compiler, I called it "Small Devices -uino" or "Small-duino".
 
 This project is not supposed to be “better than Arduino”. It’s purpose
 is to give you a head start into a different CPU architecture if you happen

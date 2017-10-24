@@ -41,8 +41,8 @@ As a result, there are several different cases to consider:
   The behaviour of this construction is very similar to a real C++ class.
 
   **Examples:**
-[SPI](api/SPI.md), [I2C](api/I2C.md),
-[HardwareSerial](api/HardwareSerial.md) 
+[SPI](../api/SPI.md), [I2C](../api/I2C.md),
+[HardwareSerial](../api/HardwareSerial.md) 
 
 ```c
 #include <I2C.h>
@@ -77,7 +77,7 @@ setup() {
   Polymorph instantiation declarations are possible.
   Non-constant values for the initialization are supported.
 
-  **Examples:** [LiquidCrystal](api/LiquidCrystal.md)
+  **Examples:** [LiquidCrystal](../api/LiquidCrystal.md)
 
 ```c
 int rs_pin = 2;
@@ -116,7 +116,7 @@ setup() {
 
   Polymorph instantiation declarations are possible.
 
-  Examples: [Servo](api/Servo.md)
+  Examples: [Servo](../api/Servo.md)
 
 ```c
 #include <Servo.h>
@@ -178,7 +178,7 @@ loop() {
 
   Polymorph instantiation declarations are possible.
 
-  Examples: [Stepper](api/Stepper.md)
+  Examples: [Stepper](../api/Stepper.md)
 
   By requiring the user to add a call to the added constructor as the
   mandatory first call to the instance it could be treated as any other
