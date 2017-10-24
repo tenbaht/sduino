@@ -27,7 +27,9 @@ perfect for breadboards).
 My breakout boards came preprogrammed with a blink program and with active
 write protection bits. For unlocking before first use:
 
-	stm8flash -cstlinkv2 -pstm8s103?3 -u
+```bash
+stm8flash -cstlinkv2 -pstm8s103?3 -u
+```
 
 
 

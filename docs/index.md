@@ -42,7 +42,8 @@ Wasn't too hard, was it?
 
 Some Arduino libraries are already ported to C-syntax. The resulting API is
 still very close to the C++ version and porting an existing application is
-not hard. Check out the [API migration guidelines](api.md) for details.
+not hard. Check out the [API migration guidelines](api/migration.md) for
+details.
 
 #### Communication
 
@@ -81,6 +82,14 @@ not hard. Check out the [API migration guidelines](api.md) for details.
   CPU is still quite fresh but it should work now.
 
 
+
+### Limitations
+
+SDCC doesn't support C++. Some preprocessor magic is applied to close the
+gap between C and C++ syntax as much as possible, but this is not a 100%
+compatible drop-in replacement for full Arduino environments like for AVR or
+STM32. See [Limitations](usage/limitations.md) and the
+[migration guidelines](api/migration.md) for details.
 
 
 ### Supported Systems

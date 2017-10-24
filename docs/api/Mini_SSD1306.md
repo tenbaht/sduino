@@ -76,7 +76,7 @@ void loop()
 
 ## Hardware requirements
 
-These tiny displays communicate usually via I2C, but SPI version do exist.
+These tiny displays communicate usually via I2C, but SPI versions do exist.
 My display uses the I2C address 0x3C, but there are similar displays out
 there configured to use the address 0x3D.
 
@@ -89,6 +89,7 @@ of the screen:
 ![My 0.96" OLED display](oled-ssd1306.jpg)
 
 Technical data:
+
   * Driver chip SSD1306
   * Display resolution: 128x64
   * Power: 3.3V, approx. 20mA (5V possible)
@@ -109,13 +110,15 @@ Pin	|Function|STM8S103 pin	|sduino pin
 ## Further reading
 
 Technical information:
-  * Adafruit tutorial: https://learn.adafruit.com/monochrome-oled-breakouts
-  * SSD1306 datasheet: https://www.adafruit.com/datasheets/SSD1306.pdf
+
+  * [Adafruit tutorial](https://learn.adafruit.com/monochrome-oled-breakouts)
+  * [SSD1306 datasheet](https://www.adafruit.com/datasheets/SSD1306.pdf)
 
 Other libraries:
-  * Adafruit library: https://github.com/adafruit/Adafruit_SSD1306
-  * Old Arduino library u8glib: https://github.com/olikraus/u8glib
-  * newer library u8g2: https://github.com/olikraus/u8g2
+
+  * [Adafruit library](https://github.com/adafruit/Adafruit_SSD1306)
+  * [Old Arduino library u8glib](https://github.com/olikraus/u8glib)
+  * [newer library u8g2](https://github.com/olikraus/u8g2)
 
 
 ## Possible improvements

@@ -14,8 +14,8 @@ pages:
         - Limitations: 'usage/limitations.md'
         - Status and todo: 'usage/status-todo.md'
     - Libraries:
-        - API description and migration guidelines: api.md
-#	- Standard Arduino functions:
+        - API description and migration guidelines: api/migration.md
+        - Print: api/Print.md
         - HardwareSerial: api/HardwareSerial.md
         - SPI: api/SPI.md
         - I2C: api/I2C.md

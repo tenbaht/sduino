@@ -1,4 +1,4 @@
-# About
+# About Sduino
 
 The idea is to smoothen the path towards your first successful STM8-based
 project.
@@ -16,7 +16,7 @@ detailed knowledge of the CPU internals. [compiling the SPL with
 SDCC](developer/spl.md)
 
 
-## Tools used
+### Tools used
 
 This project is based on free tools that are available for Linux, MacOS, and
 Windows.
@@ -34,7 +34,7 @@ The build process is controlled by a makefile based on the amazing
 
 
 
-## Project origin
+### Project origin
 
 For a customer I needed to port an existing project from an ATmega to a
 better suited (read: cheaper) platform. As the project was based on some
@@ -44,14 +44,14 @@ of days. Porting some of the more commonly used Arduino libraries was a fun
 project done in my spare time later.
 
 
-## About me
+### About me
 
 I am a freelance programmer for embedded systems and electronics developer
 based in Heidelberg, Germany. I work with embedded systems for more than
 25 years now.
 
 
-### Experiences
+#### Experiences
 
 **current CPU architectures**: AVR (ATmega, ATxmega), PIC, STM8, STM32, MCS51
 

@@ -5,37 +5,46 @@ http://www.cnx-software.com/2015/04/13/how-to-program-stm8s-1-board-in-linux/
 
 STM8-Support only started with Version 3.4 in Ubuntu 14.10. For Ubuntu 14.4:
 
+```bash
 	add-apt-repository ppa:laczik/ppa
 	apt-get update
 	apt-get install sdcc
+```
 
 But even this version is fairly old and contains some known bugs. Better
 download a current snapshot build from http://sdcc.sourceforge.net/ and
 unpack it to `/opt/sdcc`. This requires a current version of libstdc++6:
 
+```bash
 	add-apt-repository ppa:ubuntu-toolchain-r/test
 	apt-get update
 	apt-get install libstdc++6
+```
 
 If you prefer to compile stm8flash yourself instead of using the Linux
 binaries in the `tools` directory:
 
+```bash
 	git clone https://github.com/vdudouyt/stm8flash.git
 	cd stm8flash
 	make
 	sudo make install
+```
 
 Download some example code:
 
+```bash
 	git clone https://github.com/vdudouyt/sdcc-examples-stm8.git
 	cd sdcc-examples-stm8
+```
 
 The examples are meant for the STM8L, not the STM8S. This requires some
 changes to account for the different pinout and register addresses (see below).
 Finally upload the binary to the CPU:
 
+```bash
 	stm8flash -c stlinkv2 -p stm8s103?3 -w blinky.ihx
-
+```
 
 
 ### Mixing assembler code with C code
@@ -101,7 +110,7 @@ Make sure to use a recent snapshot build if you are planing to use simulator!
 
 #### Missing peephole optimisations
 
-See discussion of issue 14: https://github.com/tenbaht/sduino/issues/14
+See discussion of [issue #14](https://github.com/tenbaht/sduino/issues/14)
 
 
 

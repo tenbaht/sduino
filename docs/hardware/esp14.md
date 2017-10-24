@@ -20,7 +20,7 @@ Feature		| STM8S003	| STM8S103
 ------------	| -------------	| ------------
 EEPROM size	| 128 Bytes	| 640 Bytes
 
-I am not sure why the '003 is sold for half the price, or, to but it the
+I am not sure why the '003 is sold for half the price, or, to put it the
 other way around, why anybody should choose the '103 at all. Did I miss an
 important difference?
 
@@ -35,9 +35,9 @@ usual ESP AT-Firmware and is connected to the RX/TX pins of the STM8S.
 It feels like having a classic ATmega8-Arduino with a build-in ESP-01
 module. Using the [WiFiEsp library](https://github.com/bportaluri/WiFiEsp)
 we could have a programming experience very similar to using an Arduino with
-a Wifi-shield.
+a Wifi-shield or an Arduino Yun.
 
-Problem is the limited flash space of the '003. Even the very basic
+The main problem is the limited flash space of the '003. Even the very basic
 WebServer example that comes with the WiFiEsp library needs more then 14kB
 flash and more than 1kB RAM when compiled for an Arduino Uno. Even if the
 library could be carefully optimized to fit into the 8kB flash of an '003 -

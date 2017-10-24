@@ -1,11 +1,11 @@
 # STM8S Discovery
 
-A widespread evaluation board made by ST. All CPU pin are easily accessible
+A widespread evaluation board made by ST. All CPU pins are easily accessible
 on 2x6 pin headers. It costs only $9 and includes a ST-Link/v1 flash
 programmer on board.
 
-It should work now, but the support is very fresh and not thoroughly tested. 
-At least Blink.c is known to work already.
+It should work now, but the support is not thoroughly tested. At least
+Blink.c is known to work already.
 
 STM8S105C6T6 microcontroller, 32 KB Flash, 2 KB RAM, 1 KB EEPROM 
 
@@ -39,20 +39,27 @@ hole board useless. You need to make modprobe to ignore it by adding this
 line to /etc/modprobe.conf or by adding a file
 /etc/modprobe.d/stdiscovery.conf with this line:
 
+```bash
 	options usb-storage quirks=0483:3744:i
+```
 
 Unplug the Discovery board and unload the usb mass storage driver with
 
+```bash
 	modprobe -r uas usb_storage
+```
 
 If you can't unload the usb_storage drive because it is in use with other
 devices you can temporary trigger the same effect by this line:
 
+```bash
 	echo "0483:3744:i" >/sys/module/usb_storage/parameters/quirks
+```
 
 The second step is to add a new udev rule in order to access the USB port.
 Save this as root in in `/etc/udev/rules.d/99-stlink.rules`:
 
+```bash
 	# ST-Link/V2 programming adapter
 
 	# ST-Link V1, if using a STM8S discovery board
@@ -61,10 +68,12 @@ Save this as root in in `/etc/udev/rules.d/99-stlink.rules`:
 
 	# ST-Link/V2, the china adapter with the green plastic housing
 	ATTR{idVendor}=="0483", ATTR{idProduct}=="3748", MODE="0666", GROUP="plugdev"
+```
 
 Finally, it is time to (re-) connect the board. Now dmesg should show that
 the mass storage device of the Discovery board is ignored:
 
+```bash
 	[  815.228928] usbcore: deregistering interface driver uas
 	[  815.229201] usbcore: deregistering interface driver usb-storage
 	[  823.001086] usb 1-3: new full-speed USB device number 7 using xhci_hcd
@@ -77,10 +86,13 @@ the mass storage device of the Discovery board is ignored:
 	[  823.748299] usb-storage 1-3:1.0: device ignored
 	[  823.748453] usbcore: registered new interface driver usb-storage
 	[  823.771094] usbcore: registered new interface driver uas
+```
 
 Let's read the preinstalled firmware of the STM8S105:
 
+```bash
 	stm8flash -cstlink "-pstm8s105?6" -r flash.img
+```
 
 
 ## Further reading

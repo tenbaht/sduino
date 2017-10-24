@@ -27,10 +27,10 @@ community support for the STM8. The community support and the sheer number
 of existing libraries for all kinds of sensors and hardware is outstanding
 in the Arduino world. 
 
-Don't let the temping price tag be your only guide. An Arduino Nano
+Don't let the tempting price tag be your only guide. An Arduino Nano
 compatible board is not *that* much more expensive: They start at $1.90 on
 [aliexpress](https://www.aliexpress.com/wholesale?SearchText=arduino+nano).
-That is only $1.20 more. I am sure you can afford that.
+That is only $1.20 more than an STM8S. I am sure you can afford that.
 
 *If you just want to get something done, go for an
 Arduino board. Nothing will give you faster and easier results.*

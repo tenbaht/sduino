@@ -124,7 +124,7 @@ structure. Typically, this is done in the `setup()`-function and this pointer
 is stored in a global variable to be used as a device descriptor.
 
 
-So far the [Stepper library](api/Stepper.md) is the only example:
+So far the [Stepper library](Stepper.md) is the only example:
 
 ```c
 #include <Stepper.h>

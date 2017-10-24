@@ -1,19 +1,25 @@
-## ST Standard Library
+## ST Standard Peripherie Library
 
-Can be [downloaded from the ST website]
-(http://www.st.com/en/embedded-software/stsw-stm8069.html)
-(free registration required). Don't miss the Examples folder within the
-downloaded zip file. This is the most useful reference on using this library
-and programming the STM8 in general.
+The Library an be [downloaded from the ST
+website](http://www.st.com/en/embedded-software/stsw-stm8069.html) (free
+registration required). A slightly older version is part of the [STM8S_Teach
+presentation](https://github.com/VincentYChen/STM8teach/tree/master/code/Project/STM8S_StdPeriph_Examples),
+
+Don't miss the Examples folder within the downloaded
+zip file. This and [Lujji's
+blog](https://lujji.github.io/blog/bare-metal-programming-stm8/) is the most
+useful reference on using this library and programming the STM8 in general.
 
 For use with SDCC the library needs to be patched:
 
-	git clone https://github.com/g-gabber/STM8S_StdPeriph_Driver.git
-	git clone https://github.com/gicking/SPL_2.2.0_SDCC_patch.git
-	cp ../STM8S_SPL_2.2.0/Libraries/STM8S_StdPeriph_Driver/inc/stm8s.h .
-	patch -p1 < ../SPL_2.2.0_SDCC_patch/STM8_SPL_v2.2.0_SDCC.patch
-	cp -av  ../STM8S_StdPeriph_Lib/Project/STM8S_StdPeriph_Template/stm8s_conf.h .
-	cp -av  ../STM8S_StdPeriph_Lib/Project/STM8S_StdPeriph_Template/stm8s_it.h .
+```bash
+git clone https://github.com/g-gabber/STM8S_StdPeriph_Driver.git
+git clone https://github.com/gicking/SPL_2.2.0_SDCC_patch.git
+cp ../STM8S_SPL_2.2.0/Libraries/STM8S_StdPeriph_Driver/inc/stm8s.h .
+patch -p1 < ../SPL_2.2.0_SDCC_patch/STM8_SPL_v2.2.0_SDCC.patch
+cp -av  ../STM8S_StdPeriph_Lib/Project/STM8S_StdPeriph_Template/stm8s_conf.h .
+cp -av  ../STM8S_StdPeriph_Lib/Project/STM8S_StdPeriph_Template/stm8s_it.h .
+```
 
 SDCC uses .rel as the file extension for its object files.
 
@@ -82,16 +88,17 @@ The SPL folder in this archive contains a script `doit` to separate the
 functions before compilation.
 FIXME: description needed
 
-Erklärung wie zumindest die Interrupt-Vektoren in die eigene Datei kommen
-können:
+A suggestion how to move at least the IRQ vectors away from the libray into
+the own source files:
 http://richs-words.blogspot.de/2010/09/stm8s-interrupt-handling.html
 
 
 
 ### Interrupts
 
-Namen definiert in stm8s_itc.h
-Interrupt-Routine definieren:
+Interrupt names are defined in stm8s_itc.h
+
+Declaration of an interrupt function for SDCC:
 
 ```c
 /* UART1 TX */
@@ -100,15 +107,15 @@ void UART1_TX_IRQHandler(void) __interrupt(ITC_IRQ_UART1_TX)
 }
 ```
 
-Jetzt muss noch das passende IRQ-Enable-Flag gesetzt werden und Interrupt
-generell freigegeben werden, also hier:
+Set the matching IRQ enable flag and globally allow interrupts:
 
 ```c
 UART1_ITConfig(UART1_IT_TXE, ENABLE);
 enableInterrupts();
 ```
 
-Unklar ist, was die ITC-Prioritäten bewirken. Es geht jedenfalls auch ohne:
+Not sure about the meaning of the ITC priorities. It works even without
+them:
 
 ```c
 ITC_DeInit();

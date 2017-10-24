@@ -153,10 +153,10 @@ Expected folder structure:
 the command line so much more enjoyable.
 
 
-The needed Board Mangager install files are in your user folder in 
-`AppData/Local/Arduino/packages/sduino/tools'. Copy `sdcc/<version>` and the content
-of `STM8STools/<version` into `hardware/sduino/tools`. Mind the slightly
-different folder structure.
+The needed Board Manager install files are in your user folder in
+`AppData/Local/Arduino/packages/sduino/tools`. Copy `sdcc/<version>` and the
+content of `STM8STools/<version` into `hardware/sduino/tools`. Mind the
+slightly different folder structure.
 
 Update your `%PATH%`:
 
@@ -177,9 +177,9 @@ If you have installed [console2](https://sourceforge.net/projects/console/)
 before, you could even configure it to use `bash` as your default command
 shell instead of `cmd.exe`.
 
-Now use the Board Mangager to remove the auto-installed Sduino package and
+Now use the Board Manager to remove the auto-installed Sduino package and
 you are ready.
 
-(Keep in mind the [Known problems using
-Windows](limitations#known-problems-using-windows))
+(Keep the [Known problems using
+Windows](limitations#known-problems-using-windows) in mind)
 
