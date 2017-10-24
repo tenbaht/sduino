@@ -7,6 +7,12 @@ or compatibles. These displays quite cheap and are commonly found on older monoc
 phones, such as the [Nokia 3310](http://en.wikipedia.org/wiki/Nokia_3310) or
 [5110](http://en.wikipedia.org/wiki/Nokia_5110).
 
+This library is a very much simpified version of the Adafruit library.
+
+* Optimized for a minimal memory footprint.
+* Only SPI mode supported. 
+* Uses soft-SPI, does not need the SPI pins.
+
 This is a modified version of the
 [PCD8544 library](https://github.com/carlosefr/pcd8544) written by
 [Carlos Rodrigues](https://github.com/carlosefr). It is ported from C++ to C
@@ -21,7 +27,7 @@ from Adafruit (no sduino/STM8 port yet, though).
 ## API
 
 
-Thanks to some [c preprocessor macro magic](macro.html) the API syntax is
+Thanks to some [c preprocessor macro magic](../macro.md) the API syntax is
 very similar to the original C++ syntax. Apart from the usual name mangeling
 for polymorph functions replacing the dots in the method names for
 underscores and a small modification of the initializer code should be
@@ -148,4 +154,3 @@ of this function.
 
 To make it easy to create custom symbols, there's a
 graphical glyph editor [available online](http://carlosefr.github.io/pcd8544/).
-

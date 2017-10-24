@@ -1,0 +1,48 @@
+# Installation
+
+There are two very different ways to install Sduino:
+[Manual](manual-install) or using the Arduino Board Manager.
+
+
+## Using the Arduino Board Manager
+
+This is the recommanded way of installation now.
+
+- Open the Settings tab of the Preferences dialog
+- Enter
+  `https://github.com/tenbaht/sduino/raw/master/package_sduino_stm8_index.json`
+  as an Additional Boards Manager URL
+- Select *sduino* in the Boards Manager list (Tools->Board:...->Boards Manager)
+- Click on Install
+
+Wait for the download to finsh and you are ready to blink:
+
+- Open the Boards list at Tools->Board:...
+- You should find a new entry "STM8S Boards".
+- Choose *STM8S103F3 Breakout Board* from the list
+- Open the standard Blink example from File->Examples->01. Basics->Blink
+- Compile it by hitting 'Verify'
+
+Wasn't too hard, was it?
+
+
+
+## Alternative way of installation
+
+The Arduino Board Manager is now the recommended way of installation. If you
+outgrow it's possibilities it is easy to [update to the manual
+install](update-to-manual). The manual install gives you more flexibility,
+but is only useful if you are planning to use development or experimental
+branches of Sduino or if you prefer a GUI-less build system controlled by a
+Makefile.
+
+Let's compare:
+
+|		| Board Manager	|[manual install](manual-install)
+|----		|-----		|------
+|Difficulty	|very easy	|easy on Linux and MacOS, more difficult on Windows.
+|Used Packages	|latest release	|release, development or experimental
+|IDE/GUI based builds|yes		|yes
+|Makefile based builds|no		|yes
+|Compiling without Arduino libraries|no	|yes
+

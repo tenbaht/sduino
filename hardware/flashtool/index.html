@@ -11,7 +11,7 @@
 
 	<title>Flash tool - Sduino</title>
 
-        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/bootstrap-3.0.3.min.css" rel="stylesheet">
         <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
         <link rel="stylesheet" href="../../css/highlight.css">
         <link href="../../css/base.css" rel="stylesheet">
@@ -55,23 +55,39 @@
                     <ul class="dropdown-menu">
                     
                         <li >
-                            <a href="../..">Overview</a>
+                            <a href="../..">Introduction</a>
                         </li>
                     
                         <li >
-                            <a href="../../install/">Installation</a>
+                            <a href="../../usage/board-manager-install/">Automatic Installation</a>
                         </li>
                     
                         <li >
-                            <a href="../../sdcc/">Using the SDCC compiler</a>
+                            <a href="../../usage/build-ide/">Building with the IDE</a>
                         </li>
                     
                         <li >
-                            <a href="../../spl/">Using the SPL with SDCC and sduino</a>
+                            <a href="../../usage/why-stm8/">When to use an STM8S - and when not</a>
                         </li>
                     
                         <li >
-                            <a href="../../macro/">C preprocessor macro magic</a>
+                            <a href="../../usage/update-to-manual/">Update to Manual Installation</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../usage/manual-install/">Manual Installation</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../usage/build-cli/">Building with a Makefile</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../usage/limitations/">Limitations</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../usage/status-todo/">Status and todo</a>
                         </li>
                     
                     </ul>
@@ -133,14 +149,6 @@
                         </li>
                     
                         <li >
-                            <a href="../">List of supported boards</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../pin_mapping/">Ways to define a pin mapping</a>
-                        </li>
-                    
-                        <li >
                             <a href="../stm8blue/">Generic STM8S103 breakout board (stm8blue)</a>
                         </li>
                     
@@ -150,6 +158,43 @@
                     
                         <li >
                             <a href="../stm8sdiscovery/">STM8S105Discovery: Evaluation board made my ST</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../developer/macro/">C preprocessor macro magic</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/pin_mapping/">Ways to define a pin mapping</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/sdcc/">Using the SDCC compiler</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/spl/">Using the SPL with SDCC and sduino</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/bare-metal-programming/">Bare metal programming on the STM8</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/performance/">Performance comparison and benchmarking</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/links/">Links and further reading</a>
                         </li>
                     
                     </ul>
@@ -178,7 +223,7 @@
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../">
+                    <a rel="prev" href="../stm8blue/">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -206,6 +251,8 @@
             <li><a href="#pinout">Pinout</a></li>
         
             <li><a href="#installation-for-linux">Installation for Linux</a></li>
+        
+            <li><a href="#installation-for-windows">Installation for Windows</a></li>
         
             <li><a href="#connection-to-the-cpu-board">Connection to the CPU board</a></li>
         
@@ -253,15 +300,24 @@ SWD):</p>
             +-----+
 </code></pre>
 <h2 id="installation-for-linux">Installation for Linux</h2>
-<p>For Linux: required lines in /etc/udev/rules.d/99-stlink.rules:</p>
+<p>Save this as root in in <code>/etc/udev/rules.d/99-stlink.rules</code>:</p>
 <pre><code># ST-Link/V2 programming adapter
 
-# ST-Link V1, ST-Discovery boards
+# ST-Link V1, if using a STM8S discovery board
+# important: It needs a special entry in /etc/modprob/blacklist
 ATTR{idVendor}=="0483", ATTR{idProduct}=="3744", MODE="0666", GROUP="plugdev"
 
 # ST-Link/V2, the china adapter with the green plastic housing
 ATTR{idVendor}=="0483", ATTR{idProduct}=="3748", MODE="0666", GROUP="plugdev"
 </code></pre>
+<p>Using the STM8S-Discovery board as a flash programmer is a special case and
+requires <a href="../Dstm8sdiscovery#usage-with-linux-and-stm8flash">some additional
+blacklisting</a>.</p>
+<h2 id="installation-for-windows">Installation for Windows</h2>
+<p>Download and install the ST-Link/v2 driver <strong>before you plug in the flash
+tool</strong>:
+<a href="http://www.st.com/en/development-tools/stsw-link009.html">STSW-LINK009 driver download</a>
+(Registration required, but very easy)</p>
 <h2 id="connection-to-the-cpu-board">Connection to the CPU board</h2>
 <p>The pinout of the SWIM connector P3 on my STM8S103 breakout board fits the
 pinout of the flash tool in the metal housing perfectly:</p>
@@ -340,11 +396,12 @@ STM32F0308 implements SWD only and is not usable for the STM8.</p>
 </table></div>
         </div>
 
-        <footer class="col-md-12">
-            <hr>
-            
-            <center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
-        </footer>
+	<footer class="col-md-12">
+		<hr>
+		
+		<center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
+	</footer>
+
 
         <script src="../../js/jquery-1.10.2.min.js"></script>
         <script src="../../js/bootstrap-3.0.3.min.js"></script>

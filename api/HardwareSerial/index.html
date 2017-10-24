@@ -11,7 +11,7 @@
 
 	<title>HardwareSerial - Sduino</title>
 
-        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/bootstrap-3.0.3.min.css" rel="stylesheet">
         <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
         <link rel="stylesheet" href="../../css/highlight.css">
         <link href="../../css/base.css" rel="stylesheet">
@@ -55,23 +55,39 @@
                     <ul class="dropdown-menu">
                     
                         <li >
-                            <a href="../..">Overview</a>
+                            <a href="../..">Introduction</a>
                         </li>
                     
                         <li >
-                            <a href="../../install/">Installation</a>
+                            <a href="../../usage/board-manager-install/">Automatic Installation</a>
                         </li>
                     
                         <li >
-                            <a href="../../sdcc/">Using the SDCC compiler</a>
+                            <a href="../../usage/build-ide/">Building with the IDE</a>
                         </li>
                     
                         <li >
-                            <a href="../../spl/">Using the SPL with SDCC and sduino</a>
+                            <a href="../../usage/why-stm8/">When to use an STM8S - and when not</a>
                         </li>
                     
                         <li >
-                            <a href="../../macro/">C preprocessor macro magic</a>
+                            <a href="../../usage/update-to-manual/">Update to Manual Installation</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../usage/manual-install/">Manual Installation</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../usage/build-cli/">Building with a Makefile</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../usage/limitations/">Limitations</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../usage/status-todo/">Status and todo</a>
                         </li>
                     
                     </ul>
@@ -133,14 +149,6 @@
                         </li>
                     
                         <li >
-                            <a href="../../hardware/">List of supported boards</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../../hardware/pin_mapping/">Ways to define a pin mapping</a>
-                        </li>
-                    
-                        <li >
                             <a href="../../hardware/stm8blue/">Generic STM8S103 breakout board (stm8blue)</a>
                         </li>
                     
@@ -150,6 +158,43 @@
                     
                         <li >
                             <a href="../../hardware/stm8sdiscovery/">STM8S105Discovery: Evaluation board made my ST</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../developer/macro/">C preprocessor macro magic</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/pin_mapping/">Ways to define a pin mapping</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/sdcc/">Using the SDCC compiler</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/spl/">Using the SPL with SDCC and sduino</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/bare-metal-programming/">Bare metal programming on the STM8</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/performance/">Performance comparison and benchmarking</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/links/">Links and further reading</a>
                         </li>
                     
                     </ul>
@@ -226,11 +271,12 @@ Pre-instanciated.</p>
 <h2 id="possible-impovements">Possible impovements</h2></div>
         </div>
 
-        <footer class="col-md-12">
-            <hr>
-            
-            <center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
-        </footer>
+	<footer class="col-md-12">
+		<hr>
+		
+		<center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
+	</footer>
+
 
         <script src="../../js/jquery-1.10.2.min.js"></script>
         <script src="../../js/bootstrap-3.0.3.min.js"></script>

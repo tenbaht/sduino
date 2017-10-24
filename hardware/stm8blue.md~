@@ -6,9 +6,8 @@ are my original development platform.
 
 ![Image of the STM8S103 board](stm8board-pinout.jpg)
 
-They are very similar the [ESP14 Wifi-boards](hardware/esp14.html), most
-programs should run on those chinese gems as well, but that is still
-untested.
+They are very similar to the [ESP14 Wifi-boards](esp14.md) and
+most programs will work fine on those chinese gems as well.
 
 The STM8S103 breakout boards are build around a CPU STM8S103F3P6 with 16MHz
 internal oscillator, 8kB flash, 1kB RAM, and 640 byte EEPROM. The CPU
@@ -56,7 +55,7 @@ hard-coded assumptions about the number of pins with special functions.
 Ideally, all these numbers would be the same and all programs could be
 compiled without changes.
 
-[Here](pin_mapping.html) I discuss some possible pin mapping and check
+[Here](pin_mapping.md) I discuss some possible pin mapping and check
 how close we could get the the ideal mapping. Unfortunatly, it turns out
 that a perfect mapping is not possible.
 
@@ -66,16 +65,26 @@ this mapping:
 
 ![STM8S103 breakout board pin mapping](stm8blue.png)
 
+The pins D3/D4 (SDA/SCL, PB5/PB4) are different from the others as they are
+true open drain pins. That means, they only can drive the output low or
+open. To drive it high, they require the of an external pull-up resistor.
+This is the reason why the LED on this breakout is connected between +3.3V
+and the pins and not between the pin GND as usual. This way it is possible
+to drive the LED by writing a zero to the output register.
+
+
+
 sduino pin	| STM8S103 CPU port pin
 ----------	| ---------------------
- 0-2		| PA1-PA3
+ 0-2		| PA1-PA3 (PA1 and PA2 only weak output drivers)
  3-4		| PB5-PB4 (reverse order)
  5-9		| PC3-PC7
 10-15		| PD1-PD6
 
 serial: 14,15  
 SPI: 2,7,8,9  
-I2C: 3,4  
+I2C: 3,4 (true open drain. can't drive a high signal without an external
+pull-up resistor)
 Analog: 6,11,12,14,15  
 PWM: 2,5,6,12 plus either only 13 or 7-9 but not 13 (via alternate mapping)  
 

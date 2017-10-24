@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Michael Mayer">
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+	<title>Using the SPL with SDCC and sduino - Sduino</title>
+
+        <link href="../../css/bootstrap-3.0.3.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+        <link href="../../css/base.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">Sduino</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../..">Introduction</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../usage/board-manager-install/">Automatic Installation</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../usage/build-ide/">Building with the IDE</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../usage/why-stm8/">When to use an STM8S - and when not</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../usage/update-to-manual/">Update to Manual Installation</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../usage/manual-install/">Manual Installation</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../usage/build-cli/">Building with a Makefile</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../usage/limitations/">Limitations</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../usage/status-todo/">Status and todo</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Libraries <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../api/">API description and migration guidelines</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/HardwareSerial/">HardwareSerial</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/SPI/">SPI</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/I2C/">I2C</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/LiquidCrystal/">LiquidCrystal character LCD library</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/PCD8544/">PCD8544 libray for Nokia 5110-like graphical LCDs</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/Mini_SSD1306/">Mini_SSD1306 library for monochrome OLED-displays</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/Stepper/">Stepper library</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/Servo/">Servo library</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hardware <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../hardware/flashtool/">Flash tool</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../hardware/stm8blue/">Generic STM8S103 breakout board (stm8blue)</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../hardware/esp14/">ESP14: Wifi board, STM8S003</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../hardware/stm8sdiscovery/">STM8S105Discovery: Evaluation board made my ST</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../macro/">C preprocessor macro magic</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../pin_mapping/">Ways to define a pin mapping</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../sdcc/">Using the SDCC compiler</a>
+                        </li>
+                    
+                        <li class="active">
+                            <a href="./">Using the SPL with SDCC and sduino</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../bare-metal-programming/">Bare metal programming on the STM8</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../performance/">Performance comparison and benchmarking</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../links/">Links and further reading</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../../contact/">Contact</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../../about/">About</a>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                <li >
+                    <a rel="next" href="../sdcc/">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="../bare-metal-programming/">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="https://github.com/tenbaht/sduino">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#st-standard-library">ST Standard Library</a></li>
+        
+            <li><a href="#interrupts">Interrupts</a></li>
+        
+    
+    </ul>
+</div></div>
+            <div class="col-md-9" role="main">
+
+<h2 id="st-standard-library">ST Standard Library</h2>
+<p>Can be [downloaded from the ST website]
+(http://www.st.com/en/embedded-software/stsw-stm8069.html)
+(free registration required). Don't miss the Examples folder within the
+downloaded zip file. This is the most useful reference on using this library
+and programming the STM8 in general.</p>
+<p>For use with SDCC the library needs to be patched:</p>
+<pre><code>git clone https://github.com/g-gabber/STM8S_StdPeriph_Driver.git
+git clone https://github.com/gicking/SPL_2.2.0_SDCC_patch.git
+cp ../STM8S_SPL_2.2.0/Libraries/STM8S_StdPeriph_Driver/inc/stm8s.h .
+patch -p1 &lt; ../SPL_2.2.0_SDCC_patch/STM8_SPL_v2.2.0_SDCC.patch
+cp -av  ../STM8S_StdPeriph_Lib/Project/STM8S_StdPeriph_Template/stm8s_conf.h .
+cp -av  ../STM8S_StdPeriph_Lib/Project/STM8S_StdPeriph_Template/stm8s_it.h .
+</code></pre>
+<p>SDCC uses .rel as the file extension for its object files.</p>
+<p>Additional patch required for stm8s_itc.c:</p>
+<pre><code class="diff">--- stm8s_itc.c~    2014-10-21 17:32:20.000000000 +0200
++++ stm8s_itc.c 2016-12-11 21:56:41.786048494 +0100
+@@ -55,9 +55,12 @@
+   return; /* Ignore compiler warning, the returned value is in A register */
+ #elif defined _RAISONANCE_ /* _RAISONANCE_ */
+   return _getCC_();
+-#else /* _IAR_ */
++#elif defined _IAR_ /* _IAR_ */
+   asm(&quot;push cc&quot;);
+   asm(&quot;pop a&quot;); /* Ignore compiler warning, the returned value is in A register */
++#else /* _SDCC_ */
++  __asm__(&quot;push cc&quot;);
++  __asm__(&quot;pop a&quot;); /* Ignore compiler warning, the returned value is in A register */
+ #endif /* _COSMIC_*/
+ }
+</code></pre>
+
+<p>Now the library can be compiled for the STM8S103 using this Makefile:</p>
+<pre><code class="make">CC=sdcc
+AR=sdar
+CFLAGS=-c -mstm8 -DSTM8S103 -I ../inc --opt-code-size -I.
+LDFLAGS=-rc
+SOURCES= \
+    stm8s_adc1.c    stm8s_awu.c stm8s_beep.c    stm8s_clk.c \
+    stm8s_exti.c    stm8s_flash.c   stm8s_gpio.c    stm8s_i2c.c \
+    stm8s_itc.c stm8s_iwdg.c    stm8s_rst.c stm8s_spi.c \
+    stm8s_tim1.c    stm8s_tim2.c    stm8s_tim4.c    stm8s_uart1.c \
+    stm8s_wwdg.c
+
+OBJECTS=$(SOURCES:.c=.o)
+OBJECTS_LINK=$(SOURCES:.c=.rel)
+EXECUTABLE=stm8s.lib
+
+all: $(SOURCES) $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS)
+$(AR) $(LDFLAGS) $(EXECUTABLE) $(OBJECTS_LINK)
+
+.c.o:
+    $(CC) $(CFLAGS) $&lt; -o $@
+
+clean:
+    rm -f *.lib *.rst *.rel *.lst *.ihx *.sym *.asm *.lk *.map
+    rm -f $(EXECUTABLE)
+</code></pre>
+
+<p>This library can now be used for linking with blink_spl or uart_spl. The
+files stm8s_conf.h and stm8s_it.h are still needed for compilation.</p>
+<p>The linker does not remove individual unused functions from an object file,
+only complete object files can be skipped.<br />
+<strong>=&gt; for building a library it is better to separate all functions into
+individual source files </strong></p>
+<p>The SPL folder in this archive contains a script <code>doit</code> to separate the
+functions before compilation.
+FIXME: description needed</p>
+<p>Erklärung wie zumindest die Interrupt-Vektoren in die eigene Datei kommen
+können:
+http://richs-words.blogspot.de/2010/09/stm8s-interrupt-handling.html</p>
+<h3 id="interrupts">Interrupts</h3>
+<p>Namen definiert in stm8s_itc.h
+Interrupt-Routine definieren:</p>
+<pre><code class="c">/* UART1 TX */
+void UART1_TX_IRQHandler(void) __interrupt(ITC_IRQ_UART1_TX)
+{
+}
+</code></pre>
+
+<p>Jetzt muss noch das passende IRQ-Enable-Flag gesetzt werden und Interrupt
+generell freigegeben werden, also hier:</p>
+<pre><code class="c">UART1_ITConfig(UART1_IT_TXE, ENABLE);
+enableInterrupts();
+</code></pre>
+
+<p>Unklar ist, was die ITC-Prioritäten bewirken. Es geht jedenfalls auch ohne:</p>
+<pre><code class="c">ITC_DeInit();
+ITC_SetSoftwarePriority(ITC_IRQ_UART1_TX, ITC_PRIORITYLEVEL_2);
+</code></pre></div>
+        </div>
+
+	<footer class="col-md-12">
+		<hr>
+		
+		<center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
+	</footer>
+
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script src="../../js/base.js"></script>
+    </body>
+</html>

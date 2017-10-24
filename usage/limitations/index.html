@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Michael Mayer">
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+	<title>Limitations - Sduino</title>
+
+        <link href="../../css/bootstrap-3.0.3.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+        <link href="../../css/base.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">Sduino</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../..">Introduction</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../board-manager-install/">Automatic Installation</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../build-ide/">Building with the IDE</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../why-stm8/">When to use an STM8S - and when not</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../update-to-manual/">Update to Manual Installation</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../manual-install/">Manual Installation</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../build-cli/">Building with a Makefile</a>
+                        </li>
+                    
+                        <li class="active">
+                            <a href="./">Limitations</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../status-todo/">Status and todo</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Libraries <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../api/">API description and migration guidelines</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/HardwareSerial/">HardwareSerial</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/SPI/">SPI</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/I2C/">I2C</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/LiquidCrystal/">LiquidCrystal character LCD library</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/PCD8544/">PCD8544 libray for Nokia 5110-like graphical LCDs</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/Mini_SSD1306/">Mini_SSD1306 library for monochrome OLED-displays</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/Stepper/">Stepper library</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/Servo/">Servo library</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hardware <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../hardware/flashtool/">Flash tool</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../hardware/stm8blue/">Generic STM8S103 breakout board (stm8blue)</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../hardware/esp14/">ESP14: Wifi board, STM8S003</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../hardware/stm8sdiscovery/">STM8S105Discovery: Evaluation board made my ST</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../developer/macro/">C preprocessor macro magic</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/pin_mapping/">Ways to define a pin mapping</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/sdcc/">Using the SDCC compiler</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/spl/">Using the SPL with SDCC and sduino</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/bare-metal-programming/">Bare metal programming on the STM8</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/performance/">Performance comparison and benchmarking</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/links/">Links and further reading</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../../contact/">Contact</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../../about/">About</a>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                <li >
+                    <a rel="next" href="../build-cli/">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="../status-todo/">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="https://github.com/tenbaht/sduino">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#limitations">Limitations</a></li>
+        
+            <li><a href="#compatibility-with-the-arduino-world">Compatibility with the Arduino world</a></li>
+        
+            <li><a href="#float-arithmetics">Float arithmetics</a></li>
+        
+            <li><a href="#known-problems-using-windows">Known problems using Windows</a></li>
+        
+    
+    </ul>
+</div></div>
+            <div class="col-md-9" role="main">
+
+<h1 id="limitations">Limitations</h1>
+<h2 id="compatibility-with-the-arduino-world">Compatibility with the Arduino world</h2>
+<p>I adopted the Arduino core functionality for the STM8S to set up a simple
+programming environment. But unfortunatly there is no free C++ compiler for
+these CPUs. This makes it impossible to do a full port of the whole
+enviroment and integrate it 100% in the Arduino world as it has been done
+for the STM32 and the ESP8266.</p>
+<p>This is not a drop-in replacement for an AVR, but the programming API is
+still very, very similar. Adopting existing libraries from C++ to C for use
+with the simplified C API is often easy and can be done quite fast,
+depending on the degree of dependency on specific hardware features.</p>
+<p>Using a converter/compiler like
+<a href="https://en.wikipedia.org/wiki/Cfront">cfront</a> to translate from C++ to C
+might be an option.</p>
+<h2 id="float-arithmetics">Float arithmetics</h2>
+<p>Floating point arithmetics is supported by the SDCC standard library, but it
+comes at a pretty high cost in terms of code space and CPU load. This is how
+much the generated code grows by using a single float operation compared to 
+using a long int:</p>
+<table>
+<thead>
+<tr>
+<th>Floating point operation</th>
+<th>approx. code size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>addition</td>
+<td>736 Bytes</td>
+</tr>
+<tr>
+<td>subtraction</td>
+<td>754 Bytes</td>
+</tr>
+<tr>
+<td>division</td>
+<td>673 Bytes</td>
+</tr>
+<tr>
+<td>multiplication</td>
+<td>907 Bytes</td>
+</tr>
+<tr>
+<td>sinf() or cosf()</td>
+<td>3346 Bytes</td>
+</tr>
+<tr>
+<td>log10f()</td>
+<td>3437 Bytes</td>
+</tr>
+</tbody>
+</table>
+<p>The Arduino standard example '01. Basics/ReadAnalogVoltage' is a very simple
+simple program with only very little floating point arithmetics. But it
+already uses 7336 bytes of flash. A similar sketch using integer arithmetics
+results in much more compact code occuping only 3791 bytes.</p>
+<p>Float does work, but is better to be avoided and replaced by fixed point
+arithmetics whenever possible.</p>
+<h2 id="known-problems-using-windows">Known problems using Windows</h2>
+<p>It works, but using the Arduino.mk makefile with Windows is slow. <strong>Very</strong>
+slow. Painfully slow. Compiling-the-Blink-example-takes-about-40-seconds
+kind of slow. Yes, seriously. No kidding. 40 seconds. Measured on a 3GHz
+machine with 4GB RAM.</p>
+<p>There is no easy fix, the underlying problem is a fundamental one. It is not
+about the compilation itself, it is the way Makefiles are written and
+executed. The whole concept relies on forking subprocesses for all the shell
+calls. Unfortunately, there is nothing like a fork in Windows and to work
+around that is painfully slow.</p>
+<p>It would be great if somebody would replace the painfully slow parameter
+checking part of the makefile (that causes the majority of forking) by a
+single shell script that gets called by the makefile and delivers the
+results in no time. Or use <a href="../www.cmake.org">cmake</a>. Or integrate it somehow
+into the STVD IDE (This <a href="https://github.com/shkolnick-kun/stvd-sdcc">STVD-SDCC integration
+suite</a> might be useful). Or
+whatever.</p>
+<p>Until then the least annoying way out might be using a virtual machine
+running a simple Linux system. Ubuntu Mate or a basic Debian install for
+example. Virtual Box is great for this purpose and freely available. The new
+Linux Subsystem feature of Windows 10 might be another option.</p></div>
+        </div>
+
+	<footer class="col-md-12">
+		<hr>
+		
+		<center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
+	</footer>
+
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script src="../../js/base.js"></script>
+    </body>
+</html>

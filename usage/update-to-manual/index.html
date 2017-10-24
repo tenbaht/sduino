@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Michael Mayer">
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+	<title>Update to Manual Installation - Sduino</title>
+
+        <link href="../../css/bootstrap-3.0.3.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+        <link href="../../css/base.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">Sduino</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../..">Introduction</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../board-manager-install/">Automatic Installation</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../build-ide/">Building with the IDE</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../why-stm8/">When to use an STM8S - and when not</a>
+                        </li>
+                    
+                        <li class="active">
+                            <a href="./">Update to Manual Installation</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../manual-install/">Manual Installation</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../build-cli/">Building with a Makefile</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../limitations/">Limitations</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../status-todo/">Status and todo</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Libraries <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../api/">API description and migration guidelines</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/HardwareSerial/">HardwareSerial</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/SPI/">SPI</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/I2C/">I2C</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/LiquidCrystal/">LiquidCrystal character LCD library</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/PCD8544/">PCD8544 libray for Nokia 5110-like graphical LCDs</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/Mini_SSD1306/">Mini_SSD1306 library for monochrome OLED-displays</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/Stepper/">Stepper library</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/Servo/">Servo library</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hardware <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../hardware/flashtool/">Flash tool</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../hardware/stm8blue/">Generic STM8S103 breakout board (stm8blue)</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../hardware/esp14/">ESP14: Wifi board, STM8S003</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../hardware/stm8sdiscovery/">STM8S105Discovery: Evaluation board made my ST</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../developer/macro/">C preprocessor macro magic</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/pin_mapping/">Ways to define a pin mapping</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/sdcc/">Using the SDCC compiler</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/spl/">Using the SPL with SDCC and sduino</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/bare-metal-programming/">Bare metal programming on the STM8</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/performance/">Performance comparison and benchmarking</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/links/">Links and further reading</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../../contact/">Contact</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../../about/">About</a>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                <li >
+                    <a rel="next" href="../why-stm8/">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="../manual-install/">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="https://github.com/tenbaht/sduino">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#update-to-manual-installation">Update to Manual Installation</a></li>
+        
+            <li><a href="#ok-lets-start">Ok, let's start.</a></li>
+        
+            <li><a href="#linux">Linux</a></li>
+        
+            <li><a href="#macos">MacOS</a></li>
+        
+            <li><a href="#windows">Windows</a></li>
+        
+    
+    </ul>
+</div></div>
+            <div class="col-md-9" role="main">
+
+<h1 id="update-to-manual-installation">Update to Manual Installation</h1>
+<p><a href="../board-manager-install">Using the Arduino Board Manager</a> is now the
+recommended way of installation. Updating to a manual install is only useful
+if you are planning to use development or experimental branches of Sduino or
+if you outgrow the possibilities of the Arduino IDE and you are looking for
+more control by using a proper Makefile controlled build process.</p>
+<p>Let's compare:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Board Manager</th>
+<th>manual install</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Difficulty</td>
+<td>very easy</td>
+<td>easy on Linux and MacOS, more difficult on Windows.</td>
+</tr>
+<tr>
+<td>Used Packages</td>
+<td>latest release</td>
+<td>release, development or experimental</td>
+</tr>
+<tr>
+<td>IDE/GUI based builds</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Makefile based builds</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Compiling without Arduino libraries</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ok-lets-start">Ok, let's start.</h2>
+<p>Start by cloning or downloading and extracting the
+<a href="https://github.com/tenbaht/sduino">repository</a> to a convenient location.</p>
+<p>Now we need to copy some files from the automatic install into the
+hardware/sduino/tools folder of this repository to end with a folder
+structure like this:</p>
+<pre><code class="bash">    + hardware/
+      + sduino    (this is a link)
+        + stm8/   core, variants, etc.
+        + tools/
+          + wrapper/
+          + win/       stm8flash, libusb.dll, bash, ls, make etc.
+          + linux      (link)
+          + linux32/   stm8flash, stmgal
+          + linux64/   stm8flash, stmgal
+          + sdcc       can be a link to a full sdcc install
+</code></pre>
+
+<p>After copying you <strong>MUST NOT FORGET</strong> to use the Board Manager to remove the
+auto-installed package. Otherwise your are going to use different versions
+of the sduino core for IDE and Makefile builds. Confusion would be
+guaranteed!</p>
+<h2 id="linux">Linux</h2>
+<p>Your local hardware folder is usually in <code>~/sketchbook</code> or <code>~/Arduino</code>.
+Create the hardware folder, if not already present.</p>
+<pre><code class="bash">    cd ~/Arduino
+    mkdir hardware
+</code></pre>
+
+<p>Link the hardware/sduino folder of the downloaded repository to your local
+Arduino hardware folder:</p>
+<pre><code class="bash">    ln -s [the-extracted-repository]/sduino/hardware/sduino hardware
+</code></pre>
+
+<p>The needed files from the Board Manager install are in
+<code>~/.arduino15/packages/sduino/tools</code>. We want to copy <code>sdcc</code> to <code>/opt</code> and the
+content of <code>STM8STools</code> into <code>tools</code>:</p>
+<pre><code class="bash">    sudo mkdir /opt
+    sudo cp -av ~/.arduino15/packages/sduino/tools/sdcc/&lt;version&gt; /opt/sdcc
+    cp -av ~/.arduino15/packages/sduino/tools/STM8STools/&lt;version&gt;/* tools/
+</code></pre>
+
+<p>Alternatively, you could download the lastest <a href="http://sdcc.sourceforge.net/snap.php">SDCC snapshot
+  build</a> and extract that into
+<code>/opt/sdcc</code> instead of copying the packaged version.</p>
+<p>Create a link to SDCC from the tools directory of the sduino repository
+(only needed for IDE builds):</p>
+<pre><code class="bash">    ln -s /opt/sdcc .
+</code></pre>
+
+<p><code>stm8flash</code> and <code>stm8gal</code> are both included as precompiled binaries in this
+tools directory. Copy them to a convient place in your path, e.g.
+<code>/usr/local/bin</code>:</p>
+<pre><code class="bash">    sudo cp -av linux/* /usr/local/bin
+</code></pre>
+
+<p><code>make</code> and libusb-1.0 (needed by stm8flash) are part of the standard
+repository for any Linux distribution. Example for Debian-type systems (like
+Ubuntu, Mint, Elementary etc.):</p>
+<pre><code class="bash">    sudo apt-get install make libusb-1.0-0
+</code></pre>
+
+<p>Now use the Board Mangager to remove the auto-installed Sduino package and
+you are ready.</p>
+<h2 id="macos">MacOS</h2>
+<p>Quite similar to the Linux install. <a href="https://brew.sh/">Install Homebrew</a> if
+you haven't done it yet, than install make and unpack the sdcc snapshot (if
+not re-using the packaged version):</p>
+<pre><code class="bash">    brew make
+    mkdir /opt
+    tar xvjf sdcc-snapshot* -C /opt
+</code></pre>
+
+<p>Adopt the other steps from the Linux install. The arduino hardware folder is
+in your Documents folder at <code>/Users/&lt;username&gt;/Documents/Arduino/hardware</code>.</p>
+<p>Not sure about stm8flash, I didn't try it. Have a look at the <a href="https://github.com/vdudouyt/stm8flash">stm8flash
+repository</a>. It would be great if
+someone could summarize the procedure and send it to me together with a
+compiled binary for the repository.</p>
+<h2 id="windows">Windows</h2>
+<p>Link (not copy!) the hardware/sduino folder of the downloaded repository to
+your local Arduino hardware folder (in <code>Documents/Arduino/hardware</code>). Create
+the hardware folder, if not already present.</p>
+<p>Expected folder structure:</p>
+<pre><code class="bash">   Documents/
+     + Arduino/
+       + hardware/
+         + sduino    (this is a link)
+           + stm8/   core, variants, etc.
+           + tools/
+             + wrapper/
+             + win/  stm8flash, libusb.dll, bash, ls, make etc.
+             + sdcc  can be a link to a full sdcc install
+</code></pre>
+
+<blockquote>
+<p>Don't despair of the stock Windows terminal window. Installing e.g.
+<a href="https://sourceforge.net/projects/console/">console2</a> will make your life on
+the command line so much more enjoyable.</p>
+</blockquote>
+<p>The needed Board Mangager install files are in your user folder in 
+<code>AppData/Local/Arduino/packages/sduino/tools'. Copy</code>sdcc/<version><code>and the content
+of</code>STM8STools/&lt;version<code>into</code>hardware/sduino/tools`. Mind the slightly
+different folder structure.</p>
+<p>Update your <code>%PATH%</code>:</p>
+<ul>
+<li>Add a link <code>c:\sdcc</code> to your SDCC installation directory and add this to
+  your <code>%PATH%</code>. It is very important, that this name does not contain any
+  spaces.</li>
+<li>Add the <code>sduino/tools/win</code> directory to your path or move/copy/link the
+  files in there to a directory that is already in your path.</li>
+</ul>
+<p>Open a terminal window and make sure that the binaries are found:</p>
+<pre><code class="bash">    $ ls
+    $ sdcc -v
+</code></pre>
+
+<p>If you have installed <a href="https://sourceforge.net/projects/console/">console2</a>
+before, you could even configure it to use <code>bash</code> as your default command
+shell instead of <code>cmd.exe</code>.</p>
+<p>Now use the Board Mangager to remove the auto-installed Sduino package and
+you are ready.</p>
+<p>(Keep in mind the <a href="../limitations#known-problems-using-windows">Known problems using
+Windows</a>)</p></div>
+        </div>
+
+	<footer class="col-md-12">
+		<hr>
+		
+		<center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
+	</footer>
+
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script src="../../js/base.js"></script>
+    </body>
+</html>

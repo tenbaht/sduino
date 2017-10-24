@@ -1,0 +1,76 @@
+# Sduino
+
+_**Porting the most important features of the Arduino API to the STM8S.**_
+
+Within a few minutes you are ready to compile and upload your first
+STM8S-based project while still retaining the flexibility to use ST's SPL
+functions.
+
+All you need to get started is a simple STM8S103F breakout board for 70
+cents and a ST-Link V2 compatible flash programmer for $2.50. Three boards
+and one flash programmer together are available for well under five dollars
+including shipping on
+[aliexpress](https://www.aliexpress.com/wholesale?SearchText=stm8s103f3p6).
+
+*Amazing!*
+
+
+### Usage
+
+The recommanded way of installation is now the Arduino Board Manager:
+
+- Open the Settings tab of the Preferences dialog
+- Enter
+  `https://github.com/tenbaht/sduino/raw/master/package_sduino_stm8_index.json`
+  as an Additional Boards Manager URL
+- Select *sduino* in the Boards Manager list (Tools->Board:...->Boards Manager)
+- Click on Install
+
+Wait for the download to finsh and you are ready to blink:
+
+- Open the Boards list at Tools->Board:...
+- You should find a new entry "STM8S Boards".
+- Choose *STM8S103F3 Breakout Board* from the list
+- Open the standard Blink example from File->Examples->01. Basics->Blink
+- Compile it by hitting 'Verify'
+
+Wasn't too hard, was it?
+
+
+
+### Included libraries
+
+Some Arduino libraries are already ported to C-syntax. The resulting API is
+still very close to the C++ version and porting an existing application is
+not hard. Check out the [API migration guidelines](api.md) for details.
+
+#### Communication
+
+* [SPI](api/SPI.md): Real hardware-SPI up to 10MHz.
+* [I2C](api/I2C.md): Port of the I2C master library by Wayne Truchsess
+* HardwareSerial: The standard serial interface.
+
+#### Displays
+
+* [LiquidCrystal](api/LiquidCrystal.md): HD44780 based text LCDs
+* [PCD8544](api/PCD8544.md): Monochrome graphical LCD based on the PCD8544
+  controller like the Nokia 5110 display. SPI mode only.
+* [Mini_SSD1306](api/Mini_SSD1306.md): SSD1306-based monochrome OLED displays
+  with 128x64 pixels. I2C support only.
+
+#### Motor control
+
+* [Stepper](api/Stepper.md): Stepper motors with 2, 4 or 5 phases.
+* [Servo](api/Servo.md): Up to 12 servos using only 1 timer.
+
+
+
+### Supported Systems
+
+* Linux 64 bit: Tested on Ubuntu 16.04
+* Linux 32 bit: Tested on Ubuntu 16.04
+* Windows: Tested on Windows 7. Sduino might work on XP (not tested), but
+  the ST-Link/V2 driver is not available anymore for XP.
+* MacOS: Not tested, but should be very close to working. Will need a manual
+  install, but IDE integration should be easy now. Any volunteers?
+* Raspian/Raspberry Pi: Untested. Will require a manual install.

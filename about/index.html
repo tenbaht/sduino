@@ -11,7 +11,7 @@
 
 	<title>About - Sduino</title>
 
-        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/bootstrap-3.0.3.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
         <link rel="stylesheet" href="../css/highlight.css">
         <link href="../css/base.css" rel="stylesheet">
@@ -55,23 +55,39 @@
                     <ul class="dropdown-menu">
                     
                         <li >
-                            <a href="..">Overview</a>
+                            <a href="..">Introduction</a>
                         </li>
                     
                         <li >
-                            <a href="../install/">Installation</a>
+                            <a href="../usage/board-manager-install/">Automatic Installation</a>
                         </li>
                     
                         <li >
-                            <a href="../sdcc/">Using the SDCC compiler</a>
+                            <a href="../usage/build-ide/">Building with the IDE</a>
                         </li>
                     
                         <li >
-                            <a href="../spl/">Using the SPL with SDCC and sduino</a>
+                            <a href="../usage/why-stm8/">When to use an STM8S - and when not</a>
                         </li>
                     
                         <li >
-                            <a href="../macro/">C preprocessor macro magic</a>
+                            <a href="../usage/update-to-manual/">Update to Manual Installation</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../usage/manual-install/">Manual Installation</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../usage/build-cli/">Building with a Makefile</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../usage/limitations/">Limitations</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../usage/status-todo/">Status and todo</a>
                         </li>
                     
                     </ul>
@@ -133,14 +149,6 @@
                         </li>
                     
                         <li >
-                            <a href="../hardware/">List of supported boards</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../hardware/pin_mapping/">Ways to define a pin mapping</a>
-                        </li>
-                    
-                        <li >
                             <a href="../hardware/stm8blue/">Generic STM8S103 breakout board (stm8blue)</a>
                         </li>
                     
@@ -150,6 +158,43 @@
                     
                         <li >
                             <a href="../hardware/stm8sdiscovery/">STM8S105Discovery: Evaluation board made my ST</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../developer/macro/">C preprocessor macro magic</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../developer/pin_mapping/">Ways to define a pin mapping</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../developer/sdcc/">Using the SDCC compiler</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../developer/spl/">Using the SPL with SDCC and sduino</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../developer/bare-metal-programming/">Bare metal programming on the STM8</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../developer/performance/">Performance comparison and benchmarking</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../developer/links/">Links and further reading</a>
                         </li>
                     
                     </ul>
@@ -203,6 +248,8 @@
     
         <li class="main active"><a href="#about">About</a></li>
         
+            <li><a href="#tools-used">Tools used</a></li>
+        
             <li><a href="#project-origin">Project origin</a></li>
         
             <li><a href="#about-me">About me</a></li>
@@ -223,8 +270,19 @@ ST</a> is very
 powerful and provides an relativly easy migration path towards the STM32 CPU
 series in case a project outgrows the capabilities of the 8-bit STM8 series.
 But using that library is not very intuitive and still requires a fairly
-detailed knowledge of the CPU internals. <a href="../spl/">compiling the SPL with
+detailed knowledge of the CPU internals. <a href="../developer/spl/">compiling the SPL with
 SDCC</a></p>
+<h2 id="tools-used">Tools used</h2>
+<p>This project is based on free tools that are available for Linux, MacOS, and
+Windows.
+It uses the small devices C compiler (SDCC) for compiling,
+<a href="https://github.com/vdudouyt/stm8flash">stm8flash</a> for uploading the binary
+to the CPU, and simple Makefiles for the build process.</p>
+<p>Support for the Cosmic compiler under Windows and integration into the ST
+visual developer IDE might be possible, but is not done (yet?).</p>
+<p>The build process is controlled by a makefile based on the amazing
+<a href="https://github.com/sudar/Arduino-Makefile">Arduino.mk makefile</a> by
+<a href="http://sudarmuthu.com&gt;">Sudar</a>.</p>
 <h2 id="project-origin">Project origin</h2>
 <p>For a customer I needed to port an existing project from an ATmega to a
 better suited (read: cheaper) platform. As the project was based on some
@@ -244,11 +302,12 @@ electronics, measurement equipment, industrial control, SMPS, displays
 (LCD, TFT)</p></div>
         </div>
 
-        <footer class="col-md-12">
-            <hr>
-            
-            <center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
-        </footer>
+	<footer class="col-md-12">
+		<hr>
+		
+		<center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
+	</footer>
+
 
         <script src="../js/jquery-1.10.2.min.js"></script>
         <script src="../js/bootstrap-3.0.3.min.js"></script>
