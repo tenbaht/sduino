@@ -100,7 +100,11 @@
                     <ul class="dropdown-menu">
                     
                         <li >
-                            <a href="../../api/">API description and migration guidelines</a>
+                            <a href="../../api/migration/">API description and migration guidelines</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/Print/">Print</a>
                         </li>
                     
                         <li >
@@ -223,7 +227,7 @@
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../../api/">
+                    <a rel="prev" href="../../api/migration/">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -260,43 +264,55 @@
 <h1 id="status-and-todo">Status and Todo</h1>
 <h2 id="current-status">Current status</h2>
 <h4 id="tested-and-working">tested and working</h4>
-<p><code>pinMode()</code><br />
-<code>digitalWrite()</code><br />
-<code>analogRead()</code><br />
-<code>delay()</code><br />
-<code>analogWrite()</code><br />
-<code>ShiftOut()</code><br />
-WMath: <code>map()</code><br />
-HardwareSerial<br />
-<code>serialEvent()</code>
-Print<br />
-<code>pulseInLong()</code><br />
-<a href="../../api/SPI/">SPI</a>:
-  working, no interrupt support<br />
-<a href="../../api/LiquidCrystal/">LiquidCrystal</a>:
-  Text LCD based on the HD44780 controller<br />
-<a href="../../api/PCD8544/">PCD8544</a>:
-  Nokia 5110 type displays<br />
-<a href="../../api/Mini_SSD1306/">Mini_SSD1306</a>:
-  Monochrome OLED displays based on the SSD1306 controller
-<a href="../../api/Stepper/">Stepper</a>:
-  Multi-instance design for more than one stepper at a time<br />
-<a href="../../api/Servo/">Servo</a>:
-  Multi-instance design for more than one servo at a time)  </p>
+<ul>
+<li><code>pinMode()</code></li>
+<li><code>digitalWrite()</code></li>
+<li><code>analogRead()</code></li>
+<li><code>delay()</code></li>
+<li><code>analogWrite()</code></li>
+<li><code>ShiftOut()</code></li>
+<li>WMath: <code>map()</code></li>
+<li><code>serialEvent()</code></li>
+<li><code>pulseInLong()</code></li>
+<li><a href="../../api/HardwareSerial/">HardwareSerial</a>:
+  Standard UART interface with Print functions</li>
+<li><a href="../../api/Print/">Print</a>:
+  Formatting functions to be used with the other output libraries</li>
+<li><a href="../../api/SPI/">SPI</a>:
+  working, no interrupt support  </li>
+<li><a href="../../api/LiquidCrystal/">LiquidCrystal</a>:
+  Text LCD based on the HD44780 controller  </li>
+<li><a href="../../api/PCD8544/">PCD8544</a>:
+  Nokia 5110 type displays  </li>
+<li><a href="../../api/Mini_SSD1306/">Mini_SSD1306</a>:
+  Monochrome OLED displays based on the SSD1306 controller</li>
+<li><a href="../../api/Stepper/">Stepper</a>:
+  Multi-instance design for more than one stepper at a time  </li>
+<li><a href="../../api/Servo/">Servo</a>:
+  Multi-instance design for more than one servo at a time)  </li>
+</ul>
 <h4 id="implemented-and-partly-working">implemented and partly working</h4>
-<p>Wire/I2C  </p>
+<ul>
+<li><a href="../../api/I2C/">Wire/I2C</a></li>
+</ul>
 <h4 id="tested-but-not-working">tested, but not working</h4>
-<p><code>alternateFunctions()</code>  </p>
+<ul>
+<li><code>alternateFunctions()</code></li>
+</ul>
 <h4 id="not-tested">not tested</h4>
-<p><code>ShiftIn()</code><br />
-<code>random()</code><br />
-<code>srandom()</code>  </p>
+<ul>
+<li><code>ShiftIn()</code></li>
+<li><code>random()</code></li>
+<li><code>srandom()</code></li>
+</ul>
 <h4 id="not-implemented">not implemented</h4>
-<p><code>tone()</code><br />
-<code>noTone()</code><br />
-<code>pulseIn()</code><br />
-module WCharacter<br />
-module WString  </p>
+<ul>
+<li><code>tone()</code></li>
+<li><code>noTone()</code></li>
+<li><code>pulseIn()</code></li>
+<li>module WCharacter</li>
+<li>module WString</li>
+</ul>
 <h2 id="todo">Todo</h2>
 <h3 id="unresolved-problems">Unresolved problems</h3>
 <p>The compile environment needs to detect which interrupts are actively used

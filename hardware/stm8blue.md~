@@ -55,9 +55,9 @@ hard-coded assumptions about the number of pins with special functions.
 Ideally, all these numbers would be the same and all programs could be
 compiled without changes.
 
-[Here](pin_mapping.md) I discuss some possible pin mapping and check
-how close we could get the the ideal mapping. Unfortunatly, it turns out
-that a perfect mapping is not possible.
+[Here](../developer/pin_mapping.md) I discuss some possible pin mapping
+schemes and check how close we could get the the ideal mapping.
+Unfortunatly, it turns out that a perfect mapping is not possible.
 
 In the end I chose a simple geometric numbering for the square UFQFPN20
 package starting with port pin PA1 and counting up from 0. This results in

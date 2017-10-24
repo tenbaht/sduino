@@ -64,6 +64,32 @@ not hard. Check out the [API migration guidelines](api.md) for details.
 * [Servo](api/Servo.md): Up to 12 servos using only 1 timer.
 
 
+### Supported hardware
+
+* The [one-dollar-boards](hardware/stm8blue.md): A simple STM8S103 breakout
+  board build around a CPU STM8S103F3P6. It costs less than a dollar. The
+  CPU features a 16MHz internal oscillator, 8kB flash, 1kB RAM, 640 byte
+  EEPROM. It includes an UART, SPI, I2C, PWM, 10 bit ADC, 3 timer, and up to
+  14 I/O pins - quite similar to an Atmel ATmega8.
+
+* The [ESP14 Wifi-boards](hardware/esp14.md) are very similar. They are
+  basically a variant of these boards with an added ESP-01 Wifi-module. Almost
+  all programs should run on those chinese Wifi-enabled gems as well.
+
+* The [STM8S105Discovery-boards](hardware/stm8sdiscovery.md) are very similar
+  to an Arduino Uno with an ATmega328 CPU. The support for the used STM8S105
+  CPU is still quite fresh but it should work now.
+
+
+
+### Limitations
+
+SDCC doesn't support C++. Some preprocessor magic is applied to close the
+gap between C and C++ syntax as much as possible, but this is not a 100%
+compatible drop-in replacement for full Arduino environments like for AVR or
+STM32. See [Limitations](usage/limitations.md) and the
+[migration guidelines](api/migration.md) for details.
+
 
 ### Supported Systems
 

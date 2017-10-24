@@ -5,7 +5,7 @@ Let's ask the forbidden question:
 The fine line between sense and nonsense.
 
 
-## When to use a STM8 - and when not
+## When to use an STM8 - and when not
 
 ### Hobby applications
 
@@ -27,7 +27,7 @@ community support for the STM8. The community support and the sheer number
 of existing libraries for all kinds of sensors and hardware is outstanding
 in the Arduino world. 
 
-Don't let the temping price tag be your only guide. An Arduino Nano
+Don't let the tempting price tag be your only guide. An Arduino Nano
 compatible board is not *that* much more expensive: They start at $1.90 on
 [aliexpress](https://www.aliexpress.com/wholesale?SearchText=arduino+nano).
 That is only $1.20 more. I am sure you can afford that.

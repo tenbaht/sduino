@@ -100,7 +100,11 @@
                     <ul class="dropdown-menu">
                     
                         <li >
-                            <a href="../../api/">API description and migration guidelines</a>
+                            <a href="../../api/migration/">API description and migration guidelines</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/Print/">Print</a>
                         </li>
                     
                         <li >
@@ -286,7 +290,7 @@ like this:</p>
 </tr>
 </tbody>
 </table>
-<p>I am not sure why the '003 is sold for half the price, or, to but it the
+<p>I am not sure why the '003 is sold for half the price, or, to put it the
 other way around, why anybody should choose the '103 at all. Did I miss an
 important difference?</p>
 <h2 id="using-the-wifi-connection">Using the Wifi connection</h2>
@@ -296,8 +300,8 @@ usual ESP AT-Firmware and is connected to the RX/TX pins of the STM8S.</p>
 <p>It feels like having a classic ATmega8-Arduino with a build-in ESP-01
 module. Using the <a href="https://github.com/bportaluri/WiFiEsp">WiFiEsp library</a>
 we could have a programming experience very similar to using an Arduino with
-a Wifi-shield.</p>
-<p>Problem is the limited flash space of the '003. Even the very basic
+a Wifi-shield or an Arduino Yun.</p>
+<p>The main problem is the limited flash space of the '003. Even the very basic
 WebServer example that comes with the WiFiEsp library needs more then 14kB
 flash and more than 1kB RAM when compiled for an Arduino Uno. Even if the
 library could be carefully optimized to fit into the 8kB flash of an '003 -

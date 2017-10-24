@@ -100,7 +100,11 @@
                     <ul class="dropdown-menu">
                     
                         <li >
-                            <a href="api/">API description and migration guidelines</a>
+                            <a href="api/migration/">API description and migration guidelines</a>
+                        </li>
+                    
+                        <li >
+                            <a href="api/Print/">Print</a>
                         </li>
                     
                         <li >
@@ -254,6 +258,8 @@
         
             <li><a href="#supported-hardware">Supported hardware</a></li>
         
+            <li><a href="#limitations">Limitations</a></li>
+        
             <li><a href="#supported-systems">Supported Systems</a></li>
         
     
@@ -294,7 +300,8 @@ including shipping on
 <h3 id="included-libraries">Included libraries</h3>
 <p>Some Arduino libraries are already ported to C-syntax. The resulting API is
 still very close to the C++ version and porting an existing application is
-not hard. Check out the <a href="api/">API migration guidelines</a> for details.</p>
+not hard. Check out the <a href="api/migration/">API migration guidelines</a> for
+details.</p>
 <h4 id="communication">Communication</h4>
 <ul>
 <li><a href="api/SPI/">SPI</a>: Real hardware-SPI up to 10MHz.</li>
@@ -334,6 +341,12 @@ not hard. Check out the <a href="api/">API migration guidelines</a> for details.
   CPU is still quite fresh but it should work now.</p>
 </li>
 </ul>
+<h3 id="limitations">Limitations</h3>
+<p>SDCC doesn't support C++. Some preprocessor magic is applied to close the
+gap between C and C++ syntax as much as possible, but this is not a 100%
+compatible drop-in replacement for full Arduino environments like for AVR or
+STM32. See <a href="usage/limitations/">Limitations</a> and the
+<a href="api/migration/">migration guidelines</a> for details.</p>
 <h3 id="supported-systems">Supported Systems</h3>
 <ul>
 <li>Linux 64 bit: Tested on Ubuntu 16.04</li>

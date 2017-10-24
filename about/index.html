@@ -100,7 +100,11 @@
                     <ul class="dropdown-menu">
                     
                         <li >
-                            <a href="../api/">API description and migration guidelines</a>
+                            <a href="../api/migration/">API description and migration guidelines</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../api/Print/">Print</a>
                         </li>
                     
                         <li >
@@ -246,7 +250,7 @@
             <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#about">About</a></li>
+        <li class="main active"><a href="#about-sduino">About Sduino</a></li>
         
             <li><a href="#tools-used">Tools used</a></li>
         
@@ -259,7 +263,7 @@
 </div></div>
             <div class="col-md-9" role="main">
 
-<h1 id="about">About</h1>
+<h1 id="about-sduino">About Sduino</h1>
 <p>The idea is to smoothen the path towards your first successful STM8-based
 project.</p>
 <p>The Arduino project was very successful in offering a simplified API hiding
@@ -272,7 +276,7 @@ series in case a project outgrows the capabilities of the 8-bit STM8 series.
 But using that library is not very intuitive and still requires a fairly
 detailed knowledge of the CPU internals. <a href="../developer/spl/">compiling the SPL with
 SDCC</a></p>
-<h2 id="tools-used">Tools used</h2>
+<h3 id="tools-used">Tools used</h3>
 <p>This project is based on free tools that are available for Linux, MacOS, and
 Windows.
 It uses the small devices C compiler (SDCC) for compiling,
@@ -283,18 +287,18 @@ visual developer IDE might be possible, but is not done (yet?).</p>
 <p>The build process is controlled by a makefile based on the amazing
 <a href="https://github.com/sudar/Arduino-Makefile">Arduino.mk makefile</a> by
 <a href="http://sudarmuthu.com&gt;">Sudar</a>.</p>
-<h2 id="project-origin">Project origin</h2>
+<h3 id="project-origin">Project origin</h3>
 <p>For a customer I needed to port an existing project from an ATmega to a
 better suited (read: cheaper) platform. As the project was based on some
 Arduino libraries, porting parts of the Arduino environment was the logical
 first step. After doing that porting the firmware was finished in a couple
 of days. Porting some of the more commonly used Arduino libraries was a fun
 project done in my spare time later.</p>
-<h2 id="about-me">About me</h2>
+<h3 id="about-me">About me</h3>
 <p>I am a freelance programmer for embedded systems and electronics developer
 based in Heidelberg, Germany. I work with embedded systems for more than
 25 years now.</p>
-<h3 id="experiences">Experiences</h3>
+<h4 id="experiences">Experiences</h4>
 <p><strong>current CPU architectures</strong>: AVR (ATmega, ATxmega), PIC, STM8, STM32, MCS51</p>
 <p><strong>classic CPU architectures</strong>: 6502, 68HC11, 6809, Z80, MCS48</p>
 <p><strong>electronics development</strong>: optical sensors, laser driver, sensor

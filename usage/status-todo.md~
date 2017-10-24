@@ -3,47 +3,54 @@
 ## Current status
 
 #### tested and working
-`pinMode()`  
-`digitalWrite()`  
-`analogRead()`  
-`delay()`  
-`analogWrite()`  
-`ShiftOut()`  
-WMath: `map()`  
-HardwareSerial  
-`serialEvent()`
-Print  
-`pulseInLong()`  
-[SPI](api/SPI.md):
+
+* `pinMode()`
+* `digitalWrite()`
+* `analogRead()`
+* `delay()`
+* `analogWrite()`
+* `ShiftOut()`
+* WMath: `map()`
+* `serialEvent()`
+* `pulseInLong()`
+* [HardwareSerial](../api/HardwareSerial.md):
+  Standard UART interface with Print functions
+* [Print](../api/Print.md):
+  Formatting functions to be used with the other output libraries
+* [SPI](../api/SPI.md):
   working, no interrupt support  
-[LiquidCrystal](api/LiquidCrystal.md):
+* [LiquidCrystal](../api/LiquidCrystal.md):
   Text LCD based on the HD44780 controller  
-[PCD8544](api/PCD8544.md):
+* [PCD8544](../api/PCD8544.md):
   Nokia 5110 type displays  
-[Mini_SSD1306](api/Mini_SSD1306.md):
+* [Mini_SSD1306](../api/Mini_SSD1306.md):
   Monochrome OLED displays based on the SSD1306 controller
-[Stepper](api/Stepper.md):
+* [Stepper](../api/Stepper.md):
   Multi-instance design for more than one stepper at a time  
-[Servo](api/Servo.md):
+* [Servo](../api/Servo.md):
   Multi-instance design for more than one servo at a time)  
 
 #### implemented and partly working
-Wire/I2C  
+
+* [Wire/I2C](../api/I2C.md)  
 
 #### tested, but not working
-`alternateFunctions()`  
+
+* `alternateFunctions()`  
 
 #### not tested
-`ShiftIn()`  
-`random()`  
-`srandom()`  
+
+* `ShiftIn()`  
+* `random()`  
+* `srandom()`  
 
 #### not implemented
-`tone()`  
-`noTone()`  
-`pulseIn()`  
-module WCharacter  
-module WString  
+
+* `tone()`  
+* `noTone()`  
+* `pulseIn()`  
+* module WCharacter  
+* module WString  
 
 
 

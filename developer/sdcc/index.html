@@ -100,7 +100,11 @@
                     <ul class="dropdown-menu">
                     
                         <li >
-                            <a href="../../api/">API description and migration guidelines</a>
+                            <a href="../../api/migration/">API description and migration guidelines</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/Print/">Print</a>
                         </li>
                     
                         <li >
@@ -261,33 +265,38 @@
 <p>Tutorials:
 http://www.cnx-software.com/2015/04/13/how-to-program-stm8s-1-board-in-linux/</p>
 <p>STM8-Support only started with Version 3.4 in Ubuntu 14.10. For Ubuntu 14.4:</p>
-<pre><code>add-apt-repository ppa:laczik/ppa
-apt-get update
-apt-get install sdcc
+<pre><code class="bash">    add-apt-repository ppa:laczik/ppa
+    apt-get update
+    apt-get install sdcc
 </code></pre>
+
 <p>But even this version is fairly old and contains some known bugs. Better
 download a current snapshot build from http://sdcc.sourceforge.net/ and
 unpack it to <code>/opt/sdcc</code>. This requires a current version of libstdc++6:</p>
-<pre><code>add-apt-repository ppa:ubuntu-toolchain-r/test
-apt-get update
-apt-get install libstdc++6
+<pre><code class="bash">    add-apt-repository ppa:ubuntu-toolchain-r/test
+    apt-get update
+    apt-get install libstdc++6
 </code></pre>
+
 <p>If you prefer to compile stm8flash yourself instead of using the Linux
 binaries in the <code>tools</code> directory:</p>
-<pre><code>git clone https://github.com/vdudouyt/stm8flash.git
-cd stm8flash
-make
-sudo make install
+<pre><code class="bash">    git clone https://github.com/vdudouyt/stm8flash.git
+    cd stm8flash
+    make
+    sudo make install
 </code></pre>
+
 <p>Download some example code:</p>
-<pre><code>git clone https://github.com/vdudouyt/sdcc-examples-stm8.git
-cd sdcc-examples-stm8
+<pre><code class="bash">    git clone https://github.com/vdudouyt/sdcc-examples-stm8.git
+    cd sdcc-examples-stm8
 </code></pre>
+
 <p>The examples are meant for the STM8L, not the STM8S. This requires some
 changes to account for the different pinout and register addresses (see below).
 Finally upload the binary to the CPU:</p>
-<pre><code>stm8flash -c stlinkv2 -p stm8s103?3 -w blinky.ihx
+<pre><code class="bash">    stm8flash -c stlinkv2 -p stm8s103?3 -w blinky.ihx
 </code></pre>
+
 <h3 id="mixing-assembler-code-with-c-code">Mixing assembler code with C code</h3>
 <p>c-code:</p>
 <pre><code>stacktest(0x1234, 0x5678);
@@ -332,7 +341,7 @@ rev. 9998) and the subtle differences in the memory layout of the I/O section
 for the different cpu subtypes are factored in.</p>
 <p>Make sure to use a recent snapshot build if you are planing to use simulator!</p>
 <h4 id="missing-peephole-optimisations">Missing peephole optimisations</h4>
-<p>See discussion of issue 14: https://github.com/tenbaht/sduino/issues/14</p>
+<p>See discussion of <a href="https://github.com/tenbaht/sduino/issues/14">issue #14</a></p>
 <h4 id="missing-compiler-features">Missing compiler features</h4>
 <ul>
 <li>_ _preserves_regs() function attribute not supported</li>

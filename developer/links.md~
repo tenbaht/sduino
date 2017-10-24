@@ -2,11 +2,14 @@
 
 ## Further reading and application notes
 
-[project documentation files](https://github.com/tenbaht/sduino/blob/master/docs/index.md)
-More in detail information about supported boards, tools and the API.
+[A series of
+articles](https://lujji.github.io/blog/bare-metal-programming-stm8/) on bare
+metal programming of the STM8S CPUs. By far the best introduction I
+found so far. It would have helped me a lot if it would have around at the
+time when I started this project.
 
-[Quick introduction to the Arduino.mk makefile]
-(http://hackaday.com/2015/10/01/arduino-development-theres-a-makefile-for-that/)
+[Quick introduction to the Arduino.mk
+makefile](http://hackaday.com/2015/10/01/arduino-development-theres-a-makefile-for-that/)
 
 [PM0051](http://www.st.com/resource/en/programming_manual/cd00191343.pdf):
 STM8AF Flash programming manual  
@@ -15,19 +18,22 @@ STM8 SWIM protocol and debug manual
 [AN2658](http://www.st.com/resource/en/application_note/cd00176594.pdf):
 Using the analog-to-digital converter of the STM8S microcontroller  
 
-Many examples and presentations about the STM8S:  
-https://github.com/VincentYChen/STM8teach  
-It contains the SPL examples from ST, the most useful resource on the STM8:  
-https://github.com/VincentYChen/STM8teach/tree/master/code/Project/STM8S_StdPeriph_Examples
+Many [examples and presentations about the
+STM8S](https://github.com/VincentYChen/STM8teach)
 
-Hardware and pinouts of several ST-Link compatible flash tools:
-https://wiki.cuvoodoo.info/doku.php?id=jtag
+It contains the [SPL examples from
+ST](https://github.com/VincentYChen/STM8teach/tree/master/code/Project/STM8S_StdPeriph_Examples),
+one of the most useful resources on the STM8.
 
-Using the ADC:  
-http://blog.mark-stevens.co.uk/2012/09/single-scan-adc-on-the-stm8s/  
+[Hardware and pinouts of several ST-Link compatible flash
+tools](https://wiki.cuvoodoo.info/doku.php?id=jtag)
 
-Example for RS-232 handling with SPL:  
-https://sourceforge.net/p/oggstreamer/oggs-stm8-firmware-001/ci/master/tree/rx_ringbuffer.c  
+[Using the
+ADC](http://blog.mark-stevens.co.uk/2012/09/single-scan-adc-on-the-stm8s/)
+by Mark Stevens
+
+[Example for RS-232 handling with
+SPL](https://sourceforge.net/p/oggstreamer/oggs-stm8-firmware-001/ci/master/tree/rx_ringbuffer.c)
 
 [AN3139](http://www.st.com/resource/en/application_note/cd00262293.pdf):
 Migration guideline within the STM8L familiy  

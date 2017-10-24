@@ -100,7 +100,11 @@
                     <ul class="dropdown-menu">
                     
                         <li >
-                            <a href="../">API description and migration guidelines</a>
+                            <a href="../migration/">API description and migration guidelines</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../Print/">Print</a>
                         </li>
                     
                         <li >
@@ -326,7 +330,7 @@ void loop()
 </code></pre>
 
 <h2 id="hardware-requirements">Hardware requirements</h2>
-<p>These tiny displays communicate usually via I2C, but SPI version do exist.
+<p>These tiny displays communicate usually via I2C, but SPI versions do exist.
 My display uses the I2C address 0x3C, but there are similar displays out
 there configured to use the address 0x3D.</p>
 <p>The display content has to be kept in memory as it is not possible to read
@@ -335,13 +339,15 @@ the memory content of the physical display. For 128x64 pixel this requires
 buffer overlaps with the stack. Notice the chaotic pattern in the lower part
 of the screen:</p>
 <p><img alt="My 0.96&quot; OLED display" src="../oled-ssd1306.jpg" /></p>
-<p>Technical data:
-  * Driver chip SSD1306
-  * Display resolution: 128x64
-  * Power: 3.3V, approx. 20mA (5V possible)
-  * Interface: I2C, some modules support SPI as well
-  * I2C-Address: 0x3c, configurable to 0x3d by setting a solder bridge (on
-    some modules)</p>
+<p>Technical data:</p>
+<ul>
+<li>Driver chip SSD1306</li>
+<li>Display resolution: 128x64</li>
+<li>Power: 3.3V, approx. 20mA (5V possible)</li>
+<li>Interface: I2C, some modules support SPI as well</li>
+<li>I2C-Address: 0x3c, configurable to 0x3d by setting a solder bridge (on
+    some modules)</li>
+</ul>
 <p>Pin out of an I2C module:</p>
 <table>
 <thead>
@@ -380,13 +386,17 @@ of the screen:</p>
 </tbody>
 </table>
 <h2 id="further-reading">Further reading</h2>
-<p>Technical information:
-  * Adafruit tutorial: https://learn.adafruit.com/monochrome-oled-breakouts
-  * SSD1306 datasheet: https://www.adafruit.com/datasheets/SSD1306.pdf</p>
-<p>Other libraries:
-  * Adafruit library: https://github.com/adafruit/Adafruit_SSD1306
-  * Old Arduino library u8glib: https://github.com/olikraus/u8glib
-  * newer library u8g2: https://github.com/olikraus/u8g2</p>
+<p>Technical information:</p>
+<ul>
+<li><a href="https://learn.adafruit.com/monochrome-oled-breakouts">Adafruit tutorial</a></li>
+<li><a href="https://www.adafruit.com/datasheets/SSD1306.pdf">SSD1306 datasheet</a></li>
+</ul>
+<p>Other libraries:</p>
+<ul>
+<li><a href="https://github.com/adafruit/Adafruit_SSD1306">Adafruit library</a></li>
+<li><a href="https://github.com/olikraus/u8glib">Old Arduino library u8glib</a></li>
+<li><a href="https://github.com/olikraus/u8g2">newer library u8g2</a></li>
+</ul>
 <h2 id="possible-improvements">Possible improvements</h2>
 <h3 id="faster-i2c-transfer">Faster I2C transfer</h3>
 <p>Faster I2C transfer is supported by the <a href="../I2C/">I2C library</a>, but to use

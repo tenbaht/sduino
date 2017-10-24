@@ -100,7 +100,11 @@
                     <ul class="dropdown-menu">
                     
                         <li >
-                            <a href="../../api/">API description and migration guidelines</a>
+                            <a href="../../api/migration/">API description and migration guidelines</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/Print/">Print</a>
                         </li>
                     
                         <li >
@@ -277,8 +281,9 @@ perfect for breadboards).</p>
 <p><img alt="Schematic of the STMS103 board" src="../Schematic1.png" /></p>
 <p>My breakout boards came preprogrammed with a blink program and with active
 write protection bits. For unlocking before first use:</p>
-<pre><code>stm8flash -cstlinkv2 -pstm8s103?3 -u
+<pre><code class="bash">stm8flash -cstlinkv2 -pstm8s103?3 -u
 </code></pre>
+
 <h2 id="connection-to-the-flash-tool">Connection to the flash tool</h2>
 <p>I am using the ST-Link V2 compatible flash tool in the green plastic
 housing. The one in the metal housing uses a different pinout.</p>

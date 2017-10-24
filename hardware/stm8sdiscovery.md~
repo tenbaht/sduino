@@ -1,11 +1,11 @@
 # STM8S Discovery
 
-A widespread evaluation board made by ST. All CPU pin are easily accessible
+A widespread evaluation board made by ST. All CPU pins are easily accessible
 on 2x6 pin headers. It costs only $9 and includes a ST-Link/v1 flash
 programmer on board.
 
-It should work now, but the support is very fresh and not thoroughly tested. 
-At least Blink.c is known to work already.
+It should work now, but the support is not thoroughly tested. At least
+Blink.c is known to work already.
 
 STM8S105C6T6 microcontroller, 32 KB Flash, 2 KB RAM, 1 KB EEPROM 
 
@@ -56,7 +56,7 @@ Save this as root in in `/etc/udev/rules.d/99-stlink.rules`:
 	# ST-Link/V2 programming adapter
 
 	# ST-Link V1, if using a STM8S discovery board
-	# important: It needs a special entry in /etc/modprob/blacklist
+	# important: It needs a special entry in /etc/modprobe.d
 	ATTR{idVendor}=="0483", ATTR{idProduct}=="3744", MODE="0666", GROUP="plugdev"
 
 	# ST-Link/V2, the china adapter with the green plastic housing

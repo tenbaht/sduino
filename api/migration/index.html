@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Michael Mayer">
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+	<title>API description and migration guidelines - Sduino</title>
+
+        <link href="../../css/bootstrap-3.0.3.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+        <link href="../../css/base.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">Sduino</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../..">Introduction</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../usage/board-manager-install/">Automatic Installation</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../usage/build-ide/">Building with the IDE</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../usage/why-stm8/">When to use an STM8S - and when not</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../usage/update-to-manual/">Update to Manual Installation</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../usage/manual-install/">Manual Installation</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../usage/build-cli/">Building with a Makefile</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../usage/limitations/">Limitations</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../usage/status-todo/">Status and todo</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Libraries <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li class="active">
+                            <a href="./">API description and migration guidelines</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../Print/">Print</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../HardwareSerial/">HardwareSerial</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../SPI/">SPI</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../I2C/">I2C</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../LiquidCrystal/">LiquidCrystal character LCD library</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../PCD8544/">PCD8544 libray for Nokia 5110-like graphical LCDs</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../Mini_SSD1306/">Mini_SSD1306 library for monochrome OLED-displays</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../Stepper/">Stepper library</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../Servo/">Servo library</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hardware <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../hardware/flashtool/">Flash tool</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../hardware/stm8blue/">Generic STM8S103 breakout board (stm8blue)</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../hardware/esp14/">ESP14: Wifi board, STM8S003</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../hardware/stm8sdiscovery/">STM8S105Discovery: Evaluation board made my ST</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../../developer/macro/">C preprocessor macro magic</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/pin_mapping/">Ways to define a pin mapping</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/sdcc/">Using the SDCC compiler</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/spl/">Using the SPL with SDCC and sduino</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/bare-metal-programming/">Bare metal programming on the STM8</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/performance/">Performance comparison and benchmarking</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../developer/links/">Links and further reading</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../../contact/">Contact</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../../about/">About</a>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                <li >
+                    <a rel="next" href="../../usage/status-todo/">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="../Print/">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="https://github.com/tenbaht/sduino">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#migrating-existing-code-from-c-to-c-syntax">Migrating existing code from C++ to C syntax</a></li>
+        
+            <li><a href="#polymorph-functions">Polymorph functions</a></li>
+        
+            <li><a href="#inheritance-from-print-class">Inheritance from Print class</a></li>
+        
+            <li><a href="#libraries-with-multiple-instances">Libraries with multiple instances</a></li>
+        
+            <li><a href="#differences-from-the-original-arduino-environment">Differences from the original Arduino environment</a></li>
+        
+            <li><a href="#general-notes-on-the-arduino-port">General notes on the Arduino port</a></li>
+        
+    
+    </ul>
+</div></div>
+            <div class="col-md-9" role="main">
+
+<h1 id="migrating-existing-code-from-c-to-c-syntax">Migrating existing code from C++ to C syntax</h1>
+<p>The original Arduino environment uses C++ syntax while sduino can only use
+plain C syntax. Luckily, not many C++ features are used and in most cases a
+conversion is not very hard. In most cases a conversion from C++ to C it is
+just a matter of exchanging a dot for an underscore:</p>
+<p>A C++ method name <code>class.method()</code> becomes a C function name <code>class_method()</code>.</p>
+<p>This is possible since most libraries are written to be used as a singleton
+anyway, so the fixed name prefix is not a problem. Only very few libraries
+need a slightly more complex approach to be able to deal with multiple
+instances.</p>
+<p>There are two bigger problems left:</p>
+<h2 id="polymorph-functions">Polymorph functions</h2>
+<p>The concept of polymorphism does not exist for plain C. As a workaround
+'mangled' function names are used for the different parameter type
+combinations supported by the original polymorph methods.</p>
+<p>Typical name extensions are: <code>_u</code> for unsigned values, <code>_i</code> for signed
+integer values, <code>_c</code>for characters, <code>_s</code> for strings, <code>_n</code> for data
+buffer/length combinations.</p>
+<p>For more non-regular polymorphism the name extension is often related to the
+different use cases or to the names of the given parameters. Refer to the
+respective library header file for details.</p>
+<p>Some examples of typical name changes:</p>
+<table>
+<thead>
+<tr>
+<th>C++ name</th>
+<th>C name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Serial.print(int)</code></td>
+<td><code>Serial_print_i</code></td>
+</tr>
+<tr>
+<td><code>Serial.print(unsigned)</code></td>
+<td><code>Serial_print_u</code></td>
+</tr>
+<tr>
+<td><code>Serial.print(float)</code></td>
+<td><code>Serial_print_f</code></td>
+</tr>
+<tr>
+<td><code>Serial.print(char)</code></td>
+<td><code>Serial_print_c</code></td>
+</tr>
+<tr>
+<td><code>Serial.print(char *)</code></td>
+<td><code>Serial_print_s</code></td>
+</tr>
+<tr>
+<td><code>Serial.print(char *buf, int len)</code></td>
+<td><code>Serial_print_n</code></td>
+</tr>
+<tr>
+<td><code>Serial.print(unsigned n, int base)</code></td>
+<td><code>Serial_print_ub</code></td>
+</tr>
+<tr>
+<td><code>random(long)</code></td>
+<td><code>random</code></td>
+</tr>
+<tr>
+<td><code>random(long howsmall, long howbig)</code></td>
+<td><code>random_minmax</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-_generic-selection">The _Generic selection</h3>
+<p>The C11 standard introduced the
+<a href="http://en.cppreference.com/w/c/language/generic"><code>_Generic</code></a>
+selection function. This function allows for automatic selection of
+different function variants at compile time depending on the type of the
+function arguments mimicing polymorph C++ functions.</p>
+<p>Recent versions of SDCC already support this function (command line argument
+<code>--std-sdcc99</code>), but it's usefulness is still limited to some special cases.</p>
+<pre><code class="c">#define Serial_print(X) _Generic((X), \
+    char*: Serial_print_s, \
+    signed long: Serial_print_i, \
+    signed int: Serial_print_i, \
+    signed char: Serial_print_c, \
+    unsigned long: Serial_print_u, \
+    unsigned int: Serial_print_u, \
+    unsigned char: Serial_print_u \
+    )(X)
+</code></pre>
+
+<p>This would unify some, but not all print function variants:</p>
+<table>
+<thead>
+<tr>
+<th>C++ name</th>
+<th>C name using _Generic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Serial.print(int)</code></td>
+<td><code>Serial_print</code></td>
+</tr>
+<tr>
+<td><code>Serial.print(unsigned)</code></td>
+<td><code>Serial_print</code></td>
+</tr>
+<tr>
+<td><code>Serial.print(char)</code></td>
+<td><code>Serial_print</code></td>
+</tr>
+<tr>
+<td><code>Serial.print(char *)</code></td>
+<td><code>Serial_print_s</code></td>
+</tr>
+<tr>
+<td><code>Serial.print(char *buf, int len)</code></td>
+<td><code>Serial_print_n</code></td>
+</tr>
+<tr>
+<td><code>Serial.print(unsigned n, int base)</code></td>
+<td><code>Serial_print_ub</code></td>
+</tr>
+</tbody>
+</table>
+<p>Unfortunately cpp does not match string constants and <code>char*</code> resulting in a
+very non-regular usage pattern:</p>
+<pre><code>char *string="Hello";
+
+Serial_print(string);   // works
+Serial_print("Hello");  // doesn't work
+Serial_print_s("Hello");// works
+</code></pre>
+<p>To avoid too much confusion it might be better to not use <code>_Generic</code> at all.</p>
+<p>Another problem using the <code>_Generic</code> selector is configurable instance
+names. The preprocessor does not allow for variable macro names. That means
+<code>_Generic</code> would work with fixed name like <code>Serial</code>, but it wouldn't work
+for <code>SoftwareSerial</code> with no standard instance name.</p>
+<h2 id="inheritance-from-print-class">Inheritance from Print class</h2>
+<p>Most character output modules inherit methods from the Print class by
+providing a virtual write method. A similar result can be achived by
+providing a function pointer to the write function to be used to the print
+functions.</p>
+<p>This additional parameter is hidden from the user by providing more
+convinient defines in every library that need to 'inherit' functions from
+Print. This way <code>lcd.print("Hello World!")</code> becomes <code>lcd_print_s("Hello
+World!")</code> and <code>Serial.print("Hello World!")</code> becomes <code>Serial_print_s("Hello
+World!")</code>. Both call the same code from Print, but with different function
+pointers to their own putchar/write function.</p>
+<h2 id="libraries-with-multiple-instances">Libraries with multiple instances</h2>
+<p>If multiple instances need to be supported, an approach similar to a C file
+descriptor is used. The "constructor" function allocates and initializes a
+data structure for one particular instance and return a pointer to this
+structure. Typically, this is done in the <code>setup()</code>-function and this pointer 
+is stored in a global variable to be used as a device descriptor.</p>
+<p>So far the <a href="../Stepper/">Stepper library</a> is the only example:</p>
+<pre><code class="c">#include &lt;Stepper.h&gt;
+Stepper myStepper;      // variable to store the &quot;device descriptor&quot;
+void setup(void) {
+    myStepper = Stepper_2phase(100,11,12);  // init a 2 phase stepper
+}
+void loop() {
+    Stepper_step(myStepper, 20);        // do 20 steps forward
+}
+</code></pre>
+
+<h2 id="differences-from-the-original-arduino-environment">Differences from the original Arduino environment</h2>
+<h3 id="additional-output-pin-modes">Additional output pin modes</h3>
+<table>
+<thead>
+<tr>
+<th>Pin mode</th>
+<th>Pin properties</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OUTPUT</code></td>
+<td>output, push-pull, slow mode (default)</td>
+</tr>
+<tr>
+<td><code>OUTPUT_OD</code></td>
+<td>output, open drain, fast mode</td>
+</tr>
+<tr>
+<td><code>OUTPUT_FAST</code></td>
+<td>output, push-pull, fast mode</td>
+</tr>
+<tr>
+<td><code>OUTPUT_OD_FAST</code></td>
+<td>output, open drain, fast mode</td>
+</tr>
+</tbody>
+</table>
+<h3 id="timer">Timer</h3>
+<p><code>millis()</code> uses timer4. The prescaler and end value is calculated at compile
+time for a cycle time as close to 1ms as possible. Default values @16Mhz:
+prescaler=64, counter cycle=250 (end value=249), resulting in exactly 1ms
+intervals.</p>
+<p>timer1: PWM for PC3, PC4, on alternate mapping PC6, PC7, could be used for ADC<br />
+timer2: PWM for PA3, PD3, PD4 or PC5 (mutual exclusive)<br />
+timer4: millis()  </p>
+<h3 id="leaving-out-unused-parts">Leaving out unused parts</h3>
+<p>Some functions of the core Arduino system can be left out on compilation to
+save code space. This is done by compiler flags that can be defined in the
+Makefile:</p>
+<pre><code class="make">BOARD_TAG = stm8sblue
+CFLAGS = -DNO_SERIAL -DNO_ANALOG_IN -DNO_ANALOG_OUT
+
+include ../../../sduino.mk
+</code></pre>
+
+<p>These flags are supported:</p>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Bytes saved</th>
+<th>Functions lost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NO_SERIAL</td>
+<td>765</td>
+<td>all serial communication</td>
+</tr>
+<tr>
+<td>NO_ANALOG_OUT</td>
+<td>406</td>
+<td>analogWrite()</td>
+</tr>
+<tr>
+<td>NO_ANALOG_IN</td>
+<td>56</td>
+<td>analogRead()</td>
+</tr>
+</tbody>
+</table>
+<h3 id="other-modifications">Other modifications</h3>
+<p><code>makeWord(unsigned char, unsigned char)</code> is an inline function now.</p>
+<h3 id="additional-compile-time-flags">Additional compile-time flags</h3>
+<p>Some internal details can be influenced by setting compile-time defines
+using the <code>CFLAGS=-Dflagname</code> line in the Makefile.</p>
+<p><strong><code>SUPPORT_ALTERNATE_MAPPINGS</code></strong>:
+Allow the use of <code>alternateFunctions()</code></p>
+<p><strong><code>ENABLE_SWIM</code></strong>:
+Do not disable the remote debugging function on the SWIM pin. This means
+that this pin can not be used for normal I/O functions.</p>
+<p><strong><code>USE_SPL</code></strong>:
+Use SPL functions for I/O access instead of direct register accesses. Useful
+only for debugging and porting to other CPU variants. Do not use for regular
+development.</p>
+<h2 id="general-notes-on-the-arduino-port">General notes on the Arduino port</h2>
+<h3 id="adc">ADC</h3>
+<p>the prescaler is initialised for an ADC clock in the range of 1..2 MHz. The
+minimum prescaler value is 2, so for a clock speed of less than 2 MHz the
+required minimum ADC clock frequency can not be reached anymore.</p>
+<h3 id="mapping-of-logical-pin-numbers-to-register-addresses">Mapping of logical pin numbers to register addresses</h3>
+<p>The lookup-table approach for assigning port and bit adresses to the logical
+pin numbers is not effient on the STM8. The hole system could be changed to
+a more regular scheme and replace the tables by hardcoded adress
+calculations.</p>
+<h3 id="inefficient-compilation">Inefficient compilation</h3>
+<p><code>digitalWrite</code> compiles very ineffiently. It might be worth some hand
+optimization.</p>
+<h3 id="accessing-the-alternate-pin-functions">Accessing the alternate pin functions</h3>
+<p>Added <code>alternateFunction()</code> to allow switching of some pins to their alternate
+functions. This allows for three more PWM pins, but maybe it adds to much
+complexity for the Arduino API. Not sure if it should stay. Has to be
+enabled by defining <code>SUPPORT_ALTERNATE_MAPPINGS</code>.</p>
+<h3 id="useful-cpu-features-that-are-not-supported-by-the-arduino-api">Useful CPU features that are not supported by the Arduino API</h3>
+<p><strong>Input-Capture-Mode:</strong> Available for all four channels, at least for
+timer1. Would be great for precise time measurements. Maybe build a library?</p>
+<p><strong>Encoder interface mode:</strong> Hardware support for reading quadrature encoder
+and keeping track of the current (motor) position using a hardware timer
+counter. Perfectly suited to all kinds of position feedback.</p></div>
+        </div>
+
+	<footer class="col-md-12">
+		<hr>
+		
+		<center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
+	</footer>
+
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script src="../../js/base.js"></script>
+    </body>
+</html>

@@ -100,7 +100,11 @@
                     <ul class="dropdown-menu">
                     
                         <li >
-                            <a href="../../api/">API description and migration guidelines</a>
+                            <a href="../../api/migration/">API description and migration guidelines</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../../api/Print/">Print</a>
                         </li>
                     
                         <li >
@@ -291,7 +295,7 @@ void loop() {
 </code></pre>
 
 <p>All we need for a full build is this very basic <code>Makefile</code> (adopt the path
-at the include statement for your situation):</p>
+of the include statement for your situation):</p>
 <pre><code class="make">BOARD_TAG   = stm8sblue
 
 include ../../sduino/sduino.mk
