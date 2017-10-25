@@ -32,29 +32,51 @@
 
 #### implemented and partly working
 
-* [Wire/I2C](../api/I2C.md)  
+* [Wire/I2C](../api/I2C.md)
 
 #### tested, but not working
 
-* `alternateFunctions()`  
+* `alternateFunctions()`
 
 #### not tested
 
-* `ShiftIn()`  
-* `random()`  
-* `srandom()`  
+* `ShiftIn()`
+* `random()`
+* `srandom()`
 
 #### not implemented
 
-* `tone()`  
-* `noTone()`  
-* `pulseIn()`  
-* module WCharacter  
-* module WString  
+* `tone()`
+* `noTone()`
+* `pulseIn()`
+* module WCharacter
+* module WString
 
 
 
 ## Todo
+
+### Interesting libraries that might be worth porting
+
+**[cI2C](https://github.com/SMFSW/cI2C)**: Arduino Hardware I2C for AVR
+(plain c)
+
+**[SimpleDHT](https://github.com/winlinvip/SimpleDHT)**: Simple, Stable and
+Fast Arduino Temp & Humidity Sensors for DHT11 and DHT22. It started out
+as plain C code (v1.0.0), but was converted to (simple) C++ with v1.0.1
+
+**[cQueue](https://github.com/SMFSW/cQueue)**: Queue handling library
+(written in plain c). But maybe too high-level to be worth using on very
+small devices.
+
+**[RTCtime](https://github.com/smz/Arduino-RTCtime)**: This library makes
+using modules based on the DS1307 and DS3231 RTC really easy. It is
+compatible with and is meant to leverage the standard C time library
+`time.h` API (datatypes and functions) as defined in ISO/IEC 9899 (C90) and
+implemented in the AVR Std C runtime libray since version 2.0.0.
+
+
+
 
 ### Unresolved problems
 

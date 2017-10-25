@@ -1,26 +1,8 @@
 # Manual Installation
 
-This is the more flexible, but more complicated way to install Sduino.
-The recommended way of installation is now [using the Arduino Board
-Manager](board-manager-install).
+Makes most sense if you plan on using a Makefile. IDE use is still possible.
 
-The manual install is only useful if you are planning to use development or
-experimental branches of Sduino or if you prefer a GUI-less build system
-controlled by a Makefile.
-
-Let's compare:
-
-|		| Board Manager	|manual install
-|----		|-----		|------
-|Difficulty	|very easy	|easy on Linux and MacOS, more difficult on Windows.
-|Used Packages	|latest release	|release, development or experimental
-|IDE/GUI based builds|yes		|yes
-|Makefile based builds|no		|yes
-|Compiling without Arduino libraries|no	|yes
-
-
-
-
+For all systems start here:
 
 - Clone or download and extract the
   [repository](https://github.com/tenbaht/sduino) to a convenient location.
@@ -30,48 +12,47 @@ Let's compare:
   older version of SDCC that might be included in your distribution (Version
   3.6 is definitely too old).
 
-Later in the process you will unpack the SDCC archive. You only need support
-for the stm8. You can safely delete all the files related to the PIC CPUs in
-the `pic*` and `non-free` directories. That safes more than 90% of the used
-disk space and leaves only 20MB out of 240MB.
-
-
 
 ## Linux
+
+#### Sduino core
 
 Link the hardware/sduino folder of the downloaded repository to your local
 Arduino hardware folder (usually in `~/sketchbook` or `~/Arduino`). Create
 the hardware folder, if not already present:
 
-```bash
+```text
 	cd ~/Arduino
-	mkdir hardware
-	cd hardware
-	ln -s [the-extracted-repository]/sduino/hardware/sduino .
+	mkdir hardware	# only if not already present
+	ln -s [the-extracted-repository]/sduino/hardware/sduino hardware
 ```
 
-Extract the [downloaded SDCC archive](http://sdcc.sourceforge.net/snap.php)
+#### SDCC
+
+Extract the downloaded [SDCC archive](http://sdcc.sourceforge.net/snap.php)
 under `/opt`:
 
-```bash
+```text
 	sudo mkdir /opt
 	sudo tar xvjf ~/Downloads/sdcc-snapshot* -C /opt
 ```
 
 Create a link to SDCC from the tools directory of the sduino repository
-(only needed for IDE builds):
+(required for IDE builds):
 
-```bash
-	cd [the-extracted-repository]/sduino/hardware/sduino/tools
+```text
+	cd ~/Arduino/hardware/sduino/tools
 	ln -s /opt/sdcc .
 ```
+
+#### Flashtools
 
 `stm8flash` and `stm8gal` are both included as precompiled binaries in this
 tools directory. Create a link `linux` to the linux tools directory that
 matches your system and copy the binaries to a convient place in your path,
 e.g. `/usr/local/bin`:
 
-```bash
+```text
 	ln -s linux64 linux
 	cp -av linux/* /usr/local/bin
 ```
@@ -81,14 +62,14 @@ e.g. `/usr/local/bin`:
 repository for any Linux distribution. Example for Debian-type systems (like
 Ubuntu, Mint, Elementary etc.):
 
-```bash
+```text
 	sudo apt-get install make libusb-1.0-0
 ```
 
 Finally, add a udev rule in order to access the USB port for your flash
 tool. Save this as root in in `/etc/udev/rules.d/99-stlink.rules`:
 
-```bash
+```text
 	# ST-Link/V2 programming adapter
 
 	# ST-Link V1, if using a STM8S discovery board
@@ -105,12 +86,13 @@ entry](../hardware/stm8sdiscovery#usage-with-linux-and-stm8flash).
 
 
 
+
 ## MacOS
 
 Quite similar to the Linux install. [Install Homebrew](https://brew.sh/) if
 you haven't done it yet, than install make and unpack the sdcc snapshot:
 
-```bash
+```text
 	brew make
 	mkdir /opt
 	tar xvjf sdcc-snapshot* -C /opt
@@ -126,123 +108,31 @@ compiled binary for the repository.
 
 
 
+
+
+
+
 ## Windows
 
-There is more work to do here, as it is lacking all the tools for the build
-system, a package system to install them and even a file system concept
-where to store them.
-
-Link (not copy!) the hardware/sduino folder of the downloaded repository to
-your local Arduino hardware folder (in `Documents/Arduino/hardware`). Create
-the hardware folder, if not already present.
-
-Expected folder structure:
-
-```bash
-   Documents/
-     + Arduino/
-       + hardware/
-         + sduino    (this is a link)
-           + stm8/   core, variants, etc.
-           + tools/
-             + wrapper/
-             + win/  stm8flash, libusb.dll, bash, ls, make etc.
-             + sdcc  can be a link to a full sdcc install
-```
-
->Don't despair of the stock Windows terminal window. Installing e.g.
-[console2](https://sourceforge.net/projects/console/) will make your life on
-the command line so much more enjoyable.
+Same idea again, but additionally we need to install a minimal MinGW command
+line environment with tools needed by make and the Makefile. Let's start
+with that:
 
 
+#### Install Msys2
 
-### The easy way to the command line
+- Download and run the installer from [http://www.msys2.org](http://www.msys2.org)
+- Install make: `pacman -S make`
+- define the environment variable `HOME` in the windows settings as
+  `%USERPROFILE%`
+- close and re-open the terminal window
 
-Unpack the latest board manager tools archive
-[sduino-tools_mingw32*.tar.bz2](https://github.com/tenbaht/sduino/releases)
-manually into the hardware/sduino/tools folder. As a workarount for
-unpacking a tar.bz2 file (again, Windows is lacking even the most basic
-tools...) you could use the board manager and copy the needed files out of
-Appdata/Arduino/packages/sduino. But mind the different directory layout and
-don't forget to remove the package again. Otherwise your are going to use
-different versions of the sduino core for IDE and Makefile builds. Confusion
-would be guaranteed!
+Now we can start working. 
 
+#### Install the core files and SDCC
 
-Update your `%PATH%`:
-
-- Add a link `c:\sdcc` to your SDCC installation directory and add this to
-  your `%PATH%`. It is very important, that this name does not contain any
-  spaces.
-- Add the `sduino/tools/win` directory to your path or move/copy/link the
-  files in there to a directory that is already in your path.
-
-Open a terminal window and make sure that the binaries are found:
-
-```bash
-	$ ls
-	$ sdcc -v
-```
-
-If you have installed [console2](https://sourceforge.net/projects/console/)
-before, you could even configure it to use `bash` as your default command
-shell instead of `cmd.exe`.
-
-
-
-
-
-### The complete command line
-
-Instead of using the stripped down convinience packages you could do a proper
-MinGW, Msys, Msys2 or cygwin install. The result feels almost like a real
-UNIX system.
-
-
-
-#### MinGW or cygwin
-
-[MinGW/MSys](http://www.mingw.org/wiki/MSYS) and
-[cygwin](https://www.cygwin.com/) are both fine. cygwin aims to be an almost
-complete POSIX environment (which is nice, but we don't need that function).
-MinGW wants to be more compact and works with the native Windows API. That
-is perfect for this purpose.
-
-1. Check the
-  [MinGW Installation Notes](http://www.mingw.org/wiki/Getting_Started)
-2. Download
-  [mingw-get-setup.exe](https://sourceforge.net/projects/mingw/files/Installer/)
-3. Start it. You can safely deactivate the graphical option.
-4. Add this at the end to your path: `;c:\mingw\bin;c:\mingw\msys\1.0\bin`
-  (follow the instructions in "Environment Setting" on the [Installation
-  Notes page](http://www.mingw.org/wiki/Getting_Started))
-5. Open a command line and install the package msys-base by issuing this
-  command: `mingw-get install msys-base`
-6. Now `ls` or `make` should work.
-
-For efficiency, the Makefile is configured to use dash instead of bash as a
-shell. `egrep` is replaced by `grep -E`. The bare minimum of tools you will
-need to run the Arduino.mk makefile:
-
-```bash
-	dash make
-	awk cat cut expr grep head ls mkdir sed tr uname which
-```
-
-For IDE builds add bash to the list of required binaries and link them into
-hardware/sduino/tools/win.
-
-
-
-#### SDCC 
-
-Unpack the downloaded SDCC archive into a location with an easy path without
-spaces. `c:/sdcc` is fine or inside MinGW `/opt/sdcc` would be great. Add
-`/opt/sdcc/bin` to your `$PATH`. 
-
-For IDE builds link the sdcc directory into `hardware/sduino/tools`.
-
-
+Thanks to the running bash the remaining steps are the same as for Linux,
+the only difference is your Arduino folder in `Documents/Arduino`.
 
 
 #### ST-Link, stm8flash
@@ -253,37 +143,71 @@ hardware access.
 You are not bound to `stm8flash`, you can use the regular flash tool by ST
 if you prefer.
 
-A recent precompiled binary for `stm8flash` is part of the Board Manager
-tools archive file with the
-[releases](https://github.com/tenbaht/sduino/releases). Or compile your own
-from the [stm8flash repository](https://github.com/vdudouyt/stm8flash) using
-either MinGW or cygwin. For compiling, you will need the
-[libusb](http://libusb.info/) windows binary (I used the MinGW32 dll).
+`stm8flash` and `libusb-1.0.dll` are both included as precompiled binaries
+in the tools directory. Copy or link them to a directory in your path:
+
+```text
+	cd hardware/sduino/tools/win
+	cp -av stm8flash.exe libusb-1.0.dll /bin
+```
+
+#### Limitations
+
+Keep the [known problems using
+Windows](limitations#known-problems-using-windows) in mind.
 
 
-### Known problems using Windows
+## Additional suggestions for Windows users
 
-It works, but using the Arduino.mk makefile with Windows is slow. **Very**
-slow. Painfully slow. Compiling-the-Blink-example-takes-about-40-seconds
-kind of slow. Yes, seriously. No kidding. 40 seconds. Measured on a 3GHz
-machine with 4GB RAM.
+### Get a better console
 
-There is no easy fix, the underlying problem is a fundamental one. It is not
-about the compilation itself, it is the way Makefiles are written and
-executed. The whole concept relies on forking subprocesses for all the shell
-calls. Unfortunately, there is nothing like a fork in Windows and to work
-around that is painfully slow.
+There is no good reason to keep suffering from the stock Windows terminal
+window. Installing e.g.
+[console2](https://sourceforge.net/projects/console/) will make your life on
+the command line so much more enjoyable.
 
-It would be great if somebody would replace the painfully slow parameter
-checking part of the makefile (that causes the majority of forking) by a
-single shell script that gets called by the makefile and delivers the
-results in no time. Or use [cmake](www.cmake.org). Or integrate it somehow
-into the STVD IDE (This [STVD-SDCC integration
-suite](https://github.com/shkolnick-kun/stvd-sdcc) might be useful). Or
-whatever.
 
-Until then the least annoying way out might be using a virtual machine
-running a simple Linux system. Ubuntu Mate or a basic Debian install for
-example. Virtual Box is great for this purpose and freely available. The new
-Linux Subsystem feature of Windows 10 might be another option.
+### Installation shortcut
 
+Instead of installing mingw and sdcc from scratch you can
+
+* manually unpack the latest board manager tools archive
+  [sduino-tools_mingw32*.tar.bz2](https://github.com/tenbaht/sduino/releases)
+  into the hardware/sduino/tools folder
+* set `c:\sdcc` as a link to the sdcc folder
+* Add `tools/win` and `c:\sdcc\bin` to your `%PATH%
+
+As a workaround for unpacking a tar.bz2 file (again, Windows is lacking even
+the most basic tools...) you could use the board manager and copy the needed
+files out of Appdata/Arduino/packages/sduino. But mind the slightly
+different directory layout and don't forget to remove the package again
+after you are done copying. Otherwise your are going to use different
+versions of the sduino core for IDE and Makefile builds. Confusion would be
+guaranteed!
+
+
+### Using MinGW instead of msys2
+
+I used to recommand using MinGW, because it is more compact than msys2. But
+installation is a little more complicated. If you are like me and prefer
+minimal solutions over big packages:
+
+1. Check the
+   [MinGW Installation Notes](http://www.mingw.org/wiki/Getting_Started)
+2. Download and run
+   [mingw-get-setup.exe](https://sourceforge.net/projects/mingw/files/Installer/)
+   You can safely deactivate the graphical option.
+3. Add `;c:\mingw\bin;c:\mingw\msys\1.0\bin` to the end of your `%PATH%`
+4. Open a command line and install msys-base: `mingw-get install msys-base`
+5. Now `ls` or `make` should work.
+6. Start a bash: `bash`
+7. For now you might want to set the `HOME` variable: `export
+   HOME=/c/Users/<yourusername>`. In the long run this goes in `.bashrc`.
+
+
+## Additional general tweaks
+
+The full SDCC archive includes support for many CPUs, but you only need the
+stm8. You can safely delete all the files related to the PIC CPUs in the
+`pic*` and `non-free` directories. That safes more than 90% of the used disk
+space and leaves only 20MB out of 240MB.

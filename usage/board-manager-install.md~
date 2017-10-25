@@ -1,8 +1,5 @@
 # Installation
 
-There are two very different ways to install Sduino:
-[Manual](manual-install) or using the Arduino Board Manager.
-
 
 ## Using the Arduino Board Manager
 
@@ -27,7 +24,11 @@ Wasn't too hard, was it?
 
 
 
-## Alternative way of installation
+## More flexible ways of installation
+
+There are two other ways to install Sduino: [Updating to a manual
+installation](update-to-manual) or a [fully manual
+installation](manual-install).
 
 The Arduino Board Manager is now the recommended way of installation. If you
 outgrow it's possibilities it is easy to [update to the manual
@@ -36,13 +37,15 @@ but is only useful if you are planning to use development or experimental
 branches of Sduino or if you prefer a GUI-less build system controlled by a
 Makefile.
 
-Let's compare:
+Let's compare the alternatives:
 
-|		| Board Manager	|[manual install](manual-install)
-|----		|-----		|------
-|Difficulty	|very easy	|easy on Linux and MacOS, more difficult on Windows.
-|Used Packages	|latest release	|release, development or experimental
-|IDE/GUI based builds|yes		|yes
-|Makefile based builds|no		|yes
-|Compiling without Arduino libraries|no	|yes
+
+|		| Board Manager	|[update to manual install](update-to-manual)|[full manual install](manual-install)
+|----			|-----		|----		|------
+|Difficulty (Windows)	|very easy	|fair		|advanced
+|Difficulty (Linux, MacOS)|very easy	|easy		|easy
+|Used Packages		|releases only	|flexible	|flexible
+|IDE/GUI based builds|yes		|yes		|yes
+|Makefile based builds|no		|yes		|yes
+|Compiling without Arduino libraries|no	|yes		|yes
 

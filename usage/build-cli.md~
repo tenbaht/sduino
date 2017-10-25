@@ -1,4 +1,4 @@
-# Building without the IDE
+# Building with the Makefile
 
 A preconfigured IDE is a great way to start, but sooner or later you will
 want more control and flexibility.
@@ -41,7 +41,7 @@ void loop() {
 ```
 
 All we need for a full build is this very basic `Makefile` (adopt the path
-at the include statement for your situation):
+of the include statement for your situation):
 
 ```make
 BOARD_TAG	= stm8sblue
