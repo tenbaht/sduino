@@ -56,6 +56,36 @@
 
 ## Todo
 
+### Interesting libraries that might be worth porting
+
+**[cI2C](https://github.com/SMFSW/cI2C)**: Arduino Hardware I2C for AVR
+(plain c)
+
+**[SimpleDHT](https://github.com/winlinvip/SimpleDHT)**: Simple, Stable and
+Fast Arduino Temp & Humidity Sensors for DHT11 and DHT22. It started out
+as plain C code (v1.0.0), but was converted to (simple) C++ with v1.0.1
+
+**[cQueue](https://github.com/SMFSW/cQueue)**: Queue handling library
+(written in plain c). But maybe too high-level to be worth using on very
+small devices.
+
+**[RTCtime](https://github.com/smz/Arduino-RTCtime)**: This library makes
+using modules based on the DS1307 and DS3231 RTC really easy. It is
+compatible with and is meant to leverage the standard C time library
+`time.h` API (datatypes and functions) as defined in ISO/IEC 9899 (C90) and
+implemented in the AVR Std C runtime libray since version 2.0.0.
+
+**[FatFS](https://github.com/stm32duino/FatFs)**: FatFs is a generic FAT
+file system module for small embedded systems. The FatFs is written in
+compliance with ANSI C and completely separated from the disk I/O layer.
+Therefore it is independent of hardware architecture.
+stm32duino port of [FatFS by
+elm-chan](http://elm-chan.org/fsw/ff/00index_e.html). A stripped down
+version exists as [Petit FAT File System
+Module](http://elm-chan.org/fsw/ff/00index_p.html) for very small CPU. Only
+2..4kB flash usage.
+
+
 ### Unresolved problems
 
 The compile environment needs to detect which interrupts are actively used

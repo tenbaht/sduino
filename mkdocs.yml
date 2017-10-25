@@ -8,7 +8,6 @@ pages:
         - Automatic Installation: 'usage/board-manager-install.md'
         - Building with the IDE: 'usage/build-ide.md'
         - When to use an STM8S - and when not: 'usage/why-stm8.md'
-        - Update to Manual Installation: 'usage/update-to-manual.md'
         - Manual Installation: 'usage/manual-install.md'
         - Building with a Makefile: 'usage/build-cli.md'
         - Limitations: 'usage/limitations.md'
