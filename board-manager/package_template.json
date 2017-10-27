@@ -1,0 +1,19 @@
+{
+    "packages": [
+        {
+            "name": "sduino",
+            "maintainer": "Tenbaht",
+            "websiteURL": "https://tenbaht.github.io/sduino/",
+            "email": "michael-mayer@gmx.de",
+            "help": {
+                "online": "http://www.stm32duino.com/viewforum.php?f=52"
+            },
+            "platforms" : [
+            {}
+            ],
+            "tools" : [
+            {}
+            ]
+        }
+    ]
+}

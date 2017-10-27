@@ -10,7 +10,7 @@ This library is a multi-instance library, it supports an arbitrary number of
 stepper motors per sketch.
 
 The API syntax is very similar to the original C++ syntax, thanks to some
-[c preprocessor macro magic](macro.html).
+[c preprocessor macro magic](../developer/macro).
 
 The declaration supports polymorphism, so all that is needed to adopt an
 existing sketch for use with sduino is moving the opening bracket at

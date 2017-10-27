@@ -1,4 +1,4 @@
-# About
+# About Sduino
 
 The idea is to smoothen the path towards your first successful STM8-based
 project.
@@ -13,11 +13,28 @@ powerful and provides an relativly easy migration path towards the STM32 CPU
 series in case a project outgrows the capabilities of the 8-bit STM8 series.
 But using that library is not very intuitive and still requires a fairly
 detailed knowledge of the CPU internals. [compiling the SPL with
-SDCC](spl.md)
+SDCC](developer/spl.md)
+
+
+### Tools used
+
+This project is based on free tools that are available for Linux, MacOS, and
+Windows.
+It uses the small devices C compiler (SDCC) for compiling,
+[stm8flash](https://github.com/vdudouyt/stm8flash) for uploading the binary
+to the CPU, and simple Makefiles for the build process.
+
+Support for the Cosmic compiler under Windows and integration into the ST
+visual developer IDE might be possible, but is not done (yet?).
+
+The build process is controlled by a makefile based on the amazing
+[Arduino.mk makefile](https://github.com/sudar/Arduino-Makefile) by
+[Sudar](http://sudarmuthu.com>).
 
 
 
-## Project origin
+
+### Project origin
 
 For a customer I needed to port an existing project from an ATmega to a
 better suited (read: cheaper) platform. As the project was based on some
@@ -27,14 +44,14 @@ of days. Porting some of the more commonly used Arduino libraries was a fun
 project done in my spare time later.
 
 
-## About me
+### About me
 
 I am a freelance programmer for embedded systems and electronics developer
 based in Heidelberg, Germany. I work with embedded systems for more than
 25 years now.
 
 
-### Experiences
+#### Experiences
 
 **current CPU architectures**: AVR (ATmega, ATxmega), PIC, STM8, STM32, MCS51
 

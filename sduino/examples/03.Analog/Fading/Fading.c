@@ -22,7 +22,7 @@
 
 #include <Arduino.h>
 
-int ledPin = LED_BUILDIN;    // define the LED pin
+int ledPin = LED_BUILTIN;    // define the LED pin
 
 void setup() {
   // nothing happens in setup

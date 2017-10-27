@@ -127,11 +127,11 @@ static const uint8_t SCL = PIN_WIRE_SCL;
 #define	SDA	PIN_WIRE_SDA
 #define	SCL	PIN_WIRE_SCL
 
-#define PIN_LED_BUILDIN (PD0)	// sduino: pin for the buildin LED, pin 13
+#define PIN_LED_BUILTIN (PD0)	// sduino: pin for the buildin LED, pin 13
 #define PIN_TX	(PD5)		// sduino: pin for TX line, pin 8
 #define PIN_RX	(PD6)		// sduino: pin for RX line, pin 7
 
-#define LED_BUILDIN (PD0)	// pin for the buildin LED, pin 13
+#define LED_BUILTIN (PD0)	// pin for the buildin LED, pin 13
 
 #define PIN_A0   (PE6)		// 28, Ain9
 #define PIN_A1   (PE7)		// 29, Ain8

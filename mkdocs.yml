@@ -4,14 +4,17 @@ site_author: Michael Mayer
 repo_url: 'https://github.com/tenbaht/sduino'
 pages:
     - User Guide:
-        - Overview: 'index.md'
-        - Installation: 'install.md'
-        - Using the SDCC compiler: 'sdcc.md'
-        - Using the SPL with SDCC and sduino: 'spl.md'
-        - C preprocessor macro magic: 'macro.md'
+        - Introduction: 'index.md'
+        - Automatic Installation: 'usage/board-manager-install.md'
+        - Building with the IDE: 'usage/build-ide.md'
+        - When to use an STM8S - and when not: 'usage/why-stm8.md'
+        - Manual Installation: 'usage/manual-install.md'
+        - Building with a Makefile: 'usage/build-cli.md'
+        - Limitations: 'usage/limitations.md'
+        - Status and todo: 'usage/status-todo.md'
     - Libraries:
-        - API description and migration guidelines: api.md
-#	- Standard Arduino functions:
+        - API description and migration guidelines: api/migration.md
+        - Print: api/Print.md
         - HardwareSerial: api/HardwareSerial.md
         - SPI: api/SPI.md
         - I2C: api/I2C.md
@@ -22,11 +25,19 @@ pages:
         - Servo library: api/Servo.md
     - Hardware:
         - Flash tool: hardware/flashtool.md
-        - List of supported boards: hardware.md
-        - Ways to define a pin mapping: 'pin_mapping.md'
+#        - List of supported boards: hardware.md
         - 'Generic STM8S103 breakout board (stm8blue)': hardware/stm8blue.md
         - 'ESP14: Wifi board, STM8S003': hardware/esp14.md
         - 'STM8S105Discovery: Evaluation board made my ST': hardware/stm8sdiscovery.md
+    - Developer Guide:
+        - C preprocessor macro magic: 'developer/macro.md'
+        - Ways to define a pin mapping: 'developer/pin_mapping.md'
+        - Using the SDCC compiler: 'developer/sdcc.md'
+        - Using the SPL with SDCC and sduino: 'developer/spl.md'
+        - Bare metal programming on the STM8: 'developer/bare-metal-programming.md'
+        - Performance comparison and benchmarking: 'developer/performance.md'
+        - Links and further reading: 'developer/links.md'
+    - Contact: contact.md
     - About: about.md
 
 #- theme: amelia
@@ -46,5 +57,6 @@ pages:
 #+++ theme: yeti		sehr gut. Leicht, elegant
 # best: flatly, yeti (light typeface), cosmo, united, spacelab
 # with search: mkdocs
-theme: flatly
+#theme: flatly
+theme: bootstrap
 #theme: mkdocs
