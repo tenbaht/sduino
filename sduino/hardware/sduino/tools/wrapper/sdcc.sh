@@ -1,4 +1,4 @@
-#!/bin/dash
+#!/bin/bash
 
 # wrapper around SDCC to let the external interface look more gcc-alike
 #
@@ -11,6 +11,20 @@
 #   dependency checker on following builds
 
 
+VERBOSE=0
+USE_COLOR=0
+if [ "$1" == "-v" ]; then
+	VERBOSE=1;
+	shift
+elif [ "$1" == "-vv" ]; then
+	VERBOSE=2
+#	USE_COLOR=1
+	set -x
+	shift
+fi
+
+
+if [ $USE_COLOR -gt 0 ]; then
 # ANSI color codes to beautify the output:
 BLACK='\033[0;30m'
 RED='\033[0;31m'
@@ -29,10 +43,13 @@ LPURPLE='\033[1;35m'
 LCYAN='\033[1;36m'
 WHITE='\033[1;37m'
 OFF='\033[0m'
+fi
 
 
 # echo the full command line in cyan:
->&2 echo "${CYAN}${@}${OFF}"
+>&2 echo -ne "${CYAN}"
+>&2 echo -n  "${@}"
+>&2 echo -e  "${OFF}"
 
 # echo the mark id in green and the compiler call in white:
 SDCC=$1
@@ -41,14 +58,15 @@ OBJ=$3
 REL=${OBJ%.o}.rel
 MARK=$4
 shift 4
->&2 echo "${GREEN}Mark $MARK:${OFF}" "$SDCC" "$@" "$SRC" -o "$OBJ"
+>&2 echo -ne "${GREEN}Mark $MARK:${OFF}"
+>&2 echo "$SDCC" "$@" "$SRC" -o "$OBJ"
 
 case "$SRC" in
 	*.cpp)
 		# rename .cpp to .c and compile
-		>&2 echo "${RED}cpp gefunden${OFF}";
+		>&2 echo -e "${RED}cpp gefunden${OFF}";
 		CSRC="${SRC%pp}"
-		cp -av "$SRC" "$CSRC"
+		cp -a "$SRC" "$CSRC"
 		"$SDCC" "$@" "$CSRC" -o "$OBJ"
 		ERR=$?
 		rm -f "$CSRC"
