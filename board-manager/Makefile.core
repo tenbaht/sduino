@@ -34,4 +34,5 @@ $(PLATFORM_ENTRY): $(COREFILE)
 
 $(COREFILE):
 	echo "Generating the core archive file."
-	tar cjf $@ $(EXCLUDES) -C ../sduino/hardware/sduino/stm8 .
+	# dereference symlinks as they are not supported on Windows (#24)
+	tar cjf $@ --hard-dereference --dereference $(EXCLUDES) -C ../sduino/hardware/sduino/stm8 .

@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.3.1 - 2017-11-06]
+### Fixed
+- don't use symlinks in archives for Windows anymore (#25)
+- improved path quoting in the wrapper scripts for windows (#24)
+- allow the IDE to stop a failed build process by propagating compiler error
+  codes
+- fix "command not found" error for cp and rm on Windows
+
+
+
 ## [0.3.0 - 2017-10-23]
 ### Added
 - integration into the Arduino IDE

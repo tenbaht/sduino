@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# This is a very basic template "engine" to generate a full platform index
+# file.
+
+
 if [ $# -ne 1 ]; then
 	echo "
 usage: $0 packagefile
@@ -23,8 +27,8 @@ for i in parts/tools*; do
 done;
 
 # The template contains an empty {} as a 'end of list' marker. We need to
-# remove the trailing comma after the last platform and tools entry and the
-# marker. This is asking for some sed magic:
+# remove this marker and the comma right before it. This can be done by some
+# sed magic:
 #
 # compact: sed -e '/},/{N;s/},\s*{}/}/}' package_sduino_stm8_index.json
 # (slightly) more readable:

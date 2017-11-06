@@ -1,0 +1,26 @@
+{
+	"name": "Sduino STM8 plain C core (non-C++)",
+	"architecture": "stm8",
+	"version": "0.3.1",
+	"category": "Contributed",
+	"boards": [
+		{"name": "STM8S103F3 Breakout Board"},
+		{"name": "STM8S105C6 Discovery Board"}
+	],
+	"toolsDependencies": [
+		{
+			"name": "STM8Tools",
+			"version": "2017.11.06",
+			"packager": "sduino"
+		},
+		{
+			"name": "sdcc",
+			"version": "build.10088",
+			"packager": "sduino"
+		}
+	],
+	"url": "file:///home/mmayer/rsync/stm8/board-manager/release/sduino-core-0.3.1.tar.bz2",
+	"archiveFileName": "sduino-core-0.3.1.tar.bz2",
+	"checksum": "SHA-256:9d5c5d0c96c8e18efc16820f17d88ec59c48ba59a84ce46dc9ccd8fc45c59016",
+	"size": "4347217"
+},

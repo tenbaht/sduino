@@ -12,10 +12,10 @@ Makefile.core
 Makefile.sdcc
 Makefile.tools
 
-`minimize-sdcc.sh`: Repack a [SDCC snapshot build]
-(http://sdcc.sourceforge.net/snap.php) into a minimal compiler package by
-removing all non-STM8 files. The total unpacked size shrinks from 250MB to
-6MB.
+`minimize-sdcc.sh`: Repack a [SDCC snapshot
+build](http://sdcc.sourceforge.net/snap.php) into a minimal compiler package
+by removing all non-STM8 files. The total unpacked size shrinks from 250MB
+to 6MB.
 
 `package_sduino_stm8_index.json`: Generated package index file.
 

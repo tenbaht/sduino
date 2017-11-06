@@ -2,7 +2,7 @@
     "packages": [
         {
             "name": "sduino",
-            "maintainer": "Tenbaht",
+            "maintainer": "Michael Mayer",
             "websiteURL": "https://tenbaht.github.io/sduino/",
             "email": "michael-mayer@gmx.de",
             "help": {

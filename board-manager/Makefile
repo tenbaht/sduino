@@ -1,19 +1,22 @@
 # the required versions for the new build
-COREVERSION=0.3.0-pre.1
+COREVERSION=0.3.1
 SDCCVERSION=10088
-TOOLSVERSION=2017.10.21
+TOOLSVERSION=2017.11.06
 
 PACKAGEFILE=package_sduino_stm8_index.json
+GITHUB_BASE=https://github.com/tenbaht/sduino/releases/download/v$(COREVERSION)
 
 export
 
-.PHONY: core tools sdcc
+.PHONY: core tools sdcc clean upload
 
 
 $(PACKAGEFILE): core tools sdcc
 	@echo "Generating the package_index file."
 	./assemble.sh $@
-	sed 's#file:///home/mmayer/rsync/stm8/board-manager/release#http://knecht.box/sduino#' $(PACKAGEFILE) > package_knecht_index.json
+
+../$(PACKAGEFILE): $(PACKAGEFILE)
+	sed "s#file:///home/mmayer/rsync/stm8/board-manager/release#$(GITHUB_BASE)#" $^ > $@
 
 core:
 	VERSION=$(COREVERSION) make -f Makefile.core
@@ -27,3 +30,8 @@ sdcc:
 clean:
 	rm -rf *~ *.jsone *.bak *.orig *.rej
 
+
+# upload to my private test server, totally useless for anybody else.
+upload: $(PACKAGEFILE)
+	sed 's#file:///home/mmayer/rsync/stm8/board-manager#http://knecht.fritz.box/sduino#' $^ > package_knecht_index.json
+	rsync -rsh=ssh --delete release package_knecht_index.json knecht:/var/www/html/sduino
