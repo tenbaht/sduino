@@ -36,6 +36,9 @@ WHITE='\033[1;37m'
 OFF='\033[0m'
 fi
 
+# check if cp is in the path, add our binaries to the PATH if needed
+cp --version >/dev/null 2>&1 || PATH=${0%/wrapper/*}/win:$PATH
+
 SDCC="$1"
 shift
 
