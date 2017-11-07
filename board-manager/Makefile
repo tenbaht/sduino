@@ -4,37 +4,38 @@ SDCCVERSION=10088
 TOOLSVERSION=2017.11.06
 
 BASEURL=https://github.com/tenbaht/sduino/releases/download/v$(COREVERSION)
+
 PACKAGEFILE=package_sduino_stm8_index.json
+
+# version for pre-release testing on my private server at home
+TESTPACKAGEFILE=package_testserver_index.json
+TESTBASEURL=http://knecht.fritz.box/sduino/release
+TESTBASEDIR=knecht:/var/www/html/sduino
 
 export
 
 .PHONY: core tools sdcc clean upload release
 
 
-$(PACKAGEFILE): core tools sdcc
+$(TESTPACKAGEFILE): ../$(PACKAGEFILE)
+	sed 's#http.*/download/#$(TESTBASEURL)/#' $^ > $@
+
+../$(PACKAGEFILE): core tools sdcc
 	@echo "Generating the package_index file."
 	./assemble.sh $@
 
-../$(PACKAGEFILE): $(PACKAGEFILE)
-	sed 's#file:///.*/release/#$(BASEURL)/#' $^ > $@
-
-core:
-	VERSION=$(COREVERSION) make -f Makefile.core
-
-tools:
-	VERSION=$(TOOLSVERSION) make -f Makefile.tools
-
-sdcc:
-	VERSION=$(SDCCVERSION) make -f Makefile.sdcc
+core tools sdcc:
+	make -f Makefile.$@
 
 clean:
 	rm -rf *~ *.jsone *.bak *.orig *.rej
 
 
 # upload to my private test server, totally useless for anybody else.
-upload: $(PACKAGEFILE)
-	sed 's#file:///home/mmayer/rsync/stm8/board-manager#http://knecht.fritz.box/sduino#' $^ > package_knecht_index.json
-	rsync -av -rsh=ssh --delete release package_knecht_index.json knecht:/var/www/html/sduino
+upload: $(TESTPACKAGEFILE)
+	@echo "uploading to $(TESTBASEDIR)"
+	rsync -av -rsh=ssh --delete release $(TESTPACKAGEFILE) $(TESTBASEDIR)
+	@echo "URL for board manager: $(TESTBASEURL)/$(TESTPACKAGEFILE)"
 
 DATE=$(shell date '+%F')
 

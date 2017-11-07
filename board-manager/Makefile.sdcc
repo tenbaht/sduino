@@ -1,5 +1,6 @@
 NAME=sdcc
-VERSION?=10088
+COREVERSION?=0.3.0
+SDCCVERSION?=10088
 
 # where to look for the original SDCC snapshot files
 #SNAPSHOTDIR=sdcc-snapshots
@@ -8,6 +9,7 @@ VERSION?=10088
 SDCCDIR=release
 PARTSDIR=parts
 
+VERSION=$(SDCCVERSION)
 
 #
 ### No user serviceable part below here. Only generated content. ########
@@ -25,4 +27,4 @@ TOOLS_ENTRY=$(PARTSDIR)/tools-entry-$(NAME)-$(VERSION).txt
 
 
 $(TOOLS_ENTRY) : $(SDCC_TARS)
-	./gen_tools_entry.sh "$(TOOLS_STEM)" "$(VERSION)" > $@
+	./gen_tools_entry.sh "$(TOOLS_STEM)" "$(VERSION)" "$(COREVERSION)" > $@

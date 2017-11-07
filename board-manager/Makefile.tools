@@ -1,5 +1,5 @@
 NAME=sduino-tools
-VERSION?=2017.10.21
+TOOLSVERSION?=2017.10.21
 
 # Where to find the tools directory
 BASEDIR=../sduino/hardware/sduino
@@ -21,12 +21,12 @@ PARTSDIR=parts
 TOOLS_STEM=$(ARCHIVEDIR)/$(NAME)
 
 # filename for the new tools entries
-TOOLS_ENTRY=$(PARTSDIR)/tools-entry-$(NAME)-$(VERSION).txt
+TOOLS_ENTRY=$(PARTSDIR)/tools-entry-$(NAME)-$(TOOLSVERSION).txt
 
 # The individual filenames for the different tools archives
-TOOLS_LINUX32=release/$(NAME)_linux32-$(VERSION).tar.bz2
-TOOLS_LINUX64=release/$(NAME)_linux64-$(VERSION).tar.bz2
-TOOLS_WINDOWS=release/$(NAME)_mingw32-$(VERSION).tar.bz2
+TOOLS_LINUX32=release/$(NAME)_linux32-$(TOOLSVERSION).tar.bz2
+TOOLS_LINUX64=release/$(NAME)_linux64-$(TOOLSVERSION).tar.bz2
+TOOLS_WINDOWS=release/$(NAME)_mingw32-$(TOOLSVERSION).tar.bz2
 
 TOOLS_TARS=$(TOOLS_LINUX32) $(TOOLS_LINUX64) $(TOOLS_WINDOWS)
 EXCLUDES=$(addprefix --exclude=, $(IGNORE))
@@ -38,7 +38,7 @@ TARFLAGS=$(EXCLUDES) --show-transformed-names --transform
 
 # generate one tools entry for all matching tools files
 $(TOOLS_ENTRY) : $(TOOLS_TARS)
-	./gen_tools_entry.sh "$(TOOLS_STEM)" "$(VERSION)" > $@
+	./gen_tools_entry.sh "$(TOOLS_STEM)" "$(TOOLSVERSION)" "$(COREVERSION)" > $@
 
 $(TOOLS_LINUX32):
 	@echo "Generating the tools archive file for Linux 32 bit."

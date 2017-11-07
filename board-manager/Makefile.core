@@ -1,5 +1,5 @@
 NAME=sduino
-VERSION?=0.3.2
+COREVERSION?=0.3.2
 SDCCVERSION?=10088
 TOOLSVERSION?=2017.11.06
 
@@ -15,10 +15,10 @@ SUBTREE=sduino/hardware/sduino/stm8
 #
 
 # filename for the generated core file
-COREFILE=$(COREDIR)/$(NAME)-core-$(VERSION).tar.bz2
+COREFILE=$(COREDIR)/$(NAME)-core-$(COREVERSION).tar.bz2
 
 # filename for the new platform entry
-PLATFORM_ENTRY=$(PARTSDIR)/platform-entry-$(NAME)-$(VERSION).txt
+PLATFORM_ENTRY=$(PARTSDIR)/platform-entry-$(NAME)-$(COREVERSION).txt
 
 EXCLUDES=$(addprefix --exclude=, $(IGNORE))
 
@@ -28,7 +28,8 @@ EXCLUDES=$(addprefix --exclude=, $(IGNORE))
 
 # generate one platform entry for the new core file
 $(PLATFORM_ENTRY): $(COREFILE)
-	./gen_platform_entry.sh $^ "$(VERSION)" "$(SDCCVERSION)" "$(TOOLSVERSION)" > $@
+	./gen_platform_entry.sh $^ "$(COREVERSION)" "$(SDCCVERSION)" "$(TOOLSVERSION)" |\
+	sed "s/^/                /" > $@
 
 $(COREFILE):
 	echo "Generating the core archive file."
