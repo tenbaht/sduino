@@ -1,6 +1,7 @@
 *~
 *bak
 .*.swp
+*.jsone
 # ignore all kinds of binary files:
 *.o
 *.bin

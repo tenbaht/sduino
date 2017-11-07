@@ -40,8 +40,10 @@ upload: $(TESTPACKAGEFILE)
 DATE=$(shell date '+%F')
 
 release:
-	echo sed "/^## \[Unreleased\]/ a\\\n\n## [$(COREVERSION) - $(DATE)]" ../CHANGELOG.md
-	echo git add ../CHANGELOG.md
-	echo git add parts/tools-*  parts/platform-*
-	echo git commit
-	echo git tag v$(COREVERSION)
+	# update the version number in the changelog if not already done:
+	grep -q "$(COREVERSION)" ../CHANGELOG.md || \
+	sed "/^## \[Unreleased\]/ a\\\n\n## [$(COREVERSION) - $(DATE)]" ../CHANGELOG.md
+	git add ../CHANGELOG.md
+	git add parts/tools-*-$(SDCCVERSION).txt parts/tools-*-$(TOOLSVERSION).txt parts/platform-*-$(COREVERSION).txt
+	git commit
+	git tag v$(COREVERSION)
