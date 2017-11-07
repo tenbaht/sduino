@@ -1,16 +1,14 @@
 NAME=sduino
-VERSION?=0.3.0-pre1
+VERSION?=0.3.2
 SDCCVERSION?=10088
-TOOLSVERSION?=2017.10.21
+TOOLSVERSION?=2017.11.06
 
 # where to put the generated files
 COREDIR?=release
 PARTSDIR?=parts
 
-# Ignore all files matching one of these shell patterns when building the
-# core archive.
-IGNORE=*~ *bak x build-* *.orig *.rej
-
+# subtree of the repository to be included in the archive
+SUBTREE=sduino/hardware/sduino/stm8
 
 #
 ### No user serviceable part below here. ################################
@@ -34,5 +32,5 @@ $(PLATFORM_ENTRY): $(COREFILE)
 
 $(COREFILE):
 	echo "Generating the core archive file."
-	# dereference symlinks as they are not supported on Windows (#24)
-	tar cjf $@ --hard-dereference --dereference $(EXCLUDES) -C ../sduino/hardware/sduino/stm8 .
+	(cd ..;	git archive -v --format=tar HEAD:$(SUBTREE))|\
+	bzip2 > $(COREFILE)
