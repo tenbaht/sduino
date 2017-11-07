@@ -6,7 +6,7 @@ SDCCVERSION?=10088
 #SNAPSHOTDIR=sdcc-snapshots
 
 # where to put the generated files
-SDCCDIR=release
+SDCCDIR=release/v$(COREVERSION)
 PARTSDIR=parts
 
 VERSION=$(SDCCVERSION)

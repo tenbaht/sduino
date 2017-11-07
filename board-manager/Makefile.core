@@ -4,7 +4,7 @@ SDCCVERSION?=10088
 TOOLSVERSION?=2017.11.06
 
 # where to put the generated files
-COREDIR?=release
+COREDIR?=release/v$(COREVERSION)
 PARTSDIR?=parts
 
 # subtree of the repository to be included in the archive
@@ -31,7 +31,15 @@ $(PLATFORM_ENTRY): $(COREFILE)
 	./gen_platform_entry.sh $^ "$(COREVERSION)" "$(SDCCVERSION)" "$(TOOLSVERSION)" |\
 	sed "s/^/                /" > $@
 
-$(COREFILE):
+$(COREFILE): | $(COREDIR)
 	echo "Generating the core archive file."
 	(cd ..;	git archive -v --format=tar HEAD:$(SUBTREE))|\
 	bzip2 > $(COREFILE)
+
+# make a new release directory if not present
+#
+# make sure to define an order-only dependency on this rule by placing it on
+# the right side of a pipe symbol. This prevents rebuilding the archives
+# every time.
+$(COREDIR):
+	mkdir -p $@

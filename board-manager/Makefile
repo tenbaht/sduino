@@ -9,7 +9,7 @@ PACKAGEFILE=package_sduino_stm8_index.json
 
 # version for pre-release testing on my private server at home
 TESTPACKAGEFILE=package_testserver_index.json
-TESTBASEURL=http://knecht.fritz.box/sduino/release
+TESTBASEURL=http://knecht.fritz.box/sduino
 TESTBASEDIR=knecht:/var/www/html/sduino
 
 export
@@ -18,7 +18,7 @@ export
 
 
 $(TESTPACKAGEFILE): ../$(PACKAGEFILE)
-	sed 's#http.*/download/#$(TESTBASEURL)/#' $^ > $@
+	sed 's#http.*/download/#$(TESTBASEURL)/release/#' $^ > $@
 
 ../$(PACKAGEFILE): core tools sdcc
 	@echo "Generating the package_index file."
