@@ -35,4 +35,4 @@ done;
 sed -ie '/},/{
 	N;
 	s/},\s*{}/}/
-}' package_sduino_stm8_index.json
+}' ${PACKAGEFILE}
