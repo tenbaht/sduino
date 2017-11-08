@@ -1262,12 +1262,16 @@ $(OBJDIR)/%.s.$(OBJSUFFIX): %.s $(COMMON_DEPS) | $(OBJDIR)
 # the pde -> o file
 $(OBJDIR)/%.pde.$(OBJSUFFIX): %.pde $(COMMON_DEPS) | $(OBJDIR)
 	@$(MKDIR) $(dir $@)
-	$(CXX) -x c++ -include $(ARDUINO_HEADER) -MMD -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
+	(echo '#include <Arduino.h>\n#line 1 "$<"'; cat $<) > "$(patsubst %.$(OBJSUFFIX),%.c,$@)"
+	$(CC) "-Wp-MMD $(patsubst %.$(OBJSUFFIX),%.d,$@)" -c $(CPPFLAGS) $(CFLAGS) "$(patsubst %.$(OBJSUFFIX),%.c,$@)" -o $@
+#	$(CXX) -x c++ -include $(ARDUINO_HEADER) -MMD -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
 
 # the ino -> o file
 $(OBJDIR)/%.ino.$(OBJSUFFIX): %.ino $(COMMON_DEPS) | $(OBJDIR)
 	@$(MKDIR) $(dir $@)
-	$(CXX) -x c++ -include $(ARDUINO_HEADER) -MMD -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
+	(echo '#include <Arduino.h>\n#line 1 "$<"'; cat $<) > "$(patsubst %.$(OBJSUFFIX),%.c,$@)"
+	$(CC) "-Wp-MMD $(patsubst %.$(OBJSUFFIX),%.d,$@)" -c $(CPPFLAGS) $(CFLAGS) "$(patsubst %.$(OBJSUFFIX),%.c,$@)" -o $@
+#	$(CXX) -x c++ -include $(ARDUINO_HEADER) -MMD -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
 
 # generated assembly
 $(OBJDIR)/%.s: %.pde $(COMMON_DEPS) | $(OBJDIR)
