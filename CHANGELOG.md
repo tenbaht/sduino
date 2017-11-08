@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+
+## [0.3.2 - 2017-11-08]
+### Added
+- make the Sduino versions of the built-in examples visible in the IDE
+- support for compiling .pde and .ino files using the makefile
+
+### Fixed
+- makefile Arduino.mk uses the same tools path then the IDE
+- use more scripts to generate cleaner release archive files
+
+
+
 ## [0.3.1 - 2017-11-06]
 ### Fixed
 - don't use symlinks in archives for Windows anymore (#25)

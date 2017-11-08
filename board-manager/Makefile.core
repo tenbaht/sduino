@@ -33,7 +33,7 @@ $(PLATFORM_ENTRY): $(COREFILE)
 
 $(COREFILE): | $(COREDIR)
 	echo "Generating the core archive file."
-	(cd ..;	git archive -v --format=tar HEAD:$(SUBTREE))|\
+	(cd ..;	git archive -v --prefix=./ --format=tar HEAD:$(SUBTREE))|\
 	bzip2 > $(COREFILE)
 
 # make a new release directory if not present
