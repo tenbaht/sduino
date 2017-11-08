@@ -3,7 +3,7 @@
 A preconfigured IDE is a great way to start, but sooner or later you will
 want more control and flexibility.
 
-The [manual install](install) of Sduino comes with an easy-to-use powerful
+The [manual install](manual-install.md) of Sduino comes with an easy-to-use powerful
 Makefile based on the amazing [Arduino.mk
 makefile](https://github.com/sudar/Arduino-Makefile) by
 [Sudar](http://sudarmuthu.com>).
