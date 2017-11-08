@@ -19,7 +19,6 @@
 
  */
 
-#include <Arduino.h>
 #include <Stepper.h>
 
 #define stepsPerRevolution 200  // change this to fit the number of steps per revolution

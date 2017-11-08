@@ -42,7 +42,6 @@
  */
 
 // include the library code:
-#include <Arduino.h>
 #include <LiquidCrystal.h>
 
 

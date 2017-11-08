@@ -1,28 +1,24 @@
 /*
- Fading
+  Fading
 
- This example shows how to fade an LED using the analogWrite() function.
+  This example shows how to fade an LED using the analogWrite() function.
 
- If the used board doesn't include a buildin LED:
- * LED attached from a digital pin to ground.
- * assign the used pin number to the variable ledPin
+  The circuit:
+  - LED attached from digital pin 9 to ground.
 
- Created 1 Nov 2008
- By David A. Mellis
- modified 30 Aug 2011
- By Tom Igoe
- modified 28 Feb 2017 for use with sduino
- by Michael Mayer
+  created 1 Nov 2008
+  by David A. Mellis
+  modified 30 Aug 2011
+  by Tom Igoe
+  modified 28 Feb 2017 for use with sduino
+  by Michael Mayer
 
- http://www.arduino.cc/en/Tutorial/Fading
+  This example code is in the public domain.
 
- This example code is in the public domain.
+  http://www.arduino.cc/en/Tutorial/Fading
+*/
 
- */
-
-#include <Arduino.h>
-
-int ledPin = LED_BUILTIN;    // define the LED pin
+int ledPin = 9;    // LED connected to digital pin 9
 
 void setup() {
   // nothing happens in setup
@@ -45,5 +41,3 @@ void loop() {
     delay(30);
   }
 }
-
-

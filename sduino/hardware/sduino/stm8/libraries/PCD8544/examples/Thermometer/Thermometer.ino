@@ -60,8 +60,7 @@
 #define OVERSAMPLING	4
 
 static const byte sensorPin = A1;
-
-static const byte ledPin = 3;
+static const byte ledPin = LED_BUILTIN;
 
 // The dimensions of the LCD (in pixels)...
 #define LCD_WIDTH	84

@@ -43,7 +43,6 @@
  */
 
 // include the library code:
-#include <Arduino.h>
 #include <LiquidCrystal.h>
 
 // initialize the library with the numbers of the interface pins

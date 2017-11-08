@@ -40,7 +40,6 @@
  */
 
 // include the library code:
-#include <Arduino.h>
 #include <LiquidCrystal.h>
 #include <Serial.h>
 

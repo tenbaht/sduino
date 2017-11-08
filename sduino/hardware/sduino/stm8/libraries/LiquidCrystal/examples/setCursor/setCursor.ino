@@ -41,7 +41,6 @@
  */
 
 // include the library code:
-#include <Arduino.h>
 #include <LiquidCrystal.h>
 
 // these constants won't change.  But you can change the size of

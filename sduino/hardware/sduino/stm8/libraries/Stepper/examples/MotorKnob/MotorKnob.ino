@@ -8,7 +8,6 @@
  * This example code is in the public domain.
  */
 
-#include <Arduino.h>
 #include <Stepper.h>
 
 // change this to the number of steps on your motor

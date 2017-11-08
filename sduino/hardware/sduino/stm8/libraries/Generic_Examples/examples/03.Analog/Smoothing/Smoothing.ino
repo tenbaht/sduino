@@ -2,32 +2,29 @@
 
   Smoothing
 
-  Reads repeatedly from an analog input, calculating a running average
-  and printing it to the computer.  Keeps ten readings in an array and
-  continually averages them.
+  Reads repeatedly from an analog input, calculating a running average and
+  printing it to the computer. Keeps ten readings in an array and continually
+  averages them.
 
   The circuit:
-    * Analog sensor (potentiometer will do) attached to analog input 0
+  - analog sensor (potentiometer will do) attached to analog input 0
 
-  Created 22 April 2007
-  By David A. Mellis  <dam@mellis.org>
+  created 22 Apr 2007
+  by David A. Mellis  <dam@mellis.org>
   modified 9 Apr 2012
   by Tom Igoe
   modified 28 Feb 2017 for use with sduino
   by Michael Mayer
-  http://www.arduino.cc/en/Tutorial/Smoothing
 
   This example code is in the public domain.
 
-
+  http://www.arduino.cc/en/Tutorial/Smoothing
 */
 
-#include <Arduino.h>
-
-// Define the number of samples to keep track of.  The higher the number,
-// the more the readings will be smoothed, but the slower the output will
-// respond to the input.  Using a constant rather than a normal variable lets
-// use this value to determine the size of the readings array.
+// Define the number of samples to keep track of. The higher the number, the
+// more the readings will be smoothed, but the slower the output will respond to
+// the input. Using a constant rather than a normal variable lets us use this
+// value to determine the size of the readings array.
 #define numReadings 10
 
 int readings[numReadings];      // the readings from the analog input
@@ -68,5 +65,3 @@ void loop() {
   Serial_println_u(average);
   delay(1);        // delay in between reads for stability
 }
-
-

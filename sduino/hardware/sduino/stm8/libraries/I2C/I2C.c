@@ -222,14 +222,11 @@ void I2C_scan()
 }
 #endif
 
-#if 0
 uint8_t I2C_available()
 {
   return(bytesAvailable);
 }
-#endif
 
-#if 0
 uint8_t I2C_receive()
 {
   bufferIndex = totalBytes - bytesAvailable;
@@ -241,7 +238,6 @@ uint8_t I2C_receive()
   bytesAvailable--;
   return(data[bufferIndex]);
 }
-#endif
   
 /*return values for new functions that use the timeOut feature 
   will now return at what point in the transmission the timeout
@@ -291,7 +287,6 @@ uint8_t I2C_write(uint8_t address, uint8_t registerAddress)
   return(returnStatus);
 }
 
-#if 1
 uint8_t I2C_write_c(uint8_t address, uint8_t registerAddress, uint8_t data)
 {
   returnStatus = 0;
@@ -323,7 +318,6 @@ uint8_t I2C_write_c(uint8_t address, uint8_t registerAddress, uint8_t data)
   }
   return(returnStatus);
 }
-#endif
 
 #if 0
 uint8_t I2C_write_s(uint8_t address, uint8_t registerAddress, char *data)
@@ -370,7 +364,7 @@ uint8_t I2C_write_sn(uint8_t address, uint8_t registerAddress, uint8_t *data, ui
   return(returnStatus);
 }
 
-#if 0
+#if 1
 uint8_t I2C_read(uint8_t address, uint8_t numberBytes)
 {
   bytesAvailable = 0;
