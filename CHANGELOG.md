@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Fixed
 - Windows: better path handling to fix "'cp' and 'rm' not found" error
+- removed unneed symlink in SPL that caused the IDE installation to fail (#30)
 
 
 
