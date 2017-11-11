@@ -34,9 +34,27 @@ WHITE='\033[1;37m'
 OFF='\033[0m'
 fi
 
-# check if cp is in the path, add our binaries to the PATH if needed
-cp --version >/dev/null 2>&1 || PATH=${0%/wrapper/*}/win:$PATH
-
+# check if cp is in the path using 'command -v' (a builtin POSIX function)
+if ! command -v cp > /dev/null; then
+	# Ok, this means we are on a Windows system and we have to find a
+	# way to access cp and rm in ../win. A simple 'cd ../win' or
+	# '../win/cp' does't work, as the current working directory is still
+	# the Arduino binary directory.
+	#
+	# This looks ok, but it doesn't work on some Windows systems:
+	# (No idea why)
+	# PATH="${0%/wrapper/*}"/win:$PATH
+	#
+	# This is technically wrong, but surprisingly it works with Windows:
+	# cd $0/../..
+	# PATH=$(pwd)/win:$PATH
+	#
+	# Use cd/pwd as a replacement for 'realpath' using only builtins.
+	# It has the positive side effect of converting from Windows to Unix
+	# path syntax avoiding all these backslash issues.
+	cd "${0%/wrapper/*}"
+	PATH=$(pwd)/win:$PATH
+fi
 
 # echo the full command line in cyan:
 >&2 echo -ne "${CYAN}"
