@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- IDE installation for OSX works now (#29, manual installation still
+  problematic)
+
 ### Fixed
 - Windows: better path handling to fix "'cp' and 'rm' not found" error
 - removed unneed symlink in SPL that caused the IDE installation to fail (#30)

@@ -1,7 +1,7 @@
 # the required versions for the new build
-COREVERSION=0.3.2
+COREVERSION=0.3.3
 SDCCVERSION=10088
-TOOLSVERSION=2017.11.06
+TOOLSVERSION=2017.11.13
 
 BASEURL=https://github.com/tenbaht/sduino/releases/download/v$(COREVERSION)
 
@@ -12,6 +12,7 @@ TESTPACKAGEFILE=package_testserver_index.json
 TESTBASEURL=http://knecht.fritz.box/sduino
 TESTBASEDIR=knecht:/var/www/html/sduino
 
+# make sure these definitions are visible for the sub-makes
 export
 
 .PHONY: core tools sdcc clean upload release

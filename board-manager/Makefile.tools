@@ -28,11 +28,12 @@ TOOLS_ENTRY=$(PARTSDIR)/tools-entry-$(NAME)-$(TOOLSVERSION).txt
 # The individual filenames for the different tools archives
 TOOLS_LINUX32=$(ARCHIVEDIR)/$(NAME)_linux32-$(TOOLSVERSION).tar.bz2
 TOOLS_LINUX64=$(ARCHIVEDIR)/$(NAME)_linux64-$(TOOLSVERSION).tar.bz2
+TOOLS_MACOSX=$(ARCHIVEDIR)/$(NAME)_macosx-$(TOOLSVERSION).tar.bz2
 TOOLS_WINDOWS=$(ARCHIVEDIR)/$(NAME)_mingw32-$(TOOLSVERSION).tar.bz2
 
-TOOLS_TARS=$(TOOLS_LINUX32) $(TOOLS_LINUX64) $(TOOLS_WINDOWS)
+TOOLS_TARS=$(TOOLS_LINUX32) $(TOOLS_LINUX64) $(TOOLS_MACOSX) $(TOOLS_WINDOWS)
 EXCLUDES=$(addprefix --exclude=, $(IGNORE))
-TARFLAGS=$(EXCLUDES) --show-transformed-names --transform
+
 
 #
 # The actual rules
@@ -51,6 +52,10 @@ $(TOOLS_LINUX64): | $(ARCHIVEDIR)
 	@echo "Generating the tools archive file for Linux 64 bit."
 	tar cjf $@ $(EXCLUDES) -C $(BASEDIR) --transform s/linux64/linux/ \
 		tools/wrapper tools/linux64
+
+$(TOOLS_MACOSX): | $(ARCHIVEDIR)
+	@echo "Generating the tools archive file for Mac OSX"
+	tar cjf $@ $(EXCLUDES) -C $(BASEDIR) tools/wrapper tools/macosx
 
 $(TOOLS_WINDOWS): | $(ARCHIVEDIR)
 	@echo "Generating the tools archive file for Windows."

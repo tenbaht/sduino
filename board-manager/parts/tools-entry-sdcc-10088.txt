@@ -20,6 +20,12 @@
                             "archiveFileName": "sdcc-stm8-i586-mingw32msvc-20171020-10088.tar.bz2",
                             "checksum": "SHA-256:2c9db6ff4d2f7b7b608f956adbc06e24ac8ec4dd4f41f26c79c48f9ddecb22a5",
                             "size": "2973875"
+                        },{
+                            "host": "x86_64-apple-darwin",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.3.3/sdcc-stm8-universal-apple-macosx-20170720-9960.tar.bz2",
+                            "archiveFileName": "sdcc-stm8-universal-apple-macosx-20170720-9960.tar.bz2",
+                            "checksum": "SHA-256:135539c7685ed22f433a6085e4f4db5777655865fd05885a2bf773fec4eea405",
+                            "size": "4812042"
                         }
                     ]
                 },

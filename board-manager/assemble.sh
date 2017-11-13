@@ -18,11 +18,11 @@ PACKAGEFILE=$1
 
 cp -a package_template.json ${PACKAGEFILE} 
 
-for i in parts/platform*; do
+for i in parts/platform*.txt; do
 	sed -ie "/\"platforms\" : \[/r $i" ${PACKAGEFILE};
 done;
 
-for i in parts/tools*; do
+for i in parts/tools*.txt; do
 	sed -ie "/\"tools\" : \[/r $i" ${PACKAGEFILE};
 done;
 
