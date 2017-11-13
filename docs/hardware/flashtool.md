@@ -1,27 +1,33 @@
 # Flash tool
 
-You need a special flash tools in order to program the CPU. As far as I know
-there is no third-party product or software that implements the needed
-communication protocol. So you can't just use a regular Arduino board as a
-flash tool as you could for the ATmega. But this is not a problem, as these
-tools are are easily available and unbeliveably cheap (well under $3 on
-aliexpress, search for st-link).
+The STM8-Discovery-Boards come with an integrated ST-Link-Interface, but for
+any other board you need a special flash tools in order to program the CPU.
 
-There are two versions of the ST-Link V2 compatible flash tool available:
-One in a USB-Drive-like metal housing (often pink or blue) and one made by
-Baite in a green plastic housing. Both work well, but they use a different
-pinout.
+As far as I know there is no third-party product or software that implements
+the needed communication protocol. So you can't just use a regular Arduino
+board as a flash tool as you could for the ATmega. But this is not a
+problem, as these tools are are easily available and unbeliveably cheap
+(well under $3 on aliexpress, search for st-link).
+
+There are two main versions of the ST-Link V2 compatible flash tool
+available: One in a USB-Drive-like metal housing (often pink or blue) and
+one made by Baite in a green plastic housing. Both work well, but they use a
+different pinout.
 
 ![Picture of both flash tools](ST-LinkV2_pinout_01.jpg)
 
 Both flash tools support the SWIM protocol for STM8 CPUs and the SWD
 protocol for the STM32 CPUs. The programmer from Baite additionally supports
 JTAG and is slightly superior to the more common one in the metal housing.
-More information on the hardware and the pinouts:
-https://wiki.cuvoodoo.info/doku.php?id=jtag
+
 
 
 ## Pinout
+
+Recently, very similar looking versions of the metal housing flash tool, but
+with different pinouts, have been seen. Make sure to check your specific
+tool before building cables! [More information on the hardware and the
+pinouts](https://wiki.cuvoodoo.info/doku.php?id=jtag)
 
 Pinout of Chinese ST-Link V2-clone made by Baite with green plasic housing
 (supports SWIM, SWD and JTAG):
@@ -71,6 +77,9 @@ Download and install the ST-Link/v2 driver **before you plug in the flash
 tool**:
 [STSW-LINK009 driver download](http://www.st.com/en/development-tools/stsw-link009.html)
 (Registration required, but very easy)
+
+I would love to include this driver with the Sduino install package, but I
+am not sure if this is covered by the ST licence terms for the driver.
 
 
 

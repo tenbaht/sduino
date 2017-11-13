@@ -20,7 +20,10 @@ Wait for the download to finsh and you are ready to blink:
 - Open the standard Blink example from File->Examples->01. Basics->Blink
 - Compile it by hitting 'Verify'
 
-Wasn't too hard, was it?
+Easy, isn't it?
+
+In order to upload the compiled sketch to a connected board you need to
+[install your flash tool](../hardware/flashtool/#installation-for-windows).
 
 
 
