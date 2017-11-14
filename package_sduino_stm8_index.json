@@ -32,8 +32,8 @@
                     ],
                     "url": "https://github.com/tenbaht/sduino/releases/download/v0.3.3/sduino-core-0.3.3.tar.bz2",
                     "archiveFileName": "sduino-core-0.3.3.tar.bz2",
-                    "checksum": "SHA-256:67e0bc853f6498dcfb57aacc698e4fb8a07d75f515c1687c9232ef6e1e27431d",
-                    "size": "5642785"
+                    "checksum": "SHA-256:58f2f08a3172cff3575ec0aa412b248a7c9b5f4c1c5a6aa91dc55d7133c4d5a6",
+                    "size": "5643135"
                 },
                 {
                     "name": "Sduino STM8 plain C core (non-C++)",
