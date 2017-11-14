@@ -9,7 +9,7 @@
         
         <link rel="shortcut icon" href="../../img/favicon.ico">
 
-	<title>Status and todo - Sduino</title>
+	<title>IDE integration - Sduino</title>
 
         <link href="../../css/bootstrap-3.0.3.min.css" rel="stylesheet">
         <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -50,7 +50,7 @@
             <ul class="nav navbar-nav">
             
             
-                <li class="dropdown active">
+                <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                     
@@ -59,31 +59,31 @@
                         </li>
                     
                         <li >
-                            <a href="../board-manager-install/">Automatic Installation</a>
+                            <a href="../../usage/board-manager-install/">Automatic Installation</a>
                         </li>
                     
                         <li >
-                            <a href="../build-ide/">Building with the IDE</a>
+                            <a href="../../usage/build-ide/">Building with the IDE</a>
                         </li>
                     
                         <li >
-                            <a href="../why-stm8/">When to use an STM8S - and when not</a>
+                            <a href="../../usage/why-stm8/">When to use an STM8S - and when not</a>
                         </li>
                     
                         <li >
-                            <a href="../manual-install/">Manual Installation</a>
+                            <a href="../../usage/manual-install/">Manual Installation</a>
                         </li>
                     
                         <li >
-                            <a href="../build-cli/">Building with a Makefile</a>
+                            <a href="../../usage/build-cli/">Building with a Makefile</a>
                         </li>
                     
                         <li >
-                            <a href="../limitations/">Limitations</a>
+                            <a href="../../usage/limitations/">Limitations</a>
                         </li>
                     
-                        <li class="active">
-                            <a href="./">Status and todo</a>
+                        <li >
+                            <a href="../../usage/status-todo/">Status and todo</a>
                         </li>
                     
                     </ul>
@@ -165,40 +165,40 @@
             
             
             
-                <li class="dropdown">
+                <li class="dropdown active">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                     
-                        <li >
-                            <a href="../../developer/ide-integration/">IDE integration</a>
+                        <li class="active">
+                            <a href="./">IDE integration</a>
                         </li>
                     
                         <li >
-                            <a href="../../developer/macro/">C preprocessor macro magic</a>
+                            <a href="../macro/">C preprocessor macro magic</a>
                         </li>
                     
                         <li >
-                            <a href="../../developer/pin_mapping/">Ways to define a pin mapping</a>
+                            <a href="../pin_mapping/">Ways to define a pin mapping</a>
                         </li>
                     
                         <li >
-                            <a href="../../developer/sdcc/">Using the SDCC compiler</a>
+                            <a href="../sdcc/">Using the SDCC compiler</a>
                         </li>
                     
                         <li >
-                            <a href="../../developer/spl/">Using the SPL with SDCC and sduino</a>
+                            <a href="../spl/">Using the SPL with SDCC and sduino</a>
                         </li>
                     
                         <li >
-                            <a href="../../developer/bare-metal-programming/">Bare metal programming on the STM8</a>
+                            <a href="../bare-metal-programming/">Bare metal programming on the STM8</a>
                         </li>
                     
                         <li >
-                            <a href="../../developer/performance/">Performance comparison and benchmarking</a>
+                            <a href="../performance/">Performance comparison and benchmarking</a>
                         </li>
                     
                         <li >
-                            <a href="../../developer/links/">Links and further reading</a>
+                            <a href="../links/">Links and further reading</a>
                         </li>
                     
                     </ul>
@@ -222,12 +222,12 @@
             <!-- Search, Navigation and Repo links -->
             <ul class="nav navbar-nav navbar-right">
                 <li >
-                    <a rel="next" href="../limitations/">
+                    <a rel="next" href="../../hardware/stm8sdiscovery/">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../../api/migration/">
+                    <a rel="prev" href="../macro/">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -250,99 +250,111 @@
             <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#status-and-todo">Status and Todo</a></li>
+        <li class="main active"><a href="#ide-integration">IDE integration</a></li>
         
-            <li><a href="#current-status">Current status</a></li>
+            <li><a href="#linux-and-macos">Linux and MacOS</a></li>
         
-            <li><a href="#todo">Todo</a></li>
+            <li><a href="#bash-on-windows">bash on Windows</a></li>
         
     
     </ul>
 </div></div>
             <div class="col-md-9" role="main">
 
-<h1 id="status-and-todo">Status and Todo</h1>
-<h2 id="current-status">Current status</h2>
-<h4 id="tested-and-working">tested and working</h4>
-<ul>
-<li><code>pinMode()</code></li>
-<li><code>digitalWrite()</code></li>
-<li><code>analogRead()</code></li>
-<li><code>delay()</code></li>
-<li><code>analogWrite()</code></li>
-<li><code>ShiftOut()</code></li>
-<li>WMath: <code>map()</code></li>
-<li><code>serialEvent()</code></li>
-<li><code>pulseInLong()</code></li>
-<li><a href="../../api/HardwareSerial/">HardwareSerial</a>:
-  Standard UART interface with Print functions</li>
-<li><a href="../../api/Print/">Print</a>:
-  Formatting functions to be used with the other output libraries</li>
-<li><a href="../../api/SPI/">SPI</a>:
-  working, no interrupt support  </li>
-<li><a href="../../api/LiquidCrystal/">LiquidCrystal</a>:
-  Text LCD based on the HD44780 controller  </li>
-<li><a href="../../api/PCD8544/">PCD8544</a>:
-  Nokia 5110 type displays  </li>
-<li><a href="../../api/Mini_SSD1306/">Mini_SSD1306</a>:
-  Monochrome OLED displays based on the SSD1306 controller</li>
-<li><a href="../../api/Stepper/">Stepper</a>:
-  Multi-instance design for more than one stepper at a time  </li>
-<li><a href="../../api/Servo/">Servo</a>:
-  Multi-instance design for more than one servo at a time)  </li>
-</ul>
-<h4 id="implemented-and-partly-working">implemented and partly working</h4>
-<ul>
-<li><a href="../../api/I2C/">Wire/I2C</a></li>
-</ul>
-<h4 id="tested-but-not-working">tested, but not working</h4>
-<ul>
-<li><code>alternateFunctions()</code></li>
-</ul>
-<h4 id="not-tested">not tested</h4>
-<ul>
-<li><code>ShiftIn()</code></li>
-<li><code>random()</code></li>
-<li><code>srandom()</code></li>
-</ul>
-<h4 id="not-implemented">not implemented</h4>
-<ul>
-<li><code>tone()</code></li>
-<li><code>noTone()</code></li>
-<li><code>pulseIn()</code></li>
-<li>module WCharacter</li>
-<li>module WString</li>
-</ul>
-<h2 id="todo">Todo</h2>
-<h3 id="interesting-libraries-that-might-be-worth-porting">Interesting libraries that might be worth porting</h3>
-<p><strong><a href="https://github.com/SMFSW/cI2C">cI2C</a></strong>: Arduino Hardware I2C for AVR
-(plain c)</p>
-<p><strong><a href="https://github.com/winlinvip/SimpleDHT">SimpleDHT</a></strong>: Simple, Stable and
-Fast Arduino Temp &amp; Humidity Sensors for DHT11 and DHT22. It started out
-as plain C code (v1.0.0), but was converted to (simple) C++ with v1.0.1</p>
-<p><strong><a href="https://github.com/SMFSW/cQueue">cQueue</a></strong>: Queue handling library
-(written in plain c). But maybe too high-level to be worth using on very
-small devices.</p>
-<p><strong><a href="https://github.com/smz/Arduino-RTCtime">RTCtime</a></strong>: This library makes
-using modules based on the DS1307 and DS3231 RTC really easy. It is
-compatible with and is meant to leverage the standard C time library
-<code>time.h</code> API (datatypes and functions) as defined in ISO/IEC 9899 (C90) and
-implemented in the AVR Std C runtime libray since version 2.0.0.</p>
-<p><strong><a href="https://github.com/stm32duino/FatFs">FatFS</a></strong>: FatFs is a generic FAT
-file system module for small embedded systems. The FatFs is written in
-compliance with ANSI C and completely separated from the disk I/O layer.
-Therefore it is independent of hardware architecture.
-stm32duino port of <a href="http://elm-chan.org/fsw/ff/00index_e.html">FatFS by
-elm-chan</a>. A stripped down
-version exists as <a href="http://elm-chan.org/fsw/ff/00index_p.html">Petit FAT File System
-Module</a> for very small CPU. Only
-2..4kB flash usage.</p>
-<h3 id="unresolved-problems">Unresolved problems</h3>
-<p>The compile environment needs to detect which interrupts are actively used
-and link only the needed ones into the binary. See test/digitalWrite:
-Compiling with the straight Makefile.classic does not add UART interrupt
-routines. But when using the sduino.mk Makefile the two UART interrupt
-routines are pulled into the binary by the interrupt table in main.c.</p></div>
+<h1 id="ide-integration">IDE integration</h1>
+<p>The IDE uses arduino-builder as a build tool. This tool is tightly build
+around the gcc. It always assumes that the main sketch is a cpp file and it
+includes hardcoded assumptions about the file suffixes '.o' for object files
+and '.a' for libraries.</p>
+<p>As SDCC is not flexible about file suffix' as well we need some wrapper
+scripts to convert the different suffixes before and after the compiler run:</p>
+<table>
+<thead>
+<tr>
+<th>file type</th>
+<th>gcc file suffix</th>
+<th>SDCC file suffix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>source file</td>
+<td>any</td>
+<td>.c</td>
+</tr>
+<tr>
+<td>object file</td>
+<td>.o</td>
+<td>.rel</td>
+</tr>
+<tr>
+<td>library archive</td>
+<td>.a</td>
+<td>.lib</td>
+</tr>
+<tr>
+<td>dependency file</td>
+<td>.d</td>
+<td>.d</td>
+</tr>
+</tbody>
+</table>
+<h2 id="linux-and-macos">Linux and MacOS</h2>
+<p>I like minimal approaches and usually prefer using dash over bash. Less
+features =&gt; less problems. You know.</p>
+<p>The linker wrapper sdcc-link.sh is tricky, as we need to parse all
+arguments, modify them if an object file or a library is found and call sdcc
+with the full list. The required array handling is not implemented in dash,
+so we are stuck with the full bash.</p>
+<h2 id="bash-on-windows">bash on Windows</h2>
+<p>Using the bash.exe from the MinGW project we can use the same script files
+even for Windows.</p>
+<h3 id="figuring-out-the-path">Figuring out the path</h3>
+<p>The hard part is locating the executeables without requiring the user to
+modify the PATH variable. Relative to the location of the wrapper scripts
+the executeables for <code>cp</code> and <code>rm</code> are in <code>../win</code>. But a simple simple <code>cd
+../win</code> or <code>../win/cp</code> does't work, as the current working directory at this
+point is still the Arduino binary directory.</p>
+<p>Since the script is called with a full absolute path, we can extract the
+needed path from there. This is the obvious solution:</p>
+<pre><code>PATH="${0%/wrapper/*}"/win:$PATH
+</code></pre>
+<p>It looks ok, but it doesn't work on some Windows systems. It will result
+in an absolute path like
+<code>C:\Users\michael\AppData\Local\Arduino15\packages\sduino\tools\STM8Tools/win</code>.
+On some systems this works, on some it doesn't. Surprisingly, the mingw
+system somehow decides to set the <code>tools/STM8Tools</code> directory as the root
+directory. On some systems absolute paths above that point are ok, on some
+systems they are not. No idea why. And no idea where this root base is
+defined (or how to influence it). How can the bash.exe know that it was
+extracted from a tar file below the <code>tools/STM8Tools</code> directory?</p>
+<p>So we need a plan B.</p>
+<p>This is technically wrong, but surprisingly it works with Windows:</p>
+<pre><code>cd $0/../..
+PATH=$(pwd)/win:$PATH
+</code></pre>
+<p>The <code>pwd</code> has the positive side effect of converting the path from Windows
+to Unix syntax avoiding all these backslash issues.</p>
+<p>Finally, this is syntactally correct and works on all systems:</p>
+<pre><code>cd "${0%/wrapper/*}"
+PATH=$(pwd)/win:$PATH
+</code></pre>
+<p>All together it leds to this solution:</p>
+<pre><code class="bash"># check if cp is in the path
+if ! command -v cp &gt; /dev/null; then
+    cd &quot;${0%/wrapper/*}&quot;
+    PATH=$(pwd)/win:$PATH
+fi
+</code></pre>
+
+<p>Now we are ready to go even on Windows. All used functions <code>command</code>, <code>cd</code>
+and <code>pwd</code> and the pattern matching are POSIX-conformant builtin shell
+functions without any external dependencies resulting in almost no overhead
+and high portability.</p>
+<h3 id="using-only-cmdexe">Using only cmd.exe</h3>
+<p>It might be possible to get away with straight cmd.exe batch programming.
+But my ambitions of getting into Windows programming are very limited, so
+maybe somebody else would like to investigate this.</p></div>
         </div>
 
 	<footer class="col-md-12">

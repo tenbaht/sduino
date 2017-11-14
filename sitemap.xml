@@ -5,49 +5,49 @@
         
     <url>
      <loc>None/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/usage/board-manager-install/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/usage/build-ide/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/usage/why-stm8/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/usage/manual-install/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/usage/build-cli/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/usage/limitations/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/usage/status-todo/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -57,61 +57,61 @@
         
     <url>
      <loc>None/api/migration/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/api/Print/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/api/HardwareSerial/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/api/SPI/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/api/I2C/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/api/LiquidCrystal/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/api/PCD8544/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/api/Mini_SSD1306/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/api/Stepper/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/api/Servo/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -121,25 +121,25 @@
         
     <url>
      <loc>None/hardware/flashtool/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/hardware/stm8blue/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/hardware/esp14/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/hardware/stm8sdiscovery/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -148,44 +148,50 @@
     
         
     <url>
+     <loc>None/developer/ide-integration/</loc>
+     <lastmod>2017-11-14</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
      <loc>None/developer/macro/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/developer/pin_mapping/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/developer/sdcc/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/developer/spl/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/developer/bare-metal-programming/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/developer/performance/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/developer/links/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -194,7 +200,7 @@
     
     <url>
      <loc>None/contact/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -202,7 +208,7 @@
     
     <url>
      <loc>None/about/</loc>
-     <lastmod>2017-11-08</lastmod>
+     <lastmod>2017-11-14</lastmod>
      <changefreq>daily</changefreq>
     </url>
     

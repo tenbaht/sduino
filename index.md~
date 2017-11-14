@@ -34,7 +34,11 @@ Wait for the download to finsh and you are ready to blink:
 - Open the standard Blink example from File->Examples->01. Basics->Blink
 - Compile it by hitting 'Verify'
 
-Wasn't too hard, was it?
+Easy, isn't it?
+
+In order to upload the compiled sketch to a connected board you need to
+[install your flash tool](../hardware/flashtool.md).
+
 
 
 
@@ -42,7 +46,8 @@ Wasn't too hard, was it?
 
 Some Arduino libraries are already ported to C-syntax. The resulting API is
 still very close to the C++ version and porting an existing application is
-not hard. Check out the [API migration guidelines](api.md) for details.
+not hard. Check out the [API migration guidelines](api/migration.md) for
+details.
 
 #### Communication
 
