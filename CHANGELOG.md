@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+
+## [0.3.3 - 2017-11-14]
 ### Added
 - IDE installation for OSX works now (#29, manual installation still
   problematic)
