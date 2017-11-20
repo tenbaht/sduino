@@ -13,6 +13,11 @@ version=1.6.15
 # ----------------------------------
 # For Board Manager installs these variables are already predefined and will
 # not be overwritten. This assignment is done only for manual installs.
+#
+# Apparently, this trick only works for compiler settings, not for the
+# upload process. The upload process is not handled by arduino-build, but
+# the IDE itself and behaves slightly differently.
+# FIXME: find a solution to allow for uploads with manual installations.
 runtime.tools.sdcc.path={runtime.hardware.path}/tools/sdcc
 runtime.tools.STM8Tools.path={runtime.hardware.path}/tools
 
@@ -134,3 +139,24 @@ tools.stm8flash.path.macosx={runtime.tools.STM8Tools.path}/macosx
 tools.stm8flash.upload.params.verbose=
 tools.stm8flash.upload.params.quiet=
 tools.stm8flash.upload.pattern="{path}/{cmd}" -c{upload.protocol} -p{upload.mcu} -s flash -w "{build.path}/{build.project_name}.hex"
+
+
+# Serial upload using the builtin bootloader
+# ------------------------------------------
+
+tools.stm8gal.cmd=stm8gal
+tools.stm8gal.path={runtime.tools.STM8Tools.path}/linux
+#tools.stm8gal.path={runtime.hardware.path}/tools/linux
+tools.stm8gal.path.windows={runtime.tools.STM8Tools.path}/win
+tools.stm8gal.path.macosx={runtime.tools.STM8Tools.path}/macosx
+#tools.stm8gal.path.linux64={runtime.hardware.path}/tools/linux64
+
+#tools.stm8gal.upload.params.verify=
+tools.stm8gal.upload.params.noverify=-v
+tools.stm8gal.upload.params.verbose=-V
+tools.stm8gal.upload.params.quiet=
+tools.stm8gal.upload.pattern="{path}/{cmd}" -p "{serial.port}" {upload.verbose} {upload.verify} -R 1 -u 2 -Q -w "{build.path}/{build.project_name}.hex"
+
+#tools.stm8gal.erase.params.verbose=-V
+#tools.stm8gal.erase.params.quiet=
+#tools.stm8gal.erase.pattern="{path}/{cmd}" "-p{serial.port}" {erase.verbose} -R1 -u2 -Q -e

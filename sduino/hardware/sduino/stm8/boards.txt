@@ -43,19 +43,18 @@ stm8sdisco.upload.speed=1
 
 
 ##############################################################
+s8uno.name=sduino_UNO Board with STM8S105K6
 
-s8uno.name=sduino_UNO Board with STM8S105K6 using stlink
-
-s8uno.upload.using=stm8flash
-s8uno.upload.protocol=stlink
-s8uno.upload.mcu=stm8s105?6
+# we need to specify a protocol in order to use the bootloader
+s8uno.upload.tool=stm8gal
+s8uno.upload.protocol=serial
+s8uno.upload.speed=230400
 s8uno.upload.maximum_size=32768
+s8uno.upload.maximum_data_size=2048
 
 s8uno.build.mcu=STM8S105
 s8uno.build.f_cpu=16000000L
+s8uno.build.board=STM8S_UNO
 s8uno.build.core=sduino
 s8uno.build.variant=s8uno
 
-# meaningless variables just to keep the makefile happy
-
-s8uno.upload.speed=115200
