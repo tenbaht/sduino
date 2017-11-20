@@ -1056,36 +1056,21 @@ ifneq ($(CATERINA),)
     CPPFLAGS += -DUSB_VID=$(USB_VID) -DUSB_PID=$(USB_PID)
 endif
 
-# avr-gcc version that we can do maths on
-#CC_VERNUM = $(shell $(CC) -dumpversion | sed 's/\.//g')
-CC_VERNUM = $(shell $(CC) -v | sed 's/\.//g')
-
-# moved from above so we can find version-dependant ar
+# Sduino: removed all the CC_VERNUM dependent defines, as these
+# differences are only important for gcc, not for sdcc.
 ifndef AR_NAME
-    ifeq ($(shell expr $(CC_VERNUM) '>' 490), 1)
-        AR_NAME      = avr-gcc-ar
-    else
-        AR_NAME      = avr-ar
-    endif
+        AR_NAME      = sdar
 endif
 
 ifndef CFLAGS_STD
-    ifeq ($(shell expr $(CC_VERNUM) '>' 490), 1)
-        CFLAGS_STD      = -std=gnu11 -flto -fno-fat-lto-objects
-    else
         CFLAGS_STD        =
-    endif
     $(call show_config_variable,CFLAGS_STD,[DEFAULT])
 else
     $(call show_config_variable,CFLAGS_STD,[USER])
 endif
 
 ifndef CXXFLAGS_STD
-    ifeq ($(shell expr $(CC_VERNUM) '>' 490), 1)
-        CXXFLAGS_STD      = -std=gnu++11 -fno-threadsafe-statics -flto
-    else
         CXXFLAGS_STD      =
-    endif
     $(call show_config_variable,CXXFLAGS_STD,[DEFAULT])
 else
     $(call show_config_variable,CXXFLAGS_STD,[USER])
@@ -1094,14 +1079,7 @@ endif
 CFLAGS        += $(CFLAGS_STD)
 CXXFLAGS      += -fpermissive -fno-exceptions $(CXXFLAGS_STD)
 ASFLAGS       += -x assembler-with-cpp
-ifeq ($(shell expr $(CC_VERNUM) '>' 490), 1)
-    ASFLAGS += -flto
-endif
-#LDFLAGS       += -$(MCU_FLAG_NAME)=$(MCU) -Wl,--gc-sections -O$(OPTIMIZATION_LEVEL)
 LDFLAGS       += -$(MCU_FLAG_NAME)$(MCU)
-ifeq ($(shell expr $(CC_VERNUM) '>' 490), 1)
-    LDFLAGS += -flto -fuse-linker-plugin
-endif
 SIZEFLAGS     ?= --mcu=$(MCU) -C
 
 # for backwards compatibility, grab ARDUINO_PORT if the user has it set
@@ -1284,12 +1262,16 @@ $(OBJDIR)/%.s.$(OBJSUFFIX): %.s $(COMMON_DEPS) | $(OBJDIR)
 # the pde -> o file
 $(OBJDIR)/%.pde.$(OBJSUFFIX): %.pde $(COMMON_DEPS) | $(OBJDIR)
 	@$(MKDIR) $(dir $@)
-	$(CXX) -x c++ -include $(ARDUINO_HEADER) -MMD -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
+	(echo '#include <Arduino.h>\n#line 1 "$<"'; cat $<) > "$(patsubst %.$(OBJSUFFIX),%.c,$@)"
+	$(CC) "-Wp-MMD $(patsubst %.$(OBJSUFFIX),%.d,$@)" -c $(CPPFLAGS) $(CFLAGS) "$(patsubst %.$(OBJSUFFIX),%.c,$@)" -o $@
+#	$(CXX) -x c++ -include $(ARDUINO_HEADER) -MMD -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
 
 # the ino -> o file
 $(OBJDIR)/%.ino.$(OBJSUFFIX): %.ino $(COMMON_DEPS) | $(OBJDIR)
 	@$(MKDIR) $(dir $@)
-	$(CXX) -x c++ -include $(ARDUINO_HEADER) -MMD -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
+	(echo '#include <Arduino.h>\n#line 1 "$<"'; cat $<) > "$(patsubst %.$(OBJSUFFIX),%.c,$@)"
+	$(CC) "-Wp-MMD $(patsubst %.$(OBJSUFFIX),%.d,$@)" -c $(CPPFLAGS) $(CFLAGS) "$(patsubst %.$(OBJSUFFIX),%.c,$@)" -o $@
+#	$(CXX) -x c++ -include $(ARDUINO_HEADER) -MMD -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
 
 # generated assembly
 $(OBJDIR)/%.s: %.pde $(COMMON_DEPS) | $(OBJDIR)

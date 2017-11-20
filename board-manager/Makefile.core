@@ -1,26 +1,24 @@
 NAME=sduino
-VERSION?=0.3.0-pre1
+COREVERSION?=0.3.2
 SDCCVERSION?=10088
-TOOLSVERSION?=2017.10.21
+TOOLSVERSION?=2017.11.06
 
 # where to put the generated files
-COREDIR?=release
+COREDIR?=release/v$(COREVERSION)
 PARTSDIR?=parts
 
-# Ignore all files matching one of these shell patterns when building the
-# core archive.
-IGNORE=*~ *bak x build-* *.orig *.rej
-
+# subtree of the repository to be included in the archive
+SUBTREE=sduino/hardware/sduino/stm8
 
 #
 ### No user serviceable part below here. ################################
 #
 
 # filename for the generated core file
-COREFILE=$(COREDIR)/$(NAME)-core-$(VERSION).tar.bz2
+COREFILE=$(COREDIR)/$(NAME)-core-$(COREVERSION).tar.bz2
 
 # filename for the new platform entry
-PLATFORM_ENTRY=$(PARTSDIR)/platform-entry-$(NAME)-$(VERSION).txt
+PLATFORM_ENTRY=$(PARTSDIR)/platform-entry-$(NAME)-$(COREVERSION).txt
 
 EXCLUDES=$(addprefix --exclude=, $(IGNORE))
 
@@ -30,8 +28,18 @@ EXCLUDES=$(addprefix --exclude=, $(IGNORE))
 
 # generate one platform entry for the new core file
 $(PLATFORM_ENTRY): $(COREFILE)
-	./gen_platform_entry.sh $^ "$(VERSION)" "$(SDCCVERSION)" "$(TOOLSVERSION)" > $@
+	./gen_platform_entry.sh $^ "$(COREVERSION)" "$(SDCCVERSION)" "$(TOOLSVERSION)" |\
+	sed "s/^/                /" > $@
 
-$(COREFILE):
+$(COREFILE): | $(COREDIR)
 	echo "Generating the core archive file."
-	tar cjf $@ $(EXCLUDES) -C ../sduino/hardware/sduino/stm8 .
+	(cd ..;	git archive -v --prefix=./ --format=tar HEAD:$(SUBTREE))|\
+	bzip2 > $(COREFILE)
+
+# make a new release directory if not present
+#
+# make sure to define an order-only dependency on this rule by placing it on
+# the right side of a pipe symbol. This prevents rebuilding the archives
+# every time.
+$(COREDIR):
+	mkdir -p $@

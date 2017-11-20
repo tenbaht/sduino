@@ -23,8 +23,8 @@ runtime.tools.STM8Tools.path={runtime.hardware.path}/tools
 compiler.warning_flags=
 compiler.warning_flags.none=--less-pedantic
 compiler.warning_flags.default=
-compiler.warning_flags.more=-Wall
-compiler.warning_flags.all=-Wall -Wextra
+compiler.warning_flags.more=-Wp-Wall
+compiler.warning_flags.all=-Wp-Wall -V
 
 # Default "compiler.path" is correct, change only if you want to override the initial value
 compiler.path={runtime.tools.sdcc.path}/bin
@@ -127,7 +127,7 @@ recipe.preproc.macros="{compiler.wrapper.path}/{compiler.cpp.cmd}.sh" "{compiler
 tools.stm8flash.cmd=stm8flash
 tools.stm8flash.path={runtime.tools.STM8Tools.path}/linux
 tools.stm8flash.path.windows={runtime.tools.STM8Tools.path}/win
-tools.stm8flash.path.macos={runtime.tools.STM8Tools.path}/macosx
+tools.stm8flash.path.macosx={runtime.tools.STM8Tools.path}/macosx
 #tools.stm8flash.path.linux64={runtime.hardware.path}/tools/linux64
 
 #tools.stm8flash.upload.params.verify=

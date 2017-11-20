@@ -63,11 +63,11 @@ endif
 ifeq ($(OS),Windows_NT)
     ifndef SDCC_PATH
         # for Windows always assume the tools to be in this dir tree
-        SDCC_PATH := $(ARDUINO_DIR)/hardware/tools/stm8/bin
+        SDCC_PATH := $(ARDUINO_DIR)/hardware/sduino/tools/sdcc/bin
     endif
-#    SHELL := $(ARDUINO_DIR)/hardware/tools/stm8/bin/dash
+#    SHELL := $(ARDUINO_DIR)/hardware/sduino/tools/win/dash
     SHELL := dash
-#    PATH  := $(realpath $(ARDUINO_DIR)/hardware/tools/stm8/bin):$(PATH)
+#    PATH  := $(realpath $(ARDUINO_DIR)/hardware/sduino/tools/win):$(PATH)
 else
     # Linux (and Mac): expect SDCC to be in /opt/sdcc
     ifndef SDCC_PATH

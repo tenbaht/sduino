@@ -154,6 +154,7 @@ void Mini_SSD1306_drawPixel(int16_t x, int16_t y, uint8_t color) {
 //  if ((x < 0) || (x >= width()) || (y < 0) || (y >= height()))
 //    return;
 
+/* since getRotation is always 0 this would throw compiler warnings
   // check rotation, move pixel around if necessary
   switch (getRotation()) {
   case 1:
@@ -169,6 +170,7 @@ void Mini_SSD1306_drawPixel(int16_t x, int16_t y, uint8_t color) {
     y = HEIGHT - y - 1;
     break;
   }
+*/
 
   // x is which column
     switch (color)

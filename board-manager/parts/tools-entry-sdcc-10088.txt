@@ -4,22 +4,28 @@
                     "systems": [
                         {
                             "host": "x86_64-pc-linux-gnu",
-                            "url": "file:///home/mmayer/rsync/stm8/board-manager/release/sdcc-stm8-amd64-unknown-linux2.5-20171020-10088.tar.bz2",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.3.0/sdcc-stm8-amd64-unknown-linux2.5-20171020-10088.tar.bz2",
                             "archiveFileName": "sdcc-stm8-amd64-unknown-linux2.5-20171020-10088.tar.bz2",
                             "checksum": "SHA-256:dce37df6f57f6264e6b705cf7ce394d9b4407dba53c4071e77bfa34f746599a6",
                             "size": "2486676"
                         },{
                             "host": "i686-pc-linux-gnu",
-                            "url": "file:///home/mmayer/rsync/stm8/board-manager/release/sdcc-stm8-i386-unknown-linux2.5-20171020-10088.tar.bz2",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.3.0/sdcc-stm8-i386-unknown-linux2.5-20171020-10088.tar.bz2",
                             "archiveFileName": "sdcc-stm8-i386-unknown-linux2.5-20171020-10088.tar.bz2",
                             "checksum": "SHA-256:5237465f22f62beb69c62a14adf1e1140fe12fc29060329c61516c11fe4bacf2",
                             "size": "2606938"
                         },{
                             "host": "i686-mingw32",
-                            "url": "file:///home/mmayer/rsync/stm8/board-manager/release/sdcc-stm8-i586-mingw32msvc-20171020-10088.tar.bz2",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.3.0/sdcc-stm8-i586-mingw32msvc-20171020-10088.tar.bz2",
                             "archiveFileName": "sdcc-stm8-i586-mingw32msvc-20171020-10088.tar.bz2",
                             "checksum": "SHA-256:2c9db6ff4d2f7b7b608f956adbc06e24ac8ec4dd4f41f26c79c48f9ddecb22a5",
                             "size": "2973875"
+                        },{
+                            "host": "x86_64-apple-darwin",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.3.3/sdcc-stm8-universal-apple-macosx-20170720-9960.tar.bz2",
+                            "archiveFileName": "sdcc-stm8-universal-apple-macosx-20170720-9960.tar.bz2",
+                            "checksum": "SHA-256:135539c7685ed22f433a6085e4f4db5777655865fd05885a2bf773fec4eea405",
+                            "size": "4812042"
                         }
                     ]
                 },

@@ -1,26 +1,26 @@
-{
-	"name": "Sduino STM8 plain C core (non-C++)",
-	"architecture": "stm8",
-	"version": "0.3.0",
-	"category": "Contributed",
-	"boards": [
-		{"name": "STM8S103F3 Breakout Board"},
-		{"name": "STM8S105C6 Discovery Board"}
-	],
-	"toolsDependencies": [
-		{
-			"name": "STM8Tools",
-			"version": "2017.10.21",
-			"packager": "sduino"
-		},
-		{
-			"name": "sdcc",
-			"version": "build.10088",
-			"packager": "sduino"
-		}
-	],
-	"url": "file:///home/mmayer/rsync/stm8/board-manager/release/sduino-core-0.3.0.tar.bz2",
-	"archiveFileName": "sduino-core-0.3.0.tar.bz2",
-	"checksum": "SHA-256:5e3b2b950954e1004ef78084063374c59b37f682ba43f1789bc40d66d88e9994",
-	"size": "4261038"
-},
+                {
+                    "name": "Sduino STM8 plain C core (non-C++)",
+                    "architecture": "stm8",
+                    "version": "0.3.0",
+                    "category": "Contributed",
+                    "boards": [
+                        {"name": "STM8S103F3 Breakout Board"},
+                        {"name": "STM8S105C6 Discovery Board"}
+                    ],
+                    "toolsDependencies": [
+                        {
+                            "name": "STM8Tools",
+                            "version": "2017.10.21",
+                            "packager": "sduino"
+                        },
+                        {
+                            "name": "sdcc",
+                            "version": "build.10088",
+                            "packager": "sduino"
+                        }
+                    ],
+                    "url": "https://github.com/tenbaht/sduino/releases/download/v0.3.0/sduino-core-0.3.0.tar.bz2",
+                    "archiveFileName": "sduino-core-0.3.0.tar.bz2",
+                    "checksum": "SHA-256:5e3b2b950954e1004ef78084063374c59b37f682ba43f1789bc40d66d88e9994",
+                    "size": "4261038"
+                },

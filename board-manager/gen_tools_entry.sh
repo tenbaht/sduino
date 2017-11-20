@@ -6,7 +6,7 @@
 # package_*.json file.
 
 
-if [ $# -ne 2 ]; then
+if [ $# -ne 3 ]; then
 	echo "
 helper script for automatic releases.
 
@@ -14,20 +14,26 @@ Prints a full tool entry for the given filename stem to be added to the
 package_*_index.json file. It will include all OS variants found with the
 same filename stem and the same version specifier.
 
-usage: $0 toolfile-stem version
+usage: $0 toolfile-stem toolversion coreversion
 
 Lists info for all files matching the filename pattern
 [toolsfile-stem]*[version]*
 
-Example: $0 release/sduino-tools 2017-10-21 prints information for all files
-matching the filename pattern release/sduino-tools*2017-10-21*.
+The coreversion is only needed to build the download link.
+
+Example: $0 release/sduino-tools 2017-10-21 0.3.1
+	prints information for all files matching the filename pattern
+	release/sduino-tools*2017-10-21* and generates download links
+	for a github release directory download/v0.3.1.
 "
 	exit 1
 fi
 
 TRUNK=$1
 VERSION=$2
+COREVERSION=$3
 
+BASEURL=https://github.com/tenbaht/sduino/releases/download/v${COREVERSION}
 
 ### helper functions #####################################################
 
@@ -37,8 +43,8 @@ VERSION=$2
 #
 print_filedata()
 {
-	URL=file://$(realpath $1)
 	FILENAME=$(basename "$1")
+	URL=${BASEURL}/${FILENAME}
 	SIZE=$(stat --printf="%s" $1)
 	CHKSUM=$(shasum -a 256 $1|cut "-d " -f1)
 	cat << EOF

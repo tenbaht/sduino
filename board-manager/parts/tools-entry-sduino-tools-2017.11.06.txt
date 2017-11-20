@@ -1,0 +1,25 @@
+                {
+                    "name": "STM8Tools",
+                    "version": "2017.11.06",
+                    "systems": [
+                        {
+                            "host": "i686-pc-linux-gnu",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.3.1/sduino-tools_linux32-2017.11.06.tar.bz2",
+                            "archiveFileName": "sduino-tools_linux32-2017.11.06.tar.bz2",
+                            "checksum": "SHA-256:c0af0be23db870d66f5342e29deb803df006d361345526095cc03ec9998f5c88",
+                            "size": "45294"
+                        },{
+                            "host": "x86_64-pc-linux-gnu",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.3.1/sduino-tools_linux64-2017.11.06.tar.bz2",
+                            "archiveFileName": "sduino-tools_linux64-2017.11.06.tar.bz2",
+                            "checksum": "SHA-256:c5235baa3f9cc37029fbd81858a9af08e37f76550d5c82e3faf920a4f094c561",
+                            "size": "49872"
+                        },{
+                            "host": "i686-mingw32",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.3.1/sduino-tools_mingw32-2017.11.06.tar.bz2",
+                            "archiveFileName": "sduino-tools_mingw32-2017.11.06.tar.bz2",
+                            "checksum": "SHA-256:2209dcc01827e9e0de2c6ece40de1fc40d0d86d4537413fdd30329fb8decbd25",
+                            "size": "5541339"
+                        }
+                    ]
+                },

@@ -1,5 +1,7 @@
 NAME=sduino-tools
-VERSION?=2017.10.21
+COREVERSION?=0.3.2
+# default the tool version to be the current date as YYYY.MM.DD
+TOOLSVERSION?=$(shell date '+%Y.%m.%d')
 
 # Where to find the tools directory
 BASEDIR=../sduino/hardware/sduino
@@ -8,7 +10,7 @@ BASEDIR=../sduino/hardware/sduino
 IGNORE=*~ *bak x build-* *.orig *.rej
 
 # where to put the generated files
-ARCHIVEDIR=release
+ARCHIVEDIR=release/v$(COREVERSION)
 PARTSDIR=parts
 
 
@@ -21,16 +23,17 @@ PARTSDIR=parts
 TOOLS_STEM=$(ARCHIVEDIR)/$(NAME)
 
 # filename for the new tools entries
-TOOLS_ENTRY=$(PARTSDIR)/tools-entry-$(NAME)-$(VERSION).txt
+TOOLS_ENTRY=$(PARTSDIR)/tools-entry-$(NAME)-$(TOOLSVERSION).txt
 
 # The individual filenames for the different tools archives
-TOOLS_LINUX32=release/$(NAME)_linux32-$(VERSION).tar.bz2
-TOOLS_LINUX64=release/$(NAME)_linux64-$(VERSION).tar.bz2
-TOOLS_WINDOWS=release/$(NAME)_mingw32-$(VERSION).tar.bz2
+TOOLS_LINUX32=$(ARCHIVEDIR)/$(NAME)_linux32-$(TOOLSVERSION).tar.bz2
+TOOLS_LINUX64=$(ARCHIVEDIR)/$(NAME)_linux64-$(TOOLSVERSION).tar.bz2
+TOOLS_MACOSX=$(ARCHIVEDIR)/$(NAME)_macosx-$(TOOLSVERSION).tar.bz2
+TOOLS_WINDOWS=$(ARCHIVEDIR)/$(NAME)_mingw32-$(TOOLSVERSION).tar.bz2
 
-TOOLS_TARS=$(TOOLS_LINUX32) $(TOOLS_LINUX64) $(TOOLS_WINDOWS)
+TOOLS_TARS=$(TOOLS_LINUX32) $(TOOLS_LINUX64) $(TOOLS_MACOSX) $(TOOLS_WINDOWS)
 EXCLUDES=$(addprefix --exclude=, $(IGNORE))
-TARFLAGS=$(EXCLUDES) --show-transformed-names --transform
+
 
 #
 # The actual rules
@@ -38,18 +41,31 @@ TARFLAGS=$(EXCLUDES) --show-transformed-names --transform
 
 # generate one tools entry for all matching tools files
 $(TOOLS_ENTRY) : $(TOOLS_TARS)
-	./gen_tools_entry.sh "$(TOOLS_STEM)" "$(VERSION)" > $@
+	./gen_tools_entry.sh "$(TOOLS_STEM)" "$(TOOLSVERSION)" "$(COREVERSION)" > $@
 
-$(TOOLS_LINUX32):
+$(TOOLS_LINUX32): | $(ARCHIVEDIR)
 	@echo "Generating the tools archive file for Linux 32 bit."
 	tar cjf $@ $(EXCLUDES) -C $(BASEDIR) --transform s/linux32/linux/ \
 		tools/wrapper tools/linux32
 
-$(TOOLS_LINUX64):
+$(TOOLS_LINUX64): | $(ARCHIVEDIR)
 	@echo "Generating the tools archive file for Linux 64 bit."
 	tar cjf $@ $(EXCLUDES) -C $(BASEDIR) --transform s/linux64/linux/ \
 		tools/wrapper tools/linux64
 
-$(TOOLS_WINDOWS):
+$(TOOLS_MACOSX): | $(ARCHIVEDIR)
+	@echo "Generating the tools archive file for Mac OSX"
+	tar cjf $@ $(EXCLUDES) -C $(BASEDIR) tools/wrapper tools/macosx
+
+$(TOOLS_WINDOWS): | $(ARCHIVEDIR)
 	@echo "Generating the tools archive file for Windows."
 	tar cjf $@ $(EXCLUDES) -C $(BASEDIR) tools/wrapper tools/win
+
+
+# make a new release directory if not present
+#
+# make sure to define an order-only dependency on this rule by placing it on
+# the right side of a pipe symbol. This prevents rebuilding the archives
+# every time.
+$(ARCHIVEDIR):
+	mkdir -p $@
