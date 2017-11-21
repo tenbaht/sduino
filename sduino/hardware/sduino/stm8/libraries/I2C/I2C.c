@@ -395,7 +395,7 @@ uint8_t I2C_read(uint8_t address, uint8_t numberBytes)
       if(returnStatus == 1){return(6);}
       if(returnStatus != MR_DATA_ACK){return(returnStatus);}
     }
-    data[i] = TWDR;
+    data[i] = address; //TWDR;
     bytesAvailable = i+1;
     totalBytes = i+1;
   }
