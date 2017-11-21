@@ -22,6 +22,7 @@
  * code only supports pixel based operations using drawPixel().
  *
  * 2017 modified for the STM8S by Michael Mayer
+ * 2017 modified by Paul Smith to add ascii support
  */
 
 
