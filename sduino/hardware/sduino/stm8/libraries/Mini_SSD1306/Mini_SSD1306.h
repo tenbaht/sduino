@@ -77,10 +77,11 @@ All text above, and the splash screen below must be included in any redistributi
 
 //#include <SPI.h>
 //#include <Adafruit_GFX.h>
-
+#ifndef NO_MINI_SSD1306_BUFFER
 #define BLACK 0
 #define WHITE 1
 #define INVERSE 2
+#endif 
 
 #define SSD1306_I2C_ADDRESS   0x3C  // 011110+SA0+RW - 0x3C or 0x3D
 // Address for 128x32 is 0x3C
@@ -126,7 +127,7 @@ All text above, and the splash screen below must be included in any redistributi
 #endif
 
 #define WIDTH	SSD1306_LCDWIDTH
-#define HEIGHT	SSD1306_LCDHEIGHT
+#define HEIGHT SSD1306_LCDHEIGHT
 
 #define SSD1306_SETCONTRAST 0x81
 #define SSD1306_DISPLAYALLON_RESUME 0xA4
@@ -187,9 +188,7 @@ All text above, and the splash screen below must be included in any redistributi
 
   void Mini_SSD1306_begin(uint8_t switchvcc, uint8_t i2caddr, bool reset);
 
-  void Mini_SSD1306_clearDisplay(void);
   void Mini_SSD1306_invertDisplay(uint8_t i);
-  void Mini_SSD1306_display();
 
   void Mini_SSD1306_startscrollright(uint8_t start, uint8_t stop);
   void Mini_SSD1306_startscrollleft(uint8_t start, uint8_t stop);
@@ -200,8 +199,19 @@ All text above, and the splash screen below must be included in any redistributi
 
   void Mini_SSD1306_dim(boolean dim);
 
+  #ifndef NO_MINI_SSD1306_BUFFER
+  void Mini_SSD1306_clearDisplay(void);
+  void Mini_SSD1306_display();
   void Mini_SSD1306_drawPixel(int16_t x, int16_t y, uint8_t color);
+  #endif
 
+  #ifndef NO_MINI_SSD1306_ASCII
+  void Mini_SSD1306_initPages(void);
+  void Mini_SSD1306_clearPages(void);
+  void Mini_SSD1306_setCursor(uint8_t column, uint8_t page);
+  void Mini_SSD1306_printChar(char c);
+  void Mini_SSD1306_printString(char *s);
+  #endif
 //  void Mini_SSD1306_drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color);
 //  void Mini_SSD1306_drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
 
@@ -216,7 +226,7 @@ All text above, and the splash screen below must be included in any redistributi
 // header file as well before we start calling any macros.
 
 #include <xmacro.h>
-#include <Print.h>
+// #include <Print.h>
 
 
 /* usage:
@@ -261,19 +271,38 @@ All text above, and the splash screen below must be included in any redistributi
 		Mini_SSD1306_begin(vccstate,i2caddr,reset);\
 	}
 
+#ifndef NO_MINI_SSD1306_BUFFER
+# define BUFFER(instance) \
+  X2Method0	(Mini_SSD1306,instance,display) \
+  X2Method0	(Mini_SSD1306,instance,clearDisplay) \
+  X2Method3	(Mini_SSD1306,instance,drawPixel,int16_t,int16_t,uint8_t) 
+#else
+# define BUFFER(instance)
+#endif
+
+#ifndef NO_MINI_SSD1306_ASCII
+# define ASCII(instance) \
+  X2Method0 (Mini_SSD1306,instacne,initPages) \
+  X2Method2 (Mini_SSD1306,instance,setCursor,uint8_t, uint8_t) \
+  X2Method0 (Mini_SSD1306,instance,clearPages) \
+  X2Method1 (Mini_SSD1306,instance,printChar,char) \
+  X2Method1 (Mini_SSD1306,instance,printString,char*)
+#else
+# define ASCII(instance)
+#endif
+
+#define COMMON(instance) \
+  X2Method1	(Mini_SSD1306,instance,invertDisplay,uint8_t) \
+  X2Method2	(Mini_SSD1306,instance,startscrollright,uint8_t,uint8_t) \
+  X2Method2	(Mini_SSD1306,instance,startscrollleft,uint8_t,uint8_t) \
+  X2Method2	(Mini_SSD1306,instance,startscrolldiagright,uint8_t,uint8_t) \
+  X2Method2	(Mini_SSD1306,instance,startscrolldiagleft,uint8_t,uint8_t) \
+  X2Method0	(Mini_SSD1306,instance,stopscroll) \
+  X2Method1	(Mini_SSD1306,instance,dim,boolean)
+
 #define XMini_SSD1306Methods(instance) \
-	XMini_SSD1306Begin	(instance)\
-	\
-	X2Method0	(Mini_SSD1306,instance,clearDisplay) \
-	X2Method1	(Mini_SSD1306,instance,invertDisplay,uint8_t) \
-	X2Method0	(Mini_SSD1306,instance,display) \
-	X2Method2	(Mini_SSD1306,instance,startscrollright,uint8_t,uint8_t) \
-	X2Method2	(Mini_SSD1306,instance,startscrollleft,uint8_t,uint8_t) \
-	X2Method2	(Mini_SSD1306,instance,startscrolldiagright,uint8_t,uint8_t) \
-	X2Method2	(Mini_SSD1306,instance,startscrolldiagleft,uint8_t,uint8_t) \
-	X2Method0	(Mini_SSD1306,instance,stopscroll) \
-	X2Method1	(Mini_SSD1306,instance,dim,boolean) \
-	X2Method3	(Mini_SSD1306,instance,drawPixel,int16_t,int16_t,uint8_t)
+	XMini_SSD1306Begin(instance)\
+	COMMON(instance) BUFFER(instance) ASCII(instance)
 
 
 // There is an unneeded external declaration at the beginning and the end of
@@ -287,11 +316,10 @@ All text above, and the splash screen below must be included in any redistributi
 // the pseudo-inheritence of all output functions from Print "class".
 
 #define Mini_SSD1306(instance,RST) \
-	extern int 		Mini_SSD1306; \
-	XMini_SSD1306Inst	(instance,RST) \
-	XMini_SSD1306Methods	(instance)\
-	extern int 		Mini_SSD1306
-
+	extern int Mini_SSD1306; \
+	XMini_SSD1306Inst (instance,RST) \
+	XMini_SSD1306Methods (instance) \
+	extern int Mini_SSD1306
 // not used (yet):
 //	XPrintMethods		(Mini_SSD1306,instance)
 

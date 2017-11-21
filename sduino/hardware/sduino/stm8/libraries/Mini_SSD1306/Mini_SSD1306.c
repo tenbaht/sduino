@@ -59,6 +59,10 @@ All text above, and the splash screen below must be included in any redistributi
 #endif
 #include "Mini_SSD1306.h"
 
+#ifndef NO_MINI_SSD1306_ASCII 
+# include "FONT_5x7.h"
+#endif
+
 // private:
   static int8_t _i2caddr, _vccstate, sid, sclk, dc, rst, cs;
 //  static void fastSPIwrite(uint8_t c);
@@ -70,7 +74,7 @@ All text above, and the splash screen below must be included in any redistributi
 #endif
 
 // the memory buffer for the LCD
-
+#ifndef NO_MINI_SSD1306_BUFFER
 static uint8_t buffer[SSD1306_LCDHEIGHT * SSD1306_LCDWIDTH / 8] = {
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -142,44 +146,39 @@ static uint8_t buffer[SSD1306_LCDHEIGHT * SSD1306_LCDWIDTH / 8] = {
 #endif
 };
 
-#define ssd1306_swap(a, b) { int16_t t = a; a = b; b = t; }
-#define rotation	(0)
-#define getRotation()	(0)
+#endif
+
+// #define ssd1306_swap(a, b) { int16_t t = a; a = b; b = t; }
+// #define rotation	(0)
+// #define getRotation()	(0)
 
 static void ssd1306_command(uint8_t c);
+static void ssd1306_data(uint8_t c);
 
+static void ssd1306_command(uint8_t c) {
+  // I2C
+#if USE_WIRE
+  uint8_t control = 0x00;   // Co = 0, D/C = 0
+  Wire.beginTransmission(_i2caddr);
+  Wire.write(control);
+  Wire.write(c);
+  Wire.endTransmission();
+#else
+	i2c_write(_i2caddr, 0x00, c);
+#endif
+}
 
-// the most basic function, set a single pixel
-void Mini_SSD1306_drawPixel(int16_t x, int16_t y, uint8_t color) {
-//  if ((x < 0) || (x >= width()) || (y < 0) || (y >= height()))
-//    return;
-
-/* since getRotation is always 0 this would throw compiler warnings
-  // check rotation, move pixel around if necessary
-  switch (getRotation()) {
-  case 1:
-    ssd1306_swap(x, y);
-    x = WIDTH - x - 1;
-    break;
-  case 2:
-    x = WIDTH - x - 1;
-    y = HEIGHT - y - 1;
-    break;
-  case 3:
-    ssd1306_swap(x, y);
-    y = HEIGHT - y - 1;
-    break;
-  }
-*/
-
-  // x is which column
-    switch (color)
-    {
-      case WHITE:   buffer[x+ (y/8)*SSD1306_LCDWIDTH] |=  (1 << (y&7)); break;
-      case BLACK:   buffer[x+ (y/8)*SSD1306_LCDWIDTH] &= ~(1 << (y&7)); break;
-      case INVERSE: buffer[x+ (y/8)*SSD1306_LCDWIDTH] ^=  (1 << (y&7)); break;
-    }
-
+static void ssd1306_data(uint8_t c) {
+   // I2C
+#if USE_WIRE
+  uint8_t control = 0x40;   // Co = 0, D/C = 0
+  Wire.beginTransmission(_i2caddr);
+  Wire.write(control);
+  Wire.write(c);
+  Wire.endTransmission();
+#else
+	i2c_write(_i2caddr, 0x40, c);
+#endif
 }
 
 // initializer for I2C - we only indicate the reset pin!
@@ -284,23 +283,6 @@ void Mini_SSD1306_invertDisplay(uint8_t i) {
   }
 }
 
-static void ssd1306_command(uint8_t c) {
-  {
-    // I2C
-#if USE_WIRE
-    uint8_t control = 0x00;   // Co = 0, D/C = 0
-    Wire.beginTransmission(_i2caddr);
-    Wire.write(control);
-    Wire.write(c);
-    Wire.endTransmission();
-#else
-	i2c_write(_i2caddr, 0x00, c);
-#endif
-  }
-}
-
-
-
 // startscrollright
 // Activate a right handed scroll for rows start through stop
 // Hint, the display is 16 rows tall. To scroll the whole display, run:
@@ -390,7 +372,7 @@ void Mini_SSD1306_dim(boolean dim) {
   ssd1306_command(contrast);
 }
 
-
+#ifndef NO_MINI_SSD1306_BUFFER
 void Mini_SSD1306_display(void) {
   ssd1306_command(SSD1306_COLUMNADDR);
   ssd1306_command(0);   // Column start address (0 = reset)
@@ -433,3 +415,88 @@ void Mini_SSD1306_display(void) {
 void Mini_SSD1306_clearDisplay(void) {
   memset(buffer, 0, (SSD1306_LCDWIDTH*SSD1306_LCDHEIGHT/8));
 }
+
+
+// the most basic function, set a single pixel
+void Mini_SSD1306_drawPixel(int16_t x, int16_t y, uint8_t color) {
+//  if ((x < 0) || (x >= width()) || (y < 0) || (y >= height()))
+//    return;
+
+/* since getRotation is always 0 this would throw compiler warnings
+  // check rotation, move pixel around if necessary
+  switch (getRotation()) {
+  case 1:
+    ssd1306_swap(x, y);
+    x = WIDTH - x - 1;
+    break;
+  case 2:
+    x = WIDTH - x - 1;
+    y = HEIGHT - y - 1;
+    break;
+  case 3:
+    ssd1306_swap(x, y);
+    y = HEIGHT - y - 1;
+    break;
+  }
+*/
+
+  // x is which column
+    switch (color)
+    {
+      case WHITE:   buffer[x+ (y/8)*SSD1306_LCDWIDTH] |=  (1 << (y&7)); break;
+      case BLACK:   buffer[x+ (y/8)*SSD1306_LCDWIDTH] &= ~(1 << (y&7)); break;
+      case INVERSE: buffer[x+ (y/8)*SSD1306_LCDWIDTH] ^=  (1 << (y&7)); break;
+    }
+
+}
+#endif
+
+#ifndef NO_MINI_SSD1306_ASCII
+void Mini_SSD1306_initPages(void) {
+  // set address mode
+  ssd1306_command(SSD1306_MEMORYMODE);
+  ssd1306_command(0x00);
+}
+
+void setPage(uint8_t page) {
+  ssd1306_command(0xB0 | page);
+}
+
+void setColumn(uint8_t column) {
+  ssd1306_command(SSD1306_SETLOWCOLUMN | (column & 0x0F));
+  ssd1306_command(SSD1306_SETHIGHCOLUMN | ((column & 0xF0) >> 4));
+}
+
+void Mini_SSD1306_setCursor(uint8_t column, uint8_t page) {
+  setPage(page);
+  setColumn(column);
+}
+
+void Mini_SSD1306_clearPages(void) {
+  setPage(0);
+  setColumn(0);
+
+  for (uint16_t p = 0; p < (WIDTH) * (HEIGHT / 8); p++) {
+    ssd1306_data(0b00000000);
+  }
+}
+
+void Mini_SSD1306_printString(char *s) {
+  for (uint8_t i = 0; i < strlen(s); i++) {
+    Mini_SSD1306_printChar(s[i]);
+  }
+}
+
+void Mini_SSD1306_printChar(char c) {
+  // send char segment wise
+  for (uint8_t i = 0; i < 5; ++i) {
+    // fetch char from font map, and convert unknown to '?'
+    ssd1306_data(font_5x7[((c < 0x20 || c > 0x20 + 94) ? 0x1F : (c - 0x20)) * 5 + i]);
+  }
+  ssd1306_data(0x00); // font spacing
+  delay(3); // FIXME:use i2c_write_sn above?
+}
+
+#endif
+
+
