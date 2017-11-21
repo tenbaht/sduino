@@ -66,25 +66,30 @@ void setup()
 	display_begin(SSD1306_SWITCHCAPVCC, 0x3C, 0);
 	// initially clear the screen
 	display_clearPages();
+
+	// display_printChar(count);
+	display_setCursor(0, 3);
+
+	// display charmap of 94 chars
+	for (char i = 0; i < 95; i++)
+	{
+		display_printChar(i + 0x20);
+	}
 }
 
 static const char *helloWorld = "HelloWorld!";
 
+// start at first printable char 0x20, see FONT_5x7.h
+uint8_t count = 0x20;
+
 void loop()
 {
-	delay(1000);
+	delay(100);
 
+	// only redraw part of the screen
 	display_setCursor(0, 0);
 	display_printString(helloWorld);
-	delay(3);
-
-	// display_printChar(count);
-	display_setCursor(0, 3);
-	delay(3);
-
-	// // display charmap of 94 chars
-	for (char i = 0; i < 94; i++)
-	{
-		display_printChar(i + 0x20);
-	}
+	// printChar is hardcoded to avoid non printable chars
+	display_printChar(count);
+	count++;
 }

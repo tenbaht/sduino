@@ -489,12 +489,22 @@ void Mini_SSD1306_printString(char *s) {
 
 void Mini_SSD1306_printChar(char c) {
   // send char segment wise
+  // for (uint8_t i = 0; i < 5; ++i) {
+  //   // fetch char from font map, and convert unknown to '?'
+  //   ssd1306_data(font_5x7[((c < 0x20 || c > 0x20 + 94) ? 0x1F : (c - 0x20)) * 5 + i]);
+  //         // send a bunch of data in one xmission
+  // }
+  #if USE_WIRE
+  Wire.beginTransmission(_i2caddr);
+  WIRE_WRITE(0x40);
   for (uint8_t i = 0; i < 5; ++i) {
-    // fetch char from font map, and convert unknown to '?'
-    ssd1306_data(font_5x7[((c < 0x20 || c > 0x20 + 94) ? 0x1F : (c - 0x20)) * 5 + i]);
+    WIRE_WRITE(font_5x7[((c < 0x20 || c > 0x20 + 94) ? 0x1F : (c - 0x20)) * 5+i]);
   }
+  Wire.endTransmission();
+#else
+	i2c_write_sn(_i2caddr, 0x40, &font_5x7[((c < 0x20 || c > 0x20 + 94) ? 0x1F : (c - 0x20)) * 5], 5);
+#endif
   ssd1306_data(0x00); // font spacing
-  delay(3); // FIXME:use i2c_write_sn above?
 }
 
 #endif
