@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- using stm8gal to upload using the builtin bootloader of larger STM8 devices
+- Support for Sduino-UNO board
+
 
 
 ## [0.3.3 - 2017-11-14]

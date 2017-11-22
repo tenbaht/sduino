@@ -7,7 +7,7 @@
 # https://github.com/arduino/Arduino/wiki/Arduino-IDE-1.5-3rd-party-Hardware-specification
 
 name=STM8S Boards
-version=1.6.15
+version=0.4.0-pre1
 
 # General folder structure variables
 # ----------------------------------
@@ -17,6 +17,9 @@ version=1.6.15
 # Apparently, this trick only works for compiler settings, not for the
 # upload process. The upload process is not handled by arduino-build, but
 # the IDE itself and behaves slightly differently.
+# Problem is in Arduino/arduino-core/src/processing/app/BaseNoGui.java
+# function createToolPreferences():
+# 	PreferencesData.removeAllKeysWithPrefix(prefix);
 # FIXME: find a solution to allow for uploads with manual installations.
 runtime.tools.sdcc.path={runtime.hardware.path}/tools/sdcc
 runtime.tools.STM8Tools.path={runtime.hardware.path}/tools
