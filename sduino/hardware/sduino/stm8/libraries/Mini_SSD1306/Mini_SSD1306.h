@@ -210,6 +210,7 @@ All text above, and the splash screen below must be included in any redistributi
   void Mini_SSD1306_initPages(void);
   void Mini_SSD1306_clearPages(void);
   void Mini_SSD1306_setCursor(uint8_t column, uint8_t page);
+  void Mini_SSD1306_sendByte(uint8_t b);
   void Mini_SSD1306_printChar(char c);
   void Mini_SSD1306_printString(char *s);
   #endif
@@ -286,6 +287,7 @@ All text above, and the splash screen below must be included in any redistributi
   X2Method0 (Mini_SSD1306,instacne,initPages) \
   X2Method2 (Mini_SSD1306,instance,setCursor,uint8_t, uint8_t) \
   X2Method0 (Mini_SSD1306,instance,clearPages) \
+  X2Method1 (Mini_SSD1306,instance,sendByte,uint8_t) \
   X2Method1 (Mini_SSD1306,instance,printChar,char) \
   X2Method1 (Mini_SSD1306,instance,printString,char*)
 #else

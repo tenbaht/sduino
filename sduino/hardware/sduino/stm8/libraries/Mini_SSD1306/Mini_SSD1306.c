@@ -488,6 +488,9 @@ void Mini_SSD1306_printString(char *s) {
   }
 }
 
+void Mini_SSD1306_sendByte(uint8_t b){
+  ssd1306_data(b);
+}
 void Mini_SSD1306_printChar(char c) {
   // send char segment wise
   // for (uint8_t i = 0; i < 5; ++i) {
