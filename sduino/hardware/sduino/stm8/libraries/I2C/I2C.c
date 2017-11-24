@@ -14,13 +14,13 @@
 #include "I2C.h"
 
 #define TIMEOUT 0x0FFF
-uint8_t t;
 
 uint8_t ret;
+uint16_t t;
 
 static uint8_t sendAddress(uint8_t);
 static uint8_t sendByte(uint8_t);
-static void start(void);
+static uint8_t start(void);
 static uint8_t stop(uint8_t);
 
 void I2C_begin() {
@@ -42,12 +42,24 @@ void I2C_begin() {
 #endif
 }
 
-static void start() {
+static uint8_t start() {
+  ret = 0;
+  t = 0x0FFF;
+  while (t-- && I2C_GetFlagStatus(I2C_FLAG_BUSBUSY))
+    ;
+  if (!t) {
+    // Error
+    ret = 1;
+    return ret;
+  }
+
 #ifdef USE_SPL
   I2C_GenerateSTART(ENABLE);
 #else
   I2C->CR2 |= I2C_CR2_START;
 #endif
+
+  return ret;
 }
 
 uint8_t stop(uint8_t res) {
@@ -106,50 +118,62 @@ uint8_t sendByte(uint8_t i2cData) {
 }
 
 uint8_t I2C_write(uint8_t address, uint8_t registerAddress) {
-  start();
-  ret = sendAddress(SLA_W(address));
+  ret = start();
   if (ret) {
     return (stop(1));
   }
-  ret = sendByte(registerAddress);
-  if (ret) {
-    return (stop(2));
-  }
-  return (stop(0));
-}
 
-uint8_t I2C_write_c(uint8_t address, uint8_t registerAddress, uint8_t data) {
-  start();
   ret = sendAddress(SLA_W(address));
-  if (ret) {
-    return (stop(1));
-  }
-  ret = sendByte(registerAddress);
   if (ret) {
     return (stop(2));
   }
-  ret = sendByte(data);
+  ret = sendByte(registerAddress);
   if (ret) {
     return (stop(3));
   }
   return (stop(0));
 }
 
-uint8_t I2C_write_sn(uint8_t address, uint8_t registerAddress, uint8_t *data,
-                     uint8_t numberBytes) {
-  start();
-  ret = sendAddress(SLA_W(address));
+uint8_t I2C_write_c(uint8_t address, uint8_t registerAddress, uint8_t data) {
+  ret = start();
   if (ret) {
     return (stop(1));
   }
-  ret = sendByte(registerAddress);
+
+  ret = sendAddress(SLA_W(address));
   if (ret) {
     return (stop(2));
+  }
+  ret = sendByte(registerAddress);
+  if (ret) {
+    return (stop(3));
+  }
+  ret = sendByte(data);
+  if (ret) {
+    return (stop(4));
+  }
+  return (stop(0));
+}
+
+uint8_t I2C_write_sn(uint8_t address, uint8_t registerAddress, uint8_t *data,
+                     uint8_t numberBytes) {
+  ret = start();
+  if (ret) {
+    return (stop(1));
+  }
+
+  ret = sendAddress(SLA_W(address));
+  if (ret) {
+    return (stop(2));
+  }
+  ret = sendByte(registerAddress);
+  if (ret) {
+    return (stop(3));
   }
   for (uint8_t i = 0; i < numberBytes; i++) {
     ret = sendByte(data[i]);
     if (ret) {
-      return (stop(3));
+      return (stop(4));
     }
   }
 
@@ -157,9 +181,8 @@ uint8_t I2C_write_sn(uint8_t address, uint8_t registerAddress, uint8_t *data,
 }
 
 uint8_t I2C_read(uint8_t address, uint8_t *buffer, uint8_t numberBytes) {
-  uint16_t t;
 
-  // ACK on each read byte
+// ACK on each byte
 #ifdef USE_SPL
   I2C_AcknowledgeConfig(I2C_ACK_CURR);
 #else
@@ -167,10 +190,14 @@ uint8_t I2C_read(uint8_t address, uint8_t *buffer, uint8_t numberBytes) {
   I2C->CR2 &= (uint8_t)(~I2C_CR2_POS);
 #endif
 
-  start();
-  ret = sendAddress(SLA_R(address));
+  ret = start();
   if (ret) {
     return (stop(1));
+  }
+
+  ret = sendAddress(SLA_R(address));
+  if (ret) {
+    return (stop(2));
   }
 
   for (uint8_t i = 0; i < numberBytes; i++) {
@@ -178,7 +205,7 @@ uint8_t I2C_read(uint8_t address, uint8_t *buffer, uint8_t numberBytes) {
     while (t-- && !I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_RECEIVED))
       ;
     if (!t) {
-      return (stop(2));
+      return (stop(3));
     }
 
     if (i == numberBytes - 1) {
