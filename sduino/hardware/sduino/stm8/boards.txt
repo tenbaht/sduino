@@ -1,5 +1,7 @@
 # See: http://code.google.com/p/arduino/wiki/Platforms
 
+menu.upload_method=Upload method
+
 ##############################################################
 
 stm8sblue.name=STM8S103F3 Breakout Board
@@ -25,11 +27,17 @@ stm8sblue.upload.speed=1
 
 stm8sdisco.name=STM8S105C6 Discovery Board
 
-stm8sdisco.upload.tool=stm8flash
-stm8sdisco.upload.protocol=stlink
-stm8sdisco.upload.mcu=stm8s105?6
-stm8sdisco.upload.maximum_size=32768
-stm8sdisco.upload.maximum_data_size=2048
+stm8sdisco.menu.upload_method.stm8flashMethod=stm8flash(STlinkV2 not onboad)
+stm8sdisco.menu.upload_method.stm8flashMethod.upload.tool=stm8flash
+stm8sdisco.menu.upload_method.stm8flashMethod.upload.protocol=stlinkv2
+stm8sdisco.menu.upload_method.stm8flashMethod.upload.mcu=stm8s105?6
+
+stm8sdisco.menu.upload_method.stm8galMethod=stm8gal(Serial)
+stm8sdisco.menu.upload_method.stm8galMethod.upload.tool=stm8gal
+stm8sdisco.menu.upload_method.stm8galMethod.upload.protocol=serial
+stm8sdisco.menu.upload_method.stm8galMethod.upload.speed=230400
+stm8sdisco.menu.upload.maximum_size=32768
+stm8sdisco.menu.upload.maximum_data_size=2048
 
 stm8sdisco.build.mcu=STM8S105
 stm8sdisco.build.f_cpu=16000000L
@@ -41,6 +49,31 @@ stm8sdisco.build.variant=stm8sdisco
 
 stm8sdisco.upload.speed=1
 
+##############################################################
+
+stm8sblack.name=STM8S105K4T6 Breakout Board
+
+stm8sblack.menu.upload_method.stm8flashMethod=stm8flash(STlinkV2)
+stm8sblack.menu.upload_method.stm8flashMethod.upload.tool=stm8flash
+stm8sblack.menu.upload_method.stm8flashMethod.upload.protocol=stlinkv2
+stm8sblack.menu.upload_method.stm8flashMethod.upload.mcu=stm8s105?4
+
+stm8sblack.menu.upload_method.stm8galMethod=stm8gal(Serial)
+stm8sblack.menu.upload_method.stm8galMethod.upload.tool=stm8gal
+stm8sblack.menu.upload_method.stm8galMethod.upload.protocol=serial
+stm8sblack.menu.upload_method.stm8galMethod.upload.speed=230400
+stm8sblack.upload.maximum_size=16384
+stm8sblack.upload.maximum_data_size=2048
+
+stm8sblack.build.mcu=STM8S105
+stm8sblack.build.f_cpu=16000000L
+stm8sblack.build.board=STM8S_BLACK
+stm8sblack.build.core=sduino
+stm8sblack.build.variant=stm8sblack
+
+# meaningless variables just to keep the makefile happy
+
+stm8sblack.upload.speed=1
 
 ##############################################################
 s8uno.name=sduino_UNO Board with STM8S105K6
@@ -57,4 +90,3 @@ s8uno.build.f_cpu=16000000L
 s8uno.build.board=STM8S_UNO
 s8uno.build.core=sduino
 s8uno.build.variant=s8uno
-
