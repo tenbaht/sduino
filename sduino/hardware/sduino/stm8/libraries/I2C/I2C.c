@@ -49,22 +49,6 @@ void I2C_begin() {
 #endif
 }
 
-#define waitWhile(flag, errValue)                                              \
-  t = 0x0FFF;                                                                  \
-  while (t-- && I2C_GetFlagStatus(flag))                                       \
-    ;                                                                          \
-  if (!t) {                                                                    \
-    return errValue;                                                           \
-  }
-
-#define waitUntil(flag, errValue)                                              \
-  t = 0x0FFF;                                                                  \
-  while (t-- && !I2C_GetFlagStatus(flag))                                      \
-    ;                                                                          \
-  if (!t) {                                                                    \
-    return errValue;                                                           \
-  }
-
 #define stopIfNotSuccess(ret, reason)                                          \
   if (ret) {                                                                   \
     return stop(reason);                                                       \
@@ -101,8 +85,12 @@ uint8_t stop(uint8_t res) {
 
 uint8_t sendAddress(uint8_t i2cAddress) {
   /* Test on EV5 and clear it */
-  while (!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT))
+  t = 0x0FFF;
+  while (t-- && !I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT))
     ;
+  if (!t) {
+    return 1;
+  }
 
 #ifdef USE_SPL
   I2C_SendData(i2cAddress);
@@ -115,12 +103,20 @@ uint8_t sendAddress(uint8_t i2cAddress) {
   // #define SLA_R(address)  ((address << 1) + 0x01
   if (i2cAddress & 0x01) {
     // Master Receiver SLA_R
-    while (!I2C_CheckEvent(I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED))
+    t = 0x0FFF;
+    while (t-- & !I2C_CheckEvent(I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED))
       ;
+    if (!t) {
+      return 2;
+    }
   } else {
     // Master Transmitter SLA_W
-    while (!I2C_CheckEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
+    t = 0x0FFF;
+    while (t-- && !I2C_CheckEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
       ;
+    if (!t) {
+      return 2;
+    }
   }
   /* Test on EV6 and clear it */
 
@@ -128,19 +124,27 @@ uint8_t sendAddress(uint8_t i2cAddress) {
 }
 
 uint8_t sendByte(uint8_t i2cData) {
-  /* Test on EV8 */
-  while (!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTING))
-    ;
 
 #ifdef USE_SPL
   I2C_SendData(i2cData);
 #else
   I2C->DR = i2cData;
 #endif
+  /* Test on EV8 */
+  t = 0xFFFF;
+  while (t-- && !I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTING))
+    ;
+  if (!t) {
+    return 1;
+  }
 
   /* Test on EV8_2 */
-  while (!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED))
+  t = 0xFFFF;
+  while (t-- && !I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED))
     ;
+  // if (!t) {
+  //   return 2; // fail here?
+  // }
 
   return 0;
 }
@@ -220,7 +224,7 @@ uint8_t I2C_read(uint8_t address, uint8_t registerAddress,
   stopIfNotSuccess(ret, 5);
 
   for (uint8_t i = 0; i < numberBytes; i++) {
-    t = 0x0FFF; // give slave some time
+    t = 0xFFFF; // give slave some time
     while (t-- && !I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_RECEIVED))
       ;
     if (!t) {
@@ -264,7 +268,7 @@ uint8_t I2C_read_buffer(uint8_t address, uint8_t *buffer, uint8_t numberBytes) {
   stopIfNotSuccess(ret, 2);
 
   for (uint8_t i = 0; i < numberBytes; i++) {
-    t = 0x0FFF; // give slave some time
+    t = 0xFFFF; // give slave some time
     while (t-- && !I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_RECEIVED))
       ;
     if (!t) {
