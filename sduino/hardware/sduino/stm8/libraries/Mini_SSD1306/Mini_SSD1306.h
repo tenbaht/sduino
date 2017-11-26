@@ -200,20 +200,47 @@ All text above, and the splash screen below must be included in any redistributi
 
   void Mini_SSD1306_dim(boolean dim);
 
-  #ifndef NO_MINI_SSD1306_BUFFER
+#ifndef NO_MINI_SSD1306_BUFFER
   void Mini_SSD1306_clearDisplay(void);
   void Mini_SSD1306_display();
   void Mini_SSD1306_drawPixel(int16_t x, int16_t y, uint8_t color);
-  #endif
+#endif
 
-  #ifndef NO_MINI_SSD1306_ASCII
+#ifndef NO_MINI_SSD1306_ASCII
   void Mini_SSD1306_initPages(void);
   void Mini_SSD1306_clearPages(void);
   void Mini_SSD1306_setCursor(uint8_t column, uint8_t page);
   void Mini_SSD1306_sendByte(uint8_t b);
-  void Mini_SSD1306_printChar(char c);
-  void Mini_SSD1306_printString(char *s);
-  #endif
+  size_t Mini_SSD1306_write(uint8_t c);
+  //void Mini_SSD1306_printString(char *s);
+  // variants of the standard Mini_SSD1306.print() function: Separate implementations
+  // for string, char, unsigned, signed int
+  #define Mini_SSD1306_print_s(S)	Print_print_s(Mini_SSD1306_write,S)
+  #define Mini_SSD1306_print_sn(S,N)	Print_print_sn(Mini_SSD1306_write,S,N)
+  #define Mini_SSD1306_print_c(C)	Mini_SSD1306_write(C)
+
+  // print signed/unsigned integer values (char, short, int, long) as decimal values
+  #define Mini_SSD1306_print_i(I)	Print_print_i(Mini_SSD1306_write,I)
+  #define Mini_SSD1306_print_u(U)	Print_print_u(Mini_SSD1306_write,U)
+
+  // print signed/unsigned integer values (char, short, int, long) to base B
+  #define Mini_SSD1306_print_ib(I,B)	Print_print_ib(Mini_SSD1306_write,I,B)
+  #define Mini_SSD1306_print_ub(U,B)	Print_print_ub(Mini_SSD1306_write,U,B)
+
+  // print float value
+  #define Mini_SSD1306_print_f(F)	Print_print_fd(Mini_SSD1306_write,F,2)
+  #define Mini_SSD1306_print_fd(F,D)	Print_print_fd(Mini_SSD1306_write,F,D)
+
+  #define Mini_SSD1306_println()	Print_println(Mini_SSD1306_write)
+  #define Mini_SSD1306_println_s(S)	Print_println_s(Mini_SSD1306_write,S)
+  #define Mini_SSD1306_println_sn(S,N)	Print_println_sn(Mini_SSD1306_write,S,N)
+  #define Mini_SSD1306_println_u(U)	Print_println_u(Mini_SSD1306_write,U)
+  #define Mini_SSD1306_println_i(I)	Print_println_i(Mini_SSD1306_write,I)
+  #define Mini_SSD1306_println_ib(I,B)	Print_println_ib(Mini_SSD1306_write,I,B)
+  #define Mini_SSD1306_println_ub(U,B)	Print_println_ub(Mini_SSD1306_write,U,B)
+  #define Mini_SSD1306_println_f(F)	Print_println_fd(Mini_SSD1306_write,F,2)
+  #define Mini_SSD1306_println_fd(F,D)	Print_println_fd(Mini_SSD1306_write,F,D)
+#endif
 //  void Mini_SSD1306_drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color);
 //  void Mini_SSD1306_drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
 
@@ -284,12 +311,30 @@ All text above, and the splash screen below must be included in any redistributi
 
 #ifndef NO_MINI_SSD1306_ASCII
 # define ASCII(instance) \
-  X2Method0 (Mini_SSD1306,instacne,initPages) \
+  X2Method0 (Mini_SSD1306,instance,initPages) \
   X2Method2 (Mini_SSD1306,instance,setCursor,uint8_t, uint8_t) \
   X2Method0 (Mini_SSD1306,instance,clearPages) \
   X2Method1 (Mini_SSD1306,instance,sendByte,uint8_t) \
-  X2Method1 (Mini_SSD1306,instance,printChar,char) \
-  X2Method1 (Mini_SSD1306,instance,printString,char*)
+  X2Method1 (Mini_SSD1306,instance,write,uint8_t) \
+  X2Method1 (Mini_SSD1306,instance,print_s,const char*) \
+  X2Method2 (Mini_SSD1306,instance,print_sn,const uint8_t*, size_t) \
+  X2Method1 (Mini_SSD1306,instance,print_c,uint8_t) \
+  X2Method1 (Mini_SSD1306,instance,print_i,long) \
+  X2Method1 (Mini_SSD1306,instance,print_u,unsigned long) \
+  X2Method2 (Mini_SSD1306,instance,print_ib,long,uint8_t) \
+  X2Method2 (Mini_SSD1306,instance,print_ub,unsigned long,uint8_t) \
+  X2Method2 (Mini_SSD1306,instance,print_fd,double,uint8_t) \
+  X2Method0 (Mini_SSD1306,instance,println) \
+  X2Method1 (Mini_SSD1306,instance,println_s,const char*) \
+  X2Method2 (Mini_SSD1306,instance,println_sn,const uint8_t*, size_t) \
+  X2Method1 (Mini_SSD1306,instance,println_u,unsigned long) \
+  X2Method1 (Mini_SSD1306,instance,println_i,long) \
+  X2Method2 (Mini_SSD1306,instance,println_ib,long,uint8_t) \
+  X2Method2 (Mini_SSD1306,instance,println_ub,unsigned long,uint8_t) \
+  X2Method2 (Mini_SSD1306,instance,println_fd,double,uint8_t)
+  /*X2Method2 (Mini_SSD1306,instance,print_f,double,2) \*/
+ /* X2Method2 (Mini_SSD1306,instance,println_f,double,2) \*/
+    /* X2Method1 (Mini_SSD1306,instance,printString,char*) */
 #else
 # define ASCII(instance)
 #endif

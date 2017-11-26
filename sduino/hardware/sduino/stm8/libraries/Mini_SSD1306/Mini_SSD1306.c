@@ -482,16 +482,16 @@ void Mini_SSD1306_clearPages(void) {
   }
 }
 
-void Mini_SSD1306_printString(char *s) {
-  for (uint8_t i = 0; i < strlen(s); i++) {
-    Mini_SSD1306_printChar(s[i]);
-  }
-}
+// void Mini_SSD1306_printString(char *s) {
+//   for (uint8_t i = 0; i < strlen(s); i++) {
+//     Mini_SSD1306_printChar(s[i]);
+//   }
+// }
 
 void Mini_SSD1306_sendByte(uint8_t b){
   ssd1306_data(b);
 }
-void Mini_SSD1306_printChar(char c) {
+size_t Mini_SSD1306_write(uint8_t c) {
   // send char segment wise
   // for (uint8_t i = 0; i < 5; ++i) {
   //   // fetch char from font map, and convert unknown to '?'
@@ -509,6 +509,8 @@ void Mini_SSD1306_printChar(char c) {
 	i2c_write_sn(_i2caddr, 0x40, &font_5x7[((c < 0x20 || c > 0x20 + 94) ? 0x1F : (c - 0x20)) * 5], 5);
 #endif
   ssd1306_data(0x00); // font spacing
+
+  return 1;
 }
 
 #endif
