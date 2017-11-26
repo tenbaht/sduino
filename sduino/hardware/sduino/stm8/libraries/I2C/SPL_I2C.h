@@ -226,5 +226,5 @@ void Orig_I2C_Init(uint32_t OutputClockFrequencyHz, uint16_t OwnAddress,
                    uint8_t InputClockFrequencyMHz);
 
 uint8_t Orig_I2C_CheckEvent(I2C_Event_TypeDef I2C_Event);
-
+uint8_t Orig_I2C_GetFlagStatus(uint16_t I2C_Flag);
 #endif

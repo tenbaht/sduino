@@ -165,3 +165,48 @@ uint8_t Orig_I2C_CheckEvent(I2C_Event_TypeDef I2C_Event) {
   /* Return status */
   return status;
 }
+
+uint8_t Orig_I2C_GetFlagStatus(uint16_t I2C_Flag)
+{
+  uint8_t tempreg = 0;
+  uint8_t regindex = 0;
+  uint8_t bitstatus = RESET;
+
+  /* Read flag register index */
+  regindex = (uint8_t)((uint16_t)I2C_Flag >> 8);
+  /* Check SRx index */
+  switch (regindex)
+  {
+      /* Returns whether the status register to check is SR1 */
+    case 0x01:
+      tempreg = (uint8_t)I2C->SR1;
+      break;
+
+      /* Returns whether the status register to check is SR2 */
+    case 0x02:
+      tempreg = (uint8_t)I2C->SR2;
+      break;
+
+      /* Returns whether the status register to check is SR3 */
+    case 0x03:
+      tempreg = (uint8_t)I2C->SR3;
+      break;
+
+    default:
+      break;
+  }
+
+  /* Check the status of the specified I2C flag */
+  if ((tempreg & (uint8_t)I2C_Flag ) != 0)
+  {
+    /* Flag is set */
+    bitstatus = !0;
+  }
+  else
+  {
+    /* Flag is reset */
+    bitstatus = 0;
+  }
+  /* Return the flag status */
+  return bitstatus;
+}

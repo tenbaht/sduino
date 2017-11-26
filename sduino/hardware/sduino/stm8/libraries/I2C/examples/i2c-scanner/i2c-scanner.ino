@@ -21,8 +21,6 @@ uint8_t count = 0x20;
 void setup() {
   I2C_begin();
 
-  // The Nokia 5110 display generates the high voltage from the 3.3v
-  // line internally! (neat!)
   // Initialize with the I2C addr 0x3C. Some displays use 0x3D instead.
   display_begin(SSD1306_SWITCHCAPVCC, 0x3C, 0);
   // initially clear the screen
@@ -42,28 +40,10 @@ void loop() {
   count++;
 
   // write to bme280 (0x76), set register to id (0xD0)
-  I2C_write(BME280, 0xD0);
-  res = I2C_read_buffer(BME280, &buffer[0], 1);
+  res = I2C_read(BME280, 0xD0, 1);
 
-  if (buffer[0] == 0x60) {
+  if (I2C_receive() == 0x60) {
     display_setCursor(0, 1);
     display_printString(foundBME280);
-
-    display_setCursor(0, 2);
-    I2C_write(BME280, 0xF7); // start of data and burst
-    res = I2C_read_buffer(BME280, &buffer[0], BUFFER_SIZE);
-    display_sendByte(res); // debug
-    display_sendByte(res); // debug
-    display_sendByte(res); // debug
-
-    display_sendByte(0x00); // debug
-    display_sendByte(0x00); // debug
-    display_sendByte(0x00); // debug
-
-    for (uint8_t i = 0; i < BUFFER_SIZE; i++) {
-      display_sendByte(buffer[i]);
-      display_sendByte(buffer[i]);
-      display_sendByte(buffer[i]);
-    }
   }
 }

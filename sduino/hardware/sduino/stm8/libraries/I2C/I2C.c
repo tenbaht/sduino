@@ -6,17 +6,24 @@
 #endif
 
 #ifndef USE_SPL
-// include original init function
 #include "SPL_I2C.h"
 #define I2C_CheckEvent Orig_I2C_CheckEvent
+#define I2C_GetFlagStatus Orig_I2C_GetFlagStatus
 #endif
 
 #include "I2C.h"
 
 #define TIMEOUT 0x0FFF
 
-uint8_t ret;
-uint16_t t;
+static uint8_t ret;
+static uint16_t t;
+
+#ifndef I2C_BUFFER_SIZE
+#define I2C_BUFFER_SIZE 32
+#endif
+static uint8_t internalBuffer[I2C_BUFFER_SIZE];
+static uint8_t internalWritePtr = 0;
+static uint8_t internalReadPtr = 0;
 
 static uint8_t sendAddress(uint8_t);
 static uint8_t sendByte(uint8_t);
@@ -42,10 +49,31 @@ void I2C_begin() {
 #endif
 }
 
+#define waitWhile(flag, errValue)                                              \
+  t = 0x0FFF;                                                                  \
+  while (t-- && I2C_GetFlagStatus(flag))                                       \
+    ;                                                                          \
+  if (!t) {                                                                    \
+    return errValue;                                                           \
+  }
+
+#define waitUntil(flag, errValue)                                              \
+  t = 0x0FFF;                                                                  \
+  while (t-- && !I2C_GetFlagStatus(flag))                                      \
+    ;                                                                          \
+  if (!t) {                                                                    \
+    return errValue;                                                           \
+  }
+
+#define stopIfNotSuccess(ret, reason)                                          \
+  if (ret) {                                                                   \
+    return stop(reason);                                                       \
+  }
+
 static uint8_t start() {
   ret = 0;
-  t = 0x0FFF;
-  while (t-- && I2C_GetFlagStatus(I2C_FLAG_BUSBUSY))
+  t = 0xFFFF;
+  while (t-- && I2C_GetFlagStatus((uint16_t)0x0302)) // I2C_FLAG_BUSBUSY
     ;
   if (!t) {
     // Error
@@ -119,68 +147,63 @@ uint8_t sendByte(uint8_t i2cData) {
 
 uint8_t I2C_write(uint8_t address, uint8_t registerAddress) {
   ret = start();
-  if (ret) {
-    return (stop(1));
-  }
+  stopIfNotSuccess(ret, 1);
 
   ret = sendAddress(SLA_W(address));
-  if (ret) {
-    return (stop(2));
-  }
+  stopIfNotSuccess(ret, 2);
+
   ret = sendByte(registerAddress);
-  if (ret) {
-    return (stop(3));
-  }
+  stopIfNotSuccess(ret, 3);
+
   return (stop(0));
 }
 
 uint8_t I2C_write_c(uint8_t address, uint8_t registerAddress, uint8_t data) {
   ret = start();
-  if (ret) {
-    return (stop(1));
-  }
+  stopIfNotSuccess(ret, 1);
 
   ret = sendAddress(SLA_W(address));
-  if (ret) {
-    return (stop(2));
-  }
+  stopIfNotSuccess(ret, 2);
+
   ret = sendByte(registerAddress);
-  if (ret) {
-    return (stop(3));
-  }
+  stopIfNotSuccess(ret, 3);
+
   ret = sendByte(data);
-  if (ret) {
-    return (stop(4));
-  }
+  stopIfNotSuccess(ret, 4);
+
   return (stop(0));
 }
 
 uint8_t I2C_write_sn(uint8_t address, uint8_t registerAddress, uint8_t *data,
                      uint8_t numberBytes) {
   ret = start();
-  if (ret) {
-    return (stop(1));
-  }
+  stopIfNotSuccess(ret, 1);
 
   ret = sendAddress(SLA_W(address));
-  if (ret) {
-    return (stop(2));
-  }
+  stopIfNotSuccess(ret, 2);
+
   ret = sendByte(registerAddress);
-  if (ret) {
-    return (stop(3));
-  }
+  stopIfNotSuccess(ret, 3);
+
   for (uint8_t i = 0; i < numberBytes; i++) {
     ret = sendByte(data[i]);
-    if (ret) {
-      return (stop(4));
-    }
+    stopIfNotSuccess(ret, 4);
   }
 
   return (stop(0));
 }
 
-uint8_t I2C_read(uint8_t address, uint8_t *buffer, uint8_t numberBytes) {
+uint8_t I2C_receive(void) {
+  uint8_t result = internalBuffer[internalReadPtr];
+  internalReadPtr = (internalReadPtr++) % I2C_BUFFER_SIZE;
+  return result;
+}
+
+uint8_t I2C_read(uint8_t address, uint8_t registerAddress,
+                 uint8_t numberBytes) {
+
+  ret = I2C_write(address, registerAddress);
+  stopIfNotSuccess(ret, ret);
 
 // ACK on each byte
 #ifdef USE_SPL
@@ -191,14 +214,54 @@ uint8_t I2C_read(uint8_t address, uint8_t *buffer, uint8_t numberBytes) {
 #endif
 
   ret = start();
-  if (ret) {
-    return (stop(1));
-  }
+  stopIfNotSuccess(ret, 4);
 
   ret = sendAddress(SLA_R(address));
-  if (ret) {
-    return (stop(2));
+  stopIfNotSuccess(ret, 5);
+
+  for (uint8_t i = 0; i < numberBytes; i++) {
+    t = 0x0FFF; // give slave some time
+    while (t-- && !I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_RECEIVED))
+      ;
+    if (!t) {
+      return (stop(6));
+    }
+
+    if (i == numberBytes - 1) {
+    // NACK after next byte
+#ifdef USE_SPL
+      I2C_AcknowledgeConfig(I2C_ACK_NONE);
+#else
+      I2C->CR2 &= (uint8_t)(~I2C_CR2_ACK);
+#endif
+    }
+
+#ifdef USE_SPL
+    internalBuffer[internalWritePtr] = I2C_ReceiveData();
+#else
+    internalBuffer[internalWritePtr] = (uint8_t)I2C->DR;
+#endif
+    internalWritePtr = (internalWritePtr++) % I2C_BUFFER_SIZE;
   }
+
+  return (stop(0));
+}
+
+uint8_t I2C_read_buffer(uint8_t address, uint8_t *buffer, uint8_t numberBytes) {
+
+// ACK on each byte
+#ifdef USE_SPL
+  I2C_AcknowledgeConfig(I2C_ACK_CURR);
+#else
+  I2C->CR2 |= I2C_CR2_ACK;
+  I2C->CR2 &= (uint8_t)(~I2C_CR2_POS);
+#endif
+
+  ret = start();
+  stopIfNotSuccess(ret, 1);
+
+  ret = sendAddress(SLA_R(address));
+  stopIfNotSuccess(ret, 2);
 
   for (uint8_t i = 0; i < numberBytes; i++) {
     t = 0x0FFF; // give slave some time
@@ -217,7 +280,11 @@ uint8_t I2C_read(uint8_t address, uint8_t *buffer, uint8_t numberBytes) {
 #endif
     }
 
+#ifdef USE_SPL
     buffer[i] = I2C_ReceiveData();
+#else
+    buffer[i] = (uint8_t)I2C->DR;
+#endif
   }
 
   return (stop(0));

@@ -17,9 +17,7 @@ uint8_t I2C_write(uint8_t, uint8_t);
 uint8_t I2C_write_c(uint8_t, uint8_t, uint8_t);
 uint8_t I2C_write_s(uint8_t, uint8_t, char *);
 uint8_t I2C_write_sn(uint8_t, uint8_t, uint8_t *, uint8_t);
-uint8_t I2C_read(uint8_t, uint8_t*, uint8_t);
-uint8_t I2C_read_c(uint8_t, uint8_t, uint8_t);
-uint8_t I2C_read_s(uint8_t, uint8_t, uint8_t *);
-uint8_t I2C_read_sn(uint8_t, uint8_t, uint8_t, uint8_t *);
+uint8_t I2C_read(uint8_t, uint8_t, uint8_t);
+uint8_t I2C_read_buffer(uint8_t, uint8_t*, uint8_t);
 
 #endif
