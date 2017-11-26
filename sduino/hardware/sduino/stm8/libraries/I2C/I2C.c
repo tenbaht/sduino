@@ -238,6 +238,7 @@ uint8_t I2C_read(uint8_t address, uint8_t registerAddress,
 #else
       I2C->CR2 &= (uint8_t)(~I2C_CR2_ACK);
 #endif
+      stop(0);
     }
 
 #ifdef USE_SPL
@@ -248,7 +249,7 @@ uint8_t I2C_read(uint8_t address, uint8_t registerAddress,
     internalWritePtr = (internalWritePtr++) % I2C_BUFFER_SIZE;
   }
 
-  return (stop(0));
+  return 0;
 }
 
 uint8_t I2C_read_buffer(uint8_t address, uint8_t *buffer, uint8_t numberBytes) {
