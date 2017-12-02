@@ -20,5 +20,5 @@ uint8_t I2C_write_sn(uint8_t, uint8_t, uint8_t *, uint8_t);
 uint8_t I2C_receive(void);
 uint8_t I2C_read(uint8_t, uint8_t, uint8_t);
 uint8_t I2C_read_buffer(uint8_t, uint8_t*, uint8_t);
-
+uint8_t I2C_scan(uint8_t);
 #endif
