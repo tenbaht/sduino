@@ -46,8 +46,7 @@
  * @retval None
  */
 void Orig_I2C_Init(uint32_t OutputClockFrequencyHz, uint16_t OwnAddress,
-                   uint8_t I2C_DutyCycle,
-                   uint8_t AddMode,
+                   uint8_t I2C_DutyCycle, uint8_t AddMode,
                    uint8_t InputClockFrequencyMHz) {
   uint16_t result = 0x0004;
   uint16_t tmpval = 0;
@@ -123,6 +122,11 @@ void Orig_I2C_Init(uint32_t OutputClockFrequencyHz, uint16_t OwnAddress,
   I2C->CCRH =
       (uint8_t)((uint8_t)((uint8_t)(result >> 8) & I2C_CCRH_CCR) | tmpccrh);
 
+  // Disable Interrupts
+  I2C->ITR &= (uint8_t)(~(uint8_t)I2C_IT_ERR);
+  I2C->ITR &= (uint8_t)(~(uint8_t)I2C_IT_EVT);
+  I2C->ITR &= (uint8_t)(~(uint8_t)I2C_IT_BUF);
+
   /* Enable I2C */
   I2C->CR1 |= I2C_CR1_PE;
 
@@ -166,8 +170,7 @@ uint8_t Orig_I2C_CheckEvent(I2C_Event_TypeDef I2C_Event) {
   return status;
 }
 
-uint8_t Orig_I2C_GetFlagStatus(uint16_t I2C_Flag)
-{
+uint8_t Orig_I2C_GetFlagStatus(uint16_t I2C_Flag) {
   uint8_t tempreg = 0;
   uint8_t regindex = 0;
   uint8_t bitstatus = RESET;
@@ -175,35 +178,31 @@ uint8_t Orig_I2C_GetFlagStatus(uint16_t I2C_Flag)
   /* Read flag register index */
   regindex = (uint8_t)((uint16_t)I2C_Flag >> 8);
   /* Check SRx index */
-  switch (regindex)
-  {
-      /* Returns whether the status register to check is SR1 */
-    case 0x01:
-      tempreg = (uint8_t)I2C->SR1;
-      break;
+  switch (regindex) {
+    /* Returns whether the status register to check is SR1 */
+  case 0x01:
+    tempreg = (uint8_t)I2C->SR1;
+    break;
 
-      /* Returns whether the status register to check is SR2 */
-    case 0x02:
-      tempreg = (uint8_t)I2C->SR2;
-      break;
+    /* Returns whether the status register to check is SR2 */
+  case 0x02:
+    tempreg = (uint8_t)I2C->SR2;
+    break;
 
-      /* Returns whether the status register to check is SR3 */
-    case 0x03:
-      tempreg = (uint8_t)I2C->SR3;
-      break;
+    /* Returns whether the status register to check is SR3 */
+  case 0x03:
+    tempreg = (uint8_t)I2C->SR3;
+    break;
 
-    default:
-      break;
+  default:
+    break;
   }
 
   /* Check the status of the specified I2C flag */
-  if ((tempreg & (uint8_t)I2C_Flag ) != 0)
-  {
+  if ((tempreg & (uint8_t)I2C_Flag) != 0) {
     /* Flag is set */
     bitstatus = !0;
-  }
-  else
-  {
+  } else {
     /* Flag is reset */
     bitstatus = 0;
   }

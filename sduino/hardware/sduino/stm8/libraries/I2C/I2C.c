@@ -101,6 +101,13 @@ uint8_t stop(uint8_t res) {
 #else
   I2C->CR2 |= I2C_CR2_STOP;
 #endif
+  t = 0x0FFF;
+  while (t-- && I2C_GetFlagStatus((uint16_t)0x0302)) // I2C_FLAG_BUSBUSY
+    ;
+  if (!t) {
+    return 1;
+  }
+
   return res;
 }
 
@@ -136,12 +143,15 @@ uint8_t sendAddress(uint8_t i2cAddress) {
   }
 
   state = I2C->SR2;
-
   if ((state & (uint8_t)I2C_FLAG_ACKNOWLEDGEFAILURE) ==
       (uint8_t)I2C_FLAG_ACKNOWLEDGEFAILURE ) {
+    // clear flags
+    I2C->SR2 = 0;
     return 3;
   } else if ((state & (uint8_t)I2C_FLAG_BUSERROR) ==
              (uint8_t)I2C_FLAG_BUSERROR) {
+    // clear flags
+    I2C->SR2 = 0;
     return 4;
   }
 
@@ -167,15 +177,15 @@ uint8_t sendByte(uint8_t i2cData) {
   return 0;
 }
 
-uint8_t I2C_scan(uint8_t i2cAddress) {
-  ret = start();
-  stopIfNotSuccess(ret, 1);
+// uint8_t I2C_scan(uint8_t i2cAddress) {
+//   ret = start();
+//   stopIfNotSuccess(ret, 1);
 
-  ret = sendAddress(SLA_W(i2cAddress));
-  stopIfNotSuccess(ret, 2);
+//   // ret = sendAddress(SLA_R(i2cAddress));
+//   // stopIfNotSuccess(ret, 2);
 
-  return stop(ret);
-}
+//   return stop(ret);
+// }
 
 uint8_t I2C_write(uint8_t address, uint8_t registerAddress) {
   ret = start();
@@ -231,6 +241,8 @@ uint8_t I2C_receive(void) {
   return result;
 }
 
+uint8_t I2C_available() { return internalWritePtr - internalReadPtr; }
+
 uint8_t I2C_read(uint8_t address, uint8_t registerAddress,
                  uint8_t numberBytes) {
   internalReadPtr = 0;
@@ -274,7 +286,7 @@ uint8_t I2C_read(uint8_t address, uint8_t registerAddress,
 #else
     internalBuffer[internalWritePtr] = (uint8_t)I2C->DR;
 #endif
-    internalWritePtr = (internalWritePtr++) % I2C_BUFFER_SIZE;
+    internalWritePtr = (internalWritePtr + 1) % I2C_BUFFER_SIZE;
   }
 
   return stop(ret);
