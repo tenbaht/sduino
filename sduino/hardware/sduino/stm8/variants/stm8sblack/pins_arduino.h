@@ -33,43 +33,49 @@
 #define analogInputToDigitalPin(p)  ((p < NUM_ANALOG_INPUTS) ? (p) + (NUM_DIGITAL_PINS-NUM_ANALOG_INPUTS) : -1)
 
 
-/* on the STM8S the logical pin numbers are really confusing instead
- * of beeing helpful. So maybe it is better to use these Portpin-Names
- * instead?
+/* strict geometrical pin mapping for the STM8S105K4T6 breakout board.
+ *
+ * This pin mapping is very intuitive when working on a break board, but
+ * all pin numbers are totally different than on any other board. So all
+ * existing sketches will require adopted pin numbers.
+ *
+ * Potential pitfall: There is an overlap of the number ranges of analog
+ * channel numbers and digital pin numbers for pins 3..5. Values of 3..5
+ * will be treated as channel numbers, not as digital pin numbers.
  */
 enum portpin {
-	PA1, /* 1: OSC IN */
-	PA2, /* 2: OSC OUT */
-	PF4, /* 3: AIN12 */
-	PB5, /* 4: AIN5 / [I2C_SDA] */
-	PB4, /* 5: AIN4 / [I2C_SCL] */
-	PB3, /* 6: AIN3 / [TIM1_ETR] */
-	PB2, /* 7: AIN2 / [TIM2_CH3N] */
-	PB1, /* 8: AIN1 / [TIM1_CH2N] */
-	PB0, /* 9: AIN0 / [TIM1_CH1N] */
-	PE5, /* 10: SPI_NSS */
-	PC1, /* 11: TIM1_CH1 / UART2_CK */
-	PC2, /* 12: TIM1_CH2 */
-	PD7, /* 13: TLI / [TIM1_CH4] */
-	PD6, /* 14: UART2_RX */
-	PD5, /* 15: UART2_TX */
-	PD4, /* 16: TIM2_CH1 / [BEEP] */
-	PD3, /* 17: TIM2_CH2 / [ADC_ETR] */
-	PD2, /* 18: TIM3_CH1 / [TIM2_CH3] */
-	PD1, /* 19: SWIM */
-	PD0, /* 20: TIM3_CH2 / [TIM1_BKIN] / [CLK_CCO] */
-	PC7, /* 21: SPI_MISO */
-	PC6, /* 22: SPI_MOSI */
-	PC5, /* 23: SPI_SCK */
-	PC4, /* 24: TIM1_CH4 */
-	PC3, /* 25: TIM1_CH3 */
+	PA1, /* 0	OSC IN			*/
+	PA2, /* 1	OSC OUT			*/
+	PF4, /* 2	AIN12			*/
+	PB5, /* 3	AIN5 / [I2C_SDA]	*/
+	PB4, /* 4	AIN4 / [I2C_SCL]	*/
+	PB3, /* 5	AIN3 / [TIM1_ETR]	*/
+	PB2, /* 6	AIN2 / [TIM2_CH3N]	*/
+	PB1, /* 7	AIN1 / [TIM1_CH2N]	*/
+	PB0, /* 8	AIN0 / [TIM1_CH1N]	*/
+	PE5, /* 9	SPI_NSS			*/
+	PC1, /* 10~	TIM1_CH1 / UART2_CK	*/
+	PC2, /* 11~	TIM1_CH2		*/
+	PD7, /* 12	TLI / [TIM1_CH4]	*/
+	PD6, /* 13	UART2_RX		*/
+	PD5, /* 14	UART2_TX		*/
+	PD4, /* 15~	TIM2_CH1 / [BEEP]	*/
+	PD3, /* 16~	TIM2_CH2 / [ADC_ETR]	*/
+	PD2, /* 17~	TIM3_CH1 / [TIM2_CH3]	*/
+	PD1, /* 18	SWIM			*/
+	PD0, /* 19~	TIM3_CH2 / [TIM1_BKIN] / [CLK_CCO] */
+	PC7, /* 20	SPI_MISO		*/
+	PC6, /* 21	SPI_MOSI		*/
+	PC5, /* 22	SPI_SCK			*/
+	PC4, /* 23~	TIM1_CH4		*/
+	PC3, /* 24~	TIM1_CH3		*/
 };
 
 
 
 // PWM on pins 12-13,13,25-28
  // using alternate functions adds 3 more PWM pins, total of 7 PWM pins
- #define digitalPinHasPWM(p)	( ((p)>=6&(p)<=9) | ((p)>=11&(p)<=13) | ((p)>=16&(p)<=18) | (p)==20 | (p)==24 | (p)==25 |)
+#define digitalPinHasPWM(p)	( ((p)>=6&(p)<=9) | ((p)>=11&(p)<=13) | ((p)>=16&(p)<=18) | (p)==20 | (p)==24 | (p)==25 |)
 
 
 #define PIN_SPI_SS    (PE5)	// 11
@@ -105,6 +111,11 @@ static const uint8_t SCL = PIN_WIRE_SCL;
 
 #define LED_BUILTIN (PE5)	// pin for the buildin LED, pin 13
 
+// ADC (digital) pin numbers
+// note that for A0..A2 these numbers overlap with the channel numbers
+// and the values would be misstaken for an ADC channel number.
+// This is a serious problem with the strict geometrical mapping of the pin
+// numbers.
 #define PIN_A0   (PB5)		// 3, Ain5
 #define PIN_A1   (PB4)		// 4, Ain4
 #define PIN_A2   (PB3)		// 5, Ain3
@@ -119,24 +130,25 @@ static const uint8_t A2 = PIN_A2;
 static const uint8_t A3 = PIN_A3;
 static const uint8_t A4 = PIN_A4;
 */
-#define	A0	PIN_A0
-#define	A1	PIN_A1
-#define	A2	PIN_A2
-#define	A3	PIN_A3
-#define	A4	PIN_A4
-#define	A5	PIN_A5
+// ADC channel numbers
+#define	A0	5		// Ain5
+#define	A1	4		// Ain4
+#define	A2	3		// Ain3
+#define	A3	2		// Ain2
+#define	A4	1		// Ain1
+#define	A5	0		// Ain0
 
-//#define NO_ANALOG	0xff
+#define NO_ANALOG	0xff
 
 // Distinguish between ADC channel number and digital pin number.
-// Note that for value 6 both ranges overlap and it is used a pin number.
+// Note that for values 3..5 both ranges overlap and it is used a channel
+// number.
 //
 // values 0..5: ADC channel number, no conversion
-// values 6..15: digital pin numbers, convert to ADC channel number
-#define analogPinToChannel(P) (	(P)>=4 ? 9-(P) : ( \
-								(P)==4 ? 12 : ( \
-								(P) \
-								)))
+// values 6..8: digital pin numbers, convert to ADC channel number
+#define analogPinToChannel(P) (	(P)<=5 ? (P) : ( \
+					(P)<=PIN_A5 ? PIN_A5-(P) : NO_ANALOG \
+				))
 extern const uint8_t digitalPinToAnalogChannelMap[];
 
 /*FIXME
@@ -154,23 +166,23 @@ extern const uint8_t digitalPinToAnalogChannelMap[];
 
 // STM8S103F3 breakout board
 //
-//                       +----+
-//                NRST  1|    |30  PD7 (D 24)  PWM+
-//           (D 1) PA1  2|    |29  PD6 (D 23)  RX
-//           (D 2) PA2  3|    |27  PD5 (D 22)  TX
-//                 PF4  4|    |27  PD4 (D 21)  PWM
-// SDA  (D 3,AI 0) PB5  5|    |26  PD3 (D 20)  PWM
-// SCL  (D 4,AI 1) PB4  6|    |25  PD2 (D 19)  PWM
-//      (D 5,AI 2) PB3  7|    |24  PD1 (D 18)
-// PWM+ (D 6,AI 3) PB2  8|    |23  PD0 (D 17)  PWM
-// PWM+ (D 7,AI 4) PB1  9|    |22  PC7 (D 16)  MISO
-// PWM+ (D 8,AI 5) PB0 10|    |21  PC6 (D 15)  MOSI
-// LED NSS   (D 9) PE5 11|    |20  PC5 (D 14)  SCK
-// PWM      (D 10) PC1 12|    |19  PC4 (D 13)  PWM
-// PWM      (D 11) PC2 13|    |18  PC3 (D 12)  PWM
-//                 3V3 14|    |17  5V
-//                 GND 15|    |16  GND
-//                       +-\/-+
+//                       +-oooo-+
+//                NRST  1|      |30  PD7 (D 24)  PWM+
+//           (D 0) PA1  2|      |29  PD6 (D 23)  RX
+//           (D 1) PA2  3|      |27  PD5 (D 22)  TX
+//           (D 2) PF4  4|      |27  PD4 (D 21~) PWM
+// SDA  (D 3,AI 0) PB5  5|      |26  PD3 (D 20~) PWM
+// SCL  (D 4,AI 1) PB4  6|      |25  PD2 (D 19~) PWM
+//      (D 5,AI 2) PB3  7|      |24  PD1 (D 18)
+// PWM+ (D 6,AI 3) PB2  8|      |23  PD0 (D 17~) PWM
+// PWM+ (D 7,AI 4) PB1  9|      |22  PC7 (D 16)  MISO
+// PWM+ (D 8,AI 5) PB0 10|      |21  PC6 (D 15)  MOSI
+// LED NSS   (D 9) PE5 11|      |20  PC5 (D 14)  SCK
+// PWM     (D 10~) PC1 12|      |19  PC4 (D 13~) PWM
+// PWM     (D 11~) PC2 13|      |18  PC3 (D 12~) PWM
+//                 3V3 14|      |17  5V
+//                 GND 15|      |16  GND
+//                       +-\__/-+
 //
 // (PWM+ indicates the additional PWM pins on alternate
 // function pins)
