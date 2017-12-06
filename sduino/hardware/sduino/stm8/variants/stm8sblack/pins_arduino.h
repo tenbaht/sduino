@@ -158,16 +158,16 @@ extern const uint8_t digitalPinToAnalogChannelMap[];
 //                NRST  1|    |30  PD7 (D 24)  PWM+
 //           (D 1) PA1  2|    |29  PD6 (D 23)  RX
 //           (D 2) PA2  3|    |27  PD5 (D 22)  TX
-//                 PF4  4|    |27  PD4 (D 21)  PMW
-// SDA  (D 3,AI 0) PB5  5|    |26  PD3 (D 20)  PMW
-// SCL  (D 4,AI 1) PB4  6|    |25  PD2 (D 19)  PMW
+//                 PF4  4|    |27  PD4 (D 21)  PWM
+// SDA  (D 3,AI 0) PB5  5|    |26  PD3 (D 20)  PWM
+// SCL  (D 4,AI 1) PB4  6|    |25  PD2 (D 19)  PWM
 //      (D 5,AI 2) PB3  7|    |24  PD1 (D 18)
-// PMW+ (D 6,AI 3) PB2  8|    |23  PD0 (D 17)  PWM
-// PMW+ (D 7,AI 4) PB1  9|    |22  PC7 (D 16)  MISO
-// PMW+ (D 8,AI 5) PB0 10|    |21  PC6 (D 15)  MOSI
+// PWM+ (D 6,AI 3) PB2  8|    |23  PD0 (D 17)  PWM
+// PWM+ (D 7,AI 4) PB1  9|    |22  PC7 (D 16)  MISO
+// PWM+ (D 8,AI 5) PB0 10|    |21  PC6 (D 15)  MOSI
 // LED NSS   (D 9) PE5 11|    |20  PC5 (D 14)  SCK
-// PWM      (D 10) PC1 12|    |19  PC4 (D 13)  PMW
-// PWM      (D 11) PC2 13|    |18  PC3 (D 12)  PMW
+// PWM      (D 10) PC1 12|    |19  PC4 (D 13)  PWM
+// PWM      (D 11) PC2 13|    |18  PC3 (D 12)  PWM
 //                 3V3 14|    |17  5V
 //                 GND 15|    |16  GND
 //                       +-\/-+
