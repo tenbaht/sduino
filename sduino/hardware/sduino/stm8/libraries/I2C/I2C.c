@@ -364,7 +364,7 @@ uint8_t I2C_write_sn(uint8_t address, uint8_t registerAddress, uint8_t *data, ui
   return(returnStatus);
 }
 
-#if 1
+#if 0
 uint8_t I2C_read(uint8_t address, uint8_t numberBytes)
 {
   bytesAvailable = 0;
