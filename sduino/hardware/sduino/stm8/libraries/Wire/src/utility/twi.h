@@ -20,7 +20,7 @@
 #ifndef twi_h
 #define twi_h
 
-  #include <inttypes.h>
+//  #include <stdint.h>
 
   //#define ATMEGA8
 
@@ -40,14 +40,14 @@
   
   void twi_init(void);
   void twi_disable(void);
-  void twi_setAddress(uint8_t);
-  void twi_setFrequency(uint32_t);
-  uint8_t twi_readFrom(uint8_t, uint8_t*, uint8_t, uint8_t);
-  uint8_t twi_writeTo(uint8_t, uint8_t*, uint8_t, uint8_t, uint8_t);
-  uint8_t twi_transmit(const uint8_t*, uint8_t);
-  void twi_attachSlaveRxEvent( void (*)(uint8_t*, int) );
-  void twi_attachSlaveTxEvent( void (*)(void) );
-  void twi_reply(uint8_t);
+  void twi_setAddress(uint8_t address);
+  void twi_setFrequency(uint32_t frequency);
+  uint8_t twi_readFrom(uint8_t address, uint8_t* data, uint8_t length, uint8_t sendStop);
+  uint8_t twi_writeTo(uint8_t address, uint8_t* data, uint8_t length, uint8_t wait, uint8_t sendStop);
+  uint8_t twi_transmit(const uint8_t* data, uint8_t length);
+  void twi_attachSlaveRxEvent( void (*function)(uint8_t*, int) );
+  void twi_attachSlaveTxEvent( void (*function)(void) );
+  void twi_reply(uint8_t ack);
   void twi_stop(void);
   void twi_releaseBus(void);
 

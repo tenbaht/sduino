@@ -19,6 +19,7 @@
   Modified 2012 by Todd Krein (todd@krein.org) to implement repeated starts
 */
 
+/*
 #include <math.h>
 #include <stdlib.h>
 #include <inttypes.h>
@@ -26,6 +27,7 @@
 #include <avr/interrupt.h>
 #include <compat/twi.h>
 #include "Arduino.h" // for digitalWrite
+*/
 
 #ifndef cbi
 #define cbi(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
@@ -67,28 +69,17 @@ static volatile uint8_t twi_error;
  */
 void twi_init(void)
 {
-  // initialize state
-  twi_state = TWI_READY;
-  twi_sendStop = true;		// default value
-  twi_inRepStart = false;
-  
-  // activate internal pullups for twi.
-  digitalWrite(SDA, 1);
-  digitalWrite(SCL, 1);
-
-  // initialize twi prescaler and bit rate
-  cbi(TWSR, TWPS0);
-  cbi(TWSR, TWPS1);
-  TWBR = ((F_CPU / TWI_FREQ) - 16) / 2;
-
-  /* twi bit rate formula from atmega128 manual pg 204
-  SCL Frequency = CPU Clock Frequency / (16 + (2 * TWBR))
-  note: TWBR should be 10 or higher for master mode
-  It is 72 for a 16mhz Wiring board with 100kHz TWI */
-
-  // enable twi module, acks, and twi interrupt
-  TWCR = _BV(TWEN) | _BV(TWIE) | _BV(TWEA);
+	/* I2C Initialize */
+	I2C_Init(
+		I2C_MAX_STANDARD_FREQ,	// 100000// I2C_SPEED,
+		0xA0,		// OwnAddress, egal
+		I2C_DUTYCYCLE_2,	// 0x00
+		I2C_ACK_CURR,		// 0x01
+		I2C_ADDMODE_7BIT,	// 0x00
+		16		// InputClockFreqencyMhz
+	);
 }
+
 
 /* 
  * Function twi_disable
@@ -96,6 +87,7 @@ void twi_init(void)
  * Input    none
  * Output   none
  */
+/*
 void twi_disable(void)
 {
   // disable twi module, acks, and twi interrupt
@@ -105,6 +97,7 @@ void twi_disable(void)
   digitalWrite(SDA, 0);
   digitalWrite(SCL, 0);
 }
+*/
 
 /* 
  * Function twi_slaveInit
@@ -112,11 +105,13 @@ void twi_disable(void)
  * Input    none
  * Output   none
  */
+/*
 void twi_setAddress(uint8_t address)
 {
   // set twi slave address (skip over TWGCE bit)
   TWAR = address << 1;
 }
+*/
 
 /* 
  * Function twi_setClock
@@ -124,6 +119,7 @@ void twi_setAddress(uint8_t address)
  * Input    Clock Frequency
  * Output   none
  */
+#if 0
 void twi_setFrequency(uint32_t frequency)
 {
   TWBR = ((F_CPU / frequency) - 16) / 2;
@@ -133,6 +129,7 @@ void twi_setFrequency(uint32_t frequency)
   note: TWBR should be 10 or higher for master mode
   It is 72 for a 16mhz Wiring board with 100kHz TWI */
 }
+#endif
 
 /* 
  * Function twi_readFrom
@@ -146,6 +143,7 @@ void twi_setFrequency(uint32_t frequency)
  */
 uint8_t twi_readFrom(uint8_t address, uint8_t* data, uint8_t length, uint8_t sendStop)
 {
+/*
   uint8_t i;
 
   // ensure data will fit into buffer
@@ -204,7 +202,7 @@ uint8_t twi_readFrom(uint8_t address, uint8_t* data, uint8_t length, uint8_t sen
   for(i = 0; i < length; ++i){
     data[i] = twi_masterBuffer[i];
   }
-	
+*/
   return length;
 }
 
@@ -225,6 +223,7 @@ uint8_t twi_readFrom(uint8_t address, uint8_t* data, uint8_t length, uint8_t sen
  */
 uint8_t twi_writeTo(uint8_t address, uint8_t* data, uint8_t length, uint8_t wait, uint8_t sendStop)
 {
+/*
   uint8_t i;
 
   // ensure data will fit into buffer
@@ -278,7 +277,7 @@ uint8_t twi_writeTo(uint8_t address, uint8_t* data, uint8_t length, uint8_t wait
   while(wait && (TWI_MTX == twi_state)){
     continue;
   }
-  
+
   if (twi_error == 0xFF)
     return 0;	// success
   else if (twi_error == TW_MT_SLA_NACK)
@@ -287,6 +286,8 @@ uint8_t twi_writeTo(uint8_t address, uint8_t* data, uint8_t length, uint8_t wait
     return 3;	// error: data send, nack received
   else
     return 4;	// other twi error
+*/
+  return 0;
 }
 
 /* 
@@ -301,6 +302,7 @@ uint8_t twi_writeTo(uint8_t address, uint8_t* data, uint8_t length, uint8_t wait
  */
 uint8_t twi_transmit(const uint8_t* data, uint8_t length)
 {
+/*
   uint8_t i;
 
   // ensure data will fit into buffer
@@ -318,7 +320,8 @@ uint8_t twi_transmit(const uint8_t* data, uint8_t length)
     twi_txBuffer[twi_txBufferLength+i] = data[i];
   }
   twi_txBufferLength += length;
-  
+*/
+
   return 0;
 }
 
@@ -328,10 +331,12 @@ uint8_t twi_transmit(const uint8_t* data, uint8_t length)
  * Input    function: callback function to use
  * Output   none
  */
+/*
 void twi_attachSlaveRxEvent( void (*function)(uint8_t*, int) )
 {
   twi_onSlaveReceive = function;
 }
+*/
 
 /* 
  * Function twi_attachSlaveTxEvent
@@ -339,10 +344,12 @@ void twi_attachSlaveRxEvent( void (*function)(uint8_t*, int) )
  * Input    function: callback function to use
  * Output   none
  */
+/*
 void twi_attachSlaveTxEvent( void (*function)(void) )
 {
   twi_onSlaveTransmit = function;
 }
+*/
 
 /* 
  * Function twi_reply
@@ -350,6 +357,7 @@ void twi_attachSlaveTxEvent( void (*function)(void) )
  * Input    ack: byte indicating to ack or to nack
  * Output   none
  */
+/*
 void twi_reply(uint8_t ack)
 {
   // transmit master read ready signal, with or without ack
@@ -359,6 +367,7 @@ void twi_reply(uint8_t ack)
 	  TWCR = _BV(TWEN) | _BV(TWIE) | _BV(TWINT);
   }
 }
+*/
 
 /* 
  * Function twi_stop
@@ -366,6 +375,7 @@ void twi_reply(uint8_t ack)
  * Input    none
  * Output   none
  */
+/*
 void twi_stop(void)
 {
   // send stop condition
@@ -380,6 +390,7 @@ void twi_stop(void)
   // update twi state
   twi_state = TWI_READY;
 }
+*/
 
 /* 
  * Function twi_releaseBus
@@ -387,6 +398,7 @@ void twi_stop(void)
  * Input    none
  * Output   none
  */
+/*
 void twi_releaseBus(void)
 {
   // release bus
@@ -395,7 +407,9 @@ void twi_releaseBus(void)
   // update twi state
   twi_state = TWI_READY;
 }
+*/
 
+/*
 ISR(TWI_vect)
 {
   switch(TW_STATUS){
@@ -558,4 +572,4 @@ ISR(TWI_vect)
       break;
   }
 }
-
+*/

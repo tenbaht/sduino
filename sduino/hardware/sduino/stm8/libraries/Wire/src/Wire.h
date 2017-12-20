@@ -17,19 +17,21 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
   Modified 2012 by Todd Krein (todd@krein.org) to implement repeated starts
+  Modified 2017 by Michael Mayer to plain C for use with Sduino
 */
 
 #ifndef TwoWire_h
 #define TwoWire_h
 
-#include <inttypes.h>
-#include "Stream.h"
+//#include <stdint.h>
+//#include "Stream.h"
 
 #define BUFFER_LENGTH 32
 
 // WIRE_HAS_END means Wire has end()
 #define WIRE_HAS_END 1
 
+/*
 class TwoWire : public Stream
 {
   private:
@@ -80,6 +82,36 @@ class TwoWire : public Stream
 };
 
 extern TwoWire Wire;
+*/
+
+/* only this minimal interface is currently implemented: */
+void	Wire_begin(void);
+
+void	Wire_beginTransmission(uint8_t);
+uint8_t Wire_endTransmission1(uint8_t sendStop);
+inline uint8_t	Wire_endTransmission(void){Wire_endTransmission1(true);}
+
+size_t	Wire_write(uint8_t);
+int	Wire_available(void);
+int	Wire_read(void);
+
+uint8_t	Wire_requestFrom(uint8_t address, uint8_t quantity);
+uint8_t	Wire_requestFrom3(uint8_t address, uint8_t quantity, uint8_t sendStop);
+
 
 #endif
 
+/* required low level functions:
+
+  twi_init(void);
+
+  // perform blocking read into buffer
+  uint8_t read = twi_readFrom(address, rxBuffer, quantity, sendStop);
+
+  // transmit buffer (blocking)
+  uint8_t ret = twi_writeTo(txAddress, txBuffer, txBufferLength, 1, sendStop);
+
+    // reply to master
+    twi_transmit(&data, 1);
+
+*/
