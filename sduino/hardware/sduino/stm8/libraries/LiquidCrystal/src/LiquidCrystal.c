@@ -329,9 +329,9 @@ static void LiquidCrystal_send(uint8_t value, uint8_t mode) {
 
 static void LiquidCrystal_pulseEnable(void) {
   digitalWrite(_enable_pin, LOW);
-  delayMicroseconds(1);
+  delayMicroseconds(6);
   digitalWrite(_enable_pin, HIGH);
-  delayMicroseconds(1);    // enable pulse must be >450ns
+  delayMicroseconds(6);    // enable pulse must be >450ns
   digitalWrite(_enable_pin, LOW);
   delayMicroseconds(100);   // commands need > 37us to settle
 }
@@ -339,6 +339,7 @@ static void LiquidCrystal_pulseEnable(void) {
 static void LiquidCrystal_write4bits(uint8_t value) {
   for (int i = 0; i < 4; i++) {
     digitalWrite(_data_pins[i], (value >> i) & 0x01);
+    delayMicroseconds(1);
   }
 
   LiquidCrystal_pulseEnable();
@@ -347,6 +348,7 @@ static void LiquidCrystal_write4bits(uint8_t value) {
 static void LiquidCrystal_write8bits(uint8_t value) {
   for (int i = 0; i < 8; i++) {
     digitalWrite(_data_pins[i], (value >> i) & 0x01);
+    delayMicroseconds(1);
   }
 
   LiquidCrystal_pulseEnable();
