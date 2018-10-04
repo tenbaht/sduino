@@ -30,5 +30,6 @@ site/
 # ignore my scratch directory
 notes/
 # ignore links to tools
-/home/georg/Öffentlich/GitHub/sduino/sduino/hardware/sduino/tools/linux
-/home/georg/Öffentlich/GitHub/sduino/sduino/hardware/sduino/tools/sdcc
+sduino/hardware/sduino/tools/linux
+sduino/hardware/sduino/tools/sdcc
+sduino/hardware/sduino/tools/linux64/*
