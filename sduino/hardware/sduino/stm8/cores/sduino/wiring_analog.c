@@ -57,34 +57,70 @@ int analogRead(uint8_t pin)
 
 #ifdef USE_SPL
 	// using spl functions:
-	ADC1_ConversionConfig(ADC1_CONVERSIONMODE_SINGLE, pin & 15, ADC1_ALIGN_RIGHT);
-	ADC1_PrescalerConfig(ADC1_PRESSEL_FCPU_D18);
-	ADC1_ExternalTriggerConfig(ADC1_EXTTRIG_TIM, DISABLE);
-	ADC1_SchmittTriggerConfig(pin, DISABLE);
+	#if defined(ADC1)
+		ADC1_ConversionConfig(ADC1_CONVERSIONMODE_SINGLE, pin & 15, ADC1_ALIGN_RIGHT);
+		ADC1_PrescalerConfig(ADC1_PRESSEL_FCPU_D18);
+		ADC1_ExternalTriggerConfig(ADC1_EXTTRIG_TIM, DISABLE);
+		ADC1_SchmittTriggerConfig(pin, DISABLE);
+	#endif
+	#if defined(ADC2)
+		ADC2_ConversionConfig(ADC2_CONVERSIONMODE_SINGLE, pin & 15, ADC2_ALIGN_RIGHT);
+		ADC2_PrescalerConfig(ADC2_PRESSEL_FCPU_D18);
+		ADC2_ExternalTriggerConfig(ADC2_EXTTRIG_TIM, DISABLE);
+		ADC2_SchmittTriggerConfig(pin, DISABLE);
+	#endif
+
 #else
 	// direct register access:
 	// select channel
-	ADC1->CSR = pin & 15;
-	bitSet(ADC1->CR2, 3);	// right align
+	#if defined(ADC1)
+		ADC1->CSR = pin & 15;
+		bitSet(ADC1->CR2, 3);	// right align
+	#endif
+	#if defined(ADC2)
+		ADC2->CSR = pin & 15;
+		bitSet(ADC2->CR2, 3);	// right align
+	#endif
 #endif
 	// first write turns on the ADC
-//	bitSet(ADC1->CR1, 0);
-	ADC1->CR1 |= ADC1_CR1_ADON;
+	#if defined(ADC1)
+		//bitSet(ADC1->CR1, 0);
+		ADC1->CR1 |= ADC1_CR1_ADON;
 
-	// second write starts the conversion
-//	bitSet(ADC1->CR1, 0);
-	ADC1->CR1 |= ADC1_CR1_ADON;
+		// second write starts the conversion
+		//bitSet(ADC1->CR1, 0);
+		ADC1->CR1 |= ADC1_CR1_ADON;
 
-	// EOC is set when the conversion finishes
-	while (! (ADC1->CSR & ADC1_FLAG_EOC));
-	ADC1->CSR &= ~(ADC1_FLAG_EOC);	// important! clear the flag
+		// EOC is set when the conversion finishes
+		while (! (ADC1->CSR & ADC1_FLAG_EOC));
+		ADC1->CSR &= ~(ADC1_FLAG_EOC);	// important! clear the flag
 
-	// in right align mode we have to read DRL first
-	low  = ADC1->DRL;
-	high = ADC1->DRH;
+		// in right align mode we have to read DRL first
+		low  = ADC1->DRL;
+		high = ADC1->DRH;
 
-	// turn off the ADC, free the pin for digital use again
-	bitClear(ADC1->CR1, 0);
+		// turn off the ADC, free the pin for digital use again
+		bitClear(ADC1->CR1, 0);
+	#endif
+	#if defined(ADC2)
+		//bitSet(ADC2->CR1, 0);
+		ADC2->CR1 |= ADC2_CR1_ADON;
+
+		// second write starts the conversion
+		//bitSet(ADC2->CR1, 0);
+		ADC2->CR1 |= ADC2_CR1_ADON;
+
+		// EOC is set when the conversion finishes
+		while (! (ADC2->CSR & ADC2_CSR_EOC));
+		ADC2->CSR &= ~(ADC2_CSR_EOC);	// important! clear the flag
+
+		// in right align mode we have to read DRL first
+		low  = ADC2->DRL;
+		high = ADC2->DRH;
+
+		// turn off the ADC, free the pin for digital use again
+		bitClear(ADC2->CR1, 0);
+	#endif
 
 	// combine the two bytes
 	return (high << 8) | low;
