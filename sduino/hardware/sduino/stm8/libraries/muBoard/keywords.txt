@@ -1,0 +1,80 @@
+#######################################
+# Syntax Coloring Map For muBoard
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+muBoard	KEYWORD1	muBoard
+
+
+#######################################
+# Methods, Functions and Macros (KEYWORD2)
+#######################################
+
+IO_init         KEYWORD2
+set_bridge	KEYWORD2
+set_lowside	KEYWORD2
+beep	        KEYWORD2
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+# analog pins
+A7              KEYWORD3  # AIN14 = PF6 = io_7
+A8              KEYWORD3  # AIN13 = PF5 = io_8
+A9              KEYWORD3  # AIN12 = PF4 = io_9
+A10             KEYWORD3  # AIN11 = PF3 = io_10
+A11             KEYWORD3  # AIN10 = PF0 = io_11
+A12             KEYWORD3  # AIN7 = PB7 = io_12
+A13             KEYWORD3  # AIN6 = PB6 = io_13
+A14             KEYWORD3  # AIN1 = PB1 = io_14
+A15             KEYWORD3  # AIN0 = PB0 = io_15
+POTI            KEYWORD3  # AIN5 = PB5 = POTI
+VD_LV           KEYWORD3  # AIN2 = PB3 = VOLT_DIV_LV
+VD_HV           KEYWORD3  # AIN3 = PB2 = VOLT_DIV_HV
+NTC             KEYWORD3  # AIN4 = PB4 = TEMP_NTC
+VCORE           KEYWORD3  # AIN15 = PF7 = VOLT_CORE
+
+# digital pins
+AUTO_MODE       KEYWORD3  # 0  = PD7 = AUTO_MODE
+IO_1            KEYWORD3  # 1  = PE5 = IO_1
+BUTTON          KEYWORD3  # 1  = PE5 = IO_1
+IO_2            KEYWORD3  # 2  = PD2 = IO_2
+IO_3            KEYWORD3  # 3  = PD0 = IO_3
+IO_4            KEYWORD3  # 4  = PA6 = IO_4
+IO_5            KEYWORD3  # 5  = PH0 = IO_5
+IO_6            KEYWORD3  # 6  = PH1 = IO_6
+IO_7            KEYWORD3  # 7  = PF6 = IO_7 = AIN14
+IO_8            KEYWORD3  # 8  = PF5 = IO_8 = AIN13
+IO_9            KEYWORD3  # 9  = PF4 = IO_9 = AIN12
+IO_10           KEYWORD3  # 10 = PF3 = IO_10 = AIN11
+IO_11           KEYWORD3  # 11 = PF0 = IO_11 = AIN10
+IO_12           KEYWORD3  # 12 = PB7 = IO_12 = AIN7
+IO_13           KEYWORD3  # 13 = PB6 = IO_13 = AIN6
+IO_14           KEYWORD3  # 14 = PB1 = IO_14 = AIN1
+IO_15           KEYWORD3  # 15 = PB0 = IO_15 = AIN0
+IO_16           KEYWORD3  # 16 = PH4 = IO_16
+TIM_1           KEYWORD3  # 17 = PC1 = TIM_1 = TIM1_CC1
+TIM_2           KEYWORD3  # 18 = PD3 = TIM_2 = TIM2_CC2
+LIN_RX          KEYWORD3  # 19 = PD6 = LIN_RX
+LIN_TX          KEYWORD3  # 20 = PD5 = LIN_TX
+LED_GREEN       KEYWORD3  # 21 = PH2 = LED_GREEN
+LED_RED         KEYWORD3  # 22 = PH3 = LED_RED
+LS_1            KEYWORD3  # 23 = PE6 = LS_1
+LS_2            KEYWORD3  # 24 = PA3 = LS_2 = TIM2_CC3
+LS_3            KEYWORD3  # 25 = PC0 = LS_3
+BRIDGE_1        KEYWORD3  # 26 = PH5 = BRIDGE_1
+BRIDGE_2        KEYWORD3  # 27 = PH6 = BRIDGE_2
+BRIDGE_3        KEYWORD3  # 28 = PH7 = BRIDGE_3
+BRIDGE_4        KEYWORD3  # 29 = PE7 = BRIDGE_4
+SPI_MOSI        KEYWORD3  # 30 = PC6 = SPI_MOSI
+SPI_MISO        KEYWORD3  # 31 = PC7 = SPI_MISO
+SPI_SCK         KEYWORD3  # 32 = PC5 = SPI_SCK
+I2C_SDA         KEYWORD3  # 33 = PE2 = I2C_SDA
+I2C_SCL         KEYWORD3  # 34 = PE1 = I2C_SCL
+UART_TX         KEYWORD3  # 35 = PD5 = UART_TX
+UART_RX         KEYWORD3  # 36 = PD6 = UART_RX
