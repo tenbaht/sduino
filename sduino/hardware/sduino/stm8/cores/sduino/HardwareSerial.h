@@ -86,7 +86,7 @@ void HardwareSerial_end(void);
 // variants of the standard Serial.print() function: Separate implementations
 // for string, char, unsigned, signed int
 #define Serial_print_s(S)	Print_print_s(HardwareSerial_write,S)
-#define Serial_print_sn(S)	Print_print_sn(HardwareSerial_write,S,N)
+#define Serial_print_sn(S,N)	Print_print_sn(HardwareSerial_write,S,N)
 #define Serial_print_c(C)	HardwareSerial_write(C)
 
 // print signed/unsigned integer values (char, short, int, long) as decimal values
