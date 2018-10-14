@@ -24,8 +24,19 @@ void setup() {
 
 void loop() {
 
+  // measure voltage on poti
+  uint16_t val = analogRead(POTI);
+  
   // print poti reading to console
-  Serial_println_i(analogRead(POTI));
-  delay(50);
+  Serial_println_i(val);
+
+  
+  // print to LCD
+  lcd_clear();
+  lcd_print_s(1, 1, "poti:");
+  lcd_print_i(2, 1, val);
+
+  // wait a bit
+  delay(100);
 
 } // loop()
