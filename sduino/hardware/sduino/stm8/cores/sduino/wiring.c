@@ -205,6 +205,13 @@ void delay(unsigned long ms)
  */
 void delayMicroseconds(unsigned int us)
 {
+	uint32_t start = micros();
+
+	// wait until time [us] has passed
+	while (micros() - start < us)
+		nop();
+
+/*
 	// call = 4 cycles, return = 4 cycles, arg access = ? cycles
 //	while (us--);
 
@@ -251,6 +258,7 @@ void delayMicroseconds(unsigned int us)
 #if F_CPU >=10000000UL
 //	for (i=us; i; i--);
 #endif
+*/
 /*FIXME: Zeitdauer nicht ausgezählt. Das kommt raus:
 
                                     283 ;	wiring.c: 124: while (us--);// __asm__ ("nop");
@@ -645,29 +653,58 @@ void init()
 #endif // ifndef NO_ANALOG_OUT
 
 #ifndef NO_ANALOG_IN
+	
 	/* De-Init ADC peripheral, sets prescaler to 2 */
-	ADC1_DeInit();
-	// optional:
-	// set a2d prescaler so we are inside a range of 1-2 MHz
-	#if F_CPU >= 18000000 // 18 MHz / 18 = 1000 KHz
-		ADC1->CR1 = 7 <<4;
-	#elif F_CPU >= 12000000 // 12 MHz / 12 = 1000 kHz
-		ADC1->CR1 = 6 <<4;
-	#elif F_CPU >= 10000000 // 10 MHz / 10 = 1000 kHz
-		ADC1->CR1 = 5 <<4;
-	#elif F_CPU >= 8000000 // 8 MHz / 8 = 1000 kHz
-		ADC1->CR1 = 4 <<4;
-	#elif F_CPU >= 6000000 // 6 MHz / 6 = 1000 kHz
-		ADC1->CR1 = 4 <<4;
-	#elif F_CPU >= 4000000 // 4 MHz / 4 = 1000 kHz
-		ADC1->CR1 = 3 <<4;
-	#elif F_CPU >= 3000000 // 3 MHz / 3 = 1000 kHz
-		ADC1->CR1 = 2 <<4;
-	#elif F_CPU >= 2000000 // 2 MHz / 2 = 1000 kHz
-		ADC1->CR1 = 1 <<4;
-//	#else // minimum prescaler is 2, already set by ADC1_DeInit();
-//		ADC1->CR1 = 0 <<4;
-	#endif
+	#if defined(ADC1)
+		ADC1_DeInit();
+		// optional:
+		// set a2d prescaler so we are inside a range of 1-2 MHz
+		#if F_CPU >= 18000000 // 18 MHz / 18 = 1000 KHz
+			ADC1->CR1 = 7 <<4;
+		#elif F_CPU >= 12000000 // 12 MHz / 12 = 1000 kHz
+			ADC1->CR1 = 6 <<4;
+		#elif F_CPU >= 10000000 // 10 MHz / 10 = 1000 kHz
+			ADC1->CR1 = 5 <<4;
+		#elif F_CPU >= 8000000 // 8 MHz / 8 = 1000 kHz
+			ADC1->CR1 = 4 <<4;
+		#elif F_CPU >= 6000000 // 6 MHz / 6 = 1000 kHz
+			ADC1->CR1 = 4 <<4;
+		#elif F_CPU >= 4000000 // 4 MHz / 4 = 1000 kHz
+			ADC1->CR1 = 3 <<4;
+		#elif F_CPU >= 3000000 // 3 MHz / 3 = 1000 kHz
+			ADC1->CR1 = 2 <<4;
+		#elif F_CPU >= 2000000 // 2 MHz / 2 = 1000 kHz
+			ADC1->CR1 = 1 <<4;
+		//#else // minimum prescaler is 2, already set by ADC1_DeInit();
+		//	ADC1->CR1 = 0 <<4;
+		#endif
+
+	#elif defined(ADC2)
+		ADC2_DeInit();
+		// optional:
+		// set a2d prescaler so we are inside a range of 1-2 MHz
+		#if F_CPU >= 18000000 // 18 MHz / 18 = 1000 KHz
+			ADC2->CR1 = 7 <<4;
+		#elif F_CPU >= 12000000 // 12 MHz / 12 = 1000 kHz
+			ADC2->CR1 = 6 <<4;
+		#elif F_CPU >= 10000000 // 10 MHz / 10 = 1000 kHz
+			ADC2->CR1 = 5 <<4;
+		#elif F_CPU >= 8000000 // 8 MHz / 8 = 1000 kHz
+			ADC2->CR1 = 4 <<4;
+		#elif F_CPU >= 6000000 // 6 MHz / 6 = 1000 kHz
+			ADC2->CR1 = 4 <<4;
+		#elif F_CPU >= 4000000 // 4 MHz / 4 = 1000 kHz
+			ADC2->CR1 = 3 <<4;
+		#elif F_CPU >= 3000000 // 3 MHz / 3 = 1000 kHz
+			ADC2->CR1 = 2 <<4;
+		#elif F_CPU >= 2000000 // 2 MHz / 2 = 1000 kHz
+			ADC2->CR1 = 1 <<4;
+		//#else // minimum prescaler is 2, already set by ADC1_DeInit();
+		//	ADC2->CR1 = 0 <<4;
+		#endif
+
+	#endif // ADC2
+
 #endif // ifndef NO_ANALOG_IN
 
 	// this needs to be called before setup() or some functions won't
