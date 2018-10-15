@@ -174,13 +174,13 @@ cross-platform layer like
 
 Required packages:
 
-- for 64 bit systems: `apt install libusb-1.0-0-dev`
-- for 32 bit systems: `apt install libusb-1.0-0-dev:i386`
+	apt install libusb-1.0-0-dev`
+
+Compiling stm8flash:
 
 	git clone git@github.com:vdudouyt/stm8flash.git
 	cd stm8flash
-	make
-	cp -av stm8flash /usr/local/bin
+	make RELEASE=yes
 
 
 
@@ -192,8 +192,9 @@ Required packages:
 
 Compiling stm8flash:
 
+	git clone git@github.com:vdudouyt/stm8flash.git
 	cd stm8flash
-	CFLAGS=-m32 make
+	make RELEASE=yes CFLAGS=-m32
 
 
 
@@ -201,10 +202,15 @@ Compiling stm8flash:
 
 ### Cross-Compiling for windows on a Linux system
 
+Required packages:
+
 	apt install mingw-w64 mingw-w64-tools
 
+Compiling stm8flash:
+
+	git clone git@github.com:vdudouyt/stm8flash.git
 	cd stm8flash
-	make CC=i686-w64-mingw32-gcc PLATFORM=w7
+	make CC=i686-w64-mingw32-gcc RELEASE=yes CFLAGS=-I. PLATFORM=w7
 
 
 
@@ -227,4 +233,35 @@ https://github.com/orlp/dev-on-windows/wiki/Installing-GCC--&-MSYS2
 	mingw-w64-i686-winpthreads-git mingw-w64-i686-winstorecompat-git
 
 - copy `libusb-1.0/libusb.h` and `libusb.dll` into current directory
-- `make CFLAGS="-I. -L."`
+- `make RELEASE=yes CFLAGS="-I. -L."`
+
+
+### For Mac OSX
+
+
+#### stm8flash
+
+Required packages (libusb pulls in gcc if not already installed):
+
+	brew install libusb pkg-config
+
+Change into the stm8flash source directory and change the `#include
+"libusb.h"` to "#include "libusb-1.0/libusb.h"` (same as for Windows). Now
+it compiles:
+
+        make RELEASE=yes
+
+
+
+#### stm8gal
+
+No SPI support, so compiling is similar to Windows and the same modification
+of the Makefile is necessary: Remove `spi_spidev_comm.c` from the list of
+source files in `SOURCES` in the Makefile.
+
+Now we can compile, but we need to convince the Makefile not to set the
+`USE_SPIDEV` define. An easy workaround to do so is to fool the Makefile
+into assuming a Windows build:
+
+	make OS=Win
+
