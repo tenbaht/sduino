@@ -128,7 +128,7 @@ void I2C_end()
 }
 #endif
 
-#if 0
+#if 1
 void I2C_timeOut(uint16_t _timeOut)
 {
   timeOutDelay = _timeOut;
@@ -643,16 +643,35 @@ static uint8_t sendAddress(uint8_t i2cAddress)
     return(bufferedStatus);
   } 
 #else
+	// for timeout	
+	unsigned long startingTime = millis();
+
 	/* Test on EV5 and clear it */
-	while (!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT));
+	while (!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT))
+	{
+		if(!timeOutDelay){continue;}
+		if((millis() - startingTime) >= timeOutDelay)
+		{
+			lockUp();
+			return(1);
+		}
+	}
 
 	/* Send the Address + Direction */
 	I2C->DR = i2cAddress;	// I2C_Send7bitAddress()
 
 	/* Test on EV6 and clear it */
-	while (!I2C_CheckEvent(I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED));
+	while (!I2C_CheckEvent(I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED))
+	{
+		if(!timeOutDelay){continue;}
+		if((millis() - startingTime) >= timeOutDelay)
+		{
+			lockUp();
+			return(1);
+		}
+	}
 
-	return 0;
+	return(0);
 #endif
 }
 
@@ -688,8 +707,19 @@ uint8_t sendByte(uint8_t i2cData)
     return(bufferedStatus);
   } 
 #else
+	// for timeout	
+	unsigned long startingTime = millis();
+
 	/* Test on EV8 */
-	while (!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTING));
+	while (!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTING))
+	{
+		if(!timeOutDelay){continue;}
+		if((millis() - startingTime) >= timeOutDelay)
+		{
+			lockUp();
+			return(1);
+		}
+	}
 
 	I2C->DR = i2cData;
 	return 0;
@@ -747,8 +777,19 @@ static uint8_t stop(void)
        
   }
 #else
+	// for timeout	
+	unsigned long startingTime = millis();
+
 	/* Test on EV8_2 */
-	while (!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED));
+	while (!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED))
+	{
+		if(!timeOutDelay){continue;}
+		if((millis() - startingTime) >= timeOutDelay)
+		{
+			lockUp();
+			return(1);
+		}
+	}
 
 	/* Generate a STOP condition */
 	I2C->CR2 |= I2C_CR2_STOP;
@@ -761,5 +802,7 @@ static void lockUp(void)
 #if 0
   TWCR = 0; //releases SDA and SCL lines to high impedance
   TWCR = _BV(TWEN) | _BV(TWEA); //reinitialize TWI 
+#else
+
 #endif
 }
