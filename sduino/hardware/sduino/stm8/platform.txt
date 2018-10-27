@@ -136,7 +136,6 @@ tools.stm8flash.cmd=stm8flash
 tools.stm8flash.path={runtime.tools.STM8Tools.path}/linux
 tools.stm8flash.path.windows={runtime.tools.STM8Tools.path}/win
 tools.stm8flash.path.macosx={runtime.tools.STM8Tools.path}/macosx
-#tools.stm8flash.path.linux64={runtime.hardware.path}/tools/linux64
 
 #tools.stm8flash.upload.params.verify=
 tools.stm8flash.upload.params.verbose=
@@ -149,17 +148,21 @@ tools.stm8flash.upload.pattern="{path}/{cmd}" -c{upload.protocol} -p{upload.mcu}
 
 tools.stm8gal.cmd=stm8gal
 tools.stm8gal.path={runtime.tools.STM8Tools.path}/linux
-#tools.stm8gal.path={runtime.hardware.path}/tools/linux
 tools.stm8gal.path.windows={runtime.tools.STM8Tools.path}/win
 tools.stm8gal.path.macosx={runtime.tools.STM8Tools.path}/macosx
-#tools.stm8gal.path.linux64={runtime.hardware.path}/tools/linux64
 
-#tools.stm8gal.upload.params.verify=
-tools.stm8gal.upload.params.noverify=-v
-tools.stm8gal.upload.params.verbose=-V
+tools.stm8gal.params.port=-p "{serial.port}"
+tools.stm8gal.params.baudrate=-b 230400
+tools.stm8gal.params.reset=-R 1
+tools.stm8gal.params.method=-u 0
+tools.stm8gal.params.verbose=-V 0
+tools.stm8gal.params.background=-B
+
+tools.stm8gal.upload.command=-w "{build.path}/{build.project_name}.hex"
 tools.stm8gal.upload.params.quiet=
-tools.stm8gal.upload.pattern="{path}/{cmd}" -p "{serial.port}" {upload.verbose} {upload.verify} -R 1 -u 2 -Q -w "{build.path}/{build.project_name}.hex"
+tools.stm8gal.upload.params.noverify=-v
+tools.stm8gal.upload.pattern="{path}/{cmd}" {params.port} {params.baudrate} {params.reset} {params.method} {params.background} {params.verbose} {upload.params.noverify} {upload.command}
 
-#tools.stm8gal.erase.params.verbose=-V
-#tools.stm8gal.erase.params.quiet=
-#tools.stm8gal.erase.pattern="{path}/{cmd}" "-p{serial.port}" {erase.verbose} -R1 -u2 -Q -e
+tools.stm8gal.erase.command=-e
+tools.stm8gal.erase.params.quiet=
+tools.stm8gal.erase.pattern="{path}/{cmd}" {params.port} {params.baudrate} {params.reset} {params.method} {params.background} {params.verbose} {erase.command}

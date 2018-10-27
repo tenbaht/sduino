@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - using stm8gal to upload using the builtin bootloader of larger STM8 devices
 - Support for Sduino-UNO board
 
+### Changed
+- updated stm8flash to support more STM8 devices (and espstlink for Linux
+  and OSX)
+- updated SDCC to version 3.8.0
+
+### Fixed
+- Serial_serial_print_sn()
+
 
 
 ## [0.3.3 - 2017-11-14]

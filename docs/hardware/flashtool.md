@@ -2,12 +2,21 @@
 
 The STM8-Discovery-Boards come with an integrated ST-Link-Interface, but for
 any other board you need a special flash tools in order to program the CPU.
+These litte devices look like a generic USB thumb drive and are sold for
+well under $3 on aliexpress, just search for st-link.
 
-As far as I know there is no third-party product or software that implements
-the needed communication protocol. So you can't just use a regular Arduino
-board as a flash tool as you could for the ATmega. But this is not a
-problem, as these tools are are easily available and unbeliveably cheap
-(well under $3 on aliexpress, search for st-link).
+As far as I know there is no solution to use a regular Arduino board as a
+SWIM-capable flash programmer. The [universal programmer
+uprog2](http://jcwolfram.de/projekte/uprog2/main.php) (website in german
+only) is based on an ATmega664 and it might be possible to use an Arduino
+Mega board with this software (untested).
+
+[esp-stlink](https://github.com/rumpeltux/esp-stlink) is a ST-Link
+programmer based on the ESP8266. It allows programming an STM8 via a Wifi
+connection. The use of this programmer is supported by stm8flash now, but
+not yet integrated into the Arduino IDE. I didn't test this yet.
+
+## Classic ST-Link V2 flash tools
 
 There are two main versions of the ST-Link V2 compatible flash tool
 available: One in a USB-Drive-like metal housing (often pink or blue) and
