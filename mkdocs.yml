@@ -2,7 +2,8 @@ site_name: Sduino
 site_description: Programming the STM8S the Arduino way
 site_author: Michael Mayer
 repo_url: 'https://github.com/tenbaht/sduino'
-pages:
+# using mkdocs 1.0.4 now
+nav:
     - User Guide:
         - Introduction: 'index.md'
         - Automatic Installation: 'usage/board-manager-install.md'
@@ -19,6 +20,7 @@ pages:
         - SPI: api/SPI.md
         - I2C: api/I2C.md
         - LiquidCrystal character LCD library: api/LiquidCrystal.md
+        - LiquidCrystal_I2C character LCD connected via I2C backpack boards: api/LiquidCrystal_I2C.md
         - PCD8544 libray for Nokia 5110-like graphical LCDs: api/PCD8544.md
         - Mini_SSD1306 library for monochrome OLED-displays: api/Mini_SSD1306.md
         - Stepper library: api/Stepper.md
@@ -29,8 +31,11 @@ pages:
         - 'Generic STM8S103 breakout board (stm8blue)': hardware/stm8blue.md
         - 'ESP14: Wifi board, STM8S003': hardware/esp14.md
         - 'STM8S105Discovery: Evaluation board made my ST': hardware/stm8sdiscovery.md
+        - W1209 thermostat board: 'hardware/w1209-thermostat.md'
     - Developer Guide:
         - IDE integration: 'developer/ide-integration.md'
+        - Compiling the tools: 'developer/compiling-the-tools.md'
+        - Update an automatic installation to a manual installtion: 'developer/update-to-manual.md'
         - C preprocessor macro magic: 'developer/macro.md'
         - Ways to define a pin mapping: 'developer/pin_mapping.md'
         - Using the SDCC compiler: 'developer/sdcc.md'
