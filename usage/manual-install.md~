@@ -1,8 +1,15 @@
 # Manual Installation
 
-Makes most sense if you plan on using a Makefile. IDE use is still possible.
+The recommanded way of installation is now the [automatic
+installation](board-manager-install.md) using the Arduino Board Manager.
 
-For all systems start here:
+The manual installation described here is only useful if you prefer a
+Makefile based build over using the Arduino IDE or if you would like to help
+with the development of Sduino.
+
+In any case it is still possible to use the IDE.
+
+For all systems start with this:
 
 - Clone or download and extract the
   [repository](https://github.com/tenbaht/sduino) to a convenient location.

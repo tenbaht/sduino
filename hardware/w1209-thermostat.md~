@@ -1,0 +1,34 @@
+# W1209 Thermostat module
+
+
+STM8S000F3P6 microcontroller, 8 KB Flash, 1 KB RAM, 128 bytes EEPROM
+
+- 12V supply voltage
+- One relay with indikator LED
+- three buttons
+- three digit 7-segment-display, multiplexed
+- external NTC temperture sensor, 10k
+
+![connecting the board](https://github.com/mister-grumbler/w1209-firmware/raw/master/docs/st-link_conn_w1209.jpg)
+
+
+## SWIM connector
+
+Pinout of SWIM connector
+
+Pin	| Signal
+---:	| ------
+1	| Vcc (5V)
+2	| SWIM
+3	| NRST
+4	| GND
+
+
+## Schematic
+
+![Schematic of W1209](https://github.com/mister-grumbler/w1209-firmware/raw/master/docs/thermostat-w1209.jpg)
+
+
+## Further reading
+
+[Functionally identical firmware, GPL2'ed](https://github.com/mister-grumbler/w1209-firmware)

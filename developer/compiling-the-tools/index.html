@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Michael Mayer">
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Compiling the tools - Sduino</title>
+    <link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../js/jquery-1.10.2.min.js" defer></script>
+    <script src="../../js/bootstrap-3.3.7.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../..">Sduino</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../..">Introduction</a>
+</li>
+                                    
+<li >
+    <a href="../../usage/board-manager-install/">Automatic Installation</a>
+</li>
+                                    
+<li >
+    <a href="../../usage/build-ide/">Building with the IDE</a>
+</li>
+                                    
+<li >
+    <a href="../../usage/why-stm8/">When to use an STM8S - and when not</a>
+</li>
+                                    
+<li >
+    <a href="../../usage/manual-install/">Manual Installation</a>
+</li>
+                                    
+<li >
+    <a href="../../usage/build-cli/">Building with a Makefile</a>
+</li>
+                                    
+<li >
+    <a href="../../usage/limitations/">Limitations</a>
+</li>
+                                    
+<li >
+    <a href="../../usage/status-todo/">Status and todo</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Libraries <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../api/migration/">API description and migration guidelines</a>
+</li>
+                                    
+<li >
+    <a href="../../api/Print/">Print</a>
+</li>
+                                    
+<li >
+    <a href="../../api/HardwareSerial/">HardwareSerial</a>
+</li>
+                                    
+<li >
+    <a href="../../api/SPI/">SPI</a>
+</li>
+                                    
+<li >
+    <a href="../../api/I2C/">I2C</a>
+</li>
+                                    
+<li >
+    <a href="../../api/LiquidCrystal/">LiquidCrystal character LCD library</a>
+</li>
+                                    
+<li >
+    <a href="../../api/LiquidCrystal_I2C/">LiquidCrystal_I2C character LCD connected via I2C backpack boards</a>
+</li>
+                                    
+<li >
+    <a href="../../api/PCD8544/">PCD8544 libray for Nokia 5110-like graphical LCDs</a>
+</li>
+                                    
+<li >
+    <a href="../../api/Mini_SSD1306/">Mini_SSD1306 library for monochrome OLED-displays</a>
+</li>
+                                    
+<li >
+    <a href="../../api/Stepper/">Stepper library</a>
+</li>
+                                    
+<li >
+    <a href="../../api/Servo/">Servo library</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hardware <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../hardware/flashtool/">Flash tool</a>
+</li>
+                                    
+<li >
+    <a href="../../hardware/stm8blue/">Generic STM8S103 breakout board (stm8blue)</a>
+</li>
+                                    
+<li >
+    <a href="../../hardware/esp14/">ESP14: Wifi board, STM8S003</a>
+</li>
+                                    
+<li >
+    <a href="../../hardware/stm8sdiscovery/">STM8S105Discovery: Evaluation board made my ST</a>
+</li>
+                                    
+<li >
+    <a href="../../hardware/w1209-thermostat/">W1209 thermostat board</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../ide-integration/">IDE integration</a>
+</li>
+                                    
+<li class="active">
+    <a href="./">Compiling the tools</a>
+</li>
+                                    
+<li >
+    <a href="../update-to-manual/">Update an automatic installation to a manual installtion</a>
+</li>
+                                    
+<li >
+    <a href="../macro/">C preprocessor macro magic</a>
+</li>
+                                    
+<li >
+    <a href="../pin_mapping/">Ways to define a pin mapping</a>
+</li>
+                                    
+<li >
+    <a href="../sdcc/">Using the SDCC compiler</a>
+</li>
+                                    
+<li >
+    <a href="../spl/">Using the SPL with SDCC and sduino</a>
+</li>
+                                    
+<li >
+    <a href="../bare-metal-programming/">Bare metal programming on the STM8</a>
+</li>
+                                    
+<li >
+    <a href="../performance/">Performance comparison and benchmarking</a>
+</li>
+                                    
+<li >
+    <a href="../links/">Links and further reading</a>
+</li>
+                                </ul>
+                            </li>
+                            <li >
+                                <a href="../../contact/">Contact</a>
+                            </li>
+                            <li >
+                                <a href="../../about/">About</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li >
+                                <a rel="next" href="../ide-integration/">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../update-to-manual/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://github.com/tenbaht/sduino/edit/master/docs/developer/compiling-the-tools.md"><i class="fa fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#compiling-the-tools">Compiling the tools</a></li>
+            <li><a href="#stm8gal">stm8gal</a></li>
+            <li><a href="#stm8flash">stm8flash</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="compiling-the-tools">Compiling the tools</h1>
+<h2 id="stm8gal">stm8gal</h2>
+<p>Project page: https://github.com/gicking/stm8gal</p>
+<pre><code>git clone git@github.com:gicking/stm8gal.git
+</code></pre>
+<h3 id="for-linux">For Linux</h3>
+<pre><code>cd stm8gal
+make
+cp -av stm8gal /usr/local/bin
+</code></pre>
+<h3 id="for-linux-32-bit-on-a-64-bit-linux-system">For Linux 32 bit on a 64 bit Linux system</h3>
+<p>Required packages:</p>
+<pre><code>apt install gcc-multilib libusb-1.0-0-dev:i386
+</code></pre>
+<p>Compiling stm8gal requires a small modification in the Makefile. For CFLAGS
+and LDFLAGS change the <code>=</code> operator to <code>+=</code> to allow for additional
+parameters on the command line:</p>
+<pre><code>cd stm8gal
+sed -i '/FLAGS/ s/ = / += /' Makefile
+</code></pre>
+<p>Now start the compiler:</p>
+<pre><code>CFLAGS=-m32 LDFLAGS=-m32 make
+</code></pre>
+<h3 id="for-windows">For Windows</h3>
+<p>Windows does not support an SPI device. Apply this patch to disable
+compilation of spi_spidev_comm.c for Windows:</p>
+<pre><code class="diff">diff --git a/Makefile b/Makefile
+index 24b0057..053d17b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -4,7 +4,7 @@ CC            = gcc
+ CFLAGS        = -c -Wall -I./STM8_Routines
+ #CFLAGS       += -DDEBUG
+ LDFLAGS       = -g3 -lm
+-SOURCES       = bootloader.c hexfile.c main.c misc.c serial_comm.c spi_spidev_comm.c spi_Arduino_comm.c
++SOURCES       = bootloader.c hexfile.c main.c misc.c serial_comm.c spi_Arduino_comm.c
+ INCLUDES      = globals.h misc.h bootloader.h hexfile.h serial_comm.h spi_spidev_comm.h spi_Arduino_comm.h main.h
+ STM8FLASH     = STM8_Routines/E_W_ROUTINEs_128K_ver_2.1.s19 STM8_Routines/E_W_ROUTINEs_128K_ver_2.0.s19 STM8_Routines/E_W_ROUTINEs_256K_ver_1.0.s19 STM8_Routines/E_W_ROUTINEs_32K_ver_1.3.s19 STM8_Routines/E_W_ROUTINEs_32K_ver_1.4.s19 STM8_Routines/E_W_ROUTINEs_128K_ver_2.2.s19 STM8_Routines/E_W_ROUTINEs_32K_ver_1.0.s19 STM8_Routines/E_W_ROUTINEs_128K_ver_2.4.s19 STM8_Routines/E_W_ROUTINEs_32K_ver_1.2.s19  STM8_Routines/E_W_ROUTINEs_32K_verL_1.0.s19 STM8_Routines/E_W_ROUTINEs_8K_verL_1.0.s19
+ STM8INCLUDES  = $(STM8FLASH:.s19=.h)
+@@ -16,6 +16,7 @@ RM            = rm -fr
+ # add optional SPI support via spidev library (Windows not yet supported)
+ ifeq (,$(findstring Win,$(OS)))
+    CFLAGS  += -DUSE_SPIDEV
++   SOURCES += spi_spidev_comm.c
+ endif
+
+ # add optional GPIO reset via wiringPi library (Raspberry only) 
+diff --git a/misc.c b/misc.c
+index 9fe02a0..67b5c0d 100644
+--- a/misc.c
++++ b/misc.c
+@@ -22,7 +22,7 @@
+ // WIN32 specific
+ #if defined(WIN32)
+
+-  #include &quot;Windows.h&quot;
++  #include &quot;windows.h&quot;
+
+   // forground colours
+   #define FG_BLACK      0
+</code></pre>
+
+<p>Now compile:</p>
+<ul>
+<li>on a Windows system: <code>make</code></li>
+<li>using mingw on Linux: <code>make CC=i686-w64-mingw32-gcc OS=Win</code></li>
+</ul>
+<h2 id="stm8flash">stm8flash</h2>
+<p>Project page: https://github.com/vdudouyt/stm8flash</p>
+<p>Compiling for Linux and OSX is straight forward, Windows is more
+complicated. Current versions of stm8flash support the espstlink programmer.
+The programmer is conneced via USB and a virtual serial port, not over Wifi
+and for serial access the termios library is used. Being a POSIX function,
+this is not supported by mingw, only by cygwin. As a workaround I use this
+patch to disable the espstlink functionality on Windows systems:</p>
+<pre><code class="diff">diff --git a/Makefile b/Makefile
+index 7ed48d1..e76a69f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -39,6 +39,7 @@ else
+    LIBS   = -lusb-1.0
+    LIBUSB_CFLAGS =
+    CC     ?= GCC
++   SKIP_ESP   = yes
+    BIN_SUFFIX =.exe
+ endif
+
+@@ -47,8 +48,12 @@ override CFLAGS := $(BASE_CFLAGS) $(LIBUSB_CFLAGS) $(CFLAGS)
+
+
+ BIN        =stm8flash
+-OBJECTS    =stlink.o stlinkv2.o espstlink.o main.o byte_utils.o ihex.o srec.o stm8.o libespstlink.o
+-
++OBJECTS    =stlink.o stlinkv2.o main.o byte_utils.o ihex.o srec.o stm8.o
++ifeq ($(SKIP_ESP),yes)
++   override CFLAGS  += -DNO_ESP
++else
++   OBJECTS +=espstlink.o libespstlink.o
++endif
+
+ .PHONY: all clean install
+
+diff --git a/main.c b/main.c
+index ce19e47..29a25d2 100644
+--- a/main.c
++++ b/main.c
+@@ -54,6 +54,7 @@ programmer_t pgms[] = {
+        stlink2_swim_read_range,
+        stlink2_swim_write_range,
+    },
++#ifndef NO_ESP
+     {
+        &quot;espstlink&quot;,
+        0,
+@@ -64,6 +65,7 @@ programmer_t pgms[] = {
+        espstlink_swim_read_range,
+        espstlink_swim_write_range,
+    },
++#endif
+    { NULL },
+ };
+
+@@ -72,9 +74,15 @@ void print_help_and_exit(const char *name, bool err) {
+    fprintf(stream, &quot;Usage: %s [-c programmer] [-S serialno] [-p partno] [-s memtype] [-b bytes] [-r|-w|-v] &lt;filename&gt;\n&quot;, name);
+    fprintf(stream, &quot;Options:\n&quot;);
+    fprintf(stream, &quot;\t-?             Display this help\n&quot;);
+-   fprintf(stream, &quot;\t-c programmer  Specify programmer used (stlink, stlinkv2 or espstlink)\n&quot;);
++   fprintf(stream, &quot;\t-c programmer  Specify programmer used (stlink, stlinkv2&quot;
++#ifndef NO_ESP
++   &quot; or espstlink&quot;
++#endif
++   &quot;)\n&quot;);
+    fprintf(stream, &quot;\t-S serialno    Specify programmer's serial number. If not given and more than one programmer is available, they'll be listed.\n&quot;);
++#ifndef NO_ESP
+    fprintf(stream, &quot;\t-d port        Specify the serial device for espstlink (default: /dev/ttyUSB0)\n&quot;);
++#endif
+    fprintf(stream, &quot;\t-p partno      Specify STM8 device\n&quot;);
+    fprintf(stream, &quot;\t-l             List supported STM8 devices\n&quot;);
+    fprintf(stream, &quot;\t-s memtype     Specify memory type (flash, eeprom, ram, opt or explicit address)\n&quot;);
+</code></pre>
+
+<p>Obviously, a better approach would be the use of a simple intermediate
+cross-platform layer like
+<a href="https://sigrok.org/wiki/Libserialport">libserialport</a>.</p>
+<h3 id="for-linux_1">For Linux</h3>
+<p>Required packages:</p>
+<pre><code>apt install libusb-1.0-0-dev`
+</code></pre>
+<p>Compiling stm8flash:</p>
+<pre><code>git clone git@github.com:vdudouyt/stm8flash.git
+cd stm8flash
+make RELEASE=yes
+</code></pre>
+<h3 id="for-linux-32-bit-on-a-64-bit-linux-system_1">For Linux 32 bit on a 64 bit Linux system</h3>
+<p>Required packages:</p>
+<pre><code>apt install gcc-multilib libusb-1.0-0-dev:i386
+</code></pre>
+<p>Compiling stm8flash:</p>
+<pre><code>git clone git@github.com:vdudouyt/stm8flash.git
+cd stm8flash
+make RELEASE=yes CFLAGS=-m32
+</code></pre>
+<h3 id="cross-compiling-for-windows-on-a-linux-system">Cross-Compiling for windows on a Linux system</h3>
+<p>Required packages:</p>
+<pre><code>apt install mingw-w64 mingw-w64-tools
+</code></pre>
+<p>Compiling stm8flash:</p>
+<pre><code>git clone git@github.com:vdudouyt/stm8flash.git
+cd stm8flash
+make CC=i686-w64-mingw32-gcc RELEASE=yes CFLAGS=-I. PLATFORM=w7
+</code></pre>
+<h3 id="for-windows-on-a-windows-system">For Windows on a Windows system</h3>
+<p>https://github.com/orlp/dev-on-windows/wiki/Installing-GCC--&amp;-MSYS2</p>
+<ul>
+<li>Open msys window, execute <code>pacman -Syuu</code>, close window.</li>
+<li>repeat the before step until no more updates are found.</li>
+<li>do eigther the full install (700MB):
+    pacman -S --needed base-devel mingw-w64-i686-toolchain</li>
+<li>or the reduced install (350MB):
+    pacman -S --needed mingw-w64-i686-toolchain make grep sed pkg-config</li>
+<li>
+<p>minimum install (150MB):
+    pacman -S --needed mingw-w64-i686-binutils mingw-w64-i686-crt-git
+    mingw-w64-i686-gcc mingw-w64-i686-gcc-libs mingw-w64-i686-headers-git
+    mingw-w64-i686-libmangle-git mingw-w64-i686-libwinpthread-git
+    mingw-w64-i686-make mingw-w64-i686-pkg-config mingw-w64-i686-tools-git
+    mingw-w64-i686-winpthreads-git mingw-w64-i686-winstorecompat-git</p>
+</li>
+<li>
+<p>copy <code>libusb-1.0/libusb.h</code> and <code>libusb.dll</code> into current directory</p>
+</li>
+<li><code>make RELEASE=yes CFLAGS="-I. -L."</code></li>
+</ul>
+<h3 id="for-mac-osx">For Mac OSX</h3>
+<h4 id="stm8flash_1">stm8flash</h4>
+<p>Required packages (libusb pulls in gcc if not already installed):</p>
+<pre><code>brew install libusb pkg-config
+</code></pre>
+<p>Change into the stm8flash source directory and change the <code>#include
+"libusb.h"</code> to "#include "libusb-1.0/libusb.h"` (same as for Windows). Now
+it compiles:</p>
+<pre><code>    make RELEASE=yes
+</code></pre>
+<h4 id="stm8gal_1">stm8gal</h4>
+<p>No SPI support, so compiling is similar to Windows and the same modification
+of the Makefile is necessary: Remove <code>spi_spidev_comm.c</code> from the list of
+source files in <code>SOURCES</code> in the Makefile.</p>
+<p>Now we can compile, but we need to convince the Makefile not to set the
+<code>USE_SPIDEV</code> define. An easy workaround to do so is to fool the Makefile
+into assuming a Windows build:</p>
+<pre><code>make OS=Win
+</code></pre></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

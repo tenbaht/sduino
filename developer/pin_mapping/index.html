@@ -8,260 +8,242 @@
         <meta name="author" content="Michael Mayer">
         
         <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Ways to define a pin mapping - Sduino</title>
+    <link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
-	<title>Ways to define a pin mapping - Sduino</title>
-
-        <link href="../../css/bootstrap-3.0.3.min.css" rel="stylesheet">
-        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
-        <link rel="stylesheet" href="../../css/highlight.css">
-        <link href="../../css/base.css" rel="stylesheet">
-
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-        <![endif]-->
-
-        
+    <script src="../../js/jquery-1.10.2.min.js" defer></script>
+    <script src="../../js/bootstrap-3.3.7.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
     <body>
 
         <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
+            <div class="container">
 
-        <!-- Collapsed navigation -->
-        <div class="navbar-header">
-            <!-- Expander button -->
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../..">Sduino</a>
+                </div>
 
-            <!-- Main title -->
-            <a class="navbar-brand" href="../..">Sduino</a>
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../..">Introduction</a>
+</li>
+                                    
+<li >
+    <a href="../../usage/board-manager-install/">Automatic Installation</a>
+</li>
+                                    
+<li >
+    <a href="../../usage/build-ide/">Building with the IDE</a>
+</li>
+                                    
+<li >
+    <a href="../../usage/why-stm8/">When to use an STM8S - and when not</a>
+</li>
+                                    
+<li >
+    <a href="../../usage/manual-install/">Manual Installation</a>
+</li>
+                                    
+<li >
+    <a href="../../usage/build-cli/">Building with a Makefile</a>
+</li>
+                                    
+<li >
+    <a href="../../usage/limitations/">Limitations</a>
+</li>
+                                    
+<li >
+    <a href="../../usage/status-todo/">Status and todo</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Libraries <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../api/migration/">API description and migration guidelines</a>
+</li>
+                                    
+<li >
+    <a href="../../api/Print/">Print</a>
+</li>
+                                    
+<li >
+    <a href="../../api/HardwareSerial/">HardwareSerial</a>
+</li>
+                                    
+<li >
+    <a href="../../api/SPI/">SPI</a>
+</li>
+                                    
+<li >
+    <a href="../../api/I2C/">I2C</a>
+</li>
+                                    
+<li >
+    <a href="../../api/LiquidCrystal/">LiquidCrystal character LCD library</a>
+</li>
+                                    
+<li >
+    <a href="../../api/LiquidCrystal_I2C/">LiquidCrystal_I2C character LCD connected via I2C backpack boards</a>
+</li>
+                                    
+<li >
+    <a href="../../api/PCD8544/">PCD8544 libray for Nokia 5110-like graphical LCDs</a>
+</li>
+                                    
+<li >
+    <a href="../../api/Mini_SSD1306/">Mini_SSD1306 library for monochrome OLED-displays</a>
+</li>
+                                    
+<li >
+    <a href="../../api/Stepper/">Stepper library</a>
+</li>
+                                    
+<li >
+    <a href="../../api/Servo/">Servo library</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hardware <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../hardware/flashtool/">Flash tool</a>
+</li>
+                                    
+<li >
+    <a href="../../hardware/stm8blue/">Generic STM8S103 breakout board (stm8blue)</a>
+</li>
+                                    
+<li >
+    <a href="../../hardware/esp14/">ESP14: Wifi board, STM8S003</a>
+</li>
+                                    
+<li >
+    <a href="../../hardware/stm8sdiscovery/">STM8S105Discovery: Evaluation board made my ST</a>
+</li>
+                                    
+<li >
+    <a href="../../hardware/w1209-thermostat/">W1209 thermostat board</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../ide-integration/">IDE integration</a>
+</li>
+                                    
+<li >
+    <a href="../compiling-the-tools/">Compiling the tools</a>
+</li>
+                                    
+<li >
+    <a href="../update-to-manual/">Update an automatic installation to a manual installtion</a>
+</li>
+                                    
+<li >
+    <a href="../macro/">C preprocessor macro magic</a>
+</li>
+                                    
+<li class="active">
+    <a href="./">Ways to define a pin mapping</a>
+</li>
+                                    
+<li >
+    <a href="../sdcc/">Using the SDCC compiler</a>
+</li>
+                                    
+<li >
+    <a href="../spl/">Using the SPL with SDCC and sduino</a>
+</li>
+                                    
+<li >
+    <a href="../bare-metal-programming/">Bare metal programming on the STM8</a>
+</li>
+                                    
+<li >
+    <a href="../performance/">Performance comparison and benchmarking</a>
+</li>
+                                    
+<li >
+    <a href="../links/">Links and further reading</a>
+</li>
+                                </ul>
+                            </li>
+                            <li >
+                                <a href="../../contact/">Contact</a>
+                            </li>
+                            <li >
+                                <a href="../../about/">About</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li >
+                                <a rel="next" href="../macro/">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../sdcc/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://github.com/tenbaht/sduino/edit/master/docs/developer/pin_mapping.md"><i class="fa fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-
-        <!-- Expanded navigation -->
-        <div class="navbar-collapse collapse">
-            <!-- Main navigation -->
-            <ul class="nav navbar-nav">
-            
-            
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                    
-                        <li >
-                            <a href="../..">Introduction</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../../usage/board-manager-install/">Automatic Installation</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../../usage/build-ide/">Building with the IDE</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../../usage/why-stm8/">When to use an STM8S - and when not</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../../usage/manual-install/">Manual Installation</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../../usage/build-cli/">Building with a Makefile</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../../usage/limitations/">Limitations</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../../usage/status-todo/">Status and todo</a>
-                        </li>
-                    
-                    </ul>
-                </li>
-            
-            
-            
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Libraries <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                    
-                        <li >
-                            <a href="../../api/migration/">API description and migration guidelines</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../../api/Print/">Print</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../../api/HardwareSerial/">HardwareSerial</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../../api/SPI/">SPI</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../../api/I2C/">I2C</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../../api/LiquidCrystal/">LiquidCrystal character LCD library</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../../api/PCD8544/">PCD8544 libray for Nokia 5110-like graphical LCDs</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../../api/Mini_SSD1306/">Mini_SSD1306 library for monochrome OLED-displays</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../../api/Stepper/">Stepper library</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../../api/Servo/">Servo library</a>
-                        </li>
-                    
-                    </ul>
-                </li>
-            
-            
-            
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hardware <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                    
-                        <li >
-                            <a href="../../hardware/flashtool/">Flash tool</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../../hardware/stm8blue/">Generic STM8S103 breakout board (stm8blue)</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../../hardware/esp14/">ESP14: Wifi board, STM8S003</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../../hardware/stm8sdiscovery/">STM8S105Discovery: Evaluation board made my ST</a>
-                        </li>
-                    
-                    </ul>
-                </li>
-            
-            
-            
-                <li class="dropdown active">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                    
-                        <li >
-                            <a href="../ide-integration/">IDE integration</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../macro/">C preprocessor macro magic</a>
-                        </li>
-                    
-                        <li class="active">
-                            <a href="./">Ways to define a pin mapping</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../sdcc/">Using the SDCC compiler</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../spl/">Using the SPL with SDCC and sduino</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../bare-metal-programming/">Bare metal programming on the STM8</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../performance/">Performance comparison and benchmarking</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../links/">Links and further reading</a>
-                        </li>
-                    
-                    </ul>
-                </li>
-            
-            
-            
-                <li >
-                    <a href="../../contact/">Contact</a>
-                </li>
-            
-            
-            
-                <li >
-                    <a href="../../about/">About</a>
-                </li>
-            
-            
-            </ul>
-
-            <!-- Search, Navigation and Repo links -->
-            <ul class="nav navbar-nav navbar-right">
-                <li >
-                    <a rel="next" href="../macro/">
-                        <i class="fa fa-arrow-left"></i> Previous
-                    </a>
-                </li>
-                <li >
-                    <a rel="prev" href="../sdcc/">
-                        Next <i class="fa fa-arrow-right"></i>
-                    </a>
-                </li>
-                
-                <li>
-                    <a href="https://github.com/tenbaht/sduino">
-                        
-                            <i class="fa fa-github"></i>
-                        
-                        GitHub
-                    </a>
-                </li>
-                
-            </ul>
-        </div>
-    </div>
-</div>
 
         <div class="container">
-            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-    
         <li class="main active"><a href="#pin-mapping-scheme">Pin mapping scheme</a></li>
-        
             <li><a href="#possible-logical-pin-number-mappings">Possible logical pin number mappings</a></li>
-        
             <li><a href="#comparing-the-results">Comparing the results</a></li>
-        
             <li><a href="#pin-remapping">Pin remapping</a></li>
-        
-    
     </ul>
 </div></div>
-            <div class="col-md-9" role="main">
+                <div class="col-md-9" role="main">
 
 <h1 id="pin-mapping-scheme">Pin mapping scheme</h1>
 <p>Many Arduino sketches and libraries contain hard-coded assumptions about the
@@ -288,7 +270,7 @@ syntax anyway that is maybe a less severe problem than it sounds.</p>
 <th>STM8 pin</th>
 <th>Name</th>
 <th>Alt</th>
-<th>Arduino pin</th>
+<th align="right">Arduino pin</th>
 <th>ATmega pin</th>
 <th>Alt</th>
 </tr>
@@ -298,7 +280,7 @@ syntax anyway that is maybe a less severe problem than it sounds.</p>
 <td>PD6</td>
 <td>RX</td>
 <td>Ain6</td>
-<td>0</td>
+<td align="right">0</td>
 <td>PD0</td>
 <td></td>
 </tr>
@@ -306,7 +288,7 @@ syntax anyway that is maybe a less severe problem than it sounds.</p>
 <td>PD5</td>
 <td>TX</td>
 <td>Ain5</td>
-<td>1</td>
+<td align="right">1</td>
 <td>PD1</td>
 <td></td>
 </tr>
@@ -314,7 +296,7 @@ syntax anyway that is maybe a less severe problem than it sounds.</p>
 <td>PA3</td>
 <td>SS</td>
 <td></td>
-<td>10</td>
+<td align="right">10</td>
 <td>PB2</td>
 <td>PWM</td>
 </tr>
@@ -322,7 +304,7 @@ syntax anyway that is maybe a less severe problem than it sounds.</p>
 <td>PC6</td>
 <td>MOSI</td>
 <td></td>
-<td>11</td>
+<td align="right">11</td>
 <td>PB3</td>
 <td>PWM</td>
 </tr>
@@ -330,7 +312,7 @@ syntax anyway that is maybe a less severe problem than it sounds.</p>
 <td>PC7</td>
 <td>MISO</td>
 <td></td>
-<td>12</td>
+<td align="right">12</td>
 <td>PB4</td>
 <td></td>
 </tr>
@@ -338,7 +320,7 @@ syntax anyway that is maybe a less severe problem than it sounds.</p>
 <td>PC5</td>
 <td>SCK</td>
 <td></td>
-<td>13</td>
+<td align="right">13</td>
 <td>PB5</td>
 <td>LED</td>
 </tr>
@@ -346,7 +328,7 @@ syntax anyway that is maybe a less severe problem than it sounds.</p>
 <td>PB5</td>
 <td>SDA</td>
 <td>LED</td>
-<td>18</td>
+<td align="right">18</td>
 <td>PC4</td>
 <td>Ain4</td>
 </tr>
@@ -354,7 +336,7 @@ syntax anyway that is maybe a less severe problem than it sounds.</p>
 <td>PB4</td>
 <td>SCL</td>
 <td></td>
-<td>19</td>
+<td align="right">19</td>
 <td>PC5</td>
 <td>Ain5</td>
 </tr>
@@ -366,7 +348,7 @@ syntax anyway that is maybe a less severe problem than it sounds.</p>
 <tr>
 <th>STM8 pin</th>
 <th>Name</th>
-<th>Alt</th>
+<th align="center">Alt</th>
 <th>Arduino pin</th>
 <th>ATmega pin</th>
 <th>Alt</th>
@@ -376,7 +358,7 @@ syntax anyway that is maybe a less severe problem than it sounds.</p>
 <tr>
 <td>C4</td>
 <td>Ain2</td>
-<td></td>
+<td align="center"></td>
 <td></td>
 <td></td>
 <td></td>
@@ -384,7 +366,7 @@ syntax anyway that is maybe a less severe problem than it sounds.</p>
 <tr>
 <td>D2</td>
 <td>Ain3</td>
-<td></td>
+<td align="center"></td>
 <td></td>
 <td></td>
 <td></td>
@@ -392,7 +374,7 @@ syntax anyway that is maybe a less severe problem than it sounds.</p>
 <tr>
 <td>D3</td>
 <td>Ain4</td>
-<td></td>
+<td align="center"></td>
 <td></td>
 <td></td>
 <td></td>
@@ -400,7 +382,7 @@ syntax anyway that is maybe a less severe problem than it sounds.</p>
 <tr>
 <td>D5</td>
 <td>Ain5</td>
-<td>TX</td>
+<td align="center">TX</td>
 <td></td>
 <td></td>
 <td></td>
@@ -408,7 +390,7 @@ syntax anyway that is maybe a less severe problem than it sounds.</p>
 <tr>
 <td>D6</td>
 <td>Ain6</td>
-<td>RX</td>
+<td align="center">RX</td>
 <td></td>
 <td></td>
 <td></td>
@@ -421,7 +403,7 @@ syntax anyway that is maybe a less severe problem than it sounds.</p>
 <tr>
 <th>STM8 pin</th>
 <th>Name</th>
-<th>Alt</th>
+<th align="center">Alt</th>
 <th>Arduino pin</th>
 <th>ATmega pin</th>
 <th>Alt</th>
@@ -431,7 +413,7 @@ syntax anyway that is maybe a less severe problem than it sounds.</p>
 <tr>
 <td></td>
 <td></td>
-<td></td>
+<td align="center"></td>
 <td>3</td>
 <td></td>
 <td></td>
@@ -439,7 +421,7 @@ syntax anyway that is maybe a less severe problem than it sounds.</p>
 <tr>
 <td></td>
 <td></td>
-<td></td>
+<td align="center"></td>
 <td>5</td>
 <td></td>
 <td></td>
@@ -447,7 +429,7 @@ syntax anyway that is maybe a less severe problem than it sounds.</p>
 <tr>
 <td></td>
 <td></td>
-<td></td>
+<td align="center"></td>
 <td>6</td>
 <td></td>
 <td></td>
@@ -455,7 +437,7 @@ syntax anyway that is maybe a less severe problem than it sounds.</p>
 <tr>
 <td></td>
 <td></td>
-<td></td>
+<td align="center"></td>
 <td>9</td>
 <td></td>
 <td></td>
@@ -463,7 +445,7 @@ syntax anyway that is maybe a less severe problem than it sounds.</p>
 <tr>
 <td>(</td>
 <td></td>
-<td></td>
+<td align="center"></td>
 <td>10</td>
 <td>)</td>
 <td></td>
@@ -471,7 +453,7 @@ syntax anyway that is maybe a less severe problem than it sounds.</p>
 <tr>
 <td>(</td>
 <td></td>
-<td></td>
+<td align="center"></td>
 <td>11</td>
 <td>)</td>
 <td></td>
@@ -484,7 +466,7 @@ syntax anyway that is maybe a less severe problem than it sounds.</p>
 <tr>
 <th>STM8 pin</th>
 <th>Name</th>
-<th>Alt</th>
+<th align="center">Alt</th>
 <th>Arduino pin</th>
 <th>ATmega pin</th>
 <th>Alt</th>
@@ -494,7 +476,7 @@ syntax anyway that is maybe a less severe problem than it sounds.</p>
 <tr>
 <td>PB5</td>
 <td>SDA</td>
-<td></td>
+<td align="center"></td>
 <td>13</td>
 <td>SCK</td>
 <td></td>
@@ -547,7 +529,7 @@ PWM Bitmap pin 15-0: 0001 0011 1110 0100 = 0x13e4 (alternate mapping)  </p>
 <table>
 <thead>
 <tr>
-<th>Phys. STM8 pin</th>
+<th align="right">Phys. STM8 pin</th>
 <th>Name</th>
 <th>Functions</th>
 <th>Functional mapping</th>
@@ -557,7 +539,7 @@ PWM Bitmap pin 15-0: 0001 0011 1110 0100 = 0x13e4 (alternate mapping)  </p>
 </thead>
 <tbody>
 <tr>
-<td></td>
+<td align="right"></td>
 <td></td>
 <td></td>
 <td></td>
@@ -565,7 +547,7 @@ PWM Bitmap pin 15-0: 0001 0011 1110 0100 = 0x13e4 (alternate mapping)  </p>
 <td>from PA1</td>
 </tr>
 <tr>
-<td>1</td>
+<td align="right">1</td>
 <td>PD4</td>
 <td>UART_CLK/T2-1/beep</td>
 <td>5</td>
@@ -573,7 +555,7 @@ PWM Bitmap pin 15-0: 0001 0011 1110 0100 = 0x13e4 (alternate mapping)  </p>
 <td>13~</td>
 </tr>
 <tr>
-<td>2</td>
+<td align="right">2</td>
 <td>PD5</td>
 <td>TX/Ain5</td>
 <td></td>
@@ -581,7 +563,7 @@ PWM Bitmap pin 15-0: 0001 0011 1110 0100 = 0x13e4 (alternate mapping)  </p>
 <td>2  14/A3</td>
 </tr>
 <tr>
-<td>3</td>
+<td align="right">3</td>
 <td>PD6</td>
 <td>RX/Ain6</td>
 <td></td>
@@ -589,7 +571,7 @@ PWM Bitmap pin 15-0: 0001 0011 1110 0100 = 0x13e4 (alternate mapping)  </p>
 <td>3  15/A4</td>
 </tr>
 <tr>
-<td>5</td>
+<td align="right">5</td>
 <td>PA1</td>
 <td>(OscIn, kein HS)</td>
 <td>6</td>
@@ -597,7 +579,7 @@ PWM Bitmap pin 15-0: 0001 0011 1110 0100 = 0x13e4 (alternate mapping)  </p>
 <td>0</td>
 </tr>
 <tr>
-<td>6</td>
+<td align="right">6</td>
 <td>PA2</td>
 <td>(OscIn, kein HS)</td>
 <td>7</td>
@@ -605,7 +587,7 @@ PWM Bitmap pin 15-0: 0001 0011 1110 0100 = 0x13e4 (alternate mapping)  </p>
 <td>1</td>
 </tr>
 <tr>
-<td>10</td>
+<td align="right">10</td>
 <td>PA3</td>
 <td>SS/T2-3</td>
 <td></td>
@@ -613,7 +595,7 @@ PWM Bitmap pin 15-0: 0001 0011 1110 0100 = 0x13e4 (alternate mapping)  </p>
 <td>6~ 2~</td>
 </tr>
 <tr>
-<td>11</td>
+<td align="right">11</td>
 <td>PB5</td>
 <td>SDA    LED</td>
 <td>18</td>
@@ -621,7 +603,7 @@ PWM Bitmap pin 15-0: 0001 0011 1110 0100 = 0x13e4 (alternate mapping)  </p>
 <td>3</td>
 </tr>
 <tr>
-<td>12</td>
+<td align="right">12</td>
 <td>PB4</td>
 <td>SCL</td>
 <td>19</td>
@@ -629,7 +611,7 @@ PWM Bitmap pin 15-0: 0001 0011 1110 0100 = 0x13e4 (alternate mapping)  </p>
 <td>4</td>
 </tr>
 <tr>
-<td>13</td>
+<td align="right">13</td>
 <td>PC3</td>
 <td>T1-3/[T1-n1]</td>
 <td>9</td>
@@ -637,7 +619,7 @@ PWM Bitmap pin 15-0: 0001 0011 1110 0100 = 0x13e4 (alternate mapping)  </p>
 <td>5~(n~)</td>
 </tr>
 <tr>
-<td>14</td>
+<td align="right">14</td>
 <td>PC4</td>
 <td>T1-4/Ain2/[T1-n2]</td>
 <td>4</td>
@@ -645,7 +627,7 @@ PWM Bitmap pin 15-0: 0001 0011 1110 0100 = 0x13e4 (alternate mapping)  </p>
 <td>6~(n~)/A0</td>
 </tr>
 <tr>
-<td>15</td>
+<td align="right">15</td>
 <td>PC5</td>
 <td>SCK/[T2-1]</td>
 <td>13</td>
@@ -653,7 +635,7 @@ PWM Bitmap pin 15-0: 0001 0011 1110 0100 = 0x13e4 (alternate mapping)  </p>
 <td>7(~)</td>
 </tr>
 <tr>
-<td>16</td>
+<td align="right">16</td>
 <td>PC6</td>
 <td>MOSI/[T1-1]</td>
 <td>11</td>
@@ -661,7 +643,7 @@ PWM Bitmap pin 15-0: 0001 0011 1110 0100 = 0x13e4 (alternate mapping)  </p>
 <td>8(~)</td>
 </tr>
 <tr>
-<td>17</td>
+<td align="right">17</td>
 <td>PC7</td>
 <td>MISO/[T1-2]</td>
 <td>12</td>
@@ -669,7 +651,7 @@ PWM Bitmap pin 15-0: 0001 0011 1110 0100 = 0x13e4 (alternate mapping)  </p>
 <td>9(~)</td>
 </tr>
 <tr>
-<td>18</td>
+<td align="right">18</td>
 <td>PD1</td>
 <td>(SWIM)</td>
 <td>8</td>
@@ -677,7 +659,7 @@ PWM Bitmap pin 15-0: 0001 0011 1110 0100 = 0x13e4 (alternate mapping)  </p>
 <td>10</td>
 </tr>
 <tr>
-<td>19</td>
+<td align="right">19</td>
 <td>PD2</td>
 <td>Ain3/[T2-3]</td>
 <td>3</td>
@@ -685,7 +667,7 @@ PWM Bitmap pin 15-0: 0001 0011 1110 0100 = 0x13e4 (alternate mapping)  </p>
 <td>11(~~)/A1</td>
 </tr>
 <tr>
-<td>20</td>
+<td align="right">20</td>
 <td>PD3</td>
 <td>Ain4/T2-2</td>
 <td>2</td>
@@ -761,16 +743,80 @@ Programmable via SWIM (see UM0470) and in IAP-Mode (see PM0051).</p>
 </table></div>
         </div>
 
-	<footer class="col-md-12">
-		<hr>
-		
-		<center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
-	</footer>
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
 
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
 
-        <script src="../../js/jquery-1.10.2.min.js"></script>
-        <script src="../../js/bootstrap-3.0.3.min.js"></script>
-        <script src="../../js/highlight.pack.js"></script>
-        <script src="../../js/base.js"></script>
     </body>
 </html>
