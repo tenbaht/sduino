@@ -60,7 +60,7 @@ around that is painfully slow.
 It would be great if somebody would replace the painfully slow parameter
 checking part of the makefile (that causes the majority of forking) by a
 single shell script that gets called by the makefile and delivers the
-results in no time. Or use [cmake](www.cmake.org). Or integrate it somehow
+results in no time. Or use [cmake](https://cmake.org). Or integrate it somehow
 into the STVD IDE (This [STVD-SDCC integration
 suite](https://github.com/shkolnick-kun/stvd-sdcc) might be useful). Or
 whatever.

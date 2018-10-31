@@ -65,6 +65,7 @@
 
 //#include <inttypes.h>
 #include "I2C.h"
+#include "Serial.h"
 
 
 
@@ -128,7 +129,7 @@ void I2C_end()
 }
 #endif
 
-#if 0
+#if 1
 void I2C_timeOut(uint16_t _timeOut)
 {
   timeOutDelay = _timeOut;
@@ -183,14 +184,14 @@ void I2C_pullup(uint8_t activate)
 }
 #endif
 
-#if 0
+#if 1
 void I2C_scan()
 {
   uint16_t tempTime = timeOutDelay;
-  timeOut(80);
+  I2C_timeOut(80);
   uint8_t totalDevicesFound = 0;
-  Serial.println("Scanning for devices...please wait");
-  Serial.println();
+  Serial_println_s("Scanning for devices...please wait");
+  Serial_println_s(NULL);
   for(uint8_t s = 0; s <= 0x7F; s++)
   {
     returnStatus = 0;
@@ -203,21 +204,27 @@ void I2C_scan()
     {
       if(returnStatus == 1)
       {
-        Serial.println("There is a problem with the bus, could not complete scan");
+        Serial_println_s("There is a problem with the bus, could not complete scan");
         timeOutDelay = tempTime;
         return;
+      }
+      else
+      {
+        Serial_print_s("scanning address 0x");
+        Serial_print_ub(s,HEX);
+        Serial_print_s("\r");
       }
     }
     else
     {
-      Serial.print("Found device at address - ");
-      Serial.print(" 0x");
-      Serial.println(s,HEX);
+      Serial_print_s("Found device at address - ");
+      Serial_print_s(" 0x");
+      Serial_println_ub(s,HEX);
       totalDevicesFound++;
     }
     stop();
   }
-  if(!totalDevicesFound){Serial.println("No devices found");}
+  if(!totalDevicesFound){Serial_println_s("No devices found");}
   timeOutDelay = tempTime;
 }
 #endif
@@ -643,6 +650,8 @@ static uint8_t sendAddress(uint8_t i2cAddress)
     return(bufferedStatus);
   } 
 #else
+        unsigned long startingTime = millis();	// FIXME: uint16_t could be used
+
 	/* Test on EV5 and clear it */
 	while (!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT));
 
@@ -650,7 +659,15 @@ static uint8_t sendAddress(uint8_t i2cAddress)
 	I2C->DR = i2cAddress;	// I2C_Send7bitAddress()
 
 	/* Test on EV6 and clear it */
-	while (!I2C_CheckEvent(I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED));
+	while (!I2C_CheckEvent(I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED))
+	{
+          if(!timeOutDelay){continue;}
+          if((millis() - startingTime) >= timeOutDelay)
+          {
+            lockUp();
+            return(2);	// no ACK received on address transmission
+          }
+        }
 
 	return 0;
 #endif
@@ -688,8 +705,18 @@ uint8_t sendByte(uint8_t i2cData)
     return(bufferedStatus);
   } 
 #else
+        unsigned long startingTime = millis();	// FIXME: uint16_t could be used
+
 	/* Test on EV8 */
-	while (!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTING));
+	while (!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTING))
+	{
+          if(!timeOutDelay){continue;}
+          if((millis() - startingTime) >= timeOutDelay)
+          {
+            lockUp();
+            return(3);	// no ACK received on data transmission
+          }
+        }
 
 	I2C->DR = i2cData;
 	return 0;
@@ -726,6 +753,7 @@ static uint8_t receiveByte(uint8_t ack)
   }
   return(TWI_STATUS); 
 #else
+        //FIXME: receiveByte not implemented
 	(void) ack;
 	return 1;
 #endif
@@ -747,8 +775,17 @@ static uint8_t stop(void)
        
   }
 #else
+        unsigned long startingTime = millis();	// FIXME: uint16_t could be used
 	/* Test on EV8_2 */
-	while (!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED));
+	while (!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED))
+	{
+          if(!timeOutDelay){continue;}
+          if((millis() - startingTime) >= timeOutDelay)
+          {
+            lockUp();
+            return(3);	// no ACK received on data transmission
+          }
+        }
 
 	/* Generate a STOP condition */
 	I2C->CR2 |= I2C_CR2_STOP;
@@ -762,4 +799,6 @@ static void lockUp(void)
   TWCR = 0; //releases SDA and SCL lines to high impedance
   TWCR = _BV(TWEN) | _BV(TWEA); //reinitialize TWI 
 #endif
+        //FIXME: this needs to be checked in detail. CR1 might be involved
+	I2C->CR2 = 0;
 }
