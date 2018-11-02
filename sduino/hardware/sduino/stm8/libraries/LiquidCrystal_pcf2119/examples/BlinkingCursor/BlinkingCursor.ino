@@ -7,28 +7,40 @@
 #include <I2C.h> 
 #include <LiquidCrystal_pcf2119.h>
 
-LiquidCrystal_pcf2119 (lcd,0x3c);
+#define LCD_ADDR  0x3B    // I2C address: 0x3A or 0x3B, dep. on pin SA0 state
+#define LCD_RST   PE3     // LCD reset pin (active high)
+
+// Set LCD address and reset pin
+LiquidCrystal_pcf2119(lcd, LCD_ADDR, LCD_RST);
 
 void setup()
 {
-	// initialize the LCD
-	lcd_begin(16,2);
+	// initialize the LCD (16x2 display)
+  lcd_begin(16,2);
+
+  // optionally set non-ASCII character set (type R+S)
+  lcd_charset(NON_ASCII);
 }
 
 void loop()
 {
-	bool blinking = true;
+  char  str[32];  // required for non-ASCII character set (R,S)
+  bool blinking = true;
 	lcd_cursor();
 
 	while (1) {
 		if (blinking) {
 			lcd_clear();
-			lcd_print_s("No cursor blink");
+      sprintf(str, "No cursor blink");
+      lcd_convert_s(str);
+      lcd_print_s(str);
 			lcd_noBlink();
 			blinking = false;
 		} else {
 			lcd_clear();
-			lcd_print_s("Cursor blink");
+      sprintf(str, "Cursor blink");
+      lcd_convert_s(str);
+      lcd_print_s(str);
 			lcd_blink();
 			blinking = true;
 		}

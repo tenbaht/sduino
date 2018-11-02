@@ -47,9 +47,9 @@
  * After creating an instance of this class, first call begin() before anything else.
  */
 
-
-
-
+// PCF2119x supports ASCII (A,D,F,I) and non-ASCII (R,S) character sets
+#define ASCII		0	// default
+#define NON_ASCII	1	// use lcd_charset() to change
 
 
 #ifdef __cplusplus
@@ -79,6 +79,17 @@
 	void LiquidCrystal_pcf2119_begin();
 	void LiquidCrystal_pcf2119_begin2(uint8_t lcd_cols, uint8_t lcd_rows);
 	void LiquidCrystal_pcf2119_begin3(uint8_t lcd_cols, uint8_t lcd_rows, uint8_t charsize);
+
+	/**
+	 * Set character set (default=ASCII). Some NON-ASCII charsets require translation, see https://www.nxp.com/docs/en/data-sheet/PCF2119X.pdf 
+	 */
+	void LiquidCrystal_pcf2119_charset(uint8_t charset);
+
+	/**
+	 * convert char and string to non-ASCII LCD charsets, see https://www.nxp.com/docs/en/data-sheet/PCF2119X.pdf 
+	 */
+	char LiquidCrystal_pcf2119_convert_c(char c);
+	void LiquidCrystal_pcf2119_convert_s(char *s);
 
 	 /**
 	  * Remove all the characters currently shown. Next print/write operation will start
@@ -320,6 +331,10 @@
 	XPrintMethods	(LiquidCrystal_pcf2119,instance) \
 	extern char	LiquidCrystal_pcf2119
 
+// for naming consistency. Specific to PCF2119x, not "inherited" from LCD class
+#define lcd_charset(N)  LiquidCrystal_pcf2119_charset(N)
+#define lcd_convert_c(c)  LiquidCrystal_pcf2119_convert_c(c)
+#define lcd_convert_s(s)  LiquidCrystal_pcf2119_convert_s(s)
 
 
 #endif /* c interface */

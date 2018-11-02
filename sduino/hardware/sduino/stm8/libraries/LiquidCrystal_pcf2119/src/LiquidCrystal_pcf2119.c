@@ -60,12 +60,14 @@ static uint8_t _rows;	// was _numlines;
 static uint8_t _rstPin;
 static uint8_t _charsize;
 static uint8_t _row_offsets[4];
+static uint8_t _charset;
 
 
 void LiquidCrystal_pcf2119_init(uint8_t lcd_addr, uint8_t lcd_rst)
 {
 	_addr = lcd_addr;
 	_rstPin = lcd_rst;
+	_charset = ASCII;
 }
 
 
@@ -76,6 +78,7 @@ void LiquidCrystal_pcf2119_init5(uint8_t lcd_addr, uint8_t lcd_rst, uint8_t lcd_
 	_cols = lcd_cols;
 	_rows = lcd_rows;
 	_charsize = charsize;
+	_charset = ASCII;
 }
 
 
@@ -84,6 +87,7 @@ void LiquidCrystal_pcf2119_begin3(uint8_t lcd_cols, uint8_t lcd_rows, uint8_t ch
 	_cols = lcd_cols;
 	_rows = lcd_rows;
 	_charsize = charsize;
+	_charset = ASCII;
 	LiquidCrystal_pcf2119_begin();
 }
 
@@ -92,6 +96,7 @@ void LiquidCrystal_pcf2119_begin2(uint8_t lcd_cols, uint8_t lcd_rows)
 {
 	_cols = lcd_cols;
 	_rows = lcd_rows;
+	_charset = ASCII;
 	LiquidCrystal_pcf2119_begin();
 }
 
@@ -105,7 +110,7 @@ void LiquidCrystal_pcf2119_begin()
 		digitalWrite(_rstPin, LOW);
 		delay(10);
 		digitalWrite(_rstPin, HIGH);
-		delay(10);
+		delay(100);
 		digitalWrite(_rstPin, LOW);
 	}
 
@@ -119,56 +124,96 @@ void LiquidCrystal_pcf2119_begin()
 	if (_rows > 1) {
 		_displayfunction |= LCD_2LINE;
 	}
-  _row_offsets[0] = 0;
-  _row_offsets[1] = 0x40;
-  _row_offsets[2] = _cols;
-  _row_offsets[3] = 0x40+_cols;
+	_row_offsets[0] = 0;
+	_row_offsets[1] = 0x40;
+	_row_offsets[2] = _cols;
+	_row_offsets[3] = 0x40+_cols;
 
-  // for some 1 line displays you can select a 10 pixel high font
+	// for some 1 line displays you can select a 10 pixel high font
 	if ((_charsize != 0) && (_rows == 1)) {
-    _displayfunction |= LCD_5x10DOTS;
-  }
+		_displayfunction |= LCD_5x10DOTS;
+	}
 
-  // SEE PAGE 45/46 FOR INITIALIZATION SPECIFICATION!
-  // according to datasheet, we need at least 40ms after power rises above 2.7V
-  // before sending commands. Arduino can turn on way before 4.5V so we'll wait 50
-  delay(50);
+	// SEE PAGE 45/46 FOR INITIALIZATION SPECIFICATION!
+	// according to datasheet, we need at least 40ms after power rises above 2.7V
+	// before sending commands. Arduino can turn on way before 4.5V so we'll wait 50
+	delay(50);
 
 
-    // Send function set command sequence
-    LiquidCrystal_pcf2119_command(LCD_FUNCTIONSET | _displayfunction);
-    delayMicroseconds(4500);  // wait more than 4.1ms
-/* not sure if these are needed, but keeping it for reference
-    // second try
-    LiquidCrystal_pcf2119_command(LCD_FUNCTIONSET | _displayfunction);
-    delayMicroseconds(150);
+	// Send function set command sequence
+	LiquidCrystal_pcf2119_command(LCD_FUNCTIONSET | _displayfunction);
+	delayMicroseconds(4500);  // wait more than 4.1ms
 
-    // third go
-    LiquidCrystal_pcf2119_command(LCD_FUNCTIONSET | _displayfunction);
+	/* not sure if these are needed, but keeping it for reference
+	// second try
+	LiquidCrystal_pcf2119_command(LCD_FUNCTIONSET | _displayfunction);
+	delayMicroseconds(150);
 
-    // finally, set # lines, font size, etc.
-    LiquidCrystal_pcf2119_command(LCD_FUNCTIONSET | _displayfunction);
-*/
-    // turn the display on with no cursor or blinking default
-    _displaycontrol = LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF;
-    LiquidCrystal_pcf2119_display();
+	// third go
+	LiquidCrystal_pcf2119_command(LCD_FUNCTIONSET | _displayfunction);
 
-    // clear it off
-    LiquidCrystal_pcf2119_clear();
+	// finally, set # lines, font size, etc.
+	LiquidCrystal_pcf2119_command(LCD_FUNCTIONSET | _displayfunction);
+	*/
+	
+	// turn the display on with no cursor or blinking default
+	_displaycontrol = LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF;
+	LiquidCrystal_pcf2119_display();
 
-  // Initialize to default text direction (for roman languages)
-  _displaymode = LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT;
-  // set the entry mode
-    LiquidCrystal_pcf2119_command(LCD_ENTRYMODESET | _displaymode);
+	// clear it off
+	LiquidCrystal_pcf2119_clear();
+
+	// Initialize to default text direction (for roman languages)
+	_displaymode = LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT;
+	// set the entry mode
+	LiquidCrystal_pcf2119_command(LCD_ENTRYMODESET | _displaymode);
 
 	LiquidCrystal_pcf2119_home();
 }
 
 /********** high level commands, for the user! */
+
+// Set character set (default=ASCII). Some charsets require remapping, see https://www.nxp.com/docs/en/data-sheet/PCF2119X.pdf 
+void LiquidCrystal_pcf2119_charset(uint8_t charset) {
+	_charset = charset;
+	LiquidCrystal_pcf2119_clear();
+} // LiquidCrystal_pcf2119_charset()
+
+// convert ASCII character to NON-ASCII LCD charset, see https://www.nxp.com/docs/en/data-sheet/PCF2119X.pdf 
+char LiquidCrystal_pcf2119_convert_c(char c) {
+	if (_charset != ASCII)
+		return(c | 0x80);
+	else
+		return(c);
+}
+
+// convert ASCII string to NON-ASCII LCD charset, see https://www.nxp.com/docs/en/data-sheet/PCF2119X.pdf 
+void LiquidCrystal_pcf2119_convert_s(char *s) {
+	if (_charset == ASCII)
+		return;
+	for (int i=0; i<_cols*_rows; i++) {
+		if (s[i] == '\0')
+			break;
+		s[i] |= 0x80;
+	}
+}
+
 void LiquidCrystal_pcf2119_clear()
 {
-  LiquidCrystal_pcf2119_command(LCD_CLEARDISPLAY);  // clear display, set cursor position to zero
-  delayMicroseconds(2000);  // this command takes a long time!
+  // ASCII charset (A,D,F,I) -> use built-in clear
+  if (_charset == ASCII) {
+    LiquidCrystal_pcf2119_command(LCD_CLEARDISPLAY);  // clear display, set cursor position to zero
+    delayMicroseconds(2000);  // this command takes a long time!
+  }
+  
+  // non-ASCII charset (R,S) -> manually fill with space
+  else {
+    uint8_t c = ' ' | 0x80 ;
+    LiquidCrystal_pcf2119_home();
+    for (int i=0; i<_cols*_rows; i++)
+      LiquidCrystal_pcf2119_write(c);
+    LiquidCrystal_pcf2119_home();
+  }
 }
 
 void LiquidCrystal_pcf2119_home()
