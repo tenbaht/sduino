@@ -16,31 +16,23 @@ LiquidCrystal_pcf2119(lcd, LCD_ADDR, LCD_RST);
 void setup()
 {
 	// initialize the LCD (16x2 display)
-  lcd_begin(16,2);
-
-  // optionally set non-ASCII character set (type R+S)
-  lcd_charset(NON_ASCII);
+	lcd_begin(16,2);
 }
 
 void loop()
 {
-  char  str[32];  // required for non-ASCII character set (R,S)
-  bool blinking = true;
+	bool blinking = true;
 	lcd_cursor();
 
 	while (1) {
 		if (blinking) {
 			lcd_clear();
-      sprintf(str, "No cursor blink");
-      lcd_convert_s(str);
-      lcd_print_s(str);
+			lcd_print_s("No cursor blink");
 			lcd_noBlink();
 			blinking = false;
 		} else {
 			lcd_clear();
-      sprintf(str, "Cursor blink");
-      lcd_convert_s(str);
-      lcd_print_s(str);
+			lcd_print_s("Cursor blink");
 			lcd_blink();
 			blinking = true;
 		}

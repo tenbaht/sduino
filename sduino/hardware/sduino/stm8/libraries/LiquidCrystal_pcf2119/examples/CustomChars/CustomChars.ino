@@ -26,13 +26,8 @@ void displayKeyCodes(void);
 
 void setup()
 {
-  char  str[32];  // required for non-ASCII character set (R,S)
-  
-  // initialize the LCD (16x2 display)
-  lcd_begin(16,2);
-
-  // optionally set non-ASCII character set (type R+S)
-  lcd_charset(NON_ASCII);
+	// initialize the LCD (16x2 display)
+	lcd_begin(16,2);
 
 	// create special characters
 	lcd_createChar(0, bell);
@@ -45,20 +40,11 @@ void setup()
 	lcd_createChar(7, retarrow);
 	lcd_home();
 
-  sprintf(str, "Hello world...");
-  lcd_convert_s(str);
-  lcd_print_s(str);
-
+	lcd_print_s("Hello world...");
 	lcd_setCursor(0, 1);
-  sprintf(str, " i ");
-  lcd_convert_s(str);
-  lcd_print_s(str);
-
+	lcd_print_s(" i ");
 	lcd_write(3);
-  sprintf(str, " arduinos!");
-  lcd_convert_s(str);
-  lcd_print_s(str);
-	
+	lcd_print_s(" arduinos!");
 	delay(5000);
 	displayKeyCodes();
 }

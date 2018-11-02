@@ -47,11 +47,6 @@
  * After creating an instance of this class, first call begin() before anything else.
  */
 
-// PCF2119x supports ASCII (A,D,F,I) and non-ASCII (R,S) character sets
-#define ASCII		0	// default
-#define NON_ASCII	1	// use lcd_charset() to change
-
-
 #ifdef __cplusplus
 
 // C++ interface for use with regular gcc compiler
@@ -65,13 +60,14 @@
 	 *
 	 * @param lcd_addr	I2C slave address of the LCD display. Most likely printed on the
 	 *					LCD circuit board, or look in the supplied LCD documentation.
+	 * @param charset	character set in CGROM of the used controller (A, D, F, I, R or S)
 	 * @param lcd_rst	reset pin (255 or -1 for none)
 	 * @param lcd_cols	Number of columns your LCD display has.
 	 * @param lcd_rows	Number of rows your LCD display has.
 	 * @param charsize	The size in dots that the display has, use LCD_5x10DOTS or LCD_5x8DOTS.
 	 */
-	void LiquidCrystal_pcf2119_init(uint8_t lcd_addr, uint8_t lcd_rst);
-	void LiquidCrystal_pcf2119_init5(uint8_t lcd_addr, uint8_t lcd_rst, uint8_t lcd_cols, uint8_t lcd_rows, uint8_t charsize);
+	void LiquidCrystal_pcf2119_init(uint8_t lcd_addr, char charset, uint8_t lcd_rst);
+	void LiquidCrystal_pcf2119_init6(uint8_t lcd_addr, char charset, uint8_t lcd_rst, uint8_t lcd_cols, uint8_t lcd_rows, uint8_t charsize);
 
 	/**
 	 * Set the LCD display in the correct begin state, must be called before anything else is done.
@@ -79,17 +75,6 @@
 	void LiquidCrystal_pcf2119_begin();
 	void LiquidCrystal_pcf2119_begin2(uint8_t lcd_cols, uint8_t lcd_rows);
 	void LiquidCrystal_pcf2119_begin3(uint8_t lcd_cols, uint8_t lcd_rows, uint8_t charsize);
-
-	/**
-	 * Set character set (default=ASCII). Some NON-ASCII charsets require translation, see https://www.nxp.com/docs/en/data-sheet/PCF2119X.pdf 
-	 */
-	void LiquidCrystal_pcf2119_charset(uint8_t charset);
-
-	/**
-	 * convert char and string to non-ASCII LCD charsets, see https://www.nxp.com/docs/en/data-sheet/PCF2119X.pdf 
-	 */
-	char LiquidCrystal_pcf2119_convert_c(char c);
-	void LiquidCrystal_pcf2119_convert_s(char *s);
 
 	 /**
 	  * Remove all the characters currently shown. Next print/write operation will start
@@ -152,6 +137,7 @@
 	void LiquidCrystal_pcf2119_createChar(uint8_t, uint8_t[]);
 	void LiquidCrystal_pcf2119_setCursor(uint8_t, uint8_t); 
 	size_t LiquidCrystal_pcf2119_write(uint8_t);
+	size_t LiquidCrystal_pcf2119_data(uint8_t);
 	void LiquidCrystal_pcf2119_command(uint8_t);
 
 	inline void LiquidCrystal_pcf2119_blink_on() { LiquidCrystal_pcf2119_blink(); }
@@ -240,16 +226,19 @@
 // The constructor functions sorted by the number of arguments.
 // For a singleton class these simple #define statements are sufficient.
 #define XLiquidCrystal_pcf2119_inst1(ADDR) \
-	LiquidCrystal_pcf2119_init(ADDR,255)
+	LiquidCrystal_pcf2119_init(ADDR,'R',255)
 
 #define XLiquidCrystal_pcf2119_inst2(ADDR,RST) \
-	LiquidCrystal_pcf2119_init(ADDR,RST)
+	LiquidCrystal_pcf2119_init(ADDR,'R',RST)
 
-#define XLiquidCrystal_pcf2119_inst4(ADDR,RST,COLS,ROWS) \
-	LiquidCrystal_pcf2119_init5(ADDR,RST,COLS,ROWS,LCD_5x8DOTS)
+#define XLiquidCrystal_pcf2119_inst3(ADDR,CHARSET,RST) \
+	LiquidCrystal_pcf2119_init(ADDR,CHARSET,RST)
 
-#define XLiquidCrystal_pcf2119_inst5(ADDR,RST,COLS,ROWS,SIZE) \
-	LiquidCrystal_pcf2119_init5(ADDR,RST,COLS,ROWS,SIZE)
+#define XLiquidCrystal_pcf2119_inst5(ADDR,CHARSET,RST,COLS,ROWS) \
+	LiquidCrystal_pcf2119_init6(ADDR,CHARSET,RST,COLS,ROWS,LCD_5x8DOTS)
+
+#define XLiquidCrystal_pcf2119_inst6(ADDR,CHARSET,RST,COLS,ROWS,SIZE) \
+	LiquidCrystal_pcf2119_init6(ADDR,CHARSET,RST,COLS,ROWS,SIZE)
 
 
 // The instantiation function remembers the I2C parameters and the name of the
@@ -321,6 +310,7 @@
 	X2Method2	(LiquidCrystal_pcf2119,instance,createChar,uint8_t,uint8_t*) \
 	X2Method2	(LiquidCrystal_pcf2119,instance,setCursor,uint8_t,uint8_t) \
 	X2Method1return (LiquidCrystal_pcf2119,instance,size_t,write,uint8_t) \
+	X2Method1return (LiquidCrystal_pcf2119,instance,size_t,data,uint8_t) \
 	X2Method1	(LiquidCrystal_pcf2119,instance,command,uint8_t) \
 	\
 	X2Method0	(LiquidCrystal_pcf2119,instance,blink_on) \
@@ -331,10 +321,6 @@
 	XPrintMethods	(LiquidCrystal_pcf2119,instance) \
 	extern char	LiquidCrystal_pcf2119
 
-// for naming consistency. Specific to PCF2119x, not "inherited" from LCD class
-#define lcd_charset(N)  LiquidCrystal_pcf2119_charset(N)
-#define lcd_convert_c(c)  LiquidCrystal_pcf2119_convert_c(c)
-#define lcd_convert_s(s)  LiquidCrystal_pcf2119_convert_s(s)
 
 
 #endif /* c interface */

@@ -15,12 +15,9 @@
 LiquidCrystal_pcf2119(lcd, LCD_ADDR, LCD_RST);
 
 void setup()
-{   
-  // initialize the LCD (16x2 display)
-  lcd_begin(16,2);
-
-  // optionally set non-ASCII character set (type R+S)
-  lcd_charset(NON_ASCII);
+{
+	// initialize the LCD (16x2 display)
+	lcd_begin(16,2);
   
 	// Initialize the serial port at a speed of 9600 baud
 	Serial_begin(9600);
@@ -37,7 +34,7 @@ void loop()
 
 		// Write all characters received with the serial port to the LCD.
 		while (Serial_available() > 0) {
-			lcd_write(lcd_convert_c(Serial_read()));
+			lcd_write(Serial_read());
 		}
 	}
 }

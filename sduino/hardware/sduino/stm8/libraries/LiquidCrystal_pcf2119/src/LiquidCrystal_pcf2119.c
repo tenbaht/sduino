@@ -35,50 +35,53 @@
 // can't assume that its in that state when a sketch starts (and the
 // LiquidCrystal constructor is called).
 
+// private constants
+
+#define CHARSET_ASCII		0
+#define CHARSET_FLIP		1
+#define CHARSET_FLIP_SPACE	2
+
+
 // private variables
 
 static void LiquidCrystal_pcf2119_send(uint8_t value, uint8_t mode);
-//static void LiquidCrystal_pcf2119_write4bits(uint8_t value);
-static void LiquidCrystal_pcf2119_write8bits(uint8_t);
-//static void LiquidCrystal_pcf2119_expanderWrite(uint8_t _data);
-//static void LiquidCrystal_pcf2119_pulseEnable(uint8_t _data);
-
-//static uint8_t _rs_pin; // LOW: command.  HIGH: character.
-//static uint8_t _rw_pin; // LOW: write to LCD.  HIGH: read from LCD.
-//static uint8_t _enable_pin; // activated by a HIGH pulse.
-//static uint8_t _data_pins[8];
 
 static uint8_t _displayfunction;
 static uint8_t _displaycontrol;
 static uint8_t _displaymode;
 
-//static uint8_t _initialized;
-
 static uint8_t _addr;	// I2C address
 static uint8_t _cols;
-static uint8_t _rows;	// was _numlines;
+static uint8_t _rows;
 static uint8_t _rstPin;
 static uint8_t _charsize;
 static uint8_t _row_offsets[4];
-static uint8_t _charset;
+static uint8_t _charset;	// type of charset: ASCII, FLIP, FLIP_SPACE
 
 
-void LiquidCrystal_pcf2119_init(uint8_t lcd_addr, uint8_t lcd_rst)
+// private functions
+
+static void LiquidCrystal_pcf2119_charset(char charset);
+
+
+// public functions/methods
+
+void LiquidCrystal_pcf2119_init(uint8_t lcd_addr, char charset, uint8_t lcd_rst)
 {
 	_addr = lcd_addr;
 	_rstPin = lcd_rst;
-	_charset = ASCII;
+	LiquidCrystal_pcf2119_charset(charset);
 }
 
 
-void LiquidCrystal_pcf2119_init5(uint8_t lcd_addr, uint8_t lcd_rst, uint8_t lcd_cols, uint8_t lcd_rows, uint8_t charsize)
+void LiquidCrystal_pcf2119_init6(uint8_t lcd_addr, char charset, uint8_t lcd_rst, uint8_t lcd_cols, uint8_t lcd_rows, uint8_t charsize)
 {
 	_addr = lcd_addr;
 	_rstPin = lcd_rst;
 	_cols = lcd_cols;
 	_rows = lcd_rows;
 	_charsize = charsize;
-	_charset = ASCII;
+	LiquidCrystal_pcf2119_charset(charset);
 }
 
 
@@ -87,7 +90,6 @@ void LiquidCrystal_pcf2119_begin3(uint8_t lcd_cols, uint8_t lcd_rows, uint8_t ch
 	_cols = lcd_cols;
 	_rows = lcd_rows;
 	_charsize = charsize;
-	_charset = ASCII;
 	LiquidCrystal_pcf2119_begin();
 }
 
@@ -96,7 +98,6 @@ void LiquidCrystal_pcf2119_begin2(uint8_t lcd_cols, uint8_t lcd_rows)
 {
 	_cols = lcd_cols;
 	_rows = lcd_rows;
-	_charset = ASCII;
 	LiquidCrystal_pcf2119_begin();
 }
 
@@ -134,7 +135,8 @@ void LiquidCrystal_pcf2119_begin()
 		_displayfunction |= LCD_5x10DOTS;
 	}
 
-	// SEE PAGE 45/46 FOR INITIALIZATION SPECIFICATION!
+
+	// SEE PAGE 64 FOR INITIALIZATION SPECIFICATION!
 	// according to datasheet, we need at least 40ms after power rises above 2.7V
 	// before sending commands. Arduino can turn on way before 4.5V so we'll wait 50
 	delay(50);
@@ -144,7 +146,7 @@ void LiquidCrystal_pcf2119_begin()
 	LiquidCrystal_pcf2119_command(LCD_FUNCTIONSET | _displayfunction);
 	delayMicroseconds(4500);  // wait more than 4.1ms
 
-	/* not sure if these are needed, but keeping it for reference
+/* not sure if these are needed, but keeping it for reference
 	// second try
 	LiquidCrystal_pcf2119_command(LCD_FUNCTIONSET | _displayfunction);
 	delayMicroseconds(150);
@@ -154,7 +156,7 @@ void LiquidCrystal_pcf2119_begin()
 
 	// finally, set # lines, font size, etc.
 	LiquidCrystal_pcf2119_command(LCD_FUNCTIONSET | _displayfunction);
-	*/
+*/
 	
 	// turn the display on with no cursor or blinking default
 	_displaycontrol = LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF;
@@ -172,48 +174,26 @@ void LiquidCrystal_pcf2119_begin()
 }
 
 /********** high level commands, for the user! */
-
-// Set character set (default=ASCII). Some charsets require remapping, see https://www.nxp.com/docs/en/data-sheet/PCF2119X.pdf 
-void LiquidCrystal_pcf2119_charset(uint8_t charset) {
-	_charset = charset;
-	LiquidCrystal_pcf2119_clear();
-} // LiquidCrystal_pcf2119_charset()
-
-// convert ASCII character to NON-ASCII LCD charset, see https://www.nxp.com/docs/en/data-sheet/PCF2119X.pdf 
-char LiquidCrystal_pcf2119_convert_c(char c) {
-	if (_charset != ASCII)
-		return(c | 0x80);
-	else
-		return(c);
-}
-
-// convert ASCII string to NON-ASCII LCD charset, see https://www.nxp.com/docs/en/data-sheet/PCF2119X.pdf 
-void LiquidCrystal_pcf2119_convert_s(char *s) {
-	if (_charset == ASCII)
-		return;
-	for (int i=0; i<_cols*_rows; i++) {
-		if (s[i] == '\0')
-			break;
-		s[i] |= 0x80;
-	}
-}
-
 void LiquidCrystal_pcf2119_clear()
 {
-  // ASCII charset (A,D,F,I) -> use built-in clear
-  if (_charset == ASCII) {
-    LiquidCrystal_pcf2119_command(LCD_CLEARDISPLAY);  // clear display, set cursor position to zero
-    delayMicroseconds(2000);  // this command takes a long time!
-  }
-  
-  // non-ASCII charset (R,S) -> manually fill with space
-  else {
-    uint8_t c = ' ' | 0x80 ;
-    LiquidCrystal_pcf2119_home();
-    for (int i=0; i<_cols*_rows; i++)
-      LiquidCrystal_pcf2119_write(c);
-    LiquidCrystal_pcf2119_home();
-  }
+	if (_charset == CHARSET_FLIP_SPACE) {
+		// non-ASCII charset R -> manually fill with space
+		// see page 32 in datasheet
+
+		LiquidCrystal_pcf2119_home();
+
+		uint8_t i=_cols*_rows;
+		while (i--) {
+			LiquidCrystal_pcf2119_data(' '|0x80);
+		}
+
+		LiquidCrystal_pcf2119_home();
+	} else {
+		// ASCII charset (A,D,F,I,S) -> use built-in clear
+
+		LiquidCrystal_pcf2119_command(LCD_CLEARDISPLAY);  // clear display, set cursor position to zero
+		delayMicroseconds(2000);  // this command takes a long time!
+	}
 }
 
 void LiquidCrystal_pcf2119_home()
@@ -303,11 +283,50 @@ void LiquidCrystal_pcf2119_createChar(uint8_t location, uint8_t charmap[]) {
   location &= 0x7; // we only have 8 locations 0-7
   LiquidCrystal_pcf2119_command(LCD_SETCGRAMADDR | (location << 3));
   for (int i=0; i<8; i++) {
-    LiquidCrystal_pcf2119_write(charmap[i]);
+    LiquidCrystal_pcf2119_data(charmap[i]);
   }
   // switch back to character output mode
   LiquidCrystal_pcf2119_command(LCD_SETDDRAMADDR);
 }
+
+
+/*********** internal helper functions */
+
+// Set character set (default=ASCII). Some charsets require remapping,
+// see page 19ff in https://www.nxp.com/docs/en/data-sheet/PCF2119X.pdf
+
+/* The PCF2119 comes in six versions with different character sets.
+ * Unfortunatly, not all of them use a ASCII compatible encoding for
+ * at least the latin alphabet. Some of them encode the latin characters
+ * in the higher half of the codepage (bit 7 set).
+ * One of them (charset R) even encodes the space character differently,
+ * rendering the build in clear command pointless and requiring a manual
+ * memory sweep to clear the display content.
+ *
+ * A: standard ASCII charset, similar to HD4480 controller
+ * D: ASCII, but upper case only
+ * F: non-ASCII. Bit 7 needs to be flipped.
+ * I: ASCII
+ * R: non-ASCII. Bit 7 needs to be flipped, even space is at 0xa0 instead of 0x20
+ * S: non-ASCII. Bit 7 needs to be flipped.
+ */
+
+static void LiquidCrystal_pcf2119_charset(char charset) {
+
+	charset &= 0xe0;	// convert lower to uppper case
+	if ((charset=='F') || (charset=='S'))
+	{
+		_charset = CHARSET_FLIP;
+	}
+	else if (charset=='R')
+	{
+		_charset = CHARSET_FLIP_SPACE;
+	}
+	else
+	{
+		_charset=CHARSET_ASCII;
+	}
+} // LiquidCrystal_pcf2119_charset()
 
 
 /*********** mid level commands, for sending data/cmds */
@@ -317,12 +336,25 @@ void LiquidCrystal_pcf2119_command(uint8_t value) {
 	I2C_write_c(_addr, 0, value);
 }
 
-size_t LiquidCrystal_pcf2119_write(uint8_t value) {
+// write a data byte.
+size_t LiquidCrystal_pcf2119_data(uint8_t value) {
 	// write to data register
 	// return 1 for success (if I2C_write_c returned 0)
 	return (
 		I2C_write_c(_addr, 0x40, value) ? 0 : 1
 	);
+}
+
+// write a character. Do ASCII conversion if needed
+size_t LiquidCrystal_pcf2119_write(uint8_t value) {
+	if (_charset != CHARSET_ASCII) {
+		// do not convert values 0x00..0x1f/0x80..0x9f
+		// this would mess up the user defined characters
+		if ((value&0x7f) >= 32) {
+			value ^= 0x80;
+		}
+	}
+	return LiquidCrystal_pcf2119_data(value);
 }
 /************ low level data pushing commands **********/
 // there is no need for another level of indirection for direct I2C access
