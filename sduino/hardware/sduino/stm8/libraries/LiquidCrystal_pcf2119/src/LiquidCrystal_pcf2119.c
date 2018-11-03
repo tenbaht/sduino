@@ -66,7 +66,7 @@ static void LiquidCrystal_pcf2119_charset(char charset);
 
 // public functions/methods
 
-void LiquidCrystal_pcf2119_init(uint8_t lcd_addr, char charset, uint8_t lcd_rst)
+void LiquidCrystal_pcf2119_init(uint8_t lcd_addr, uint8_t lcd_rst, char charset)
 {
 	_addr = lcd_addr;
 	_rstPin = lcd_rst;
@@ -74,36 +74,12 @@ void LiquidCrystal_pcf2119_init(uint8_t lcd_addr, char charset, uint8_t lcd_rst)
 }
 
 
-void LiquidCrystal_pcf2119_init6(uint8_t lcd_addr, char charset, uint8_t lcd_rst, uint8_t lcd_cols, uint8_t lcd_rows, uint8_t charsize)
-{
-	_addr = lcd_addr;
-	_rstPin = lcd_rst;
-	_cols = lcd_cols;
-	_rows = lcd_rows;
-	_charsize = charsize;
-	LiquidCrystal_pcf2119_charset(charset);
-}
-
-
-void LiquidCrystal_pcf2119_begin3(uint8_t lcd_cols, uint8_t lcd_rows, uint8_t charsize)
+void LiquidCrystal_pcf2119_begin(uint8_t lcd_cols, uint8_t lcd_rows, uint8_t charsize)
 {
 	_cols = lcd_cols;
 	_rows = lcd_rows;
 	_charsize = charsize;
-	LiquidCrystal_pcf2119_begin();
-}
 
-
-void LiquidCrystal_pcf2119_begin2(uint8_t lcd_cols, uint8_t lcd_rows)
-{
-	_cols = lcd_cols;
-	_rows = lcd_rows;
-	LiquidCrystal_pcf2119_begin();
-}
-
-
-void LiquidCrystal_pcf2119_begin()
-{
 	if (_rstPin != 255)
 	{
 		// do a hardware reset if reset pin is defined

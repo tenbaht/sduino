@@ -59,22 +59,20 @@
 	 * Constructor
 	 *
 	 * @param lcd_addr	I2C slave address of the LCD display. Most likely printed on the
-	 *					LCD circuit board, or look in the supplied LCD documentation.
-	 * @param charset	character set in CGROM of the used controller (A, D, F, I, R or S)
+	 *			LCD circuit board, or look in the supplied LCD documentation.
 	 * @param lcd_rst	reset pin (255 or -1 for none)
+	 * @param charset	character set in CGROM of the used controller (A, D, F, I, R or S)
+	 */
+	void LiquidCrystal_pcf2119_init(uint8_t lcd_addr, uint8_t lcd_rst, char charset);
+
+	/**
+	 * Set the LCD display in the correct begin state, must be called before anything else is done.
+	 *
 	 * @param lcd_cols	Number of columns your LCD display has.
 	 * @param lcd_rows	Number of rows your LCD display has.
 	 * @param charsize	The size in dots that the display has, use LCD_5x10DOTS or LCD_5x8DOTS.
 	 */
-	void LiquidCrystal_pcf2119_init(uint8_t lcd_addr, char charset, uint8_t lcd_rst);
-	void LiquidCrystal_pcf2119_init6(uint8_t lcd_addr, char charset, uint8_t lcd_rst, uint8_t lcd_cols, uint8_t lcd_rows, uint8_t charsize);
-
-	/**
-	 * Set the LCD display in the correct begin state, must be called before anything else is done.
-	 */
-	void LiquidCrystal_pcf2119_begin();
-	void LiquidCrystal_pcf2119_begin2(uint8_t lcd_cols, uint8_t lcd_rows);
-	void LiquidCrystal_pcf2119_begin3(uint8_t lcd_cols, uint8_t lcd_rows, uint8_t charsize);
+	void LiquidCrystal_pcf2119_begin(uint8_t lcd_cols, uint8_t lcd_rows, uint8_t charsize);
 
 	 /**
 	  * Remove all the characters currently shown. Next print/write operation will start
@@ -231,14 +229,8 @@
 #define XLiquidCrystal_pcf2119_inst2(ADDR,RST) \
 	LiquidCrystal_pcf2119_init(ADDR,'R',RST)
 
-#define XLiquidCrystal_pcf2119_inst3(ADDR,CHARSET,RST) \
-	LiquidCrystal_pcf2119_init(ADDR,CHARSET,RST)
-
-#define XLiquidCrystal_pcf2119_inst5(ADDR,CHARSET,RST,COLS,ROWS) \
-	LiquidCrystal_pcf2119_init6(ADDR,CHARSET,RST,COLS,ROWS,LCD_5x8DOTS)
-
-#define XLiquidCrystal_pcf2119_inst6(ADDR,CHARSET,RST,COLS,ROWS,SIZE) \
-	LiquidCrystal_pcf2119_init6(ADDR,CHARSET,RST,COLS,ROWS,SIZE)
+#define XLiquidCrystal_pcf2119_inst3(ADDR,RST,CHARSET) \
+	LiquidCrystal_pcf2119_init(ADDR,RST,CHARSET)
 
 
 // The instantiation function remembers the I2C parameters and the name of the
@@ -251,22 +243,16 @@
 
 // The variants of the polymorph begin() method.
 // The begin() method includes the delayed call of the inst() method.
-#define XLiquidCrystal_pcf2119_begin0(instance) inline \
-        void instance##_begin_empty(void){\
-		instance##_inst(); \
-		LiquidCrystal_pcf2119_begin();\
-	}
-
 #define XLiquidCrystal_pcf2119_begin2(instance) inline \
         void instance##_begin(uint8_t cols, uint8_t lines){\
 		instance##_inst(); \
-		LiquidCrystal_pcf2119_begin2(cols,lines);\
+		LiquidCrystal_pcf2119_begin(cols,lines,LCD_5x8DOTS);\
 	}
 
 #define XLiquidCrystal_pcf2119_begin3(instance) inline \
         void instance##_begin_charsize(uint8_t cols, uint8_t lines, uint8_t charsize){\
 		instance##_inst(); \
-		LiquidCrystal_pcf2119_begin3(cols,lines,charsize);\
+		LiquidCrystal_pcf2119_begin(cols,lines,charsize);\
 	}
 
 
@@ -285,7 +271,6 @@
 	char	 	LiquidCrystal_pcf2119; \
 	XLiquidCrystal_pcf2119_inst	(instance,__VA_ARGS__) \
 	\
-	XLiquidCrystal_pcf2119_begin0	(instance)\
 	XLiquidCrystal_pcf2119_begin2	(instance)\
 	XLiquidCrystal_pcf2119_begin3	(instance)\
 	\
