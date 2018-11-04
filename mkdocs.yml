@@ -21,6 +21,7 @@ nav:
         - I2C: api/I2C.md
         - LiquidCrystal character LCD library: api/LiquidCrystal.md
         - LiquidCrystal_I2C character LCD connected via I2C backpack boards: api/LiquidCrystal_I2C.md
+        - LiquidCrystal_pcf2119 character LCD connected via I2C: api/LiquidCrystal_pcf2119.md
         - PCD8544 libray for Nokia 5110-like graphical LCDs: api/PCD8544.md
         - Mini_SSD1306 library for monochrome OLED-displays: api/Mini_SSD1306.md
         - Stepper library: api/Stepper.md
@@ -35,7 +36,7 @@ nav:
     - Developer Guide:
         - IDE integration: 'developer/ide-integration.md'
         - Compiling the tools: 'developer/compiling-the-tools.md'
-        - Update an automatic installation to a manual installtion: 'developer/update-to-manual.md'
+        - Update an automatic installation to a manual installation: 'developer/update-to-manual.md'
         - C preprocessor macro magic: 'developer/macro.md'
         - Ways to define a pin mapping: 'developer/pin_mapping.md'
         - Using the SDCC compiler: 'developer/sdcc.md'

@@ -47,11 +47,6 @@
  * After creating an instance of this class, first call begin() before anything else.
  */
 
-
-
-
-
-
 #ifdef __cplusplus
 
 // C++ interface for use with regular gcc compiler
@@ -64,21 +59,20 @@
 	 * Constructor
 	 *
 	 * @param lcd_addr	I2C slave address of the LCD display. Most likely printed on the
-	 *					LCD circuit board, or look in the supplied LCD documentation.
+	 *			LCD circuit board, or look in the supplied LCD documentation.
 	 * @param lcd_rst	reset pin (255 or -1 for none)
+	 * @param charset	character set in CGROM of the used controller (A, D, F, I, R or S)
+	 */
+	void LiquidCrystal_pcf2119_init(uint8_t lcd_addr, uint8_t lcd_rst, char charset);
+
+	/**
+	 * Set the LCD display in the correct begin state, must be called before anything else is done.
+	 *
 	 * @param lcd_cols	Number of columns your LCD display has.
 	 * @param lcd_rows	Number of rows your LCD display has.
 	 * @param charsize	The size in dots that the display has, use LCD_5x10DOTS or LCD_5x8DOTS.
 	 */
-	void LiquidCrystal_pcf2119_init(uint8_t lcd_addr, uint8_t lcd_rst);
-	void LiquidCrystal_pcf2119_init5(uint8_t lcd_addr, uint8_t lcd_rst, uint8_t lcd_cols, uint8_t lcd_rows, uint8_t charsize);
-
-	/**
-	 * Set the LCD display in the correct begin state, must be called before anything else is done.
-	 */
-	void LiquidCrystal_pcf2119_begin();
-	void LiquidCrystal_pcf2119_begin2(uint8_t lcd_cols, uint8_t lcd_rows);
-	void LiquidCrystal_pcf2119_begin3(uint8_t lcd_cols, uint8_t lcd_rows, uint8_t charsize);
+	void LiquidCrystal_pcf2119_begin(uint8_t lcd_cols, uint8_t lcd_rows, uint8_t charsize);
 
 	 /**
 	  * Remove all the characters currently shown. Next print/write operation will start
@@ -141,6 +135,7 @@
 	void LiquidCrystal_pcf2119_createChar(uint8_t, uint8_t[]);
 	void LiquidCrystal_pcf2119_setCursor(uint8_t, uint8_t); 
 	size_t LiquidCrystal_pcf2119_write(uint8_t);
+	size_t LiquidCrystal_pcf2119_data(uint8_t);
 	void LiquidCrystal_pcf2119_command(uint8_t);
 
 	inline void LiquidCrystal_pcf2119_blink_on() { LiquidCrystal_pcf2119_blink(); }
@@ -229,16 +224,13 @@
 // The constructor functions sorted by the number of arguments.
 // For a singleton class these simple #define statements are sufficient.
 #define XLiquidCrystal_pcf2119_inst1(ADDR) \
-	LiquidCrystal_pcf2119_init(ADDR,255)
+	LiquidCrystal_pcf2119_init(ADDR,'R',255)
 
 #define XLiquidCrystal_pcf2119_inst2(ADDR,RST) \
-	LiquidCrystal_pcf2119_init(ADDR,RST)
+	LiquidCrystal_pcf2119_init(ADDR,'R',RST)
 
-#define XLiquidCrystal_pcf2119_inst4(ADDR,RST,COLS,ROWS) \
-	LiquidCrystal_pcf2119_init5(ADDR,RST,COLS,ROWS,LCD_5x8DOTS)
-
-#define XLiquidCrystal_pcf2119_inst5(ADDR,RST,COLS,ROWS,SIZE) \
-	LiquidCrystal_pcf2119_init5(ADDR,RST,COLS,ROWS,SIZE)
+#define XLiquidCrystal_pcf2119_inst3(ADDR,RST,CHARSET) \
+	LiquidCrystal_pcf2119_init(ADDR,RST,CHARSET)
 
 
 // The instantiation function remembers the I2C parameters and the name of the
@@ -251,22 +243,16 @@
 
 // The variants of the polymorph begin() method.
 // The begin() method includes the delayed call of the inst() method.
-#define XLiquidCrystal_pcf2119_begin0(instance) inline \
-        void instance##_begin_empty(void){\
-		instance##_inst(); \
-		LiquidCrystal_pcf2119_begin();\
-	}
-
 #define XLiquidCrystal_pcf2119_begin2(instance) inline \
         void instance##_begin(uint8_t cols, uint8_t lines){\
 		instance##_inst(); \
-		LiquidCrystal_pcf2119_begin2(cols,lines);\
+		LiquidCrystal_pcf2119_begin(cols,lines,LCD_5x8DOTS);\
 	}
 
 #define XLiquidCrystal_pcf2119_begin3(instance) inline \
         void instance##_begin_charsize(uint8_t cols, uint8_t lines, uint8_t charsize){\
 		instance##_inst(); \
-		LiquidCrystal_pcf2119_begin3(cols,lines,charsize);\
+		LiquidCrystal_pcf2119_begin(cols,lines,charsize);\
 	}
 
 
@@ -285,7 +271,6 @@
 	char	 	LiquidCrystal_pcf2119; \
 	XLiquidCrystal_pcf2119_inst	(instance,__VA_ARGS__) \
 	\
-	XLiquidCrystal_pcf2119_begin0	(instance)\
 	XLiquidCrystal_pcf2119_begin2	(instance)\
 	XLiquidCrystal_pcf2119_begin3	(instance)\
 	\
@@ -310,6 +295,7 @@
 	X2Method2	(LiquidCrystal_pcf2119,instance,createChar,uint8_t,uint8_t*) \
 	X2Method2	(LiquidCrystal_pcf2119,instance,setCursor,uint8_t,uint8_t) \
 	X2Method1return (LiquidCrystal_pcf2119,instance,size_t,write,uint8_t) \
+	X2Method1return (LiquidCrystal_pcf2119,instance,size_t,data,uint8_t) \
 	X2Method1	(LiquidCrystal_pcf2119,instance,command,uint8_t) \
 	\
 	X2Method0	(LiquidCrystal_pcf2119,instance,blink_on) \

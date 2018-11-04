@@ -16,15 +16,20 @@ uint8_t check[8] = {0x0, 0x1 ,0x3, 0x16, 0x1c, 0x8, 0x0};
 uint8_t cross[8] = {0x0, 0x1b, 0xe, 0x4, 0xe, 0x1b, 0x0};
 uint8_t retarrow[8] = {	0x1, 0x1, 0x5, 0x9, 0x1f, 0x8, 0x4};
 
-// Set the LCD address to 0x3c
-LiquidCrystal_pcf2119 (lcd, 0x3c);
+#define LCD_ADDR  0x3B    // I2C address: 0x3A or 0x3B, dep. on pin SA0 state
+#define LCD_RST   PE3     // LCD reset pin (active high)
+
+// Set LCD address and reset pin
+LiquidCrystal_pcf2119(lcd, LCD_ADDR, LCD_RST);
 
 void displayKeyCodes(void);
 
 void setup()
 {
-	lcd_begin(16, 2);
+	// initialize the LCD (16x2 display)
+	lcd_begin(16,2);
 
+	// create special characters
 	lcd_createChar(0, bell);
 	lcd_createChar(1, note);
 	lcd_createChar(2, clock);
@@ -69,4 +74,3 @@ void loop()
 {
 	// Do nothing here...
 }
-
