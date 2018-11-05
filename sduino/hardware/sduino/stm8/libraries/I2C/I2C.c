@@ -79,9 +79,9 @@ static uint8_t totalBytes = 0;
 static uint16_t timeOutDelay = 0;
 
 static uint8_t start(void);
-static uint8_t sendAddress(uint8_t);
+static uint8_t sendAddress(uint8_t, uint8_t);
 static uint8_t sendByte(uint8_t);
-static uint8_t receiveByte(uint8_t);
+static uint8_t receiveByte(void);
 static uint8_t stop(void);
 static void lockUp(void);
 
@@ -207,7 +207,7 @@ void I2C_scan()
     returnStatus = start();
     if(!returnStatus)
     { 
-      returnStatus = sendAddress(SLA_W(s));
+      returnStatus = sendAddress(SLA_W(s),1);
     }
     if(returnStatus)
     {
@@ -281,7 +281,7 @@ uint8_t I2C_write(uint8_t address, uint8_t registerAddress)
   returnStatus = 0;
   returnStatus = start();
   if(returnStatus){return(returnStatus);}
-  returnStatus = sendAddress(SLA_W(address));
+  returnStatus = sendAddress(SLA_W(address),1);
   if(returnStatus)
   {
     if(returnStatus == 1){return(2);}
@@ -307,7 +307,7 @@ uint8_t I2C_write_c(uint8_t address, uint8_t registerAddress, uint8_t data)
   returnStatus = 0;
   returnStatus = start(); 
   if(returnStatus){return(returnStatus);}
-  returnStatus = sendAddress(SLA_W(address));
+  returnStatus = sendAddress(SLA_W(address),1);
   if(returnStatus)
   {
     if(returnStatus == 1){return(2);}
@@ -349,7 +349,7 @@ uint8_t I2C_write_sn(uint8_t address, uint8_t registerAddress, uint8_t *data, ui
   returnStatus = 0;
   returnStatus = start();
   if(returnStatus){return(returnStatus);}
-  returnStatus = sendAddress(SLA_W(address));
+  returnStatus = sendAddress(SLA_W(address),1);
   if(returnStatus)
   {
     if(returnStatus == 1){return(2);}
@@ -379,9 +379,10 @@ uint8_t I2C_write_sn(uint8_t address, uint8_t registerAddress, uint8_t *data, ui
   return(returnStatus);
 }
 
-#if 0
+
 uint8_t I2C_read(uint8_t address, uint8_t numberBytes)
 {
+#if 0
   bytesAvailable = 0;
   bufferIndex = 0;
   if(numberBytes == 0){numberBytes++;}
@@ -389,7 +390,7 @@ uint8_t I2C_read(uint8_t address, uint8_t numberBytes)
   returnStatus = 0;
   returnStatus = start();
   if(returnStatus){return(returnStatus);}
-  returnStatus = sendAddress(SLA_R(address));
+  returnStatus = sendAddress(SLA_R(address),1);
   if(returnStatus)
   {
     if(returnStatus == 1){return(5);}
@@ -421,8 +422,44 @@ uint8_t I2C_read(uint8_t address, uint8_t numberBytes)
     return(returnStatus);
   }
   return(returnStatus);
-}
+#else
+  bytesAvailable = 0;
+  bufferIndex = 0;
+  if(numberBytes == 0){numberBytes++;}
+//  nack = numberBytes - 1;
+  returnStatus = start();
+  if(returnStatus){return(returnStatus);}
+
+  // method 2 (see RM0016, page 293):
+
+  returnStatus = sendAddress(SLA_R(address),(numberBytes>1));
+  if(returnStatus)
+  {
+    if(returnStatus == 1){return(5);}
+    return(returnStatus);
+  }
+
+  if (numberBytes==1) {
+    // method 2, case single byte (see RM0016, page 294):
+    I2C->CR2 &= ~I2C_CR2_ACK;	// clear ACK
+    (void) I2C->SR3;		// read SR3 to clear ADDR condition
+    I2C->CR2 |= I2C_CR2_STOP;	// send stop after receiving the one data byte
+    returnStatus = receiveByte();// wait for RxNE flag
+    if (returnStatus == 1) return(6);
+    if(returnStatus){return(returnStatus);}
+    data[0] = I2C->DR;		// save the data
+    bytesAvailable = 1;
+    totalBytes = 1;
+  } else if (numberBytes==2) {
+    //FIXME: case n=2
+    // method 2, case two bytes (see RM0016, page 294):
+  } else {
+    // method 2, general case, n>2 (see RM0016, page 294):
+    //FIXME: case n>2
+  }
+  return(returnStatus);
 #endif
+}
 
 #if 0
 uint8_t I2C_read(uint8_t address, uint8_t registerAddress, uint8_t numberBytes)
@@ -632,7 +669,7 @@ static uint8_t start(void)
 #endif
 }
 
-static uint8_t sendAddress(uint8_t i2cAddress)
+static uint8_t sendAddress(uint8_t i2cAddress, uint8_t clear_addr)
 {
 #if 0
   TWDR = i2cAddress;
@@ -666,22 +703,19 @@ static uint8_t sendAddress(uint8_t i2cAddress)
 #else
         unsigned long startingTime = millis();	// FIXME: uint16_t could be used
 
-	/* Test on EV5 and clear it */
+	/* Test on EV5 and clear it (BUSY, MSL and SB flag) */
 	while (!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT));
 
 	/* Send the Address + Direction */
 	I2C->DR = i2cAddress;	// I2C_Send7bitAddress()
 
-	/* Test on EV6 and clear it */
-	while (!I2C_CheckEvent(I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED))
-	{
-          if(!timeOutDelay){continue;}
-          if((millis() - startingTime) >= timeOutDelay)
-          {
-            lockUp();
-            return(2);	// no ACK received on address transmission
-          }
-        }
+	/* Test on EV6, but don't clear it yet (ADDR flag) */
+        // error code 2: no ACK received on address transmission
+	TIMEOUT_WAIT_WHILE(!(I2C->SR1 & I2C_SR1_ADDR),2);
+
+	if (clear_addr) {
+		(void) I2C->SR3;	// read SR3 to clear ADDR event bit
+	}
 
 	return 0;
 #endif
@@ -721,18 +755,18 @@ uint8_t sendByte(uint8_t i2cData)
 #else
         unsigned long startingTime = millis();	// FIXME: uint16_t could be used
 
-	/* Test on EV8 */
+	/* Test on EV8 (TRA, BUSY, MSL, TXE flags) */
+	/* On fail: 3: no ACK received on data transmission */
 	TIMEOUT_WAIT_WHILE(!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTING), 3);
-	// error 3: no ACK received on data transmission
 
 	I2C->DR = i2cData;
 	return 0;
 #endif
 }
 
+#if 0
 static uint8_t receiveByte(uint8_t ack)
 {
-#if 0
   unsigned long startingTime = millis();
   if(ack)
   {
@@ -759,9 +793,26 @@ static uint8_t receiveByte(uint8_t ack)
   }
   return(TWI_STATUS); 
 #else
-        //FIXME: receiveByte not implemented
-	(void) ack;
-	return 1;
+/**
+ * EV7: wait for RxNE flag and check for lost arbitration
+ *
+ * The actual data byte is not read but available in I2C->DR
+ * @returns: error code. possible values:
+ *     0: ok
+ *     1: timeout while waiting for RxNE
+ *     LOST_ARBTRTN: arbitration lost
+ */
+static uint8_t receiveByte(void)
+{
+  unsigned long startingTime = millis();
+  /* Test on EV7 (BUSY, MSL and RXNE flags) */
+  TIMEOUT_WAIT_WHILE(!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_RECEIVED), 1)
+  if (I2C->SR2 & I2C_SR2_ARLO)		// arbitration lost
+  {
+    lockUp();
+    return(LOST_ARBTRTN);
+  }
+  return(0);
 #endif
 }
 
