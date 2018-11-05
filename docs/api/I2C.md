@@ -44,3 +44,35 @@ Errorcode | Meaning: Waiting for...
   5	|Waiting for ACK/NACK while addressing slave in receiver mode (MR)
   6	|Waiting for ACK/NACK while receiving data from the slave
   7	|Waiting for successful completion of the Stop bit
+
+
+## AVR error codes
+
+Status Codes| for Master Transmitter Mode
+---	|---
+0x08	|A START condition has been transmitted
+0x10	|A repeated START condition has been transmitted
+0x18	|SLA+W has been transmitted; ACK has been received
+0x20	|SLA+W has been transmitted; NOT ACK has been received
+0x28	|Data byte has been transmitted; ACK has been received
+0x30	|Data byte has been transmitted; NOT ACK has been received
+0x38	|Arbitration lost in SLA+W or data bytes
+
+Status Codes| for Master Receiver Mode
+---	|---
+0x08	|A START condition has been transmitted
+0x10	|A repeated START condition has been transmitted
+0x38	|Arbitration lost in SLA+R or NOT ACK bit
+0x40	|SLA+R has been transmitted; ACK has been received
+0x48	|SLA+R has been transmitted; NOT ACK has been received
+0x50	|Data byte has been received; ACK has been returned
+0x58	|Data byte has been received; NOT ACK has been returned
+
+
+Status Codes| independed of mode
+---	|---
+0xF8	|No relevant state information available; TWINT = “0”
+0x00	|Bus error due to an illegal START or STOP condition
+
+Es braucht also SR1 und SR2
+0x20 ist nicht abzubilden.

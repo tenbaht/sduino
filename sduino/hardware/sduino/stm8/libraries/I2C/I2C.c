@@ -86,6 +86,18 @@ static uint8_t stop(void);
 static void lockUp(void);
 
 
+#define TIMEOUT_WAIT_WHILE(CONDITION,ERROR) \
+	while (CONDITION) 	/* wait for the required condition */ \
+	{ \
+          if(!timeOutDelay){continue;} \
+          if((millis() - startingTime) >= timeOutDelay) \
+          { \
+            lockUp(); \
+            return(ERROR); 		/* return the appropriate error code */ \
+          } \
+        }
+
+
 ////////////// Public Methods ////////////////////////////////////////
 
 
@@ -129,12 +141,10 @@ void I2C_end()
 }
 #endif
 
-#if 1
 void I2C_timeOut(uint16_t _timeOut)
 {
   timeOutDelay = _timeOut;
 }
-#endif
 
 #if 0
 void I2C_setSpeed(uint8_t _fast)
@@ -184,7 +194,6 @@ void I2C_pullup(uint8_t activate)
 }
 #endif
 
-#if 1
 void I2C_scan()
 {
   uint16_t tempTime = timeOutDelay;
@@ -227,7 +236,6 @@ void I2C_scan()
   if(!totalDevicesFound){Serial_println_s("No devices found");}
   timeOutDelay = tempTime;
 }
-#endif
 
 uint8_t I2C_available()
 {
@@ -586,6 +594,12 @@ uint8_t I2C_read_sn(uint8_t address, uint8_t registerAddress, uint8_t numberByte
 
 /////////////// Private Methods ////////////////////////////////////////
 
+/**
+ * send a start sequence
+ *
+ * in contrast to the AVR version it does not wait for start to finish for
+ * the STM8. The timeout is handled in sendAddress().
+ */
 static uint8_t start(void)
 {
 #if 0
@@ -613,7 +627,7 @@ static uint8_t start(void)
   }
   return(TWI_STATUS);
 #else
-	I2C->CR2 |= I2C_CR2_START;	// I2C_GenerateSTART(enable);
+	I2C->CR2 |= I2C_CR2_START;	// send start sequence
 	return 0;
 #endif
 }
@@ -708,15 +722,8 @@ uint8_t sendByte(uint8_t i2cData)
         unsigned long startingTime = millis();	// FIXME: uint16_t could be used
 
 	/* Test on EV8 */
-	while (!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTING))
-	{
-          if(!timeOutDelay){continue;}
-          if((millis() - startingTime) >= timeOutDelay)
-          {
-            lockUp();
-            return(3);	// no ACK received on data transmission
-          }
-        }
+	TIMEOUT_WAIT_WHILE(!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTING), 3);
+	// error 3: no ACK received on data transmission
 
 	I2C->DR = i2cData;
 	return 0;
@@ -730,7 +737,6 @@ static uint8_t receiveByte(uint8_t ack)
   if(ack)
   {
     TWCR = (1<<TWINT) | (1<<TWEN) | (1<<TWEA);
-
   }
   else
   {
@@ -776,19 +782,15 @@ static uint8_t stop(void)
   }
 #else
         unsigned long startingTime = millis();	// FIXME: uint16_t could be used
+
 	/* Test on EV8_2 */
-	while (!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED))
-	{
-          if(!timeOutDelay){continue;}
-          if((millis() - startingTime) >= timeOutDelay)
-          {
-            lockUp();
-            return(3);	// no ACK received on data transmission
-          }
-        }
+	TIMEOUT_WAIT_WHILE(!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED), 3);
+	// error 3: no ACK received on data transmission
 
 	/* Generate a STOP condition */
 	I2C->CR2 |= I2C_CR2_STOP;
+
+	TIMEOUT_WAIT_WHILE(!(I2C->SR1 & I2C_SR1_STOPF), 7);
 #endif
   return(0);
 }

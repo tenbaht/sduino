@@ -69,6 +69,7 @@
 #define I2C_h
 
 
+/* TWI status codes for AVR
 #define START           0x08
 #define REPEATED_START  0x10
 #define MT_SLA_ACK	0x18
@@ -81,6 +82,8 @@
 #define MR_DATA_NACK    0x58
 #define LOST_ARBTRTN    0x38
 #define TWI_STATUS      (TWSR & 0xF8)
+*/
+#define LOST_ARBTRTN    0x38
 #define SLA_W(address)  (address << 1)
 #define SLA_R(address)  ((address << 1) + 0x01)
 #define cbi(sfr, bit)   (_SFR_BYTE(sfr) &= ~_BV(bit))
