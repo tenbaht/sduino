@@ -278,6 +278,10 @@ uint8_t I2C_receive()
 
 uint8_t I2C_write(uint8_t address, uint8_t registerAddress)
 {
+	return (I2C_write_sn(address, registerAddress, NULL, 0));
+}
+/*
+{
   returnStatus = 0;
   returnStatus = start();
   if(returnStatus){return(returnStatus);}
@@ -301,8 +305,13 @@ uint8_t I2C_write(uint8_t address, uint8_t registerAddress)
   }
   return(returnStatus);
 }
+*/
 
 uint8_t I2C_write_c(uint8_t address, uint8_t registerAddress, uint8_t data)
+{
+	return (I2C_write_sn(address, registerAddress, &data, 1));
+}
+/*
 {
   returnStatus = 0;
   returnStatus = start(); 
@@ -333,15 +342,21 @@ uint8_t I2C_write_c(uint8_t address, uint8_t registerAddress, uint8_t data)
   }
   return(returnStatus);
 }
+*/
 
-#if 0
+#if 1
 uint8_t I2C_write_s(uint8_t address, uint8_t registerAddress, char *data)
+{
+	return (I2C_write_sn(address, registerAddress, data, strlen(data)));
+}
+/*
 {
   uint8_t bufferLength = strlen(data);
   returnStatus = 0;
   returnStatus = write(address, registerAddress, (uint8_t*)data, bufferLength);
   return(returnStatus);
 }
+*/
 #endif
 
 uint8_t I2C_write_sn(uint8_t address, uint8_t registerAddress, uint8_t *data, uint8_t numberBytes)
