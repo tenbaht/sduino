@@ -70,7 +70,7 @@
 
 
 uint8_t returnStatus;
-uint8_t nack;
+//uint8_t nack;
 uint8_t data[MAX_BUFFER_SIZE];
 
 static uint8_t bytesAvailable = 0;
@@ -78,12 +78,40 @@ static uint8_t bufferIndex = 0;
 static uint8_t totalBytes = 0;
 static uint16_t timeOutDelay = 0;
 
+/* --- internal building blocks ------------------------------------------ */
+static uint8_t I2C_read_common(uint8_t address, uint8_t numberBytes);
 static uint8_t start(void);
 static uint8_t sendAddress(uint8_t, uint8_t);
 static uint8_t sendByte(uint8_t);
 static uint8_t receiveByte(void);
 static uint8_t stop(void);
 static void lockUp(void);
+
+#define SEND_ADDRESS(ADDR) \
+  returnStatus = start(); \
+  if(returnStatus){return(returnStatus);} \
+  returnStatus = sendAddress((ADDR),1); \
+  if(returnStatus) \
+  { \
+    if(returnStatus == 1){return(2);} \
+    return(returnStatus); \
+  }
+
+#define SEND_BYTE(VAL) \
+  returnStatus = sendByte(VAL); \
+  if(returnStatus) \
+  { \
+    if(returnStatus == 1){return(3);} \
+    return(returnStatus); \
+  }
+
+#define SEND_STOP \
+  returnStatus = stop(); \
+  if(returnStatus) \
+  { \
+    if(returnStatus == 1){return(7);} \
+    return(returnStatus); \
+  }
 
 
 #define TIMEOUT_WAIT_WHILE(CONDITION,ERROR) \
@@ -280,117 +308,31 @@ uint8_t I2C_write(uint8_t address, uint8_t registerAddress)
 {
 	return (I2C_write_sn(address, registerAddress, NULL, 0));
 }
-/*
-{
-  returnStatus = 0;
-  returnStatus = start();
-  if(returnStatus){return(returnStatus);}
-  returnStatus = sendAddress(SLA_W(address),1);
-  if(returnStatus)
-  {
-    if(returnStatus == 1){return(2);}
-    return(returnStatus);
-  }
-  returnStatus = sendByte(registerAddress);
-  if(returnStatus)
-  {
-    if(returnStatus == 1){return(3);}
-    return(returnStatus);
-  }
-  returnStatus = stop();
-  if(returnStatus)
-  {
-    if(returnStatus == 1){return(7);}
-    return(returnStatus);
-  }
-  return(returnStatus);
-}
-*/
+
 
 uint8_t I2C_write_c(uint8_t address, uint8_t registerAddress, uint8_t data)
 {
 	return (I2C_write_sn(address, registerAddress, &data, 1));
 }
-/*
-{
-  returnStatus = 0;
-  returnStatus = start(); 
-  if(returnStatus){return(returnStatus);}
-  returnStatus = sendAddress(SLA_W(address),1);
-  if(returnStatus)
-  {
-    if(returnStatus == 1){return(2);}
-    return(returnStatus);
-  }
-  returnStatus = sendByte(registerAddress);
-  if(returnStatus)
-  {
-    if(returnStatus == 1){return(3);}
-    return(returnStatus);
-  }
-  returnStatus = sendByte(data);
-  if(returnStatus)
-  {
-    if(returnStatus == 1){return(3);}
-    return(returnStatus);
-  }
-  returnStatus = stop();
-  if(returnStatus)
-  {
-    if(returnStatus == 1){return(7);}
-    return(returnStatus);
-  }
-  return(returnStatus);
-}
-*/
 
-#if 1
+
 uint8_t I2C_write_s(uint8_t address, uint8_t registerAddress, char *data)
 {
 	return (I2C_write_sn(address, registerAddress, data, strlen(data)));
 }
-/*
-{
-  uint8_t bufferLength = strlen(data);
-  returnStatus = 0;
-  returnStatus = write(address, registerAddress, (uint8_t*)data, bufferLength);
-  return(returnStatus);
-}
-*/
-#endif
+
 
 uint8_t I2C_write_sn(uint8_t address, uint8_t registerAddress, uint8_t *data, uint8_t numberBytes)
 {
-  returnStatus = 0;
-  returnStatus = start();
-  if(returnStatus){return(returnStatus);}
-  returnStatus = sendAddress(SLA_W(address),1);
-  if(returnStatus)
+  SEND_ADDRESS(SLA_W(address));
+  SEND_BYTE(registerAddress);
+// only this part differs for the variants of I2C_write()
+  while (numberBytes--)
   {
-    if(returnStatus == 1){return(2);}
-    return(returnStatus);
+    SEND_BYTE(*data++);
   }
-  returnStatus = sendByte(registerAddress);
-  if(returnStatus)
-  {
-    if(returnStatus == 1){return(3);}
-    return(returnStatus);
-  }
-  for (uint8_t i = 0; i < numberBytes; i++)
-  {
-    returnStatus = sendByte(data[i]);
-    if(returnStatus)
-      {
-        if(returnStatus == 1){return(3);}
-        return(returnStatus);
-      }
-  }
-  returnStatus = stop();
-  if(returnStatus)
-  {
-    if(returnStatus == 1){return(7);}
-    return(returnStatus);
-  }
+//
+  SEND_STOP
   return(returnStatus);
 }
 
@@ -426,7 +368,7 @@ uint8_t I2C_read(uint8_t address, uint8_t numberBytes)
       if(returnStatus == 1){return(6);}
       if(returnStatus != MR_DATA_ACK){return(returnStatus);}
     }
-    data[i] = TWDR;
+    data[i] = I2C->DR;
     bytesAvailable = i+1;
     totalBytes = i+1;
   }
@@ -438,12 +380,31 @@ uint8_t I2C_read(uint8_t address, uint8_t numberBytes)
   }
   return(returnStatus);
 #else
+  returnStatus = start();
+  if(returnStatus){return(returnStatus);}
+  return (I2C_read_common(address, numberBytes));
+}
+
+/* --- building blocks --------------------------------------------------- */
+
+/** read from I2C bus
+ *
+ * This is the common part of the actual read routine. It does not send a
+ * Start sequence. This function is only used as a building block to implement
+ * the user accessible read functions.
+ *
+ * @param address: I2C address to be read
+ * @param numberBytes: Number of bytes to be read. 0 is treated as one.
+ * @returns: error code. Possible values:
+ *    0: ok
+ *    5: Waiting for ACK/NACK while addressing slave in receiver mode (MR)
+ *    6: Waiting for ACK/NACK while receiving data from the slave
+ */
+static uint8_t I2C_read_common(uint8_t address, uint8_t numberBytes)
+{
   bytesAvailable = 0;
   bufferIndex = 0;
   if(numberBytes == 0){numberBytes++;}
-//  nack = numberBytes - 1;
-  returnStatus = start();
-  if(returnStatus){return(returnStatus);}
 
   // method 2 (see RM0016, page 293):
 
@@ -473,12 +434,13 @@ uint8_t I2C_read(uint8_t address, uint8_t numberBytes)
     //FIXME: case n>2
   }
   return(returnStatus);
-#endif
 }
+#endif
 
-#if 0
-uint8_t I2C_read(uint8_t address, uint8_t registerAddress, uint8_t numberBytes)
+
+uint8_t I2C_read_c(uint8_t address, uint8_t registerAddress, uint8_t numberBytes)
 {
+#if 0
   bytesAvailable = 0;
   bufferIndex = 0;
   if(numberBytes == 0){numberBytes++;}
@@ -486,6 +448,7 @@ uint8_t I2C_read(uint8_t address, uint8_t registerAddress, uint8_t numberBytes)
   returnStatus = 0;
   returnStatus = start();
   if(returnStatus){return(returnStatus);}
+// 
   returnStatus = sendAddress(SLA_W(address));
   if(returnStatus)
   {
@@ -498,12 +461,14 @@ uint8_t I2C_read(uint8_t address, uint8_t registerAddress, uint8_t numberBytes)
     if(returnStatus == 1){return(3);}
     return(returnStatus);
   }
+// repeated start: This is similar to a simple read access
   returnStatus = start();
   if(returnStatus)
   {
     if(returnStatus == 1){return(4);}
     return(returnStatus);
   }
+//
   returnStatus = sendAddress(SLA_R(address));
   if(returnStatus)
   {
@@ -535,8 +500,13 @@ uint8_t I2C_read(uint8_t address, uint8_t registerAddress, uint8_t numberBytes)
     return(returnStatus);
   }
   return(returnStatus);
-}
+#else
+  SEND_ADDRESS(SLA_W(address));
+  SEND_BYTE(registerAddress);
+// now the regular read part with a repeated start
+  return (I2C_read(address, numberBytes));
 #endif
+}
 
 #if 0
 uint8_t I2C_read_sn(uint8_t address, uint8_t numberBytes, uint8_t *dataBuffer)
