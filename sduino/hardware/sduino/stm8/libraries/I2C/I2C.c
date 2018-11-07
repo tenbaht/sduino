@@ -118,7 +118,7 @@ static void lockUp(void);
 	while (CONDITION) 	/* wait for the required condition */ \
 	{ \
           if(!timeOutDelay){continue;} \
-          if((millis() - startingTime) >= timeOutDelay) \
+          if((((uint16_t)millis()) - startingTime) >= timeOutDelay) \
           { \
             lockUp(); \
             return(ERROR); 		/* return the appropriate error code */ \
@@ -502,7 +502,7 @@ static uint8_t sendAddress(uint8_t i2cAddress, uint8_t clear_addr)
     return(bufferedStatus);
   } 
 #else
-        unsigned long startingTime = millis();	// FIXME: uint16_t could be used
+        uint16_t startingTime = millis();
 
 	/* Test on EV5 and clear it (BUSY, MSL and SB flag) */
 	while (!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT));
@@ -554,7 +554,7 @@ uint8_t sendByte(uint8_t i2cData)
     return(bufferedStatus);
   } 
 #else
-        unsigned long startingTime = millis();	// FIXME: uint16_t could be used
+        uint16_t startingTime = millis();
 
 	/* Test on EV8 (TRA, BUSY, MSL, TXE flags) */
 	/* On fail: 3: no ACK received on data transmission */
@@ -605,7 +605,7 @@ static uint8_t receiveByte(uint8_t ack)
  */
 static uint8_t receiveByte(void)
 {
-  unsigned long startingTime = millis();
+  uint16_t startingTime = millis();
   /* Test on EV7 (BUSY, MSL and RXNE flags) */
   TIMEOUT_WAIT_WHILE(!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_RECEIVED), 1)
   if (I2C->SR2 & I2C_SR2_ARLO)		// arbitration lost
@@ -633,7 +633,7 @@ static uint8_t stop(void)
        
   }
 #else
-        unsigned long startingTime = millis();	// FIXME: uint16_t could be used
+	uint16_t startingTime = millis();
 
 	/* Test on EV8_2 */
 	TIMEOUT_WAIT_WHILE(!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED), 3);
