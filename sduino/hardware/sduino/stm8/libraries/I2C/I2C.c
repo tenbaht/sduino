@@ -406,7 +406,6 @@ uint8_t I2C_readbuf(uint8_t address, uint8_t numberBytes, uint8_t *dataBuffer)
     bytesAvailable = 1;
     totalBytes = 1;
   } else if (numberBytes==2) {
-    //FIXME: case n=2
     // method 2, case two bytes (see RM0016, page 294):
 	// Case of two bytes to be received:
 	uint16_t startingTime = millis();
@@ -418,9 +417,29 @@ uint8_t I2C_readbuf(uint8_t address, uint8_t numberBytes, uint8_t *dataBuffer)
 	bytesAvailable = 2;
 	totalBytes = 2;
   } else {
-
     // method 2, general case, n>2 (see RM0016, page 294):
-    //FIXME: case n>2
+	uint16_t startingTime;
+    while (numberBytes>3) {
+        returnStatus = receiveByte();// wait for RxNE flag
+        if (returnStatus == 1) return(6);
+        if(returnStatus){return(returnStatus);}
+        dataBuffer[bytesAvailable++] = I2C->DR;	// save the data
+        totalBytes++;
+        numberBytes--;	//FIXME: while ans Schleifenende
+    }
+	startingTime = millis();
+	TIMEOUT_WAIT_WHILE(!(I2C->SR1 & I2C_SR1_BTF), 6);// Wait for BTF to be set
+	I2C->CR2 &= ~I2C_CR2_ACK;	// clear ACK
+        dataBuffer[bytesAvailable++] = I2C->DR;	// read DataN-2
+        totalBytes++;
+	I2C->CR2 |= I2C_CR2_STOP;	// Program STOP
+	dataBuffer[bytesAvailable++] = I2C->DR;	// read DataN-1
+        totalBytes++;
+        returnStatus = receiveByte();// wait for RxNE flag
+        if (returnStatus == 1) return(6);
+        if(returnStatus){return(returnStatus);}
+	dataBuffer[bytesAvailable++] = I2C->DR;	// read DataN
+        totalBytes++;
   }
   return(returnStatus);
 }
@@ -489,7 +508,7 @@ static uint8_t start(void)
  * @parms mode: set the flag handling for POS and ACK
  *		1: clear ACK in ADDR event, before clearing ADDR (receive 1)
  *		2: set ACK, POS before ADDR event (receive 2)
- *		3: don't touch POS and ACK (receive > 2, write)
+ *		3: set ACK before ADDR event (receive > 2, write)
  */
 static uint8_t sendAddress(uint8_t i2cAddress, uint8_t mode)
 {
@@ -533,6 +552,8 @@ static uint8_t sendAddress(uint8_t i2cAddress, uint8_t mode)
 
 	if (mode==2) {
 		I2C->CR2 |= I2C_CR2_ACK | I2C_CR2_POS;	// set POS and ACK
+	} else if (mode>2) {
+		I2C->CR2 |= I2C_CR2_ACK;		// set ACK
 	}
 
 	/* Test on EV6, but don't clear it yet (ADDR flag) */
