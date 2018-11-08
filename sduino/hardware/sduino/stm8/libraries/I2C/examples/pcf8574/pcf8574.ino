@@ -51,20 +51,22 @@ void loop()
 {
 	static uint16_t last_time=0;	// 16 bit is enough for up to 65.6 sec
 	static uint8_t i=0;
+	uint8_t val;
 
 	if ((((uint16_t)millis())-last_time) >= INTERVAL)
 	{
 		last_time += INTERVAL;
 //		I2C_write(0x27, (i<<3) | 7);	// write 1 into P0..P2
-		I2C_read_reg(0x27, (i<<3) | 7, 1);// write 1 into P0..P2, read 1 byte
+		I2C_read_reg(0x27, (i<<3) | 7, 3);// write 1 into P0..P2, read 1 byte
 		Serial_print_s("loop ");
 		Serial_print_u(i);
 		Serial_print_s(": 0x");
 
 //		I2C_read(0x27, 1);		// read 1 byte into buffer
-		Serial_print_ub(data[0],16);
+		val = I2C_receive();
+		Serial_print_ub(val, 16);
 		Serial_print_s(", bin=");
-		printbin(I2C_receive());
+		printbin(val);
 		Serial_println_s(NULL);
 		i = (i+1) & 31;
 	}
