@@ -43,6 +43,7 @@ void setup()
 	Serial_println_s("Write to PCF8574");
 
 	I2C_begin();
+//	I2C_setSpeed(1);	// use fast mode
 	I2C_timeOut(50);
 }
 

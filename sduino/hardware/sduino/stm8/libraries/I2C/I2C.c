@@ -93,8 +93,7 @@ static uint8_t totalBytes = 0;
 static uint16_t timeOutDelay = 0;
 
 /* --- private functions ------------------------------------------------- */
-//static uint8_t I2C_read_common(uint8_t address, uint8_t numberBytes);
-static uint8_t start(void);
+static void start(void);
 static uint8_t sendAddress(uint8_t, uint8_t);
 static uint8_t sendByte(uint8_t);
 static uint8_t receiveByte(void);
@@ -104,8 +103,7 @@ static void lockUp(void);
 #define MODE_WRITE 4
 
 #define SEND_ADDRESS_W(ADDR) \
-  returnStatus = start(); \
-  if(returnStatus){return(returnStatus);} \
+  start(); \
   returnStatus = sendAddress(SLA_W(ADDR),MODE_WRITE); \
   if(returnStatus) \
   { \
@@ -140,42 +138,36 @@ static void lockUp(void);
           } \
         }
 
-////////////// Public Methods ////////////////////////////////////////
+
+/* --- public methods ---------------------------------------------------- */
 
 void I2C_begin()
 {
-	/* I2C Initialize */
-	I2C_Init(I2C_MAX_STANDARD_FREQ,	// 100000// I2C_SPEED,
-		 0xA0,		// OwnAddress, egal
-		 I2C_DUTYCYCLE_2,	// 0x00
-		 I2C_ACK_CURR,	// 0x01
-		 I2C_ADDMODE_7BIT,	// 0x00
-		 16		// InputClockFreqencyMhz
-	    );
+	I2C_setSpeed(0);	// initialize for standard speed (100kHz)
 }
 
-#if 0
 void I2C_end()
 {
-	TWCR = 0;
+	I2C->CR1 = 0;
 }
-#endif
 
 void I2C_timeOut(uint16_t _timeOut)
 {
 	timeOutDelay = _timeOut;
 }
 
-#if 0
 void I2C_setSpeed(uint8_t _fast)
 {
-	if (!_fast) {
-		TWBR = ((F_CPU / 100000) - 16) / 2;
-	} else {
-		TWBR = ((F_CPU / 400000) - 16) / 2;
-	}
+	/* it is easier to use the full initialization function */
+	I2C_Init(_fast ? I2C_MAX_FAST_FREQ : I2C_MAX_STANDARD_FREQ,// 100k/400k
+		 0xA0,		// OwnAddress, egal
+		 I2C_DUTYCYCLE_2,	// 0x00
+		 I2C_ACK_CURR,	// 0x01
+		 I2C_ADDMODE_7BIT,	// 0x00
+		 16		// InputClockFreqencyMhz
+	    );
+
 }
-#endif
 
 #if 0
 void I2C_pullup(uint8_t activate)
@@ -216,11 +208,8 @@ void I2C_scan()
 	Serial_println_s("Scanning for devices...please wait");
 	Serial_println_s(NULL);
 	for (uint8_t s = 0; s <= 0x7F; s++) {
-		returnStatus = 0;
-		returnStatus = start();
-		if (!returnStatus) {
-			returnStatus = sendAddress(SLA_W(s), MODE_WRITE);
-		}
+		start();
+		returnStatus = sendAddress(SLA_W(s), MODE_WRITE);
 		if (returnStatus) {
 			if (returnStatus == 1) {
 				Serial_println_s
@@ -339,12 +328,9 @@ uint8_t I2C_readbuf(uint8_t address, uint8_t numberBytes, uint8_t * dataBuffer)
 		numberBytes = 1;
 	}
 
-	returnStatus = start();
-	if (returnStatus) {
-		return (returnStatus);
-	}
 	// method 2 (see RM0016, page 293):
 
+	start();
 	returnStatus = sendAddress(SLA_R(address), numberBytes);
 	if (returnStatus) {
 		if (returnStatus == 1) {
@@ -432,10 +418,9 @@ uint8_t I2C_readbuf_reg(uint8_t address, uint8_t registerAddress,
  * in contrast to the AVR version it does not wait for start to finish for
  * the STM8. The timeout is handled in sendAddress().
  */
-static uint8_t start(void)
+static void start(void)
 {
 	I2C->CR2 |= I2C_CR2_START;	// send start sequence
-	return 0;
 }
 
 /**
