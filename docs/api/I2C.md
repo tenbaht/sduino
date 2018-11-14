@@ -8,27 +8,47 @@ deadlock situations, it allows for communication using a repeated start
 condition as required by some devices, the code is much more compact and the
 structure is easier to understand.
 
-The current state of the port is quite incomplete. Missing parts:
 
-- read functions
-- speed setting (100kHz only)
-- pullup setting
-- does not include the deadlock protection
+## API
+
+This is a pre-instantiated singleton library. It is not possible to use more
+than one instance per sketch or to change the instance name.
+
+The API syntax is very similar to the original C++ syntax. Some name
+mangeling was needed to distinguish the different variant of the `read()`
+and `write()` method. Apart from this replacing the dots in the method names
+for underscores is all it needs.
+
+The pullup setting is missing because this function is supported by the STM8
+hardware.
 
 
-## Error codes
+Arduino syntax				|sduino syntax
+--------------------			|---------------------
+`I2C.begin()`				|`I2C_begin()`
+`I2C.end()`				|`I2C_end()`
+`I2C.timeOut(val)`			|`I2C_timeOut(val)`
+`I2C.setSpeed(mode)`			|`I2C_setSpeed(mode)`
+`I2C.pullup(active)`			|not implemented
+`I2C.scan()`				|`I2C_scan()`
+`n = I2C.available()`			|`n = I2C_available()`
+`val = I2C.receive()`			|`val = I2C_receive()`
+`I2C.write(addr, val)`			|`I2C_write(addr, val)`
+`I2C.write(addr, reg, val)`		|`I2C_write_reg(addr, reg, val)`
+`I2C.write(addr, reg, string)`		|`I2C_write_s(addr, reg, string)`
+`I2C.write(addr, reg, *data, len)`	|`I2C_write_sn(addr, reg, *data, len)`
+`I2C.read(addr, n)`			|`I2C_read(addr, n)`
+`I2C.read(addr, reg, n)`		|`I2C_read_reg(addr, reg, n)`
+`I2C.read(addr, n, *buf)`		|`I2C_readbuf(addr, n, *buf)`
+`I2C.read(addr, reg, n, *buf)`		|`I2C_readbuf_reg(addr, reg, n, *buf)`
 
-Return values for functions that use the timeOut feature will return at what
-point in the transmission the timeout occurred.
 
-All possible return values:
 
-Errorcode | Meaning
----:	|---
-  0	|Function executed with no errors
-  1-7	|Timeout occurred, see above list
-  8-0xFF|See datasheet for exact meaning
+### Error codes
 
+All functions return an error code. Return values for functions that use the
+timeOut feature will return at what point in the transmission the timeout
+occurred.
 
 Looking at a full communication sequence between a master and slave
 (transmit data and then readback data) there a total of 7 points in the
@@ -37,6 +57,7 @@ the returned value.
 
 Errorcode | Meaning: Waiting for...
 ---:	|---
+  0	|Function executed with no errors
   1	|Waiting for successful completion of a Start bit
   2	|Waiting for ACK/NACK while addressing slave in transmit mode (MT)
   3	|Waiting for ACK/NACK while sending data to the slave
@@ -46,7 +67,15 @@ Errorcode | Meaning: Waiting for...
   7	|Waiting for successful completion of the Stop bit
 
 
-## AVR error codes
+
+### AVR error codes
+
+For reference: The codes listed below where defined for the AVR, but they
+don't exist for the STM8 implementation. Combining the values of SR1 and SR2
+it would be possible to implement most of these conditions (apart from
+0x20), but so far I haven't seen any program needing these values, so I
+didn't implement this.
+
 
 Status Codes| for Master Transmitter Mode
 ---	|---
@@ -74,5 +103,24 @@ Status Codes| independed of mode
 0xF8	|No relevant state information available; TWINT = “0”
 0x00	|Bus error due to an illegal START or STOP condition
 
-Es braucht also SR1 und SR2
-0x20 ist nicht abzubilden.
+
+
+
+## inner workings
+
+start(): Sends start bit, does not wait for SB flag.
+sendAddress()
+
+
+## Further reading
+
+Programming the I2C communication on the register level is quite complex for
+the STM8, especially in receive mode. The most detailed information on this
+topic is the
+
+- application note AN3281 bundeled with
+- the related source code package [STSW-STM8004](https://www.st.com/en/embedded-software/stsw-stm8004.html)
+
+Downloading from the ST website requires a (free) registration. Somebody
+uploaded the full package to github:
+https://github.com/jiaohaitao/stsw-stm8004
