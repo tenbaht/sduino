@@ -81,7 +81,7 @@ void loop()
 	// draw some dots in an 8x8 pattern
 	for (x=0; x<WIDTH; x+=8)
 	{
-		for (y=0; y<HEIGHT-8; y+=8)	// don't alter the stack!
+		for (y=0; y<HEIGHT-16; y+=8)	// don't alter the stack!
 		{
 			display_drawPixel(x,y,INVERSE);
 		}
