@@ -87,10 +87,10 @@
 uint8_t returnStatus;
 uint8_t data[MAX_BUFFER_SIZE];
 
-static uint8_t bytesAvailable = 0;
-static uint8_t bufferIndex = 0;
-static uint8_t totalBytes = 0;
-static uint16_t timeOutDelay = 0;
+static uint8_t bytesAvailable;
+static uint8_t bufferIndex;
+static uint8_t totalBytes;
+static uint16_t timeOutDelay;
 
 /* --- private functions ------------------------------------------------- */
 static void start(void);
@@ -119,14 +119,6 @@ static void lockUp(void);
     return(returnStatus); \
   }
 
-#define SEND_STOP \
-  returnStatus = stop(); \
-  if(returnStatus) \
-  { \
-    if(returnStatus == 1){return(7);} \
-    return(returnStatus); \
-  }
-
 #define TIMEOUT_WAIT_WHILE(CONDITION,ERROR) \
 	while (CONDITION) 	/* wait for the required condition */ \
 	{ \
@@ -138,11 +130,14 @@ static void lockUp(void);
           } \
         }
 
-
 /* --- public methods ---------------------------------------------------- */
 
 void I2C_begin()
 {
+	bytesAvailable = 0;
+	bufferIndex = 0;
+	totalBytes = 0;
+	timeOutDelay = 10;	// set default time out
 	I2C_setSpeed(0);	// initialize for standard speed (100kHz)
 }
 
@@ -159,7 +154,7 @@ void I2C_timeOut(uint16_t _timeOut)
 void I2C_setSpeed(uint8_t _fast)
 {
 	/* it is easier to use the full initialization function */
-	I2C_Init(_fast ? I2C_MAX_FAST_FREQ : I2C_MAX_STANDARD_FREQ,// 100k/400k
+	I2C_Init(_fast ? I2C_MAX_FAST_FREQ : I2C_MAX_STANDARD_FREQ,	// 100k/400k
 		 0xA0,		// OwnAddress, egal
 		 I2C_DUTYCYCLE_2,	// 0x00
 		 I2C_ACK_CURR,	// 0x01
@@ -251,7 +246,6 @@ uint8_t I2C_receive()
 	return (data[bufferIndex]);
 }
 
-
 /* --- write functions --------------------------------------------------- */
 
 uint8_t I2C_write(uint8_t address, uint8_t registerAddress)
@@ -259,7 +253,7 @@ uint8_t I2C_write(uint8_t address, uint8_t registerAddress)
 	return (I2C_write_sn(address, registerAddress, NULL, 0));
 }
 
-uint8_t I2C_write_c(uint8_t address, uint8_t registerAddress, uint8_t data)
+uint8_t I2C_write_reg(uint8_t address, uint8_t registerAddress, uint8_t data)
 {
 	return (I2C_write_sn(address, registerAddress, &data, 1));
 }
@@ -279,7 +273,11 @@ uint8_t I2C_write_sn(uint8_t address, uint8_t registerAddress, uint8_t * data,
 		SEND_BYTE(*data++);
 	}
 //
-	SEND_STOP return (returnStatus);
+	returnStatus = stop();
+	if (returnStatus == 1) {
+		return (7);
+	}
+	return (returnStatus);
 }
 
 /** read multiple bytes from I2C bus into internal data buffer
@@ -327,7 +325,6 @@ uint8_t I2C_readbuf(uint8_t address, uint8_t numberBytes, uint8_t * dataBuffer)
 	if (numberBytes == 0) {
 		numberBytes = 1;
 	}
-
 	// method 2 (see RM0016, page 293):
 
 	start();
@@ -511,7 +508,10 @@ static uint8_t stop(void)
 	/* Generate a STOP condition */
 	I2C->CR2 |= I2C_CR2_STOP;
 
-	TIMEOUT_WAIT_WHILE(!(I2C->SR1 & I2C_SR1_STOPF), 7);
+	// wait for BTF flag (indicating the end of transfer)
+	//FIXME: not really sure which flag indicates the end of stop condition
+	// maybe BUSY, BTF, TRA or even MSL.
+	TIMEOUT_WAIT_WHILE(!(I2C->SR1 & I2C_SR1_BTF), 7);
 	return (0);
 }
 
