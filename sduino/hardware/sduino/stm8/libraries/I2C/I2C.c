@@ -93,7 +93,6 @@ static uint8_t totalBytes;
 static uint16_t timeOutDelay;
 
 /* --- private functions ------------------------------------------------- */
-static void start(void);
 static uint8_t sendAddress(uint8_t, uint8_t);
 static uint8_t sendByte(uint8_t);
 static uint8_t receiveByte(void);
@@ -103,7 +102,6 @@ static void lockUp(void);
 #define MODE_WRITE 4
 
 #define SEND_ADDRESS_W(ADDR) \
-  start(); \
   returnStatus = sendAddress(SLA_W(ADDR),MODE_WRITE); \
   if(returnStatus) \
   { \
@@ -119,8 +117,9 @@ static void lockUp(void);
     return(returnStatus); \
   }
 
-#define TIMEOUT_WAIT_WHILE(CONDITION,ERROR) \
-	while (CONDITION) 	/* wait for the required condition */ \
+// wait while the condition is still true (wait for a bit to become zero)
+#define TIMEOUT_WAIT_FOR_ZERO(CONDITION,ERROR) \
+	while (CONDITION) 	/* wait while the condition is still true */ \
 	{ \
           if(!timeOutDelay){continue;} \
           if((((uint16_t)millis()) - startingTime) >= timeOutDelay) \
@@ -129,6 +128,9 @@ static void lockUp(void);
             return(ERROR); 		/* return the appropriate error code */ \
           } \
         }
+
+// wait while the condition is not true (wait for a bit to become one)
+#define TIMEOUT_WAIT_FOR_ONE(CONDITION,ERROR) TIMEOUT_WAIT_FOR_ZERO(!(CONDITION), ERROR)
 
 /* --- public methods ---------------------------------------------------- */
 
@@ -203,7 +205,6 @@ void I2C_scan()
 	Serial_println_s("Scanning for devices...please wait");
 	Serial_println_s(NULL);
 	for (uint8_t s = 0; s <= 0x7F; s++) {
-		start();
 		returnStatus = sendAddress(SLA_W(s), MODE_WRITE);
 		if (returnStatus) {
 			if (returnStatus == 1) {
@@ -327,7 +328,6 @@ uint8_t I2C_readbuf(uint8_t address, uint8_t numberBytes, uint8_t * dataBuffer)
 	}
 	// method 2 (see RM0016, page 293):
 
-	start();
 	returnStatus = sendAddress(SLA_R(address), numberBytes);
 	if (returnStatus) {
 		if (returnStatus == 1) {
@@ -353,7 +353,7 @@ uint8_t I2C_readbuf(uint8_t address, uint8_t numberBytes, uint8_t * dataBuffer)
 		// Case of two bytes to be received:
 		uint16_t startingTime = millis();
 		I2C->CR2 &= ~I2C_CR2_ACK;	// clear ACK
-		TIMEOUT_WAIT_WHILE(!(I2C->SR1 & I2C_SR1_BTF), 6);	// Wait for BTF to be set
+		TIMEOUT_WAIT_FOR_ONE(I2C->SR1 & I2C_SR1_BTF, 6);	// Wait for BTF to be set
 		I2C->CR2 |= I2C_CR2_STOP;	// Program STOP
 		dataBuffer[0] = I2C->DR;	// Read DR twice
 		dataBuffer[1] = I2C->DR;
@@ -374,7 +374,7 @@ uint8_t I2C_readbuf(uint8_t address, uint8_t numberBytes, uint8_t * dataBuffer)
 			numberBytes--;	//FIXME: while ans Schleifenende
 		}
 		startingTime = millis();
-		TIMEOUT_WAIT_WHILE(!(I2C->SR1 & I2C_SR1_BTF), 6);	// Wait for BTF to be set
+		TIMEOUT_WAIT_FOR_ONE(I2C->SR1 & I2C_SR1_BTF, 6);	// Wait for BTF to be set
 		I2C->CR2 &= ~I2C_CR2_ACK;	// clear ACK
 		dataBuffer[bytesAvailable++] = I2C->DR;	// read DataN-2
 		totalBytes++;
@@ -410,18 +410,7 @@ uint8_t I2C_readbuf_reg(uint8_t address, uint8_t registerAddress,
 /////////////// Private Methods ////////////////////////////////////////
 
 /**
- * send a start sequence
- *
- * in contrast to the AVR version it does not wait for start to finish for
- * the STM8. The timeout is handled in sendAddress().
- */
-static void start(void)
-{
-	I2C->CR2 |= I2C_CR2_START;	// send start sequence
-}
-
-/**
- * send the target address and wait for the ADDR event
+ * send start condition and the target address and wait for the ADDR event
  *
  * The flag handling for POS and ACK is determined by the mode byte.
  * At the end, ADDR is cleared by reading CR3.
@@ -435,8 +424,14 @@ static uint8_t sendAddress(uint8_t i2cAddress, uint8_t mode)
 {
 	uint16_t startingTime = millis();
 
-	/* Test on EV5 and clear it (BUSY, MSL and SB flag) */
-	while (!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT)) ;
+	/* make sure the bus is not busy */
+	TIMEOUT_WAIT_FOR_ZERO((I2C->SR3 & I2C_SR3_BUSY), 1);
+
+	/* send start sequence */
+	I2C->CR2 |= I2C_CR2_START;	// send start sequence
+
+	/* Test on EV5 and clear it (SB flag) */
+	TIMEOUT_WAIT_FOR_ONE(I2C->SR1 & I2C_SR1_SB, 1);
 
 	/* Send the Address + Direction */
 	I2C->DR = i2cAddress;	// I2C_Send7bitAddress()
@@ -449,7 +444,7 @@ static uint8_t sendAddress(uint8_t i2cAddress, uint8_t mode)
 
 	/* Test on EV6, but don't clear it yet (ADDR flag) */
 	// error code 2: no ACK received on address transmission
-	TIMEOUT_WAIT_WHILE(!(I2C->SR1 & I2C_SR1_ADDR), 2);
+	TIMEOUT_WAIT_FOR_ONE(I2C->SR1 & I2C_SR1_ADDR, 2);
 
 	if (mode == 1) {
 		I2C->CR2 &= ~I2C_CR2_ACK;	// clear ACK
@@ -465,10 +460,9 @@ uint8_t sendByte(uint8_t i2cData)
 {
 	uint16_t startingTime = millis();
 
-	/* Test on EV8 (TRA, BUSY, MSL, TXE flags) */
+	/* Test on EV8 (wait for TXE flag) */
 	/* On fail: 3: no ACK received on data transmission */
-	TIMEOUT_WAIT_WHILE(!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTING),
-			   3);
+	TIMEOUT_WAIT_FOR_ONE((I2C->SR1 & I2C_SR1_TXE), 3);
 
 	I2C->DR = i2cData;
 	return 0;
@@ -487,7 +481,7 @@ static uint8_t receiveByte(void)
 {
 	uint16_t startingTime = millis();
 	/* Test on EV7 (BUSY, MSL and RXNE flags) */
-	TIMEOUT_WAIT_WHILE(!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_RECEIVED), 1)
+	TIMEOUT_WAIT_FOR_ONE(I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_RECEIVED), 1)
 	    if (I2C->SR2 & I2C_SR2_ARLO)	// arbitration lost
 	{
 		lockUp();
@@ -502,7 +496,7 @@ static uint8_t stop(void)
 
 	/* Test on EV8_2: TRA, BUSY, MSL, TXE and BTF flags */
 	// on timeout error 3: no ACK received on data transmission
-	TIMEOUT_WAIT_WHILE(!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED),
+	TIMEOUT_WAIT_FOR_ONE(I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED),
 			   3);
 
 	/* Generate a STOP condition */
@@ -511,7 +505,7 @@ static uint8_t stop(void)
 	// wait for BTF flag (indicating the end of transfer)
 	//FIXME: not really sure which flag indicates the end of stop condition
 	// maybe BUSY, BTF, TRA or even MSL.
-	TIMEOUT_WAIT_WHILE(!(I2C->SR1 & I2C_SR1_BTF), 7);
+	TIMEOUT_WAIT_FOR_ONE((I2C->SR1 & I2C_SR1_BTF), 7);
 	return (0);
 }
 
