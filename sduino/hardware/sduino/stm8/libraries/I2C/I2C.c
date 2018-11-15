@@ -494,18 +494,24 @@ static uint8_t stop(void)
 {
 	uint16_t startingTime = millis();
 
-	/* Test on EV8_2: TRA, BUSY, MSL, TXE and BTF flags */
-	// on timeout error 3: no ACK received on data transmission
-	TIMEOUT_WAIT_FOR_ONE(I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED),
+	/* Test on EV8_2: TXE and BTF flags */
+	TIMEOUT_WAIT_FOR_ONE((I2C->SR1&(I2C_SR1_TXE|I2C_SR1_BTF))==(I2C_SR1_TXE|I2C_SR1_BTF),
 			   3);
 
 	/* Generate a STOP condition */
 	I2C->CR2 |= I2C_CR2_STOP;
 
-	// wait for BTF flag (indicating the end of transfer)
-	//FIXME: not really sure which flag indicates the end of stop condition
-	// maybe BUSY, BTF, TRA or even MSL.
-	TIMEOUT_WAIT_FOR_ONE((I2C->SR1 & I2C_SR1_BTF), 7);
+	// wait for the end of the STOP condition
+	//
+	// The reference manual rm0016 is not clear how to check for this
+	// condition. Maybe BUSY, BTF, TRA or even MSL.
+	// Waiting for BTF works.
+	// AN3281, Fig. 4 specifies to wait for STOPF, but that does not work.
+	// The source code attached to AN3281 waits for the STOP bit in CR2
+	// to flip back to zero. This works and so do we.
+//	TIMEOUT_WAIT_FOR_ONE((I2C->SR1 & I2C_SR1_BTF), 7);	// works
+//	TIMEOUT_WAIT_FOR_ONE((I2C->SR1 & I2C_SR1_STOPF), 7);	// doesn't work
+	TIMEOUT_WAIT_FOR_ZERO(I2C->CR2 & I2C_CR2_STOP, 7);	// works
 	return (0);
 }
 
