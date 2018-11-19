@@ -54,7 +54,7 @@ All text above, and the splash screen below must be included in any redistributi
 //# define i2c_write(A,C,D)	I2c.write(A,C,D)
 //# define i2c_write_sn(A,C,B,N)	I2c.write(A,C,B,N)
 # define i2c_begin()		I2C_begin()
-# define i2c_write(A,C,D)	I2C_write_c(A,C,D)
+# define i2c_write(A,C,D)	I2C_write_reg(A,C,D)
 # define i2c_write_sn(A,C,B,N)	I2C_write_sn(A,C,B,N)
 #endif
 #include "Mini_SSD1306.h"
@@ -188,16 +188,14 @@ void Mini_SSD1306_init(int8_t reset) {
   rst = reset;
 }
 
-#if 1
 void Mini_SSD1306_begin(uint8_t vccstate, uint8_t i2caddr, bool reset) {
   _vccstate = vccstate;
   _i2caddr = i2caddr;
 
   // set pin directions
-  {
-    // I2C Init
-    i2c_begin();
-  }
+  // I2C Init
+  i2c_begin();
+
   if ((reset) && (rst >= 0)) {
     // Setup reset pin direction (used by both SPI and I2C)
     pinMode(rst, OUTPUT);
@@ -274,7 +272,7 @@ void Mini_SSD1306_begin(uint8_t vccstate, uint8_t i2caddr, bool reset) {
 
   ssd1306_command(SSD1306_DISPLAYON);//--turn on oled panel
 }
-#endif
+
 
 void Mini_SSD1306_invertDisplay(uint8_t i) {
   if (i) {
@@ -294,7 +292,7 @@ static void ssd1306_command(uint8_t c) {
     Wire.write(c);
     Wire.endTransmission();
 #else
-	i2c_write(_i2caddr, 0x00, c);
+    i2c_write(_i2caddr, 0x00, c);
 #endif
   }
 }

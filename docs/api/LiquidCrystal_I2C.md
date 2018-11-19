@@ -29,13 +29,13 @@ underscores is all it needs.
 
 The original version of the LiquidCystal_I2C library requires the
 definition of the LCD size and the desired character size (8 or 10 pixel
-height) at the instantiation uses a parameterless begin() method.
+height) at the instantiation and uses a parameterless `begin()` method.
 
 This differs slightly from the semantic of the regular Arduino
 LiquidCrystal library using the parallel interface. There, the
 instantiation defines only the electrical connection (the used pin
 numbers) and defines the logical properties (cols, rows, charsize) later
-with the begin method.
+with the `begin()` method.
 
 As an addition to the Arduino version of this library this port
 supports both initialization styles.
@@ -45,7 +45,7 @@ Arduino syntax				|sduino syntax
 --------------------			|---------------------
 `LiquidCrystal_I2C lcd(i2c_addr,cols,rows,charsize)` |`LiquidCrystal_I2C (lcd,i2c_addr,rows,cols,charsize)`
 `LiquidCrystal_I2C lcd(i2c_addr,cols,rows)`	|`LiquidCrystal_I2C (lcd,i2c_addr,rows)`
-not allowed	|`LiquidCrystal_I2C (lcd,i2c_addr)`
+not allowed				|`LiquidCrystal_I2C (lcd,i2c_addr)`
 `lcd.init(i2c_addr,cols,rows,charsize)`	|`lcd_init(i2c_addr,cols,rows,charsize)`
 `lcd.begin()`				|`lcd_begin()`
 not allowed				|`lcd_begin_wh(cols,rows)`
@@ -166,6 +166,29 @@ void loop() {
   lcd_print_u(millis() / 1000);
 }
 ```
+
+
+## Pin connections
+
+The table shows the most common connection scheme as used by the popular
+backpack boards from China:
+
+PCF8574 bit	|Backpack pin	|LCD signal	|LCD pin
+---		|---		|---		|---
+0		|13		|RS		|4
+1		|12		|R/-W		|5
+2		|11		|EN		|6
+3		|1		|LED- (open collector, inverted)|16
+4		|6		|D4		|11
+5		|5		|D5		|12
+6		|4		|D6		|13
+7		|3		|D7		|14
+
+The numbering of the LCD connector counts in the opposite directions on the
+the LCD and the backpack module. It looks like the person designing the PCB
+layout got confused by the backwards mounting position ;-) But in reality it
+doesn't matter, they both fit together nicely. It is just a unfortunate
+silkscreen printing.
 
 
 

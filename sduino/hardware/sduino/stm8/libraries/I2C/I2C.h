@@ -1,8 +1,19 @@
 /*
   I2C.h - I2C library
-  Based on the I2C library for Arduino by Wayne Truchsess.
-  Ported to C for the STM8S by Michael Mayer.
+  It started as a port of the I2C library for Arduino by Wayne Truchsess,
+  but since the I2C device of the STM8 is programmed so fundamentally different
+  then I2C for the AVR it ended up to be a complete rewrite from scratch.
+  Only the external API is unchanged.
+
+  Re-written in C for the STM8S by Michael Mayer.
+
+  Copyright (c) 2017-2018 Michael Mayer.  All right reserved.
+  Rev 6.0 - Novemver 8th, 2018
+          - added support for Master Receiver mode
+          - complete rewrite of the library
+          - more regular and logical function naming
   Rev 5.0s1 - ported to C for the STM8S103F3 using SDCC
+          - only master transmitt mode supported, no read access
 
   Copyright (c) 2011-2012 Wayne Truchsess.  All right reserved.
   Rev 5.0 - January 24th, 2012
@@ -41,7 +52,6 @@
   function correctly without the use of a Repeated Start.  The 
   initial version of this library only supports the Master.
 
-
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -68,59 +78,50 @@
 #ifndef I2C_h
 #define I2C_h
 
-
-#define START           0x08
-#define REPEATED_START  0x10
-#define MT_SLA_ACK	0x18
-#define MT_SLA_NACK	0x20
-#define MT_DATA_ACK     0x28
-#define MT_DATA_NACK    0x30
-#define MR_SLA_ACK	0x40
-#define MR_SLA_NACK	0x48
-#define MR_DATA_ACK     0x50
-#define MR_DATA_NACK    0x58
-#define LOST_ARBTRTN    0x38
-#define TWI_STATUS      (TWSR & 0xF8)
-#define SLA_W(address)  (address << 1)
-#define SLA_R(address)  ((address << 1) + 0x01)
-#define cbi(sfr, bit)   (_SFR_BYTE(sfr) &= ~_BV(bit))
-#define sbi(sfr, bit)   (_SFR_BYTE(sfr) |= _BV(bit))
-
-#define MAX_BUFFER_SIZE 32
-
-
-
-
-    void I2C_begin();
-    void I2C_end();
-    void I2C_timeOut(uint16_t);
-    void I2C_setSpeed(uint8_t); 
-    void I2C_pullup(uint8_t);
-    void I2C_scan();
-    uint8_t I2C_available();
-    uint8_t I2C_receive();
-    uint8_t I2C_write(uint8_t, uint8_t);
-    uint8_t I2C_write_c(uint8_t, uint8_t, uint8_t);
-    uint8_t I2C_write_s(uint8_t, uint8_t, char*);
-    uint8_t I2C_write_sn(uint8_t, uint8_t, uint8_t*, uint8_t);
-    uint8_t I2C_read(uint8_t, uint8_t);
-    uint8_t I2C_read_c(uint8_t, uint8_t, uint8_t);
-    uint8_t I2C_read_s(uint8_t, uint8_t, uint8_t*);
-    uint8_t I2C_read_sn(uint8_t, uint8_t, uint8_t, uint8_t*);
-
-
-//  private:
+/* TWI status codes */
 /*
-    uint8_t I2C_start(void);
-    uint8_t I2C_sendAddress(uint8_t);
-    uint8_t I2C_sendByte(uint8_t);
-    uint8_t I2C_receiveByte(uint8_t);
-    uint8_t I2C_stop(void);
-    void I2C_lockUp(void);
-*/
+ * return values for functions that use the timeOut feature 
+ * will now return at what point in the transmission the timeout
+ * occurred. Looking at a full communication sequence between a 
+ * master and slave (transmit data and then readback data) there
+ * a total of 7 points in the sequence where a timeout can occur.
+ *
+ * These are listed below and correspond to the returned value:
+ *
+ * 0 - Function executed with no errors
+ * 1 - Waiting for successful completion of a Start bit
+ * 2 - Waiting for ACK/NACK while addressing slave in transmit mode (MT)
+ * 3 - Waiting for ACK/NACK while sending data to the slave
+ * 4 - Waiting for successful completion of a Repeated Start
+ * 5 - Waiting for ACK/NACK while addressing slave in receiver mode (MR)
+ * 6 - Waiting for ACK/NACK while receiving data from the slave
+ * 7 - Waiting for successful completion of the Stop bit
+ * 0x38	- arbitration lost
+ */
+
+#define LOST_ARBTRTN    0x38
+
+void I2C_begin();
+void I2C_end();
+void I2C_timeOut(uint16_t);
+void I2C_setSpeed(uint8_t);
+void I2C_pullup(uint8_t);
+void I2C_scan();
+uint8_t I2C_available();
+uint8_t I2C_receive();
+uint8_t I2C_write(uint8_t, uint8_t);
+uint8_t I2C_write_reg(uint8_t, uint8_t, uint8_t);
+uint8_t I2C_write_s(uint8_t, uint8_t, char *);
+uint8_t I2C_write_sn(uint8_t, uint8_t, uint8_t *, uint8_t);
+uint8_t I2C_read(uint8_t address, uint8_t numberBytes);
+uint8_t I2C_read_reg(uint8_t address, uint8_t registerAddress,
+		     uint8_t numberBytes);
+uint8_t I2C_readbuf(uint8_t address, uint8_t numberBytes, uint8_t * dataBuffer);
+uint8_t I2C_readbuf_reg(uint8_t address, uint8_t registerAddress,
+			uint8_t numberBytes, uint8_t * dataBuffer);
+
 // not sure if these really need to be public:
-    extern uint8_t returnStatus;
-    extern uint8_t nack;
-    extern uint8_t data[MAX_BUFFER_SIZE];
+//    extern uint8_t returnStatus;
+//    extern uint8_t data[MAX_BUFFER_SIZE];
 
 #endif
