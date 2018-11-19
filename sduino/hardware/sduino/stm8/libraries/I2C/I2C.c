@@ -524,4 +524,3 @@ static void lockUp(void)
 	//FIXME: this needs to be checked in detail. CR1 might be involved
 	I2C->CR2 = 0;
 }
-
