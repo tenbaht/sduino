@@ -94,7 +94,6 @@ static uint16_t timeOutDelay;
 
 /* --- private functions ------------------------------------------------- */
 static uint8_t sendAddress(uint8_t, uint8_t);
-static uint8_t sendAddressRead(uint8_t i2cAddress, uint8_t mode);
 static uint8_t sendByte(uint8_t);
 static uint8_t receiveByte(void);
 static uint8_t stop(void);
@@ -332,7 +331,7 @@ uint8_t I2C_readbuf(uint8_t address, uint8_t numberBytes, uint8_t * dataBuffer)
 	}
 	// method 2 (see RM0016, page 293):
 
-	returnStatus = sendAddressRead(SLA_R(address), numberBytes);
+	returnStatus = sendAddress(SLA_R(address), numberBytes);
 	if (returnStatus) {
 		if (returnStatus == 1) {
 			return (5);
@@ -371,14 +370,6 @@ uint8_t I2C_readbuf(uint8_t address, uint8_t numberBytes, uint8_t * dataBuffer)
 		// method 2, general case, n>2 (see RM0016, page 294):
 		while (numberBytes > 3) {
 			TIMEOUT_WAIT_FOR_ONE(I2C->SR1 & I2C_SR1_BTF, 6);	// Wait for BTF to be set
-/*
-			returnStatus = receiveByte();	// wait for RxNE flag
-			if (returnStatus == 1)
-				return (6);
-			if (returnStatus) {
-				return (returnStatus);
-			}
-*/
 			dataBuffer[bytesAvailable++] = I2C->DR;	// save the data
 			totalBytes++;
 			numberBytes--;	//FIXME: while ans Schleifenende
@@ -386,6 +377,10 @@ uint8_t I2C_readbuf(uint8_t address, uint8_t numberBytes, uint8_t * dataBuffer)
 		TIMEOUT_WAIT_FOR_ONE(I2C->SR1 & I2C_SR1_BTF, 6);	// Wait for BTF to be set
 		I2C->CR2 &= ~I2C_CR2_ACK;		// clear ACK
 		// masking interrupts according to errata sheet #17140 rev. 5
+		// using temporary variables to keep the critical section as
+		// short as possible. The pointer arithmetics for dataBuffer
+		// compiles to quite complex code.
+		//TODO: Could be optimized with assembler code
 		BEGIN_CRITICAL
 			tmp1 = I2C->DR;			// read DataN-2
 			I2C->CR2 |= I2C_CR2_STOP;	// Program STOP
@@ -394,7 +389,6 @@ uint8_t I2C_readbuf(uint8_t address, uint8_t numberBytes, uint8_t * dataBuffer)
 		dataBuffer[bytesAvailable++] = tmp1;
 		totalBytes++;
 		dataBuffer[bytesAvailable++] = tmp2;
-//		dataBuffer[bytesAvailable++] = I2C->DR;	// read DataN-1
 		totalBytes++;
 		returnStatus = receiveByte();	// wait for RxNE flag
 		if (returnStatus == 1)
@@ -404,8 +398,8 @@ uint8_t I2C_readbuf(uint8_t address, uint8_t numberBytes, uint8_t * dataBuffer)
 		}
 		dataBuffer[bytesAvailable++] = I2C->DR;	// read DataN
 		totalBytes++;
-		}
-	TIMEOUT_WAIT_FOR_ZERO(I2C->CR2 & I2C_CR2_STOP, 7);// Wait for STOP end
+	}
+	TIMEOUT_WAIT_FOR_ZERO(I2C->CR2 & I2C_CR2_STOP, 7);	// Wait for STOP end
 	return (returnStatus);
 }
 
@@ -419,7 +413,7 @@ uint8_t I2C_readbuf_reg(uint8_t address, uint8_t registerAddress,
 {
 	SEND_ADDRESS_W(address);
 	SEND_BYTE(registerAddress);
-// now a regular read with a repeated start
+	// now a regular read (with a repeated start)
 	return (I2C_readbuf(address, numberBytes, dataBuffer));
 }
 
@@ -436,11 +430,11 @@ uint8_t I2C_readbuf_reg(uint8_t address, uint8_t registerAddress,
  *		2: set ACK, POS before ADDR event (receive 2)
  *		3: set ACK before ADDR event (receive > 2, write)
  */
-static uint8_t sendAddressRead(uint8_t i2cAddress, uint8_t mode)
+static uint8_t sendAddress(uint8_t i2cAddress, uint8_t mode)
 {
 	uint16_t startingTime = millis();
 
-	/* make sure the bus is not busy */
+	/* do not wait for BUSY==0 as this would block for repeated start */
 //	TIMEOUT_WAIT_FOR_ZERO((I2C->SR3 & I2C_SR3_BUSY), 1);
 
 	I2C->CR2 |= I2C_CR2_ACK;	// set ACK
@@ -456,24 +450,17 @@ static uint8_t sendAddressRead(uint8_t i2cAddress, uint8_t mode)
 	/* Test on EV6, but don't clear it yet (ADDR flag) */
 	// error code 2: no ACK received on address transmission
 	TIMEOUT_WAIT_FOR_ONE(I2C->SR1 & I2C_SR1_ADDR, 2);
-/*
-	if (mode == 2) {
-		I2C->CR2 |= I2C_CR2_ACK | I2C_CR2_POS;	// set POS and ACK
-	} else if (mode > 2) {
-		I2C->CR2 |= I2C_CR2_ACK;	// set ACK
-	}
-*/
 
 	if (mode == 1) {
 		I2C->CR2 &= ~I2C_CR2_ACK;	// clear ACK
 		BEGIN_CRITICAL			// disable interrupts
-		(void)I2C->SR3;			// read SR3 to clear ADDR event bit
+		(void) I2C->SR3;		// read SR3 to clear ADDR event bit
 		I2C->CR2 |= I2C_CR2_STOP;	// send STOP soon
 		END_CRITICAL			// enable interrupts
 	} else if (mode == 2) {
 		I2C->CR2 |= I2C_CR2_POS;	// set POS
 		BEGIN_CRITICAL			// disable interrupts
-		(void)I2C->SR3;			// read SR3 to clear ADDR event bit
+		(void) I2C->SR3;		// read SR3 to clear ADDR event bit
 		I2C->CR2 &= ~I2C_CR2_ACK;	// clear ACK
 		END_CRITICAL			// enable interrupts
 	} else {
@@ -482,43 +469,6 @@ static uint8_t sendAddressRead(uint8_t i2cAddress, uint8_t mode)
 
 	return 0;
 }
-#if 1
-static uint8_t sendAddress(uint8_t i2cAddress, uint8_t mode)
-{
-	uint16_t startingTime = millis();
-
-	/* make sure the bus is not busy (does not work for repeated start) */
-//	TIMEOUT_WAIT_FOR_ZERO((I2C->SR3 & I2C_SR3_BUSY), 1);
-
-	/* send start sequence */
-	I2C->CR2 |= I2C_CR2_START;	// send start sequence
-
-	/* Test on EV5 and clear it (SB flag) */
-	TIMEOUT_WAIT_FOR_ONE(I2C->SR1 & I2C_SR1_SB, 1);
-
-	/* Send the Address + Direction */
-	I2C->DR = i2cAddress;	// I2C_Send7bitAddress()
-
-	if (mode == 2) {
-		I2C->CR2 |= I2C_CR2_ACK | I2C_CR2_POS;	// set POS and ACK
-	} else if (mode > 2) {
-		I2C->CR2 |= I2C_CR2_ACK;	// set ACK
-	}
-
-	/* Test on EV6, but don't clear it yet (ADDR flag) */
-	// error code 2: no ACK received on address transmission
-	TIMEOUT_WAIT_FOR_ONE(I2C->SR1 & I2C_SR1_ADDR, 2);
-
-	if (mode == 1) {
-		I2C->CR2 &= ~I2C_CR2_ACK;	// clear ACK
-	}
-//      if (mode>=2) {
-	(void)I2C->SR3;		// read SR3 to clear ADDR event bit
-//      }
-
-	return 0;
-}
-#endif
 
 uint8_t sendByte(uint8_t i2cData)
 {
@@ -559,8 +509,8 @@ static uint8_t stop(void)
 	uint16_t startingTime = millis();
 
 	/* Test on EV8_2: TXE and BTF flags */
-	TIMEOUT_WAIT_FOR_ONE((I2C->SR1&(I2C_SR1_TXE|I2C_SR1_BTF))==(I2C_SR1_TXE|I2C_SR1_BTF),
-			   3);
+	TIMEOUT_WAIT_FOR_ONE((I2C->SR1 & (I2C_SR1_TXE | I2C_SR1_BTF)) ==
+			     (I2C_SR1_TXE | I2C_SR1_BTF), 3);
 
 	/* Generate a STOP condition */
 	I2C->CR2 |= I2C_CR2_STOP;
