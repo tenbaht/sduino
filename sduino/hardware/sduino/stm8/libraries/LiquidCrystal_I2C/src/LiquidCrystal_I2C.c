@@ -14,7 +14,7 @@
  * This library is for HD44780 based text mode LCDs connected via a
  * PCF8575 i2c adapter.
  *
- * Default I2C address 0x37
+ * Default I2C address for most modules is 0x27
 
  P0	RS
  P1	RW
@@ -326,8 +326,7 @@ static void LiquidCrystal_I2C_expanderWrite(uint8_t _data) {
 	Wire_write((int)(_data) | _backlightval);
 	Wire_endTransmission();
 #else
-//        I2C_write(_addr, _data | _backlightval);
-        I2C_write_c(_addr, 0, _data | _backlightval);
+        I2C_write(_addr, _data | _backlightval);
 #endif
 }
 

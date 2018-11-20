@@ -23,5 +23,6 @@ void setup()
 
 void loop()
 {
-	// Do nothing here...
+	lcd_setCursor(0, 1);
+	lcd_print_u(millis() / 1000);
 }
