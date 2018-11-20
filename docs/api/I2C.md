@@ -124,3 +124,12 @@ topic is the
 Downloading from the ST website requires a (free) registration. Somebody
 uploaded the full package to github:
 https://github.com/jiaohaitao/stsw-stm8004
+
+There are some important notes on I2C implementation in the errata sheets:
+
+- [STM8S001J3/003xx/103xx/903xx Errata sheet, rev. 5
+  (CD00265449)](https://www.st.com/content/ccc/resource/technical/document/errata_sheet/c9/f9/ef/bf/63/91/4a/1f/CD00265449.pdf/files/CD00265449.pdf/jcr:content/translations/en.CD00265449.pdf)
+- [STM8S005xx STM8S105xx Errata sheet, rev. 7
+  (CD00270741)](https://www.st.com/content/ccc/resource/technical/document/errata_sheet/e3/c3/4e/24/0c/ca/4b/e7/CD00270741.pdf/files/CD00270741.pdf/jcr:content/translations/en.CD00270741.pdf)
+- [STM8S007xx STM8S20xxx Errata sheet, rev. 6
+  (CD00244749)](https://www.st.com/content/ccc/resource/technical/document/errata_sheet/7a/94/8f/fe/84/14/41/6d/CD00244749.pdf/files/CD00244749.pdf/jcr:content/translations/en.CD00244749.pdf)
