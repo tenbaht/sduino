@@ -1,8 +1,8 @@
 # Generic STM8S103 breakout board
 
 These simple breakout boards are available on aliexpress for well under one
-Dollar (I got mine for 67 cent each, including shipping from China). They
-are my original development platform.
+Dollar (I got mine for 67 cent each, including shipping from China). These
+boards are my main development platform.
 
 ![Image of the STM8S103 board](stm8board-pinout.jpg)
 
@@ -14,10 +14,11 @@ internal oscillator, 8kB flash, 1kB RAM, and 640 byte EEPROM. The CPU
 includes a UART, SPI, I2C, PWM, 10 bit ADC, 3 timer, and up to 14 I/O pins -
 quite similar to an Atmel ATmega8.
 
-One (red) LED is connected to GPIO PB5 (CPU pin 11). The push button is for
-reset. The CPU runs on 3.3V, a linear regulator is integrated on the
-board. The micro USB connector is only for (5V) power supply, the data lines
-are not connected.
+One (red) LED is connected to GPIO PB5 (CPU pin 11). Please keep in mind
+that this is one of the I2C signals and **using the LED blocks the I2C
+bus**. The push button is for reset. The CPU runs on 3.3V, a linear
+regulator is integrated on the board. The micro USB connector is only for
+(5V) power supply, the data lines are not connected.
 
 All CPU pins are easily accessible on (optional) pin headers (pitch 2.54mm,
 perfect for breadboards).
@@ -41,7 +42,7 @@ housing. The one in the metal housing uses a different pinout.
 Connection to the flashtool:
 
 Signal name	|P3 on CPU board	|Green flash tool|Metal flash tool
------- 		|-----:			|-----: 	|-----:
+------ 		|:-----:		|:-----: 	|:-----:
 3V3    		|1      		|2      	| 7
 SWIM   		|2      		|5      	| 5
 GND    		|3      		|7      	| 3
@@ -67,13 +68,6 @@ this mapping:
 
 ![STM8S103 breakout board pin mapping](stm8blue.png)
 
-The pins D3/D4 (SDA/SCL, PB5/PB4) are different from the others as they are
-true open drain pins. That means, they only can drive the output low or
-open. To drive it high, they require the of an external pull-up resistor.
-This is the reason why the LED on this breakout is connected between +3.3V
-and the pins and not between the pin GND as usual. This way it is possible
-to drive the LED by writing a zero to the output register.
-
 
 
 sduino pin	| STM8S103 CPU port pin
@@ -83,19 +77,24 @@ sduino pin	| STM8S103 CPU port pin
  5-9		| PC3-PC7
 10-15		| PD1-PD6
 
-serial: 14,15  
-SPI: 2,7,8,9  
-I2C: 3,4 (true open drain. can't drive a high signal without an external
-pull-up resistor)
-Analog: 6,11,12,14,15  
-PWM: 2,5,6,12 plus either only 13 or 7-9 but not 13 (via alternate mapping)  
+- serial: 14,15
+- SPI: 2,7,8,9
+- I2C: 3,4 (true open drain. can't drive a high signal without an external
+  pull-up resistor)
+- Analog: 6,11,12,14,15
+- PWM: 2,5,6,12 plus either only 13 or 7-9 but not 13 (via alternate mapping)
+
+pros of this approach:
 
  + Easy and logical for use on a breadboard
  + Very clear and logical port pin ordering
- - Analog pins are still scattered around
  + TX and RX would be the rarely used analog pin numbers A3/A4 at
    the end of the analog pin number list
  + At least the analog pins are in data sheet order
+
+cons of this approach:
+
+ - Analog pins are still scattered around
  - All functions use totally different pin numbers than Arduino
 
 I am still not really happy with this mapping. Instead of simplifing things
@@ -126,3 +125,16 @@ paratheses):
 |19	|PD2	|Ain3/[T2-3]		|11	|Analog A1, (~~)
 |20	|PD3	|Ain4/T2-2		|12	|PWM, Analog A2
 
+
+## Special pins
+
+The pins D3/D4 (SDA/SCL, PB5/PB4) are different from the others as they are
+true open drain pins. That means, they only can drive the output low or
+open. To drive it high, they require an external pull-up resistor.
+This is the reason why the LED on this breakout board is connected between +3.3V
+and the pins and not between the pin GND as usual. This way it is possible
+to drive the LED by writing a zero to the output register.
+
+
+D5/D6 (PA1/PA2, OscIn/OscOut) are weaker than the other pins. Try avoiding
+these pins for LEDs and other higher current applications.

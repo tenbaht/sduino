@@ -1,0 +1,49 @@
+###########################################
+# Syntax Coloring Map For LiquidCrystal_pcf2119
+###########################################
+
+###########################################
+# Datatypes (KEYWORD1)
+###########################################
+
+LiquidCrystal_pcf2119		KEYWORD1
+
+###########################################
+# Methods and Functions (KEYWORD2)
+###########################################
+lcd_init			KEYWORD2
+lcd_begin			KEYWORD2
+lcd_begin_empty			KEYWORD2
+lcd_begin_charsize		KEYWORD2
+lcd_clear			KEYWORD2
+lcd_home			KEYWORD2
+lcd_noDisplay			KEYWORD2
+lcd_display			KEYWORD2
+lcd_noBlink			KEYWORD2
+lcd_blink			KEYWORD2
+lcd_noCursor			KEYWORD2
+lcd_cursor			KEYWORD2
+lcd_scrollDisplayLeft		KEYWORD2
+lcd_scrollDisplayRight		KEYWORD2
+lcd_leftToRight			KEYWORD2
+lcd_rightToLeft			KEYWORD2
+lcd_shiftIncrement		KEYWORD2
+lcd_shiftDecrement		KEYWORD2
+lcd_autoscroll			KEYWORD2
+lcd_noAutoscroll		KEYWORD2
+lcd_createChar			KEYWORD2
+lcd_setCursor			KEYWORD2
+lcd_blink_on			KEYWORD2
+lcd_blink_off			KEYWORD2
+lcd_cursor_on			KEYWORD2
+lcd_cursor_off			KEYWORD2
+lcd_load_custom_character	KEYWORD2
+###########
+lcd_charset			KEYWORD2
+lcd_convert_c			KEYWORD2
+lcd_convert_s			KEYWORD2
+###########################################
+# Constants (LITERAL1)
+###########################################
+ASCII				LITERAL1
+NON_ASCII			LITERAL1

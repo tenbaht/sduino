@@ -100,7 +100,7 @@ Ubuntu, Mint, Elementary etc.):
 	sudo apt-get install make libusb-1.0-0
 ```
 
-Now use the Board Mangager to remove the auto-installed Sduino package and
+Now use the Board Manager to remove the auto-installed Sduino package and
 you are ready.
 
 
@@ -148,7 +148,7 @@ Expected folder structure:
              + sdcc  can be a link to a full sdcc install
 ```
 
->Don't despair of the stock Windows terminal window. Installing e.g.
+Don't despair of the stock Windows terminal window. Installing e.g.
 [console2](https://sourceforge.net/projects/console/) will make your life on
 the command line so much more enjoyable.
 

@@ -135,6 +135,9 @@ with that:
 - close and re-open the terminal window
 
 Now we can start working. 
+(Or read the excellent and more comprehensive installation guide on https://github.com/orlp/dev-on-windows/wiki/Installing-GCC--&-MSYS2
+)
+
 
 #### Install the core files and SDCC
 

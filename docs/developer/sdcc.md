@@ -81,6 +81,26 @@ some registers:
 	void f(void) __preserves_regs(b, c, iyl, iyh);
 
 
+#### Direct memory access
+
+To access a memory location without using a pointer variable it is possible
+to do things like this:
+
+```c
+#define ODR	(*((unsigned char *)0x5005))
+#define bitSet(value, bit) ((value) |= (1 << (bit)))
+
+void main()
+{
+
+  bitSet(ODR, 3);
+
+  *((unsigned char *) 0x5005) |= 4;
+}
+```
+
+
+
 ### Notes on SDCC
 
 The linker `sdld` does not automatically link the object file for main.c if it
