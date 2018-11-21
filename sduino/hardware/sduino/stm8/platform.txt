@@ -142,6 +142,17 @@ tools.stm8flash.upload.params.verbose=
 tools.stm8flash.upload.params.quiet=
 tools.stm8flash.upload.pattern="{path}/{cmd}" -c{upload.protocol} -p{upload.mcu} -s flash -w "{build.path}/{build.project_name}.hex"
 
+# erase: Unlock a write-protected MCU (this deletes all memories)
+# Access this function in the IDE as Tools->Burn bootloader
+tools.stm8flash.erase.params.verbose=
+tools.stm8flash.erase.params.quiet=
+tools.stm8flash.erase.pattern="{path}/{cmd}" -c{upload.protocol} -p{upload.mcu} -u
+
+# dummy definition for programming a bootloader. Needed by the IDE.
+tools.stm8flash.bootloader.params.verbose=
+tools.stm8flash.bootloader.params.quiet=
+tools.stm8flash.bootloader.pattern=echo "no bootloader available"
+
 
 # Serial upload using the builtin bootloader
 # ------------------------------------------
@@ -178,5 +189,6 @@ tools.stm8gal.program.params.noverify=-v
 tools.stm8gal.program.pattern="{path}/{cmd}" {params.port} {params.baudrate} {params.reset} {params.method} {params.background} {program.verbose} {program.verify} {program.command}
 
 tools.stm8gal.erase.command=-e
-tools.stm8gal.erase.params.quiet=
-tools.stm8gal.erase.pattern="{path}/{cmd}" {params.port} {params.baudrate} {params.reset} {params.method} {params.background} {params.verbose} {erase.command}
+tools.stm8gal.erase.params.quiet=-V 0
+tools.stm8gal.erase.params.verbose=-V 2
+tools.stm8gal.erase.pattern="{path}/{cmd}" {params.port} {params.baudrate} {params.reset} {params.method} {params.background} {erase.verbose} {erase.command}

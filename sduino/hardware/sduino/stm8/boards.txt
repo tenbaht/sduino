@@ -11,6 +11,8 @@ stm8sblue.upload.mcu=stm8s103?3
 stm8sblue.upload.maximum_size=8192
 stm8sblue.upload.maximum_data_size=1024
 
+stm8sblue.bootloader.tool=stm8flash
+
 stm8sblue.build.mcu=STM8S103
 stm8sblue.build.f_cpu=16000000L
 stm8sblue.build.board=STM8S_BLUE
@@ -45,6 +47,8 @@ stm8sdisco.upload.mcu=stm8s105?6
 stm8sdisco.upload.maximum_size=32768
 stm8sdisco.upload.maximum_data_size=2048
 
+stm8sdisco.bootloader.tool=stm8flash
+
 stm8sdisco.build.mcu=STM8S105
 stm8sdisco.build.f_cpu=16000000L
 stm8sdisco.build.board=STM8S_DISCOVERY
@@ -72,6 +76,8 @@ s8uno.upload.speed=230400
 s8uno.upload.maximum_size=32768
 s8uno.upload.maximum_data_size=2048
 
+s8uno.bootloader.tool=stm8flash
+
 s8uno.build.mcu=STM8S105
 s8uno.build.f_cpu=16000000L
 s8uno.build.board=STM8S_UNO
@@ -98,6 +104,8 @@ mb208.menu.upload_method.stm8flashMethod.upload.mcu=stm8s208?b
 mb208.upload.speed=230400
 mb208.upload.maximum_size=131072
 mb208.upload.maximum_data_size=6144
+
+mb208.bootloader.tool=stm8flash
 
 mb208.build.mcu=STM8S208
 mb208.build.f_cpu=16000000L
