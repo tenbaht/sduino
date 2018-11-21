@@ -129,8 +129,8 @@ preproc.macros.flags=-E -MC
 recipe.preproc.macros="{compiler.wrapper.path}/{compiler.cpp.cmd}.sh" "{compiler.path}/{compiler.cpp.cmd}" "{source_file}" "{preprocessed_file_path}" re12 {compiler.cpp.flags} {preproc.macros.flags} -mstm8 -D{build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} {compiler.systemincludes}
 
 
-# STlink/v2 Uploader
-# ------------------
+# stm8flash for STlink/v1 and STlink/v2
+# -------------------------------------
 
 tools.stm8flash.cmd=stm8flash
 tools.stm8flash.path={runtime.tools.STM8Tools.path}/linux
@@ -146,6 +146,10 @@ tools.stm8flash.upload.pattern="{path}/{cmd}" -c{upload.protocol} -p{upload.mcu}
 # Serial upload using the builtin bootloader
 # ------------------------------------------
 
+# Some parameter values are selected by the IDE according to preferences:
+# - *.verify/*.params.noverify: referenced as {*.verify}
+# - *.params.verbose/*.params.quiet: referenced as {*.verbose}
+
 tools.stm8gal.cmd=stm8gal
 tools.stm8gal.path={runtime.tools.STM8Tools.path}/linux
 tools.stm8gal.path.windows={runtime.tools.STM8Tools.path}/win
@@ -155,13 +159,23 @@ tools.stm8gal.params.port=-p "{serial.port}"
 tools.stm8gal.params.baudrate=-b 230400
 tools.stm8gal.params.reset=-R 1
 tools.stm8gal.params.method=-u 0
-tools.stm8gal.params.verbose=-V 0
 tools.stm8gal.params.background=-B
 
 tools.stm8gal.upload.command=-w "{build.path}/{build.project_name}.hex"
-tools.stm8gal.upload.params.quiet=
+tools.stm8gal.upload.params.quiet=-V 0
+tools.stm8gal.upload.params.verbose=-V 2
+tools.stm8gal.upload.verify=
 tools.stm8gal.upload.params.noverify=-v
-tools.stm8gal.upload.pattern="{path}/{cmd}" {params.port} {params.baudrate} {params.reset} {params.method} {params.background} {params.verbose} {upload.params.noverify} {upload.command}
+tools.stm8gal.upload.pattern="{path}/{cmd}" {params.port} {params.baudrate} {params.reset} {params.method} {params.background} {upload.verbose} {upload.verify} {upload.command}
+
+# The program pattern is used for Sketch->upload using a Programmer
+# Same as the upload pattern.
+tools.stm8gal.program.command=-w "{build.path}/{build.project_name}.hex"
+tools.stm8gal.program.params.quiet=-V 0
+tools.stm8gal.program.params.verbose=-V 2
+tools.stm8gal.program.verify=
+tools.stm8gal.program.params.noverify=-v
+tools.stm8gal.program.pattern="{path}/{cmd}" {params.port} {params.baudrate} {params.reset} {params.method} {params.background} {program.verbose} {program.verify} {program.command}
 
 tools.stm8gal.erase.command=-e
 tools.stm8gal.erase.params.quiet=
