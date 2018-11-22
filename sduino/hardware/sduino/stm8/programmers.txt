@@ -1,3 +1,9 @@
+stlink21.name=ST-Link/V2.1
+stlink21.communication=usb
+stlink21.protocol=stlinkv21
+stlink21.program.tool=stm8flash
+stlink21.program.extra_params=
+
 stlink2.name=ST-Link/V2
 stlink2.communication=usb
 stlink2.protocol=stlinkv2
