@@ -1,0 +1,46 @@
+diff --git a/Makefile b/Makefile
+index 7ed48d1..eef1710 100644
+--- a/Makefile
++++ b/Makefile
+@@ -39,6 +39,7 @@ else
+ 	LIBS   = -lusb-1.0
+ 	LIBUSB_CFLAGS =
+ 	CC	   ?= GCC
++	SKIP_ESP   = yes
+ 	BIN_SUFFIX =.exe
+ endif
+ 
+@@ -47,7 +48,12 @@ override CFLAGS := $(BASE_CFLAGS) $(LIBUSB_CFLAGS) $(CFLAGS)
+ 
+ 
+ BIN 		=stm8flash
+-OBJECTS 	=stlink.o stlinkv2.o espstlink.o main.o byte_utils.o ihex.o srec.o stm8.o libespstlink.o
++OBJECTS		=stlink.o stlinkv2.o main.o byte_utils.o ihex.o srec.o stm8.o
++ifeq ($(SKIP_ESP),yes)
++	override CFLAGS  += -DNO_ESP
++else
++	OBJECTS +=espstlink.o libespstlink.o
++endif
+ 
+ 
+ .PHONY: all clean install
+diff --git a/main.c b/main.c
+index 21c5133..7ab575b 100644
+--- a/main.c
++++ b/main.c
+@@ -81,6 +81,7 @@ programmer_t pgms[] = {
+ 		stlink2_swim_read_range,
+ 		stlink2_swim_write_range,
+ 	},
++#ifndef NO_ESP
+ 	{
+ 		"espstlink",
+ 		ESP_STLink,
+@@ -92,6 +93,7 @@ programmer_t pgms[] = {
+ 		espstlink_swim_read_range,
+ 		espstlink_swim_write_range,
+ 	},
++#endif
+ 	{ NULL },
+ };
+ 

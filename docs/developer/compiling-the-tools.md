@@ -2,7 +2,8 @@
 
 ## stm8gal
 
-Project page: https://github.com/gicking/stm8gal
+Project repository:
+[https://github.com/gicking/stm8gal](https://github.com/gicking/stm8gal)
 
 	git clone git@github.com:gicking/stm8gal.git
 
@@ -37,45 +38,11 @@ Now start the compiler:
 
 ### For Windows
 
-Windows does not support an SPI device. Apply this patch to disable
-compilation of spi_spidev_comm.c for Windows:
+Windows does not support an SPI device. Apply [this
+patch](../img/no-spi.patch) to disable the compilation of spi_spidev_comm.c
+for Windows:
 
-```diff
-diff --git a/Makefile b/Makefile
-index 24b0057..053d17b 100644
---- a/Makefile
-+++ b/Makefile
-@@ -4,7 +4,7 @@ CC            = gcc
- CFLAGS        = -c -Wall -I./STM8_Routines
- #CFLAGS       += -DDEBUG
- LDFLAGS       = -g3 -lm
--SOURCES       = bootloader.c hexfile.c main.c misc.c serial_comm.c spi_spidev_comm.c spi_Arduino_comm.c
-+SOURCES       = bootloader.c hexfile.c main.c misc.c serial_comm.c spi_Arduino_comm.c
- INCLUDES      = globals.h misc.h bootloader.h hexfile.h serial_comm.h spi_spidev_comm.h spi_Arduino_comm.h main.h
- STM8FLASH     = STM8_Routines/E_W_ROUTINEs_128K_ver_2.1.s19 STM8_Routines/E_W_ROUTINEs_128K_ver_2.0.s19 STM8_Routines/E_W_ROUTINEs_256K_ver_1.0.s19 STM8_Routines/E_W_ROUTINEs_32K_ver_1.3.s19 STM8_Routines/E_W_ROUTINEs_32K_ver_1.4.s19 STM8_Routines/E_W_ROUTINEs_128K_ver_2.2.s19 STM8_Routines/E_W_ROUTINEs_32K_ver_1.0.s19 STM8_Routines/E_W_ROUTINEs_128K_ver_2.4.s19 STM8_Routines/E_W_ROUTINEs_32K_ver_1.2.s19  STM8_Routines/E_W_ROUTINEs_32K_verL_1.0.s19 STM8_Routines/E_W_ROUTINEs_8K_verL_1.0.s19
- STM8INCLUDES  = $(STM8FLASH:.s19=.h)
-@@ -16,6 +16,7 @@ RM            = rm -fr
- # add optional SPI support via spidev library (Windows not yet supported)
- ifeq (,$(findstring Win,$(OS)))
- 	CFLAGS  += -DUSE_SPIDEV
-+	SOURCES += spi_spidev_comm.c
- endif
- 
- # add optional GPIO reset via wiringPi library (Raspberry only) 
-diff --git a/misc.c b/misc.c
-index 9fe02a0..67b5c0d 100644
---- a/misc.c
-+++ b/misc.c
-@@ -22,7 +22,7 @@
- // WIN32 specific
- #if defined(WIN32)
- 
--  #include "Windows.h"
-+  #include "windows.h"
- 
-   // forground colours
-   #define FG_BLACK      0
-```
+	patch -p1 < no-spi.patch
 
 Now compile:
 
@@ -87,87 +54,11 @@ Now compile:
 
 ## stm8flash
 
-Project page: https://github.com/vdudouyt/stm8flash
+Project repository:
+[https://github.com/vdudouyt/stm8flash](https://github.com/vdudouyt/stm8flash)
 
 Compiling for Linux and OSX is straight forward, Windows is more
-complicated. Current versions of stm8flash support the espstlink programmer.
-The programmer is conneced via USB and a virtual serial port, not over Wifi
-and for serial access the termios library is used. Being a POSIX function,
-this is not supported by mingw, only by cygwin. As a workaround I use this
-patch to disable the espstlink functionality on Windows systems:
-
-```diff
-diff --git a/Makefile b/Makefile
-index 7ed48d1..e76a69f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -39,6 +39,7 @@ else
- 	LIBS   = -lusb-1.0
- 	LIBUSB_CFLAGS =
- 	CC	   ?= GCC
-+	SKIP_ESP   = yes
- 	BIN_SUFFIX =.exe
- endif
- 
-@@ -47,8 +48,12 @@ override CFLAGS := $(BASE_CFLAGS) $(LIBUSB_CFLAGS) $(CFLAGS)
- 
- 
- BIN 		=stm8flash
--OBJECTS 	=stlink.o stlinkv2.o espstlink.o main.o byte_utils.o ihex.o srec.o stm8.o libespstlink.o
--
-+OBJECTS 	=stlink.o stlinkv2.o main.o byte_utils.o ihex.o srec.o stm8.o
-+ifeq ($(SKIP_ESP),yes)
-+	override CFLAGS  += -DNO_ESP
-+else
-+	OBJECTS +=espstlink.o libespstlink.o
-+endif
- 
- .PHONY: all clean install
- 
-diff --git a/main.c b/main.c
-index ce19e47..29a25d2 100644
---- a/main.c
-+++ b/main.c
-@@ -54,6 +54,7 @@ programmer_t pgms[] = {
- 		stlink2_swim_read_range,
- 		stlink2_swim_write_range,
- 	},
-+#ifndef NO_ESP
-     {
- 		"espstlink",
- 		0,
-@@ -64,6 +65,7 @@ programmer_t pgms[] = {
- 		espstlink_swim_read_range,
- 		espstlink_swim_write_range,
- 	},
-+#endif
- 	{ NULL },
- };
- 
-@@ -72,9 +74,15 @@ void print_help_and_exit(const char *name, bool err) {
- 	fprintf(stream, "Usage: %s [-c programmer] [-S serialno] [-p partno] [-s memtype] [-b bytes] [-r|-w|-v] <filename>\n", name);
- 	fprintf(stream, "Options:\n");
- 	fprintf(stream, "\t-?             Display this help\n");
--	fprintf(stream, "\t-c programmer  Specify programmer used (stlink, stlinkv2 or espstlink)\n");
-+	fprintf(stream, "\t-c programmer  Specify programmer used (stlink, stlinkv2"
-+#ifndef NO_ESP
-+	" or espstlink"
-+#endif
-+	")\n");
- 	fprintf(stream, "\t-S serialno    Specify programmer's serial number. If not given and more than one programmer is available, they'll be listed.\n");
-+#ifndef NO_ESP
- 	fprintf(stream, "\t-d port        Specify the serial device for espstlink (default: /dev/ttyUSB0)\n");
-+#endif
- 	fprintf(stream, "\t-p partno      Specify STM8 device\n");
- 	fprintf(stream, "\t-l             List supported STM8 devices\n");
- 	fprintf(stream, "\t-s memtype     Specify memory type (flash, eeprom, ram, opt or explicit address)\n");
-```
-
-Obviously, a better approach would be the use of a simple intermediate
-cross-platform layer like
-[libserialport](https://sigrok.org/wiki/Libserialport).
-
-
+complicated.
 
 
 ###  For Linux
@@ -202,15 +93,39 @@ Compiling stm8flash:
 
 ### Cross-Compiling for windows on a Linux system
 
+Current versions of stm8flash support the espstlink programmer.
+The programmer is conneced via USB and a virtual serial port, not over Wifi
+and for serial access the termios library is used. Being a POSIX function,
+this is not supported by mingw, only by cygwin. As a workaround apply [this
+patch](../img/no-espstlink-10810e88.patch) to disable the espstlink
+functionality on Windows systems:
+
+	patch -p1 < no-espstlink-10810e88.patch
+
+Obviously, a better approach would be the use of a simple intermediate
+cross-platform layer like
+[libserialport](https://sigrok.org/wiki/Libserialport).
+
+
 Required packages:
 
 	apt install mingw-w64 mingw-w64-tools
 
-Compiling stm8flash:
+Get stm8flash and patch the sources to cut out espstlink code:
 
 	git clone git@github.com:vdudouyt/stm8flash.git
 	cd stm8flash
-	make CC=i686-w64-mingw32-gcc RELEASE=yes CFLAGS=-I. PLATFORM=w7
+	wget https://tenbaht.github.io/sduino/img/no-espstlink-10810e88.patch
+
+Download the 7z file containing the latest [libusb dll
+binary](https://github.com/libusb/libusb/releases). Unpack the archive into
+a new directory inside the stm8flash directory:
+
+	7z -owindows x <libusb-xxx.7z>
+
+Compiling stm8flash (as 32 bit binary for XP compatibility):
+
+	make CC=i686-w64-mingw32-gcc RELEASE=yes CFLAGS="-Iwindows/include -Lwindows/MinGW32/dll" PLATFORM=w7
 
 
 
