@@ -169,7 +169,7 @@ tools.stm8gal.path.macosx={runtime.tools.STM8Tools.path}/macosx
 tools.stm8gal.params.port=-p "{serial.port}"
 tools.stm8gal.params.baudrate=-b 230400
 tools.stm8gal.params.reset=-R 1
-tools.stm8gal.params.method=-u 0
+tools.stm8gal.params.method=-u 2
 tools.stm8gal.params.background=-B
 
 tools.stm8gal.upload.command=-w "{build.path}/{build.project_name}.hex"
