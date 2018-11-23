@@ -33,7 +33,7 @@ All CPU pins are easily accessible on (optional) pin headers (pitch 2.54mm,
 perfect for breadboards).
 
 
-![Schematic of the STMS105 board](stm8s_black_sch.png)
+![Schematic of the STMS105 board](stm8sblack-schematic.jpg)
 
 
 ## I2C not easy accessible
