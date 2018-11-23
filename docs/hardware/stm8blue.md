@@ -4,7 +4,7 @@ These simple breakout boards are available on aliexpress for well under one
 Dollar (I got mine for 67 cent each, including shipping from China). These
 boards are my main development platform.
 
-![Image of the STM8S103 board](stm8board-pinout.jpg)
+![Image of the STM8S103 board](stm8blue.jpg)
 
 They are very similar to the [ESP14 Wifi-boards](esp14.md) and
 most programs will work fine on those chinese gems as well.
@@ -23,7 +23,7 @@ regulator is integrated on the board. The micro USB connector is only for
 All CPU pins are easily accessible on (optional) pin headers (pitch 2.54mm,
 perfect for breadboards).
 
-![Schematic of the STMS103 board](Schematic1.png)
+![Schematic of the STMS103 board](stm8blue-schematic.png)
 
 My breakout boards came preprogrammed with a blink program and with active
 write protection bits. For unlocking before first use:
@@ -66,7 +66,7 @@ In the end I chose a simple geometric numbering for the square UFQFPN20
 package starting with port pin PA1 and counting up from 0. This results in
 this mapping:
 
-![STM8S103 breakout board pin mapping](stm8blue.png)
+![STM8S103 breakout board pin mapping](stm8blue-pinout.png)
 
 
 
