@@ -29,10 +29,11 @@ nav:
     - Hardware:
         - Flash tool: hardware/flashtool.md
 #        - List of supported boards: hardware.md
-        - 'Generic STM8S103 breakout board (stm8blue)': hardware/stm8blue.md
+        - 'Generic STM8S103F3 breakout board (stm8blue)': hardware/stm8blue.md
         - 'ESP14 Wifi board (STM8S003F3P6)': hardware/esp14.md
         - 'W1209 thermostat board (STM8S003F3P6)': 'hardware/w1209-thermostat.md'
-        - 'STM8S105Discovery: Evaluation board made my ST': hardware/stm8sdiscovery.md
+        - 'Generic STM8S105K4 breakout board (stm8sblack)': hardware/stm8sblack.md
+        - 'STM8S105Discovery evaluation board made by ST (STM8S105C6)': hardware/stm8sdiscovery.md
         - 'sduino Uno (STM8S105K6)': https://github.com/roybaer/sduino_uno
         - 'sduino MB (STM8S208MB), inspired by Arduino Mega': https://github.com/roybaer/sduino_mb
     - Developer Guide:
