@@ -34,7 +34,7 @@ nav:
         - 'W1209 thermostat board (STM8S003F3P6)': 'hardware/w1209-thermostat.md'
         - 'Generic STM8S105K4 breakout board (stm8sblack)': hardware/stm8sblack.md
         - 'STM8S105Discovery evaluation board made by ST (STM8S105C6)': hardware/stm8sdiscovery.md
-        - 'sduino Uno (STM8S105K6)': https://github.com/roybaer/sduino_uno
+        - 'sduino Uno (STM8S105K6), inspired by Arduino Uno': https://github.com/roybaer/sduino_uno
         - 'sduino MB (STM8S208MB), inspired by Arduino Mega': https://github.com/roybaer/sduino_mb
     - Developer Guide:
         - IDE integration: 'developer/ide-integration.md'

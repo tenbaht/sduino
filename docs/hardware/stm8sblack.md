@@ -78,7 +78,7 @@ numbering is similar to a classic DIP package with the USB connector as the
 pin 1 marking. It starts with port pin PC3 and counting up from 0. This
 results in this mapping:
 
-![STM8S105 breakout board pin mapping](stm8s_black_pinout.png)
+![STM8S105 breakout board pin mapping](stm8sblack-pinout.png)
 
 
 
