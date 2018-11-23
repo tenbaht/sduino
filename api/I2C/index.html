@@ -116,6 +116,10 @@
 </li>
                                     
 <li >
+    <a href="../LiquidCrystal_pcf2119/">LiquidCrystal_pcf2119 character LCD connected via I2C</a>
+</li>
+                                    
+<li >
     <a href="../PCD8544/">PCD8544 libray for Nokia 5110-like graphical LCDs</a>
 </li>
                                     
@@ -141,19 +145,31 @@
 </li>
                                     
 <li >
-    <a href="../../hardware/stm8blue/">Generic STM8S103 breakout board (stm8blue)</a>
+    <a href="../../hardware/stm8blue/">Generic STM8S103F3 breakout board (stm8blue)</a>
 </li>
                                     
 <li >
-    <a href="../../hardware/esp14/">ESP14: Wifi board, STM8S003</a>
+    <a href="../../hardware/esp14/">ESP14 Wifi board (STM8S003F3P6)</a>
 </li>
                                     
 <li >
-    <a href="../../hardware/stm8sdiscovery/">STM8S105Discovery: Evaluation board made my ST</a>
+    <a href="../../hardware/w1209-thermostat/">W1209 thermostat board (STM8S003F3P6)</a>
 </li>
                                     
 <li >
-    <a href="../../hardware/w1209-thermostat/">W1209 thermostat board</a>
+    <a href="../../hardware/stm8sblack/">Generic STM8S105K4 breakout board (stm8sblack)</a>
+</li>
+                                    
+<li >
+    <a href="../../hardware/stm8sdiscovery/">STM8S105Discovery evaluation board made by ST (STM8S105C6)</a>
+</li>
+                                    
+<li >
+    <a href="https://github.com/roybaer/sduino_uno">sduino Uno (STM8S105K6)</a>
+</li>
+                                    
+<li >
+    <a href="https://github.com/roybaer/sduino_mb">sduino MB (STM8S208MB), inspired by Arduino Mega</a>
 </li>
                                 </ul>
                             </li>
@@ -170,7 +186,7 @@
 </li>
                                     
 <li >
-    <a href="../../developer/update-to-manual/">Update an automatic installation to a manual installtion</a>
+    <a href="../../developer/update-to-manual/">Update an automatic installation to a manual installation</a>
 </li>
                                     
 <li >
@@ -238,6 +254,9 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
         <li class="main active"><a href="#i2c">I2C</a></li>
+            <li><a href="#api">API</a></li>
+            <li><a href="#inner-workings">inner workings</a></li>
+            <li><a href="#further-reading">Further reading</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -250,8 +269,262 @@ library included in the standard arduino environment: It fixes some possible
 deadlock situations, it allows for communication using a repeated start
 condition as required by some devices, the code is much more compact and the
 structure is easier to understand.</p>
-<p>The current state of the port does not include the deadlock protection,
-though.</p></div>
+<h2 id="api">API</h2>
+<p>This is a pre-instantiated singleton library. It is not possible to use more
+than one instance per sketch or to change the instance name.</p>
+<p>The API syntax is very similar to the original C++ syntax. Some name
+mangeling was needed to distinguish the different variant of the <code>read()</code>
+and <code>write()</code> method. Apart from this replacing the dots in the method names
+for underscores is all it needs.</p>
+<p>The pullup setting is missing because this function is supported by the STM8
+hardware.</p>
+<table>
+<thead>
+<tr>
+<th>Arduino syntax</th>
+<th>sduino syntax</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>I2C.begin()</code></td>
+<td><code>I2C_begin()</code></td>
+</tr>
+<tr>
+<td><code>I2C.end()</code></td>
+<td><code>I2C_end()</code></td>
+</tr>
+<tr>
+<td><code>I2C.timeOut(val)</code></td>
+<td><code>I2C_timeOut(val)</code></td>
+</tr>
+<tr>
+<td><code>I2C.setSpeed(mode)</code></td>
+<td><code>I2C_setSpeed(mode)</code></td>
+</tr>
+<tr>
+<td><code>I2C.pullup(active)</code></td>
+<td>not implemented</td>
+</tr>
+<tr>
+<td><code>I2C.scan()</code></td>
+<td><code>I2C_scan()</code></td>
+</tr>
+<tr>
+<td><code>n = I2C.available()</code></td>
+<td><code>n = I2C_available()</code></td>
+</tr>
+<tr>
+<td><code>val = I2C.receive()</code></td>
+<td><code>val = I2C_receive()</code></td>
+</tr>
+<tr>
+<td><code>I2C.write(addr, val)</code></td>
+<td><code>I2C_write(addr, val)</code></td>
+</tr>
+<tr>
+<td><code>I2C.write(addr, reg, val)</code></td>
+<td><code>I2C_write_reg(addr, reg, val)</code></td>
+</tr>
+<tr>
+<td><code>I2C.write(addr, reg, string)</code></td>
+<td><code>I2C_write_s(addr, reg, string)</code></td>
+</tr>
+<tr>
+<td><code>I2C.write(addr, reg, *data, len)</code></td>
+<td><code>I2C_write_sn(addr, reg, *data, len)</code></td>
+</tr>
+<tr>
+<td><code>I2C.read(addr, n)</code></td>
+<td><code>I2C_read(addr, n)</code></td>
+</tr>
+<tr>
+<td><code>I2C.read(addr, reg, n)</code></td>
+<td><code>I2C_read_reg(addr, reg, n)</code></td>
+</tr>
+<tr>
+<td><code>I2C.read(addr, n, *buf)</code></td>
+<td><code>I2C_readbuf(addr, n, *buf)</code></td>
+</tr>
+<tr>
+<td><code>I2C.read(addr, reg, n, *buf)</code></td>
+<td><code>I2C_readbuf_reg(addr, reg, n, *buf)</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="error-codes">Error codes</h3>
+<p>All functions return an error code. Return values for functions that use the
+timeOut feature will return at what point in the transmission the timeout
+occurred.</p>
+<p>Looking at a full communication sequence between a master and slave
+(transmit data and then readback data) there a total of 7 points in the
+sequence where a timeout can occur. These are listed below and correspond to
+the returned value.</p>
+<table>
+<thead>
+<tr>
+<th align="right">Errorcode</th>
+<th>Meaning: Waiting for...</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">0</td>
+<td>Function executed with no errors</td>
+</tr>
+<tr>
+<td align="right">1</td>
+<td>Waiting for successful completion of a Start bit</td>
+</tr>
+<tr>
+<td align="right">2</td>
+<td>Waiting for ACK/NACK while addressing slave in transmit mode (MT)</td>
+</tr>
+<tr>
+<td align="right">3</td>
+<td>Waiting for ACK/NACK while sending data to the slave</td>
+</tr>
+<tr>
+<td align="right">4</td>
+<td>Waiting for successful completion of a Repeated Start</td>
+</tr>
+<tr>
+<td align="right">5</td>
+<td>Waiting for ACK/NACK while addressing slave in receiver mode (MR)</td>
+</tr>
+<tr>
+<td align="right">6</td>
+<td>Waiting for ACK/NACK while receiving data from the slave</td>
+</tr>
+<tr>
+<td align="right">7</td>
+<td>Waiting for successful completion of the Stop bit</td>
+</tr>
+</tbody>
+</table>
+<h3 id="avr-error-codes">AVR error codes</h3>
+<p>For reference: The codes listed below where defined for the AVR, but they
+don't exist for the STM8 implementation. Combining the values of SR1 and SR2
+it would be possible to implement most of these conditions (apart from
+0x20), but so far I haven't seen any program needing these values, so I
+didn't implement this.</p>
+<table>
+<thead>
+<tr>
+<th>Status Codes</th>
+<th>for Master Transmitter Mode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x08</td>
+<td>A START condition has been transmitted</td>
+</tr>
+<tr>
+<td>0x10</td>
+<td>A repeated START condition has been transmitted</td>
+</tr>
+<tr>
+<td>0x18</td>
+<td>SLA+W has been transmitted; ACK has been received</td>
+</tr>
+<tr>
+<td>0x20</td>
+<td>SLA+W has been transmitted; NOT ACK has been received</td>
+</tr>
+<tr>
+<td>0x28</td>
+<td>Data byte has been transmitted; ACK has been received</td>
+</tr>
+<tr>
+<td>0x30</td>
+<td>Data byte has been transmitted; NOT ACK has been received</td>
+</tr>
+<tr>
+<td>0x38</td>
+<td>Arbitration lost in SLA+W or data bytes</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Status Codes</th>
+<th>for Master Receiver Mode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x08</td>
+<td>A START condition has been transmitted</td>
+</tr>
+<tr>
+<td>0x10</td>
+<td>A repeated START condition has been transmitted</td>
+</tr>
+<tr>
+<td>0x38</td>
+<td>Arbitration lost in SLA+R or NOT ACK bit</td>
+</tr>
+<tr>
+<td>0x40</td>
+<td>SLA+R has been transmitted; ACK has been received</td>
+</tr>
+<tr>
+<td>0x48</td>
+<td>SLA+R has been transmitted; NOT ACK has been received</td>
+</tr>
+<tr>
+<td>0x50</td>
+<td>Data byte has been received; ACK has been returned</td>
+</tr>
+<tr>
+<td>0x58</td>
+<td>Data byte has been received; NOT ACK has been returned</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Status Codes</th>
+<th>independed of mode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0xF8</td>
+<td>No relevant state information available; TWINT = “0”</td>
+</tr>
+<tr>
+<td>0x00</td>
+<td>Bus error due to an illegal START or STOP condition</td>
+</tr>
+</tbody>
+</table>
+<h2 id="inner-workings">inner workings</h2>
+<p>start(): Sends start bit, does not wait for SB flag.
+sendAddress()</p>
+<h2 id="further-reading">Further reading</h2>
+<p>Programming the I2C communication on the register level is quite complex for
+the STM8, especially in receive mode. The most detailed information on this
+topic is the</p>
+<ul>
+<li>application note AN3281 bundeled with</li>
+<li>the related source code package <a href="https://www.st.com/en/embedded-software/stsw-stm8004.html">STSW-STM8004</a></li>
+</ul>
+<p>Downloading from the ST website requires a (free) registration. Somebody
+uploaded the full package to github:
+https://github.com/jiaohaitao/stsw-stm8004</p>
+<p>There are some important notes on I2C implementation in the errata sheets:</p>
+<ul>
+<li><a href="https://www.st.com/content/ccc/resource/technical/document/errata_sheet/c9/f9/ef/bf/63/91/4a/1f/CD00265449.pdf/files/CD00265449.pdf/jcr:content/translations/en.CD00265449.pdf">STM8S001J3/003xx/103xx/903xx Errata sheet, rev. 5
+  (CD00265449)</a></li>
+<li><a href="https://www.st.com/content/ccc/resource/technical/document/errata_sheet/e3/c3/4e/24/0c/ca/4b/e7/CD00270741.pdf/files/CD00270741.pdf/jcr:content/translations/en.CD00270741.pdf">STM8S005xx STM8S105xx Errata sheet, rev. 7
+  (CD00270741)</a></li>
+<li><a href="https://www.st.com/content/ccc/resource/technical/document/errata_sheet/7a/94/8f/fe/84/14/41/6d/CD00244749.pdf/files/CD00244749.pdf/jcr:content/translations/en.CD00244749.pdf">STM8S007xx STM8S20xxx Errata sheet, rev. 6
+  (CD00244749)</a></li>
+</ul></div>
         </div>
 
         <footer class="col-md-12">

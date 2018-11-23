@@ -116,6 +116,10 @@
 </li>
                                     
 <li >
+    <a href="../LiquidCrystal_pcf2119/">LiquidCrystal_pcf2119 character LCD connected via I2C</a>
+</li>
+                                    
+<li >
     <a href="../PCD8544/">PCD8544 libray for Nokia 5110-like graphical LCDs</a>
 </li>
                                     
@@ -141,19 +145,31 @@
 </li>
                                     
 <li >
-    <a href="../../hardware/stm8blue/">Generic STM8S103 breakout board (stm8blue)</a>
+    <a href="../../hardware/stm8blue/">Generic STM8S103F3 breakout board (stm8blue)</a>
 </li>
                                     
 <li >
-    <a href="../../hardware/esp14/">ESP14: Wifi board, STM8S003</a>
+    <a href="../../hardware/esp14/">ESP14 Wifi board (STM8S003F3P6)</a>
 </li>
                                     
 <li >
-    <a href="../../hardware/stm8sdiscovery/">STM8S105Discovery: Evaluation board made my ST</a>
+    <a href="../../hardware/w1209-thermostat/">W1209 thermostat board (STM8S003F3P6)</a>
 </li>
                                     
 <li >
-    <a href="../../hardware/w1209-thermostat/">W1209 thermostat board</a>
+    <a href="../../hardware/stm8sblack/">Generic STM8S105K4 breakout board (stm8sblack)</a>
+</li>
+                                    
+<li >
+    <a href="../../hardware/stm8sdiscovery/">STM8S105Discovery evaluation board made by ST (STM8S105C6)</a>
+</li>
+                                    
+<li >
+    <a href="https://github.com/roybaer/sduino_uno">sduino Uno (STM8S105K6)</a>
+</li>
+                                    
+<li >
+    <a href="https://github.com/roybaer/sduino_mb">sduino MB (STM8S208MB), inspired by Arduino Mega</a>
 </li>
                                 </ul>
                             </li>
@@ -170,7 +186,7 @@
 </li>
                                     
 <li >
-    <a href="../../developer/update-to-manual/">Update an automatic installation to a manual installtion</a>
+    <a href="../../developer/update-to-manual/">Update an automatic installation to a manual installation</a>
 </li>
                                     
 <li >
@@ -238,6 +254,7 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
         <li class="main active"><a href="#mini_ssd1306">Mini_SSD1306</a></li>
+            <li><a href="#limitations">Limitations</a></li>
             <li><a href="#api">API</a></li>
             <li><a href="#example">Example</a></li>
             <li><a href="#hardware-requirements">Hardware requirements</a></li>
@@ -256,6 +273,18 @@ This version of the library does not depend on the Adafruit_GFX library and
 has a <em>much</em> smaller memory footprint than the full version, but most of the
 graphical features are missing.</p>
 <p>The Library only supports I2C communication.</p>
+<h2 id="limitations">Limitations</h2>
+<p>This Library uses a full display buffer. For a 128x64 display this requires
+128x64 = 8kbit = 1kB of RAM for the display buffer. Since the STM8S103 has
+only 1kB RAM total, there is no way that this will fit. If you ignore the
+compiler warnings about insufficient RAM, it will still run, but you will
+see a graphical memory dump in the lower part of your display. If you are
+careful not to modify that part of the memory the program still works, but
+is not terribly useful. See the oled-mini example.</p>
+<p>The <a href="https://github.com/olikraus/u8g2/wiki">u8g2</a> library by Oli Kraus is
+able to use less RAM by rendering the image in multiple stripes. This is
+slower, but saves RAM. I am thinking of porting that library, but don't hold
+your breath for it.</p>
 <h2 id="api">API</h2>
 <pre><code class="c">SSD1306(instancename, pin_reset);
 

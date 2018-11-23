@@ -1,0 +1,7 @@
+0x08	|A START condition has been transmitted
+0x10	|A repeated START condition has been transmitted
+0x18	|SLA+W has been transmitted; ACK has been received
+0x20	|SLA+W has been transmitted; NOT ACK has been received
+0x28	|Data byte has been transmitted; ACK has been received
+0x30	|Data byte has been transmitted; NOT ACK has been received
+0x38	|Arbitration lost in SLA+W or data bytes

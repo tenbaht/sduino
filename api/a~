@@ -1,0 +1,46 @@
+0x08 A START condition has been
+transmitted Load SLA+W 0 0 1 X SLA+W will be transmitted;
+ACK or NOT ACK will be
+received
+0x10 A repeated START condition
+has been transmitted Load SLA+W
+or 0 0 1 X SLA+W will be transmitted;
+ACK or NOT ACK will be
+received
+Load SLA+R 0 0 1 X SLA+R will be transmitted;
+Logic will switch to Master
+Receiver mode
+SLA+W has been transmitted; Load data
+ACK has been received
+byte or 0 0 1 X Data byte will be transmitted
+and ACK or NOT ACK will be
+received
+No TWDR
+action or 1 0 1 X Repeated START will be
+transmitted
+No TWDR
+action or 0 1 1 X STOP condition will be
+transmitted and TWSTO Flag
+will be reset
+No TWDR
+action 1 1 1 X STOP condition followed by a
+START condition will be
+transmitted and TWSTO Flag
+will be reset
+SLA+W has been transmitted; Load data
+NOT ACK has been received
+
+0x28
+0x30
+0x38
+Status of the 2-wire Serial
+Bus and 2-wire Serial
+Interface Hardware
+Data byte has been
+transmitted;
+ACK has been received
+Data byte has been
+transmitted;
+NOT ACK has been received
+Arbitration lost in SLA+W or
+data bytes

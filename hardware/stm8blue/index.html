@@ -8,7 +8,7 @@
         <meta name="author" content="Michael Mayer">
         
         <link rel="shortcut icon" href="../../img/favicon.ico">
-        <title>Generic STM8S103 breakout board (stm8blue) - Sduino</title>
+        <title>Generic STM8S103F3 breakout board (stm8blue) - Sduino</title>
     <link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
     <link href="../../css/font-awesome.min.css" rel="stylesheet">
     <link href="../../css/base.css" rel="stylesheet">
@@ -116,6 +116,10 @@
 </li>
                                     
 <li >
+    <a href="../../api/LiquidCrystal_pcf2119/">LiquidCrystal_pcf2119 character LCD connected via I2C</a>
+</li>
+                                    
+<li >
     <a href="../../api/PCD8544/">PCD8544 libray for Nokia 5110-like graphical LCDs</a>
 </li>
                                     
@@ -141,19 +145,31 @@
 </li>
                                     
 <li class="active">
-    <a href="./">Generic STM8S103 breakout board (stm8blue)</a>
+    <a href="./">Generic STM8S103F3 breakout board (stm8blue)</a>
 </li>
                                     
 <li >
-    <a href="../esp14/">ESP14: Wifi board, STM8S003</a>
+    <a href="../esp14/">ESP14 Wifi board (STM8S003F3P6)</a>
 </li>
                                     
 <li >
-    <a href="../stm8sdiscovery/">STM8S105Discovery: Evaluation board made my ST</a>
+    <a href="../w1209-thermostat/">W1209 thermostat board (STM8S003F3P6)</a>
 </li>
                                     
 <li >
-    <a href="../w1209-thermostat/">W1209 thermostat board</a>
+    <a href="../stm8sblack/">Generic STM8S105K4 breakout board (stm8sblack)</a>
+</li>
+                                    
+<li >
+    <a href="../stm8sdiscovery/">STM8S105Discovery evaluation board made by ST (STM8S105C6)</a>
+</li>
+                                    
+<li >
+    <a href="https://github.com/roybaer/sduino_uno">sduino Uno (STM8S105K6)</a>
+</li>
+                                    
+<li >
+    <a href="https://github.com/roybaer/sduino_mb">sduino MB (STM8S208MB), inspired by Arduino Mega</a>
 </li>
                                 </ul>
                             </li>
@@ -170,7 +186,7 @@
 </li>
                                     
 <li >
-    <a href="../../developer/update-to-manual/">Update an automatic installation to a manual installtion</a>
+    <a href="../../developer/update-to-manual/">Update an automatic installation to a manual installation</a>
 </li>
                                     
 <li >
@@ -249,7 +265,7 @@
 <p>These simple breakout boards are available on aliexpress for well under one
 Dollar (I got mine for 67 cent each, including shipping from China). These
 boards are my main development platform.</p>
-<p><img alt="Image of the STM8S103 board" src="../stm8board-pinout.jpg" /></p>
+<p><img alt="Image of the STM8S103 board" src="../stm8blue.jpg" /></p>
 <p>They are very similar to the <a href="../esp14/">ESP14 Wifi-boards</a> and
 most programs will work fine on those chinese gems as well.</p>
 <p>The STM8S103 breakout boards are build around a CPU STM8S103F3P6 with 16MHz
@@ -263,7 +279,7 @@ regulator is integrated on the board. The micro USB connector is only for
 (5V) power supply, the data lines are not connected.</p>
 <p>All CPU pins are easily accessible on (optional) pin headers (pitch 2.54mm,
 perfect for breadboards).</p>
-<p><img alt="Schematic of the STMS103 board" src="../Schematic1.png" /></p>
+<p><img alt="Schematic of the STMS103 board" src="../stm8blue-schematic.png" /></p>
 <p>My breakout boards came preprogrammed with a blink program and with active
 write protection bits. For unlocking before first use:</p>
 <pre><code class="bash">stm8flash -cstlinkv2 -pstm8s103?3 -u
@@ -321,7 +337,7 @@ Unfortunatly, it turns out that a perfect mapping is not possible.</p>
 <p>In the end I chose a simple geometric numbering for the square UFQFPN20
 package starting with port pin PA1 and counting up from 0. This results in
 this mapping:</p>
-<p><img alt="STM8S103 breakout board pin mapping" src="../stm8blue.png" /></p>
+<p><img alt="STM8S103 breakout board pin mapping" src="../stm8blue-pinout.png" /></p>
 <table>
 <thead>
 <tr>

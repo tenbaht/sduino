@@ -4,7 +4,7 @@ These simple breakout boards are available on aliexpress for well under one
 Dollar (I got mine for 67 cent each, including shipping from China). These
 boards are my main development platform.
 
-![Image of the STM8S103 board](stm8board-pinout.jpg)
+![Image of the STM8S103 board](stm8blue-pinout.jpg)
 
 They are very similar to the [ESP14 Wifi-boards](esp14.md) and
 most programs will work fine on those chinese gems as well.
@@ -23,7 +23,7 @@ regulator is integrated on the board. The micro USB connector is only for
 All CPU pins are easily accessible on (optional) pin headers (pitch 2.54mm,
 perfect for breadboards).
 
-![Schematic of the STMS103 board](Schematic1.png)
+![Schematic of the STMS103 board](stm8blue-schematic.png)
 
 My breakout boards came preprogrammed with a blink program and with active
 write protection bits. For unlocking before first use:
@@ -42,7 +42,7 @@ housing. The one in the metal housing uses a different pinout.
 Connection to the flashtool:
 
 Signal name	|P3 on CPU board	|Green flash tool|Metal flash tool
------- 		|-----:			|-----: 	|-----:
+------ 		|:-----:		|:-----: 	|:-----:
 3V3    		|1      		|2      	| 7
 SWIM   		|2      		|5      	| 5
 GND    		|3      		|7      	| 3
