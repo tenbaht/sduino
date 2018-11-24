@@ -12,6 +12,21 @@ graphical features are missing.
 The Library only supports I2C communication.
 
 
+## Limitations
+
+This Library uses a full display buffer. For a 128x64 display this requires
+128x64 = 8kbit = 1kB of RAM for the display buffer. Since the STM8S103 has
+only 1kB RAM total, there is no way that this will fit. If you ignore the
+compiler warnings about insufficient RAM, it will still run, but you will
+see a graphical memory dump in the lower part of your display. If you are
+careful not to modify that part of the memory the program still works, but
+is not terribly useful. See the oled-mini example.
+
+The [u8g2](https://github.com/olikraus/u8g2/wiki) library by Oli Kraus is
+able to use less RAM by rendering the image in multiple stripes. This is
+slower, but saves RAM. I am thinking of porting that library, but don't hold
+your breath for it.
+
 
 ## API
 

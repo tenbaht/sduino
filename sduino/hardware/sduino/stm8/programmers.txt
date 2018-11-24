@@ -1,0 +1,23 @@
+stlink21.name=ST-Link/V2.1
+stlink21.communication=usb
+stlink21.protocol=stlinkv21
+stlink21.program.tool=stm8flash
+stlink21.program.extra_params=
+
+stlink2.name=ST-Link/V2
+stlink2.communication=usb
+stlink2.protocol=stlinkv2
+stlink2.program.tool=stm8flash
+stlink2.program.extra_params=
+
+stlink1.name=ST-Link/V1
+stlink1.communication=usb
+stlink1.protocol=stlinkv1
+stlink1.program.tool=stm8flash
+stlink1.program.extra_params=
+
+serialboot.name=Serial STM8 bootloader
+serialboot.communication=serial
+serialboot.protocol=stlinkv1
+serialboot.program.tool=stm8gal
+serialboot.program.extra_params=

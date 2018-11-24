@@ -7,10 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - using stm8gal to upload using the builtin bootloader of larger STM8 devices
-- Support for Sduino-UNO board
+- Support for STM8S105K4 breakout board (stm8sblack)
+- Support for Sduino-UNO board (s8uno)
+- Support for Sduino MB board (mb208)
+- Unlocking a MCU by using Tools->Burn Bootloader in the Arduino IDE
 
 ### Changed
-- updated stm8flash to support more STM8 devices (and espstlink for Linux
+- completed I2C library, master transmit and master receive modes work
+- updated stm8flash to support more STM8 devices and the ST-Link/V2.1
+  adapter found on STM8 Nucleo boards (and espstlink for Linux
   and OSX)
 - updated SDCC to version 3.8.0
 
