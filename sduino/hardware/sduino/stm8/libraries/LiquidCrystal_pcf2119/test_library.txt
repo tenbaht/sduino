@@ -1,0 +1,35 @@
+ok:
+LiquidCrystal_pcf2119
+lcd_begin
+lcd_clear
+lcd_home
+lcd_noDisplay
+lcd_display
+lcd_noBlink
+lcd_blink
+lcd_noCursor
+lcd_cursor
+lcd_leftToRight
+lcd_rightToLeft
+lcd_noAutoscroll
+lcd_createChar
+lcd_setCursor
+lcd_write(c)	
+lcd_data(c)
+lcd_print_s
+lcd_print_i
+lcd_print_ub
+other print_*...?
+
+
+fail:
+lcd_scrollDisplayLeft	arrow at (16,2) due to wrong charset
+lcd_scrollDisplayRight	arrow at (1,1) due to wrong charset
+lcd_autoscroll		arrow at (16,2) due to wrong charset. Likely fixed by lcd_scrollDisplayLeft()
+
+
+only declared (->compile error) -> deleted
+lcd_printLeft
+lcd_printRight
+lcd_shiftIncrement
+lcd_shiftDecrement

@@ -180,15 +180,11 @@ void LiquidCrystal_pcf2119_home()
 
 void LiquidCrystal_pcf2119_setCursor(uint8_t col, uint8_t row)
 {
-  const size_t max_lines = sizeof(_row_offsets) / sizeof(*_row_offsets);
-  if ( row >= max_lines ) {
-    row = max_lines - 1;    // we count rows starting w/0
-  }
-  if ( row >= _rows ) {
-    row = _rows - 1;    // we count rows starting w/0
-  }
+  // clip to display size, starting w/0
+  if ( col >= _cols ) col = _cols - 1;
+  if ( row >= _rows ) row = _rows - 1;
 
-  LiquidCrystal_pcf2119_command(LCD_SETDDRAMADDR | (col + _row_offsets[row]));
+  LiquidCrystal_pcf2119_command(LCD_SETDDRAMADDR + row*_cols + col);
 }
 
 // Turn the display on/off (quickly)
@@ -289,7 +285,7 @@ void LiquidCrystal_pcf2119_createChar(uint8_t location, uint8_t charmap[]) {
 
 static void LiquidCrystal_pcf2119_charset(char charset) {
 
-	charset &= 0xe0;	// convert lower to uppper case
+	charset &= ~0x20;	// convert lower to uppper case
 	if ((charset=='F') || (charset=='S'))
 	{
 		_charset = CHARSET_FLIP;
@@ -309,15 +305,15 @@ static void LiquidCrystal_pcf2119_charset(char charset) {
 
 void LiquidCrystal_pcf2119_command(uint8_t value) {
 	// write to command register
-	I2C_write_c(_addr, 0, value);
+	I2C_write_reg(_addr, 0, value);
 }
 
 // write a data byte.
 size_t LiquidCrystal_pcf2119_data(uint8_t value) {
 	// write to data register
-	// return 1 for success (if I2C_write_c returned 0)
+	// return 1 for success (if I2C_write_reg returned 0)
 	return (
-		I2C_write_c(_addr, 0x40, value) ? 0 : 1
+		I2C_write_reg(_addr, 0x40, value) ? 0 : 1
 	);
 }
 
