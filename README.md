@@ -51,6 +51,13 @@ Now you should find a new entry *STM8S Boards* in the list at
 * compile it by hitting *Verify*
 
 
+## Known issues
+
+The Arduino IDE Version 1.8.7 suffers from a known regression bug. If you
+see the error message "select upload port first" apply this
+[workaround](https://github.com/tenbaht/sduino/issues/68#issuecomment-441425529).
+
+
 ## Included libraries
 
 Most parts of the Arduino core system and some Arduino libraries are already
@@ -97,12 +104,15 @@ guide](https://tenbaht.github.io/sduino/api/migration/) for an overview.
 
 ## Supported Systems:
 
-Arduino IDE versions 1.8.5 and 1.6.13 are tested, but any version >=1.6.6
+Arduino IDE versions 1.8.7, 1.8.5 and 1.6.13 are tested, but any version >=1.6.6
 should work.
+
+Version 1.8.7 might require a
+[workaround](https://github.com/tenbaht/sduino/issues/68#issuecomment-441425529)
+if you see an error message "select upload port first".
 
 * Linux 64 bit: Tested on Ubuntu 16.04
 * Linux 32 bit: Tested on Ubuntu 16.04
 * Windows: Tested on Windows 7. Sduino might work on XP (not tested), but
   the ST-Link/V2 driver is not available anymore for XP.
-* MacOS: Not tested, but should be very close to working. Will need a manual
-  install, but IDE integration should be easy now. Any volunteers?
+* MacOS: tested on 10.13.
