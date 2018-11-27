@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Support for Sduino-UNO board (s8uno)
 - Support for Sduino MB board (mb208)
 - Unlocking a MCU by using Tools->Burn Bootloader in the Arduino IDE
+- new library LiquidCrystal_pcf2119 for I2C text LCD based on the PCF2119
 
 ### Changed
 - completed I2C library, master transmit and master receive modes work
