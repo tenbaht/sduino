@@ -18,9 +18,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   adapter found on STM8 Nucleo boards (and espstlink for Linux
   and OSX)
 - updated SDCC to version 3.8.0
+- Arduino.h is automatically included now, now need for #include "Arduino.h"
+  anymore
 
 ### Fixed
 - Serial_serial_print_sn()
+- object dependencies are calculated correctly for *.obj suffix
+- Include path for sduino.mk in all example Makefiles
 
 
 
