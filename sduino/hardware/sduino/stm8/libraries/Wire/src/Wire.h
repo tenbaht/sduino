@@ -92,6 +92,7 @@ uint8_t Wire_endTransmission1(uint8_t sendStop);
 inline uint8_t	Wire_endTransmission(void){Wire_endTransmission1(true);}
 
 size_t	Wire_write(uint8_t);
+size_t	Wire_write_n(const uint8_t *, size_t);
 int	Wire_available(void);
 int	Wire_read(void);
 

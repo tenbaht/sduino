@@ -15,9 +15,9 @@
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- 
-  Modified 2012 by Todd Krein (todd@krein.org) to implement repeated starts
+
   Modified 2017 by Michael Mayer to plain C for use with Sduino
+  Modified 2012 by Todd Krein (todd@krein.org) to implement repeated starts
 */
 
 //extern "C" {
@@ -194,8 +194,8 @@ void TwoWire::beginTransmission(int address)
 //	Originally, 'endTransmission' was an f(void) function.
 //	It has been modified to take one parameter indicating
 //	whether or not a STOP should be performed on the bus.
-//	Calling endTransmission(false) allows a sketch to 
-//	perform a repeated start. 
+//	Calling endTransmission(false) allows a sketch to
+//	perform a repeated start.
 //
 //	WARNING: Nothing in the library keeps track of whether
 //	the bus tenure has been properly ended with a STOP. It
@@ -240,7 +240,7 @@ size_t Wire_write(uint8_t data)
     // put byte in tx buffer
     txBuffer[txBufferIndex] = data;
     ++txBufferIndex;
-    // update amount in buffer   
+    // update amount in buffer
     txBufferLength = txBufferIndex;
   }else{
   // in slave send mode
@@ -250,16 +250,16 @@ size_t Wire_write(uint8_t data)
   return 1;
 }
 
-/*
+
 // must be called in:
 // slave tx event callback
 // or after beginTransmission(address)
-size_t TwoWire::write(const uint8_t *data, size_t quantity)
+size_t Wire_write_n(const uint8_t *data, size_t quantity)
 {
   if(transmitting){
   // in master transmitter mode
     for(size_t i = 0; i < quantity; ++i){
-      write(data[i]);
+      Wire_write(data[i]);
     }
   }else{
   // in slave send mode
@@ -268,7 +268,7 @@ size_t TwoWire::write(const uint8_t *data, size_t quantity)
   }
   return quantity;
 }
-*/
+
 
 // must be called in:
 // slave rx event callback
@@ -301,7 +301,7 @@ int Wire_read(void)
 int TwoWire::peek(void)
 {
   int value = -1;
-  
+
   if(rxBufferIndex < rxBufferLength){
     value = rxBuffer[rxBufferIndex];
   }
@@ -330,7 +330,7 @@ void TwoWire::onReceiveService(uint8_t* inBytes, int numBytes)
   // copy twi rx buffer into local read buffer
   // this enables new reads to happen in parallel
   for(uint8_t i = 0; i < numBytes; ++i){
-    rxBuffer[i] = inBytes[i];    
+    rxBuffer[i] = inBytes[i];
   }
   // set rx iterator vars
   rxBufferIndex = 0;
