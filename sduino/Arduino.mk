@@ -1190,7 +1190,7 @@ $(call show_separator)
 # library sources
 $(OBJDIR)/libs/%.c.$(OBJSUFFIX): $(ARDUINO_LIB_PATH)/%.c
 	@$(MKDIR) $(dir $@)
-	$(CC) "-Wp-MMD $(patsubst %.o,%.d,$@)" -c $(CPPFLAGS) $(CFLAGS) $< -o $@
+	$(CC) "-Wp-MMD $(patsubst %.$(OBJSUFFIX),%.d,$@)" -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 #	mv $(patsubst %.o,%.rel,$@) $@
 #	$(CC) -MMD -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 
@@ -1204,7 +1204,7 @@ $(OBJDIR)/libs/%.S.$(OBJSUFFIX): $(ARDUINO_LIB_PATH)/%.S
 
 $(OBJDIR)/platformlibs/%.c.$(OBJSUFFIX): $(ARDUINO_PLATFORM_LIB_PATH)/%.c
 	@$(MKDIR) $(dir $@)
-	$(CC) "-Wp-MMD $(patsubst %.o,%.d,$@)" -c $(CPPFLAGS) $(CFLAGS) $< -o $@
+	$(CC) "-Wp-MMD $(patsubst %.$(OBJSUFFIX),%.d,$@)" -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 #	mv $(patsubst %.o,%.rel,$@) $@
 #	$(CC) -MMD -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 
