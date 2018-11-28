@@ -73,6 +73,9 @@ static uint8_t twi_sendByte(uint8_t);
 static uint8_t twi_receiveByte(void);
 
 static void twi_lockUp(void);
+
+static uint16_t startingTime;
+static bool timeout_expired;
 static void tout_start(void);
 static bool tout(void);
 
@@ -101,13 +104,12 @@ static bool tout(void);
 #define TIMEOUT_WAIT_FOR_ZERO(CONDITION,ERROR) \
 	while (CONDITION) 	/* wait while the condition is still true */ \
 	{ \
-          if(!twi_timeOutDelay){continue;} \
-          if((((uint16_t)millis()) - startingTime) >= twi_timeOutDelay) \
-          { \
-            twi_lockUp(); \
-            return(ERROR);              /* return the appropriate error code */ \
-          } \
-        }
+		if (tout()) \
+		{ \
+			twi_lockUp(); \
+			return(ERROR);/* return the appropriate error code */ \
+		} \
+	}
 
 // wait while the condition is not true (wait for a bit to become one)
 #define TIMEOUT_WAIT_FOR_ONE(CONDITION,ERROR) TIMEOUT_WAIT_FOR_ZERO(!(CONDITION), ERROR)
@@ -195,7 +197,6 @@ void twi_setFrequency(uint32_t frequency)
  */
 uint8_t twi_readFrom(uint8_t address, uint8_t* data, uint8_t length, uint8_t sendStop)
 {
-	uint16_t startingTime;
 	uint8_t bytesAvailable;
 
 	(void) sendStop;		//FIXME: ignore sendStop for now
@@ -205,7 +206,7 @@ uint8_t twi_readFrom(uint8_t address, uint8_t* data, uint8_t length, uint8_t sen
 	if (twi_sendAddress(SLA_R(address), length)) return 0;
 
 	if (!length) return 0;
-	startingTime = millis();
+	tout_start();
 	if (length == 1) {
 		// method 2, case single byte (see RM0016, page 294):
 //		I2C->CR2 |= I2C_CR2_STOP;	// send stop after receiving the one data byte
@@ -507,15 +508,14 @@ void twi_reply(uint8_t ack)
  */
 void twi_stop(void)
 {
-	uint16_t startingTime = millis();
+	tout_start();
 
 	/* Test on EV8_2: TXE and BTF flags */
 //	TIMEOUT_WAIT_FOR_ONE((I2C->SR1 & (I2C_SR1_TXE | I2C_SR1_BTF)) ==
 //			     (I2C_SR1_TXE | I2C_SR1_BTF));
 	while ((I2C->SR1 & (I2C_SR1_TXE | I2C_SR1_BTF)) != (I2C_SR1_TXE | I2C_SR1_BTF))
 	{
-        	if (!twi_timeOutDelay) continue;
-        	if((((uint16_t)millis()) - startingTime) >= twi_timeOutDelay)
+		if (tout())
         	{
 	        	twi_lockUp();
 	        	return; 	// don't update twi_state
@@ -538,8 +538,7 @@ void twi_stop(void)
 //	TIMEOUT_WAIT_FOR_ZERO(I2C->CR2 & I2C_CR2_STOP);	// works
 	while (I2C->CR2 & I2C_CR2_STOP)		// works
 	{
-        	if (!twi_timeOutDelay) continue;
-        	if((((uint16_t)millis()) - startingTime) >= twi_timeOutDelay)
+		if (tout())
         	{
 	        	twi_lockUp();
 	        	return; 	// don't update twi_state
@@ -761,7 +760,7 @@ ISR(TWI_vect)
  */
 static uint8_t twi_sendAddress(uint8_t i2cAddress, uint8_t mode)
 {
-	uint16_t startingTime = millis();
+	tout_start();
 
 	/* do not wait for BUSY==0 as this would block for repeated start */
 //	TIMEOUT_WAIT_FOR_ZERO((I2C->SR3 & I2C_SR3_BUSY), 4);
@@ -807,7 +806,7 @@ static uint8_t twi_sendAddress(uint8_t i2cAddress, uint8_t mode)
  */
 uint8_t twi_sendByte(uint8_t i2cData)
 {
-	uint16_t startingTime = millis();
+	tout_start();
 
 	/* Test on EV8 (wait for TXE flag) */
 	/* On fail: 3: no ACK received on data transmission */
@@ -828,7 +827,7 @@ uint8_t twi_sendByte(uint8_t i2cData)
  */
 static uint8_t twi_receiveByte(void)
 {
-	uint16_t startingTime = millis();
+	tout_start();
 	/* Test on EV7 (BUSY, MSL and RXNE flags) */
 	TIMEOUT_WAIT_FOR_ONE(I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_RECEIVED), 1)
 	    if (I2C->SR2 & I2C_SR2_ARLO)	// arbitration lost
@@ -850,4 +849,37 @@ static void twi_lockUp(void)
 	// don't do a full software reset here. That would require a full
 	// re-initialization before the next transfer could happen.
 	I2C->CR2 = 0;
+}
+
+
+/**
+ * start the timeout timer
+ *
+ * The current time is set as the starting time.
+ */
+static void tout_start(void)
+{
+	startingTime = millis();
+	timeout_expired = false;
+}
+
+/**
+ * check if the timeout period expired
+ *
+ * @returns:
+ *   false: Still within the waiting period
+ *   true: timeout expired
+ */
+static bool tout(void)
+{
+	if (!twi_timeOutDelay)
+	{
+		return false;	// no timeout set
+	}
+	if (!timeout_expired)
+	{
+		timeout_expired =
+		((((uint16_t)millis()) - startingTime) >= twi_timeOutDelay);
+	}
+	return timeout_expired;
 }
