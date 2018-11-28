@@ -71,7 +71,10 @@ static uint8_t returnStatus;
 static uint8_t twi_sendAddress(uint8_t, uint8_t);
 static uint8_t twi_sendByte(uint8_t);
 static uint8_t twi_receiveByte(void);
+
 static void twi_lockUp(void);
+static void tout_start(void);
+static bool tout(void);
 
 #define SLA_W(address)	(address << 1)
 #define SLA_R(address)	((address << 1) + 0x01)
@@ -120,16 +123,11 @@ static void twi_lockUp(void);
  */
 void twi_init(void)
 {
-	/* I2C Initialize */
-	I2C_Init(
-		I2C_MAX_STANDARD_FREQ,	// 100000// I2C_SPEED,
-		0xA0,			// OwnAddress, doesn't matter
-		I2C_DUTYCYCLE_2,	// 0x00
-		I2C_ACK_CURR,		// 0x01
-		I2C_ADDMODE_7BIT,	// 0x00
-		16			// InputClockFrequencyMhz
-	);
-	twi_timeOutDelay = 20;		// set default timeout to 20ms
+	// set I2C frequency to 100kHz and do a full init
+	twi_setFrequency(I2C_MAX_STANDARD_FREQ);
+
+	// set default timeout to 20ms
+	twi_timeOutDelay = 20;
 }
 
 
@@ -154,17 +152,16 @@ void twi_disable(void)
 
 /*
  * Function twi_slaveInit
- * Desc     sets slave address and enables interrupt
- * Input    none
+ * Desc     sets slave address (FIXME: and enables interrupt)
+ * Input    address to be set (gets shifted one bit left to skip the r/w bit)
  * Output   none
  */
-/*
 void twi_setAddress(uint8_t address)
 {
-  // set twi slave address (skip over TWGCE bit)
-  TWAR = address << 1;
+	// set twi slave address
+	I2C->OARL = address << 1;
+	I2C->OARH = I2C_OARH_ADDCONF;
 }
-*/
 
 /*
  * Function twi_setClock
@@ -172,17 +169,18 @@ void twi_setAddress(uint8_t address)
  * Input    Clock Frequency
  * Output   none
  */
-#if 0
 void twi_setFrequency(uint32_t frequency)
 {
-  TWBR = ((F_CPU / frequency) - 16) / 2;
-
-  /* twi bit rate formula from atmega128 manual pg 204
-  SCL Frequency = CPU Clock Frequency / (16 + (2 * TWBR))
-  note: TWBR should be 10 or higher for master mode
-  It is 72 for a 16mhz Wiring board with 100kHz TWI */
+	// the easiest way to change the frequency is a full re-init
+	I2C_Init(
+		frequency,		// I2C_SPEED,
+		0xA0,			// OwnAddress, doesn't matter
+		I2C_DUTYCYCLE_2,	// 0x00
+		I2C_ACK_CURR,		// 0x01
+		I2C_ADDMODE_7BIT,	// 0x00
+		F_CPU/1000000u		// InputClockFrequencyMhz
+	);
 }
-#endif
 
 /*
  * Function twi_readFrom
@@ -193,15 +191,72 @@ void twi_setFrequency(uint32_t frequency)
  *          length: number of bytes to read into array
  *          sendStop: Boolean indicating whether to send a stop at the end
  * Output   number of bytes read
+ *FIXME: no interrupt support, polling mode only
  */
 uint8_t twi_readFrom(uint8_t address, uint8_t* data, uint8_t length, uint8_t sendStop)
 {
-	(void) address;
-	(void) data;
-//	(void) length;
-	(void) sendStop;
-	length = 0;
-/*
+	uint16_t startingTime;
+	uint8_t bytesAvailable;
+
+	(void) sendStop;		//FIXME: ignore sendStop for now
+	bytesAvailable = 0;
+	// method 2 (see RM0016, page 293):
+
+	if (twi_sendAddress(SLA_R(address), length)) return 0;
+
+	if (!length) return 0;
+	startingTime = millis();
+	if (length == 1) {
+		// method 2, case single byte (see RM0016, page 294):
+//		I2C->CR2 |= I2C_CR2_STOP;	// send stop after receiving the one data byte
+		if (twi_receiveByte()) return 0;// wait for RxNE flag
+		data[0] = I2C->DR;	// save the data
+		bytesAvailable = 1;
+	} else if (length == 2) {
+		// method 2, case two bytes (see RM0016, page 294):
+		// Case of two bytes to be received:
+//		I2C->CR2 &= ~I2C_CR2_ACK;	// clear ACK
+		TIMEOUT_WAIT_FOR_ONE(I2C->SR1 & I2C_SR1_BTF, 6);	// Wait for BTF to be set
+		// masking interrupts according to errata sheet #17140 rev. 5
+		BEGIN_CRITICAL
+			I2C->CR2 |= I2C_CR2_STOP;	// Program STOP
+			data[0] = I2C->DR;		// Read DR twice
+		END_CRITICAL
+		data[1] = I2C->DR;
+		bytesAvailable = 2;
+	} else {
+		uint8_t tmp1, tmp2;
+		// method 2, general case, n>2 (see RM0016, page 294):
+		while (length > 3) {
+			TIMEOUT_WAIT_FOR_ONE(I2C->SR1 & I2C_SR1_BTF, 6);	// Wait for BTF to be set
+			*data++ = I2C->DR;	// save the data
+			bytesAvailable++;
+			length--;	//FIXME: while ans Schleifenende
+		}
+		TIMEOUT_WAIT_FOR_ONE(I2C->SR1 & I2C_SR1_BTF, 6);	// Wait for BTF to be set
+		I2C->CR2 &= ~I2C_CR2_ACK;		// clear ACK
+		// masking interrupts according to errata sheet #17140 rev. 5
+		// using temporary variables to keep the critical section as
+		// short as possible. The pointer arithmetics for dataBuffer
+		// compiles to quite complex code.
+		//TODO: Could be optimized with assembler code
+		BEGIN_CRITICAL
+			tmp1 = I2C->DR;			// read DataN-2
+			I2C->CR2 |= I2C_CR2_STOP;	// Program STOP
+			tmp2 = I2C->DR;			// read DataN-1
+		END_CRITICAL
+		*data++ = tmp1;
+		*data++ = tmp2;
+		bytesAvailable += 2;
+		if (twi_receiveByte()) return bytesAvailable;// wait for RxNE flag
+		*data = I2C->DR;	// read DataN
+		bytesAvailable++;
+	}
+	TIMEOUT_WAIT_FOR_ZERO(I2C->CR2 & I2C_CR2_STOP, 7);	// Wait for STOP end
+	return (bytesAvailable);
+}
+/* original Arduino code (for reference):
+{
   uint8_t i;
 
   // ensure data will fit into buffer
@@ -260,9 +315,9 @@ uint8_t twi_readFrom(uint8_t address, uint8_t* data, uint8_t length, uint8_t sen
   for(i = 0; i < length; ++i){
     data[i] = twi_masterBuffer[i];
   }
-*/
   return length;
 }
+*/
 
 /*
  * Function twi_writeTo
@@ -291,7 +346,12 @@ uint8_t twi_writeTo(uint8_t address, uint8_t* data, uint8_t length, uint8_t wait
 	if (sendStop) {
 		twi_stop();
 	}
+
+	return 0;
+}
 /*
+  // original Arduino code (for reference):
+{
   uint8_t i;
 
   // ensure data will fit into buffer
@@ -354,9 +414,9 @@ uint8_t twi_writeTo(uint8_t address, uint8_t* data, uint8_t length, uint8_t wait
     return 3;	// error: data send, nack received
   else
     return 4;	// other twi error
-*/
   return 0;
 }
+*/
 
 /*
  * Function twi_transmit
@@ -766,8 +826,7 @@ uint8_t twi_sendByte(uint8_t i2cData)
  *     1: timeout while waiting for RxNE
  *     LOST_ARBTRTN: arbitration lost
  */
-#if 0
-static uint8_t receiveByte(void)
+static uint8_t twi_receiveByte(void)
 {
 	uint16_t startingTime = millis();
 	/* Test on EV7 (BUSY, MSL and RXNE flags) */
@@ -775,11 +834,10 @@ static uint8_t receiveByte(void)
 	    if (I2C->SR2 & I2C_SR2_ARLO)	// arbitration lost
 	{
 		twi_lockUp();
-		return (LOST_ARBTRTN);
+		return (2);//FIXME: should be LOST_ARBTRTN);
 	}
 	return (0);
 }
-#endif
 
 
 static void twi_lockUp(void)
