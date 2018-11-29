@@ -80,21 +80,27 @@ void TwoWire::begin(int address)
 {
   begin((uint8_t)address);
 }
-
-void TwoWire::end(void)
-{
-  twi_disable();
-}
 */
 
-/*
-void TwoWire::setClock(uint32_t clock)
+void Wire_end(void)
 {
-  twi_setFrequency(clock);
+	twi_disable();
 }
-*/
 
-uint8_t Wire_requestFrom(uint8_t address, uint8_t quantity)
+
+void Wire_setClock(uint32_t clock)
+{
+	twi_setFrequency(clock);
+}
+
+
+void Wire_setTimeout(uint16_t ms)
+{
+	twi_setTimeout(ms);
+}
+
+
+uint8_t Wire_requestFrom2(uint8_t address, uint8_t quantity)
 {
   return Wire_requestFrom3(address, quantity, (uint8_t)true);
 }
@@ -118,15 +124,14 @@ uint8_t Wire_requestFrom3(uint8_t address, uint8_t quantity, uint8_t sendStop)
 }
 
 
-/*
-uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity, uint32_t iaddress, uint8_t isize, uint8_t sendStop)
+uint8_t Wire_requestFrom5(uint8_t address, uint8_t quantity, uint32_t iaddress, uint8_t isize, uint8_t sendStop)
 {
   if (isize > 0) {
   // send internal address; this mode allows sending a repeated start to access
   // some devices' internal registers. This function is executed by the hardware
   // TWI module on other processors (for example Due's TWI_IADR and TWI_MMR registers)
 
-  beginTransmission(address);
+  Wire_beginTransmission(address);
 
   // the maximum size of internal address is 3 bytes
   if (isize > 3){
@@ -135,10 +140,12 @@ uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity, uint32_t iaddres
 
   // write internal register address - most significant byte first
   while (isize-- > 0)
-    write((uint8_t)(iaddress >> (isize*8)));
-  endTransmission(false);
+    Wire_write((uint8_t)(iaddress >> (isize*8)));
+  Wire_endTransmission1(false);
   }
 
+  return Wire_requestFrom3(address, quantity, sendStop);
+/*
   // clamp to buffer length
   if(quantity > BUFFER_LENGTH){
     quantity = BUFFER_LENGTH;
@@ -150,8 +157,10 @@ uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity, uint32_t iaddres
   rxBufferLength = read;
 
   return read;
+*/
 }
 
+/*
 uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity, uint8_t sendStop) {
 	return requestFrom((uint8_t)address, (uint8_t)quantity, (uint32_t)0, (uint8_t)0, (uint8_t)sendStop);
 }
@@ -251,10 +260,16 @@ size_t Wire_write(uint8_t data)
 }
 
 
+size_t Wire_write_s(const uint8_t *data)
+{
+	return Wire_write_sn(data,strlen(data));
+}
+
+
 // must be called in:
 // slave tx event callback
 // or after beginTransmission(address)
-size_t Wire_write_n(const uint8_t *data, size_t quantity)
+size_t Wire_write_sn(const uint8_t *data, size_t quantity)
 {
   if(transmitting){
   // in master transmitter mode
@@ -294,11 +309,11 @@ int Wire_read(void)
   return value;
 }
 
-/*
+
 // must be called in:
 // slave rx event callback
 // or after requestFrom(address, numBytes)
-int TwoWire::peek(void)
+int Wire_peek(void)
 {
   int value = -1;
 
@@ -309,11 +324,12 @@ int TwoWire::peek(void)
   return value;
 }
 
-void TwoWire::flush(void)
+void Wire_flush(void)
 {
   // XXX: to be implemented.
 }
 
+/*
 // behind the scenes function that is called when data is received
 void TwoWire::onReceiveService(uint8_t* inBytes, int numBytes)
 {

@@ -851,6 +851,17 @@ static void twi_lockUp(void)
 	I2C->CR2 = 0;
 }
 
+/**
+ * set the timeout delay
+ *
+ * @params:
+ *    ms: timeout value in ms. 0 to disable timeout (and wait indefinitly)
+ */
+void twi_setTimeout(uint16_t ms)
+{
+	twi_timeOutDelay = ms;
+}
+
 
 /**
  * start the timeout timer

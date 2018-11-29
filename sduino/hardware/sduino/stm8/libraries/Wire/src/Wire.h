@@ -62,7 +62,7 @@ class TwoWire : public Stream
     uint8_t endTransmission(uint8_t);
     uint8_t requestFrom(uint8_t, uint8_t);
     uint8_t requestFrom(uint8_t, uint8_t, uint8_t);
-	uint8_t requestFrom(uint8_t, uint8_t, uint32_t, uint8_t, uint8_t);
+    uint8_t requestFrom(uint8_t, uint8_t, uint32_t, uint8_t, uint8_t);
     uint8_t requestFrom(int, int);
     uint8_t requestFrom(int, int, int);
     virtual size_t write(uint8_t);
@@ -86,33 +86,51 @@ extern TwoWire Wire;
 
 /* only this minimal interface is currently implemented: */
 void	Wire_begin(void);
+void	Wire_end(void);
+void	Wire_setClock(uint32_t);
+void	Wire_setTimeout(uint16_t);
 
-void	Wire_beginTransmission(uint8_t);
-uint8_t Wire_endTransmission1(uint8_t sendStop);
+void		Wire_beginTransmission(uint8_t);
+uint8_t 	Wire_endTransmission1(uint8_t sendStop);
 inline uint8_t	Wire_endTransmission(void){Wire_endTransmission1(true);}
 
 size_t	Wire_write(uint8_t);
-size_t	Wire_write_n(const uint8_t *, size_t);
+size_t	Wire_write_s(const uint8_t *);
+size_t	Wire_write_sn(const uint8_t *, size_t);
 int	Wire_available(void);
 int	Wire_read(void);
+int	Wire_peek(void);
+void	Wire_flush(void);
 
-uint8_t	Wire_requestFrom(uint8_t address, uint8_t quantity);
+uint8_t	Wire_requestFrom2(uint8_t address, uint8_t quantity);
 uint8_t	Wire_requestFrom3(uint8_t address, uint8_t quantity, uint8_t sendStop);
+uint8_t Wire_requestFrom5(uint8_t address, uint8_t quantity, uint32_t iaddress, uint8_t isize, uint8_t sendStop);
 
+
+// Pseudo-OO interface: Plain C disguised as almost-C++, thanks to X-Macros
+//
+// We want to "inherit" the output functions from Print, so include that
+// header file as well before we start calling any macros.
+
+#include <xmacro.h>
+#include <Print.h>
+
+// Since this is a pre-instantiated singleton library we can add some
+// polymorphism for the requestFrom() method. Just distinguish by the number
+// of arguments.
+//#define Wire_write(...) VARFUNC(Wire_write, __VA_ARGS__)
+#define Wire_requestFrom(...) VARFUNC(Wire_requestFrom, __VA_ARGS__)
+
+// Unfortunately, this only works for argument numbers > 0. So we can't do the
+// same for endTransmission() and endTransmission1(sendStop)
+//
+// this doesn't work (due to the way sdcc invokes the preprocessor sdcpp):
+//#define Wire_endTransmission(...) VARFUNC(Wire_requestFrom, __VA_ARGS__)
+
+
+// "inherit" all Print methods using the macro defined in xmacro:
+//#define TwoWire_write Wire_write1
+//XPrintMethods(TwoWire,Wire)
+XPrintMethods(Wire,Wire)
 
 #endif
-
-/* required low level functions:
-
-  twi_init(void);
-
-  // perform blocking read into buffer
-  uint8_t read = twi_readFrom(address, rxBuffer, quantity, sendStop);
-
-  // transmit buffer (blocking)
-  uint8_t ret = twi_writeTo(txAddress, txBuffer, txBufferLength, 1, sendStop);
-
-    // reply to master
-    twi_transmit(&data, 1);
-
-*/

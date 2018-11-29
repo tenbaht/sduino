@@ -18,6 +18,7 @@ nav:
         - Print: api/Print.md
         - HardwareSerial: api/HardwareSerial.md
         - SPI: api/SPI.md
+        - Wire: api/Wire.md
         - I2C: api/I2C.md
         - LiquidCrystal character LCD library: api/LiquidCrystal.md
         - LiquidCrystal_I2C character LCD connected via I2C backpack boards: api/LiquidCrystal_I2C.md

@@ -5,9 +5,8 @@
 // Demonstrates use of the Wire library
 // Controls AD5171 digital potentiometer via I2C/TWI
 
+// Adapted to plain C for SDunio by M. Mayer 27 November 2018
 // Created 31 March 2006
-
-// This example code is in the public domain.
 
 // This example code is in the public domain.
 
@@ -33,4 +32,3 @@ void loop() {
   }
   delay(500);
 }
-

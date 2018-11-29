@@ -42,6 +42,7 @@
   void twi_disable(void);
   void twi_setAddress(uint8_t address);
   void twi_setFrequency(uint32_t frequency);
+  void twi_setTimeout(uint16_t ms);
   uint8_t twi_readFrom(uint8_t address, uint8_t* data, uint8_t length, uint8_t sendStop);
   uint8_t twi_writeTo(uint8_t address, uint8_t* data, uint8_t length, uint8_t wait, uint8_t sendStop);
   uint8_t twi_transmit(const uint8_t* data, uint8_t length);
@@ -50,6 +51,7 @@
   void twi_reply(uint8_t ack);
   void twi_stop(void);
   void twi_releaseBus(void);
+
 
 #endif
 

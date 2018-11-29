@@ -231,3 +231,9 @@ function pointer to the write function, that should be used.
   * include a pointer to the output write function with the parameter list of
     every (aliased) print function call.
 
+
+## Further reading
+
+Polymorphism relies on variadic macros. Daniel Hardman wrote a very
+understandable [step-by-step
+introduction](https://codecraft.co/2014/11/25/variadic-macros-tricks/).
