@@ -5,6 +5,8 @@
  * Reads the value of each byte of the EEPROM and prints it
  * to the computer.
  * This example code is in the public domain.
+ *
+ * Modified to C for use with SDuino by Michael Mayer 2018
  */
 
 #include <EEPROM.h>

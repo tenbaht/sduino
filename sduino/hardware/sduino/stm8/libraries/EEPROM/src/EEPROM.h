@@ -30,6 +30,8 @@
 #include <stdint.h>
 #include <stm8s.h>
 
+/* --- Arduino-like interface -------------------------------------------- */
+
 // compatibility definitions
 #define E2END		(FLASH_DATA_BLOCKS_NUMBER * FLASH_BLOCK_SIZE - 1)
 #define EERef(N)	(*((uint8_t*)((uint16_t)FLASH_DATA_START_PHYSICAL_ADDRESS)+(N)))
@@ -38,13 +40,26 @@ typedef uint16_t EEPtr;
 //#define EEPtr uint16_t
 
 inline uint8_t EEPROM_read( int idx )              { return EERef( idx ); }
-//inline void EEPROM_write( int idx, uint8_t val )   { (EERef( idx )) = val; }
 void EEPROM_write( int idx, uint8_t val );
 //void EEPROM_update( int idx, uint8_t val )  { EERef( idx ).update( val ); }
 
 inline EEPtr EEPROM_begin()                        { return 0x00; }
 inline EEPtr EEPROM_end()                          { return E2END + 1; }
 inline uint16_t EEPROM_length()                    { return E2END + 1; }
+
+//Functionality to 'get' and 'put' objects to and from EEPROM.
+#define EEPROM_put(idx,T)	eeprom_write(idx,(uint8_t*)(&T),sizeof(T))
+#define EEPROM_get(idx,T)	eeprom_read(idx,(uint8_t*)(&T),sizeof(T))
+
+
+/* --- more flexible interface ------------------------------------------- */
+
+void eeprom_unlock(void);
+void eeprom_lock(void);
+inline uint8_t eeprom_unlocked(void) {return (FLASH->IAPSR & FLASH_FLAG_DUL);}
+uint16_t eeprom_write(uint16_t idx, uint8_t *ptr, uint16_t len);
+uint16_t eeprom_read(uint16_t idx, uint8_t *ptr, uint16_t len);
+
 
 #if 0
 //#include <inttypes.h>
