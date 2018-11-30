@@ -20,7 +20,7 @@
 #ifndef twi_h
 #define twi_h
 
-//  #include <stdint.h>
+  #include <stdint.h>
 
   //#define ATMEGA8
 

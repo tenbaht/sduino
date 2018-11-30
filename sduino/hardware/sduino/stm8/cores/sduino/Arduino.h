@@ -24,7 +24,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <math.h>
-//#include <stdint.h>
+#include <stdint.h>
 
 //#include <avr/pgmspace.h>
 //#include <avr/io.h>
