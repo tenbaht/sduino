@@ -93,7 +93,7 @@ void	Wire_setTimeout(uint16_t);
 
 void		Wire_beginTransmission(uint8_t);
 uint8_t 	Wire_endTransmission1(uint8_t sendStop);
-inline uint8_t	Wire_endTransmission(void){Wire_endTransmission1(true);}
+inline uint8_t	Wire_endTransmission(void){return Wire_endTransmission1(true);}
 
 size_t	Wire_write(uint8_t);
 size_t	Wire_write_s(const uint8_t *);

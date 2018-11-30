@@ -85,20 +85,8 @@ static bool tout(void);
 #define MODE_WRITE 4
 
 #define SEND_ADDRESS_W(ADDR) \
-  returnStatus = twi_sendAddress(SLA_W(ADDR),MODE_WRITE); \
-  if(returnStatus) \
-  { \
-    if(returnStatus == 1){return(2);} \
-    return(returnStatus); \
-  }
-
-#define SEND_BYTE(VAL) \
-  returnStatus = twi_sendByte(VAL); \
-  if(returnStatus) \
-  { \
-    if(returnStatus == 1){return(3);} \
-    return(returnStatus); \
-  }
+	returnStatus = twi_sendAddress(SLA_W(ADDR),MODE_WRITE); \
+	if (returnStatus) return(returnStatus);
 
 // wait while the condition is still true (wait for a bit to become zero)
 #define TIMEOUT_WAIT_FOR_ZERO(CONDITION,ERROR) \
@@ -210,14 +198,17 @@ uint8_t twi_readFrom(uint8_t address, uint8_t* data, uint8_t length, uint8_t sen
 	if (length == 1) {
 		// method 2, case single byte (see RM0016, page 294):
 //		I2C->CR2 |= I2C_CR2_STOP;	// send stop after receiving the one data byte
-		if (twi_receiveByte()) return 0;// wait for RxNE flag
-		data[0] = I2C->DR;	// save the data
+		// wait for RxNE flag
+		if (twi_receiveByte()) return 0;
+		// save the data
+		data[0] = I2C->DR;
 		bytesAvailable = 1;
 	} else if (length == 2) {
 		// method 2, case two bytes (see RM0016, page 294):
 		// Case of two bytes to be received:
 //		I2C->CR2 &= ~I2C_CR2_ACK;	// clear ACK
-		TIMEOUT_WAIT_FOR_ONE(I2C->SR1 & I2C_SR1_BTF, 6);	// Wait for BTF to be set
+		// Wait for BTF to be set
+		TIMEOUT_WAIT_FOR_ONE(I2C->SR1 & I2C_SR1_BTF, 0);//6);
 		// masking interrupts according to errata sheet #17140 rev. 5
 		BEGIN_CRITICAL
 			I2C->CR2 |= I2C_CR2_STOP;	// Program STOP
@@ -229,13 +220,17 @@ uint8_t twi_readFrom(uint8_t address, uint8_t* data, uint8_t length, uint8_t sen
 		uint8_t tmp1, tmp2;
 		// method 2, general case, n>2 (see RM0016, page 294):
 		while (length > 3) {
-			TIMEOUT_WAIT_FOR_ONE(I2C->SR1 & I2C_SR1_BTF, 6);	// Wait for BTF to be set
-			*data++ = I2C->DR;	// save the data
+			// Wait for BTF to be set
+			TIMEOUT_WAIT_FOR_ONE(I2C->SR1 & I2C_SR1_BTF, bytesAvailable);//6);
+			// save the data
+			*data++ = I2C->DR;
 			bytesAvailable++;
 			length--;	//FIXME: while ans Schleifenende
 		}
-		TIMEOUT_WAIT_FOR_ONE(I2C->SR1 & I2C_SR1_BTF, 6);	// Wait for BTF to be set
-		I2C->CR2 &= ~I2C_CR2_ACK;		// clear ACK
+		// Wait for BTF to be set
+		TIMEOUT_WAIT_FOR_ONE(I2C->SR1 & I2C_SR1_BTF, bytesAvailable);//6);
+		// clear ACK
+		I2C->CR2 &= ~I2C_CR2_ACK;
 		// masking interrupts according to errata sheet #17140 rev. 5
 		// using temporary variables to keep the critical section as
 		// short as possible. The pointer arithmetics for dataBuffer
@@ -253,7 +248,13 @@ uint8_t twi_readFrom(uint8_t address, uint8_t* data, uint8_t length, uint8_t sen
 		*data = I2C->DR;	// read DataN
 		bytesAvailable++;
 	}
-	TIMEOUT_WAIT_FOR_ZERO(I2C->CR2 & I2C_CR2_STOP, 7);	// Wait for STOP end
+	// don't use the TIMEOUT macro. In the error case we would have to
+	// return(bytesAvailable), which is done at the end anyway.
+	// Wait for STOP end
+	while (I2C->CR2 & I2C_CR2_STOP)
+	{
+		if (tout()) twi_lockUp();
+	}
 	return (bytesAvailable);
 }
 /* original Arduino code (for reference):
@@ -341,7 +342,7 @@ uint8_t twi_writeTo(uint8_t address, uint8_t* data, uint8_t length, uint8_t wait
 
 	SEND_ADDRESS_W(address);
 	while (length--) {
-		SEND_BYTE(*data++);
+		if (twi_sendByte(*data++)) return (3);
 	}
 
 	if (sendStop) {
