@@ -20,6 +20,7 @@ nav:
         - SPI: api/SPI.md
         - Wire: api/Wire.md
         - I2C: api/I2C.md
+        - EEPROM: api/EEPROM.md
         - LiquidCrystal character LCD library: api/LiquidCrystal.md
         - LiquidCrystal_I2C character LCD connected via I2C backpack boards: api/LiquidCrystal_I2C.md
         - LiquidCrystal_pcf2119 character LCD connected via I2C: api/LiquidCrystal_pcf2119.md
