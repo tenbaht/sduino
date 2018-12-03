@@ -104,7 +104,15 @@
 </li>
                                     
 <li >
+    <a href="../../api/Wire/">Wire</a>
+</li>
+                                    
+<li >
     <a href="../../api/I2C/">I2C</a>
+</li>
+                                    
+<li >
+    <a href="../../api/EEPROM/">EEPROM</a>
 </li>
                                     
 <li >
@@ -272,11 +280,11 @@ most programs will work fine on those chinese gems as well.</p>
 internal oscillator, 8kB flash, 1kB RAM, and 640 byte EEPROM. The CPU
 includes a UART, SPI, I2C, PWM, 10 bit ADC, 3 timer, and up to 14 I/O pins -
 quite similar to an Atmel ATmega8.</p>
-<p>One (red) LED is connected to GPIO PB5 (CPU pin 11). Please keep in mind
-that this is one of the I2C signals and <strong>using the LED blocks the I2C
-bus</strong>. The push button is for reset. The CPU runs on 3.3V, a linear
-regulator is integrated on the board. The micro USB connector is only for
-(5V) power supply, the data lines are not connected.</p>
+<p>One (red) LED is connected to GPIO PB5 (CPU pin 11). This LED is low active.
+Please keep in mind that this is one of the I2C signals and <strong>using the LED
+blocks the I2C bus</strong>. The push button is for reset. The CPU runs on 3.3V, a
+linear regulator is integrated on the board. The micro USB connector is only
+for (5V) power supply, the data lines are not connected.</p>
 <p>All CPU pins are easily accessible on (optional) pin headers (pitch 2.54mm,
 perfect for breadboards).</p>
 <p><img alt="Schematic of the STMS103 board" src="../stm8blue-schematic.png" /></p>

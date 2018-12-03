@@ -103,8 +103,16 @@
     <a href="../SPI/">SPI</a>
 </li>
                                     
+<li >
+    <a href="../Wire/">Wire</a>
+</li>
+                                    
 <li class="active">
     <a href="./">I2C</a>
+</li>
+                                    
+<li >
+    <a href="../EEPROM/">EEPROM</a>
 </li>
                                     
 <li >
@@ -233,12 +241,12 @@
                             </a>
                         </li>
                             <li >
-                                <a rel="next" href="../SPI/">
+                                <a rel="next" href="../Wire/">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li >
-                                <a rel="prev" href="../LiquidCrystal/">
+                                <a rel="prev" href="../EEPROM/">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -276,8 +284,8 @@ than one instance per sketch or to change the instance name.</p>
 mangeling was needed to distinguish the different variant of the <code>read()</code>
 and <code>write()</code> method. Apart from this replacing the dots in the method names
 for underscores is all it needs.</p>
-<p>The pullup setting is missing because this function is supported by the STM8
-hardware.</p>
+<p>The pullup setting is missing because this function is not supported by the
+STM8 hardware.</p>
 <table>
 <thead>
 <tr>

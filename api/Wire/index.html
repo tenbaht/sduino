@@ -8,7 +8,7 @@
         <meta name="author" content="Michael Mayer">
         
         <link rel="shortcut icon" href="../../img/favicon.ico">
-        <title>Status and todo - Sduino</title>
+        <title>Wire - Sduino</title>
     <link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
     <link href="../../css/font-awesome.min.css" rel="stylesheet">
     <link href="../../css/base.css" rel="stylesheet">
@@ -46,7 +46,7 @@
                 <div class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li class="dropdown active">
+                            <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
@@ -55,92 +55,92 @@
 </li>
                                     
 <li >
-    <a href="../board-manager-install/">Automatic Installation</a>
+    <a href="../../usage/board-manager-install/">Automatic Installation</a>
 </li>
                                     
 <li >
-    <a href="../build-ide/">Building with the IDE</a>
+    <a href="../../usage/build-ide/">Building with the IDE</a>
 </li>
                                     
 <li >
-    <a href="../why-stm8/">When to use an STM8S - and when not</a>
+    <a href="../../usage/why-stm8/">When to use an STM8S - and when not</a>
 </li>
                                     
 <li >
-    <a href="../manual-install/">Manual Installation</a>
+    <a href="../../usage/manual-install/">Manual Installation</a>
 </li>
                                     
 <li >
-    <a href="../build-cli/">Building with a Makefile</a>
+    <a href="../../usage/build-cli/">Building with a Makefile</a>
 </li>
                                     
 <li >
-    <a href="../limitations/">Limitations</a>
+    <a href="../../usage/limitations/">Limitations</a>
 </li>
                                     
-<li class="active">
-    <a href="./">Status and todo</a>
+<li >
+    <a href="../../usage/status-todo/">Status and todo</a>
 </li>
                                 </ul>
                             </li>
-                            <li class="dropdown">
+                            <li class="dropdown active">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Libraries <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
 <li >
-    <a href="../../api/migration/">API description and migration guidelines</a>
+    <a href="../migration/">API description and migration guidelines</a>
 </li>
                                     
 <li >
-    <a href="../../api/Print/">Print</a>
+    <a href="../Print/">Print</a>
 </li>
                                     
 <li >
-    <a href="../../api/HardwareSerial/">HardwareSerial</a>
+    <a href="../HardwareSerial/">HardwareSerial</a>
 </li>
                                     
 <li >
-    <a href="../../api/SPI/">SPI</a>
+    <a href="../SPI/">SPI</a>
+</li>
+                                    
+<li class="active">
+    <a href="./">Wire</a>
 </li>
                                     
 <li >
-    <a href="../../api/Wire/">Wire</a>
+    <a href="../I2C/">I2C</a>
 </li>
                                     
 <li >
-    <a href="../../api/I2C/">I2C</a>
+    <a href="../EEPROM/">EEPROM</a>
 </li>
                                     
 <li >
-    <a href="../../api/EEPROM/">EEPROM</a>
+    <a href="../LiquidCrystal/">LiquidCrystal character LCD library</a>
 </li>
                                     
 <li >
-    <a href="../../api/LiquidCrystal/">LiquidCrystal character LCD library</a>
+    <a href="../LiquidCrystal_I2C/">LiquidCrystal_I2C character LCD connected via I2C backpack boards</a>
 </li>
                                     
 <li >
-    <a href="../../api/LiquidCrystal_I2C/">LiquidCrystal_I2C character LCD connected via I2C backpack boards</a>
+    <a href="../LiquidCrystal_pcf2119/">LiquidCrystal_pcf2119 character LCD connected via I2C</a>
 </li>
                                     
 <li >
-    <a href="../../api/LiquidCrystal_pcf2119/">LiquidCrystal_pcf2119 character LCD connected via I2C</a>
+    <a href="../PCD8544/">PCD8544 libray for Nokia 5110-like graphical LCDs</a>
 </li>
                                     
 <li >
-    <a href="../../api/PCD8544/">PCD8544 libray for Nokia 5110-like graphical LCDs</a>
+    <a href="../Mini_SSD1306/">Mini_SSD1306 library for monochrome OLED-displays</a>
 </li>
                                     
 <li >
-    <a href="../../api/Mini_SSD1306/">Mini_SSD1306 library for monochrome OLED-displays</a>
+    <a href="../Stepper/">Stepper library</a>
 </li>
                                     
 <li >
-    <a href="../../api/Stepper/">Stepper library</a>
-</li>
-                                    
-<li >
-    <a href="../../api/Servo/">Servo library</a>
+    <a href="../Servo/">Servo library</a>
 </li>
                                 </ul>
                             </li>
@@ -241,17 +241,17 @@
                             </a>
                         </li>
                             <li >
-                                <a rel="next" href="../limitations/">
+                                <a rel="next" href="../SPI/">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li >
-                                <a rel="prev" href="../../api/migration/">
+                                <a rel="prev" href="../I2C/">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
                             <li>
-                                <a href="https://github.com/tenbaht/sduino/edit/master/docs/usage/status-todo.md"><i class="fa fa-github"></i> Edit on GitHub</a>
+                                <a href="https://github.com/tenbaht/sduino/edit/master/docs/api/Wire.md"><i class="fa fa-github"></i> Edit on GitHub</a>
                             </li>
                     </ul>
                 </div>
@@ -261,96 +261,254 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#status-and-todo">Status and Todo</a></li>
-            <li><a href="#current-status">Current status</a></li>
-            <li><a href="#todo">Todo</a></li>
+        <li class="main active"><a href="#wire">Wire</a></li>
+            <li><a href="#api">API</a></li>
+            <li><a href="#timeout">Timeout</a></li>
+            <li><a href="#further-reading">Further reading</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="status-and-todo">Status and Todo</h1>
-<h2 id="current-status">Current status</h2>
-<h4 id="tested-and-working">tested and working</h4>
+<h1 id="wire">Wire</h1>
+<p>This is an improved version of the stock Arduino Wire library for I2C
+communication. It shares most of the hardware related code with the re-write
+of the <a href="../I2C/">Sduino I2C library</a>, but holds on to the Arduino API.</p>
+<p>The main difference between this STM8 version and the Arduino AVR version is
+the existance of a timeout function to prevent deadlocks due to failed
+communication. Polling mode is used for communication, interrupts are not
+supported (yet).</p>
+<p>So far, only Master Transmit and Master Receive modes are supported, slave
+modes are not implemented yet.</p>
+<h2 id="api">API</h2>
+<p>This is a pre-instantiated singleton library. It is not possible to use more
+than one instance per sketch or to change the instance name.</p>
+<p>The API syntax is very similar to the original C++ syntax. Some name
+mangeling was needed to distinguish the different variants of the <code>write()</code>
+method. Apart from this replacing the dots in the method names for
+underscores is all it needs.</p>
+<table>
+<thead>
+<tr>
+<th>Arduino syntax</th>
+<th>sduino syntax</th>
+<th>real function name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Wire.begin()</code></td>
+<td><code>Wire_begin()</code></td>
+<td>same</td>
+</tr>
+<tr>
+<td><code>Wire.begin(ownaddress)</code></td>
+<td>slave mode not supported yet</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>Wire.end()</code></td>
+<td><code>Wire_end()</code></td>
+<td>same</td>
+</tr>
+<tr>
+<td><code>Wire.setClock(clock)</code></td>
+<td><code>Wire_setClock(clock)</code></td>
+<td>same</td>
+</tr>
+<tr>
+<td>not implemented</td>
+<td><code>Wire_timeOut(millisec)</code></td>
+<td>same</td>
+</tr>
+<tr>
+<td><code>Wire.beginTransmission(addr)</code></td>
+<td><code>Wire_beginTransmission(addr)</code></td>
+<td>same</td>
+</tr>
+<tr>
+<td>n = <code>Wire.endTransmission()</code></td>
+<td>n = <code>Wire_endTransmission()</code></td>
+<td>same (inline)</td>
+</tr>
+<tr>
+<td>n = <code>Wire.endTransmission(stop)</code></td>
+<td>n = <code>Wire_endTransmission1(stop)</code></td>
+<td>same</td>
+</tr>
+<tr>
+<td><code>Wire.write(val)</code></td>
+<td><code>Wire_write(val)</code></td>
+<td>same</td>
+</tr>
+<tr>
+<td><code>Wire.write(*str)</code></td>
+<td><code>Wire_write_s(*str)</code></td>
+<td>same</td>
+</tr>
+<tr>
+<td><code>Wire.write(*data, len)</code></td>
+<td><code>Wire_write_sn(*data, len)</code></td>
+<td>same</td>
+</tr>
+<tr>
+<td><code>n = Wire.available()</code></td>
+<td><code>n = Wire_available()</code></td>
+<td>same</td>
+</tr>
+<tr>
+<td><code>val = Wire.read()</code></td>
+<td><code>val = Wire_read()</code></td>
+<td>same</td>
+</tr>
+<tr>
+<td><code>Wire.flush()</code></td>
+<td><code>Wire_flush()</code></td>
+<td>same</td>
+</tr>
+<tr>
+<td><code>val = Wire.peek()</code></td>
+<td><code>val = Wire_peek()</code></td>
+<td>same</td>
+</tr>
+<tr>
+<td><code>Wire.requestFrom(addr, n)</code></td>
+<td><code>Wire_requestFrom(addr, n)</code></td>
+<td><code>Wire_requestFrom2</code></td>
+</tr>
+<tr>
+<td><code>Wire.requestFrom(addr, n, sendStop)</code></td>
+<td><code>Wire_requestFrom(addr, n, sendStop)</code></td>
+<td><code>Wire_requestFrom3</code></td>
+</tr>
+<tr>
+<td><code>Wire.requestFrom(addr, n, iaddr, isize, sendStop)</code></td>
+<td><code>Wire_requestFrom(addr, n, iaddr, isize, sendStop)</code></td>
+<td><code>Wire_requestFrom5</code></td>
+</tr>
+<tr>
+<td><code>Wire.print(*str)</code></td>
+<td><code>Wire_print_s(*str)</code></td>
+<td><code>Print_print_s(Write_write1,*str)</code></td>
+</tr>
+<tr>
+<td><code>Wire.print(*data,len)</code></td>
+<td><code>Wire_print_sn(*data,len)</code></td>
+<td><code>Print_print_sn(Write_write1,*data,len)</code></td>
+</tr>
+<tr>
+<td><code>Wire.print(long)</code></td>
+<td><code>Wire_print_i(long)</code></td>
+<td><code>Print_print_i(Write_write1,long)</code></td>
+</tr>
+<tr>
+<td><code>Wire.print(ulong)</code></td>
+<td><code>Wire_print_u(ulong)</code></td>
+<td><code>Print_print_u(Write_write1,ulong)</code></td>
+</tr>
+<tr>
+<td><code>Wire.print(long,base)</code></td>
+<td><code>Wire_print_ib(long,base)</code></td>
+<td><code>Print_print_ib(Write_write1,long,base)</code></td>
+</tr>
+<tr>
+<td><code>Wire.print(ulong,base)</code></td>
+<td><code>Wire_print_ub(ulong,base)</code></td>
+<td><code>Print_print_ub(Write_write1,ulong,base)</code></td>
+</tr>
+<tr>
+<td><code>Wire.print(double)</code></td>
+<td><code>Wire_print_f(float)</code></td>
+<td><code>Print_print_f(Write_write1,float)</code></td>
+</tr>
+<tr>
+<td><code>Wire.print(double,dig)</code></td>
+<td><code>Wire_print_f(float,dig)</code></td>
+<td><code>Print_print_fd(Write_write1,float,dig)</code></td>
+</tr>
+<tr>
+<td><code>Wire.println()</code></td>
+<td><code>Wire_println()</code></td>
+<td><code>Print_println(Write_write1)</code></td>
+</tr>
+<tr>
+<td><code>Wire.println(*str)</code></td>
+<td><code>Wire_println_s(*str)</code></td>
+<td><code>Print_println_s(Write_write1,*str)</code></td>
+</tr>
+<tr>
+<td><code>Wire.println(*data,len)</code></td>
+<td><code>Wire_println_sn(*data,len)</code></td>
+<td><code>Print_println_sn(Write_write1,*data,len)</code></td>
+</tr>
+<tr>
+<td><code>Wire.println(long)</code></td>
+<td><code>Wire_println_i(long)</code></td>
+<td><code>Print_println_i(Write_write1,long)</code></td>
+</tr>
+<tr>
+<td><code>Wire.println(ulong)</code></td>
+<td><code>Wire_println_u(ulong)</code></td>
+<td><code>Print_println_u(Write_write1,ulong)</code></td>
+</tr>
+<tr>
+<td><code>Wire.println(long,base)</code></td>
+<td><code>Wire_println_ib(long,base)</code></td>
+<td><code>Print_println_ib(Write_write1,long,base)</code></td>
+</tr>
+<tr>
+<td><code>Wire.println(ulong,base)</code></td>
+<td><code>Wire_println_ub(ulong,base)</code></td>
+<td><code>Print_println_ub(Write_write1,ulong,base)</code></td>
+</tr>
+<tr>
+<td><code>Wire.println(double)</code></td>
+<td><code>Wire_println_f(float)</code></td>
+<td><code>Print_println_f(Write_write1,float)</code></td>
+</tr>
+<tr>
+<td><code>Wire.println(double,dig)</code></td>
+<td><code>Wire_println_f(float,dig)</code></td>
+<td><code>Print_println_fd(Write_write1,float,dig)</code></td>
+</tr>
+</tbody>
+</table>
+<p>Please note the polymorphism of the <code>Wire_requestFrom()</code> method. This is a
+special case and only possible for pre-instantiated singleton libraries.</p>
+<p>Due to the way sdcc invokes the preprocessor sdcpp the same trick doesn't
+work for functions without arguments - so we still need
+<code>Wire_endTransmission()</code> and <code>Wire_endTransmission1(stop)</code>. Hopefully, this
+inconsistency does not spread more confusion than it is worth.</p>
+<h2 id="timeout">Timeout</h2>
+<p>The timeout functionality was added for the Sduino port and is not part of
+the original library. The maximum transmission length is limited by the size
+of the data buffer of 32 bytes. At 100kHz this would take aprox. 3ms (1
+address byte, 32 data bytes, 1 ACK bit after every byte).</p>
+<p>The default timeout is set to 20ms, that should work for most cases. If
+using a very slow device, the timeout can be changed using the
+<code>Wire_setTimeout()</code> function any time after initialzing the library by
+calling <code>Wire_begin()</code>. The timeout is defined in ms, so the maximum value
+for this 16 bit value represents about 65s - more than a minute.</p>
+<p>The value zero disables the timeout feature.</p>
+<h2 id="further-reading">Further reading</h2>
+<p>Programming the I2C communication on the register level is quite complex for
+the STM8, especially in receive mode. The most detailed information on this
+topic is the</p>
 <ul>
-<li><code>pinMode()</code></li>
-<li><code>digitalWrite()</code></li>
-<li><code>analogRead()</code></li>
-<li><code>delay()</code></li>
-<li><code>analogWrite()</code></li>
-<li><code>ShiftOut()</code></li>
-<li>WMath: <code>map()</code></li>
-<li><code>serialEvent()</code></li>
-<li><code>pulseInLong()</code></li>
-<li><a href="../../api/HardwareSerial/">HardwareSerial</a>:
-  Standard UART interface with Print functions</li>
-<li><a href="../../api/Print/">Print</a>:
-  Formatting functions to be used with the other output libraries</li>
-<li><a href="../../api/SPI/">SPI</a>:
-  working, no interrupt support  </li>
-<li><a href="../../api/LiquidCrystal/">LiquidCrystal</a>:
-  Text LCD based on the HD44780 controller  </li>
-<li><a href="../../api/PCD8544/">PCD8544</a>:
-  Nokia 5110 type displays  </li>
-<li><a href="../../api/Mini_SSD1306/">Mini_SSD1306</a>:
-  Monochrome OLED displays based on the SSD1306 controller</li>
-<li><a href="../../api/Stepper/">Stepper</a>:
-  Multi-instance design for more than one stepper at a time  </li>
-<li><a href="../../api/Servo/">Servo</a>:
-  Multi-instance design for more than one servo at a time)  </li>
+<li>application note AN3281 bundeled with</li>
+<li>the related source code package <a href="https://www.st.com/en/embedded-software/stsw-stm8004.html">STSW-STM8004</a></li>
 </ul>
-<h4 id="implemented-and-partly-working">implemented and partly working</h4>
+<p>Downloading from the ST website requires a (free) registration. Somebody
+uploaded the full package to a <a href="https://github.com/jiaohaitao/stsw-stm8004">github
+repository</a></p>
+<p>There are some important notes on I2C implementation in the errata sheets:</p>
 <ul>
-<li><a href="../../api/I2C/">Wire/I2C</a></li>
-</ul>
-<h4 id="tested-but-not-working">tested, but not working</h4>
-<ul>
-<li><code>alternateFunctions()</code></li>
-</ul>
-<h4 id="not-tested">not tested</h4>
-<ul>
-<li><code>ShiftIn()</code></li>
-<li><code>random()</code></li>
-<li><code>srandom()</code></li>
-</ul>
-<h4 id="not-implemented">not implemented</h4>
-<ul>
-<li><code>tone()</code></li>
-<li><code>noTone()</code></li>
-<li><code>pulseIn()</code></li>
-<li>handling of write error in <code>Print</code> (methods <code>setWriteError</code> etc.)</li>
-<li>module WCharacter</li>
-<li>module WString</li>
-</ul>
-<h2 id="todo">Todo</h2>
-<h3 id="interesting-libraries-that-might-be-worth-porting">Interesting libraries that might be worth porting</h3>
-<p><strong><a href="https://github.com/SMFSW/cI2C">cI2C</a></strong>: Arduino Hardware I2C for AVR
-(plain c)</p>
-<p><strong><a href="https://github.com/winlinvip/SimpleDHT">SimpleDHT</a></strong>: Simple, Stable and
-Fast Arduino Temp &amp; Humidity Sensors for DHT11 and DHT22. It started out
-as plain C code (v1.0.0), but was converted to (simple) C++ with v1.0.1</p>
-<p><strong><a href="https://github.com/SMFSW/cQueue">cQueue</a></strong>: Queue handling library
-(written in plain c). But maybe too high-level to be worth using on very
-small devices.</p>
-<p><strong><a href="https://github.com/smz/Arduino-RTCtime">RTCtime</a></strong>: This library makes
-using modules based on the DS1307 and DS3231 RTC really easy. It is
-compatible with and is meant to leverage the standard C time library
-<code>time.h</code> API (datatypes and functions) as defined in ISO/IEC 9899 (C90) and
-implemented in the AVR Std C runtime libray since version 2.0.0.</p>
-<p><strong><a href="https://github.com/stm32duino/FatFs">FatFS</a></strong>: FatFs is a generic FAT
-file system module for small embedded systems. The FatFs is written in
-compliance with ANSI C and completely separated from the disk I/O layer.
-Therefore it is independent of hardware architecture.
-stm32duino port of <a href="http://elm-chan.org/fsw/ff/00index_e.html">FatFS by
-elm-chan</a>. A stripped down
-version exists as <a href="http://elm-chan.org/fsw/ff/00index_p.html">Petit FAT File System
-Module</a> for very small CPU. Only
-2..4kB flash usage.</p>
-<h3 id="unresolved-problems">Unresolved problems</h3>
-<p>The compile environment needs to detect which interrupts are actively used
-and link only the needed ones into the binary. See test/digitalWrite:
-Compiling with the straight Makefile.classic does not add UART interrupt
-routines. But when using the sduino.mk Makefile the two UART interrupt
-routines are pulled into the binary by the interrupt table in main.c.</p></div>
+<li><a href="https://www.st.com/content/ccc/resource/technical/document/errata_sheet/c9/f9/ef/bf/63/91/4a/1f/CD00265449.pdf/files/CD00265449.pdf/jcr:content/translations/en.CD00265449.pdf">STM8S001J3/003xx/103xx/903xx Errata sheet, rev. 5
+  (CD00265449)</a></li>
+<li><a href="https://www.st.com/content/ccc/resource/technical/document/errata_sheet/e3/c3/4e/24/0c/ca/4b/e7/CD00270741.pdf/files/CD00270741.pdf/jcr:content/translations/en.CD00270741.pdf">STM8S005xx STM8S105xx Errata sheet, rev. 7
+  (CD00270741)</a></li>
+<li><a href="https://www.st.com/content/ccc/resource/technical/document/errata_sheet/7a/94/8f/fe/84/14/41/6d/CD00244749.pdf/files/CD00244749.pdf/jcr:content/translations/en.CD00244749.pdf">STM8S007xx STM8S20xxx Errata sheet, rev. 6
+  (CD00244749)</a></li>
+</ul></div>
         </div>
 
         <footer class="col-md-12">

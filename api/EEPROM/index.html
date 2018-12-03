@@ -8,7 +8,7 @@
         <meta name="author" content="Michael Mayer">
         
         <link rel="shortcut icon" href="../../img/favicon.ico">
-        <title>SPI - Sduino</title>
+        <title>EEPROM - Sduino</title>
     <link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
     <link href="../../css/font-awesome.min.css" rel="stylesheet">
     <link href="../../css/base.css" rel="stylesheet">
@@ -99,8 +99,8 @@
     <a href="../HardwareSerial/">HardwareSerial</a>
 </li>
                                     
-<li class="active">
-    <a href="./">SPI</a>
+<li >
+    <a href="../SPI/">SPI</a>
 </li>
                                     
 <li >
@@ -111,8 +111,8 @@
     <a href="../I2C/">I2C</a>
 </li>
                                     
-<li >
-    <a href="../EEPROM/">EEPROM</a>
+<li class="active">
+    <a href="./">EEPROM</a>
 </li>
                                     
 <li >
@@ -241,17 +241,17 @@
                             </a>
                         </li>
                             <li >
-                                <a rel="next" href="../HardwareSerial/">
+                                <a rel="next" href="../I2C/">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li >
-                                <a rel="prev" href="../Wire/">
+                                <a rel="prev" href="../LiquidCrystal/">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
                             <li>
-                                <a href="https://github.com/tenbaht/sduino/edit/master/docs/api/SPI.md"><i class="fa fa-github"></i> Edit on GitHub</a>
+                                <a href="https://github.com/tenbaht/sduino/edit/master/docs/api/EEPROM.md"><i class="fa fa-github"></i> Edit on GitHub</a>
                             </li>
                     </ul>
                 </div>
@@ -261,22 +261,248 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#spi">SPI</a></li>
-            <li><a href="#api">API</a></li>
+        <li class="main active"><a href="#eeprom">EEPROM</a></li>
+            <li><a href="#arduino-api">Arduino-API</a></li>
+            <li><a href="#avr-api">AVR-API</a></li>
             <li><a href="#example">Example</a></li>
-            <li><a href="#implementation-details">Implementation details</a></li>
-            <li><a href="#possible-impovements">Possible impovements</a></li>
+            <li><a href="#accessing-the-eeprom-using-stm8flash">Accessing the EEPROM using stm8flash</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="spi">SPI</h1>
-<p>Real hardware-SPI up to 10MHz. No interrupt support yet.</p>
-<p>This page is only a stub.</p>
-<h2 id="api">API</h2>
+<h1 id="eeprom">EEPROM</h1>
+<p>This is a library to access the built-in EEPROM of the STM8 MCUs. It does
+<strong>not</strong> work with external I2C or SPI-EEPROM.</p>
+<p>It is based on the Arduino EEPROM Library V2.0 by Christopher Andrews.
+In addition to the common Arduino-methods it defines some functions for
+low-level access. These functions behave similar to the built-in AVR
+functions. (see <a href="#avr-api">below</a>)</p>
+<h2 id="arduino-api">Arduino-API</h2>
+<p>This is a pre-instantiated singleton library. It is not possible to use more
+than one instance per sketch or to change the instance name.</p>
+<p>The API syntax is very similar to the original C++ syntax. In most cases
+replacing the dots in the method names for underscores is all it needs. Only
+the <code>EEPROM[]</code> operator and the <code>EEPtr</code> and <code>EERef</code> behave a little
+different than their Arduino counterparts.</p>
+<table>
+<thead>
+<tr>
+<th>Arduino syntax</th>
+<th>sduino syntax</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>val = EEPROM.read(idx)</code></td>
+<td><code>val = EEPROM_read(idx)</code></td>
+</tr>
+<tr>
+<td><code>EEPROM.write(idx, val)</code></td>
+<td><code>EEPROM_write(idx, val)</code></td>
+</tr>
+<tr>
+<td><code>EEPROM.update(idx, val)</code></td>
+<td><code>EEPROM_update(idx, val)</code></td>
+</tr>
+<tr>
+<td><code>val = EEPROM.begin()</code></td>
+<td><code>val = EEPROM_begin()</code></td>
+</tr>
+<tr>
+<td><code>val = EEPROM.end()</code></td>
+<td><code>val = EEPROM_end()</code></td>
+</tr>
+<tr>
+<td><code>val = EEPROM.length()</code></td>
+<td><code>val = EEPROM_length()</code></td>
+</tr>
+<tr>
+<td><code>EEPROM.put(idx,T)</code></td>
+<td><code>EEPROM_put(idx,T)</code></td>
+</tr>
+<tr>
+<td><code>EEPROM.get(idx,T)</code></td>
+<td><code>EEPROM_get(idx,T)</code></td>
+</tr>
+<tr>
+<td><code>EEPROM[idx]</code></td>
+<td><code>EEPROM_cell[idx]</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="eeprom_read-address-example"><strong><code>EEPROM_read( address )</code></strong> <a href="examples/eeprom_read/">[<em>example</em>]</a></h4>
+<p>This function allows you to read a single byte of data from the eeprom. Its
+only parameter is an <code>int</code> which should be set to the address you wish to
+read.</p>
+<p>The function returns an <code>unsigned char</code> containing the value read.</p>
+<h4 id="eeprom_write-address-value-example"><strong><code>EEPROM_write( address, value )</code></strong> <a href="examples/eeprom_write/">[<em>example</em>]</a></h4>
+<p>The <code>EEPROM_write()</code> method allows you to write a single byte of data to the
+EEPROM. Two parameters are needed. The first is an <code>int</code> containing the
+address that is to be written, and the second is a the data to be written
+(<code>unsigned char</code>).</p>
+<p>This function does not return any value.</p>
+<h4 id="eeprom_update-address-value-example"><strong><code>EEPROM_update( address, value )</code></strong> <a href="examples/eeprom_update/">[<em>example</em>]</a></h4>
+<p>This function is similar to <code>EEPROM_write()</code> however this method will only
+write data if the cell contents pointed to by <code>address</code> is different to
+<code>value</code>. This method can help prevent unnecessary wear on the EEPROM cells.</p>
+<p>This function does not return any value.</p>
+<h4 id="eeprom_get-address-object-example"><strong><code>EEPROM_get( address, object )</code></strong> <a href="examples/eeprom_get/">[<em>example</em>]</a></h4>
+<p>This function will retrieve any object from the EEPROM. Two parameters are
+needed to call this function. The first is an <code>int</code> containing the address
+that is to be written, and the second is the object you would like to read.</p>
+<p>This function is implemented as a macro. On completion, it evaluates to a
+pointer to the <code>object</code> passed in. It does not need to be used and is only
+returned for convience.</p>
+<p><strong>Note:</strong> This means that the expression for <code>object</code> will be evaluated
+twice. This <strong>will break sketches</strong> using pre- or postincrement operators,
+because they will end up beeing called twice.</p>
+<h4 id="eeprom_put-address-object-example"><strong><code>EEPROM_put( address, object )</code></strong> <a href="examples/eeprom_put/">[<em>example</em>]</a></h4>
+<p>This function will write any object to the EEPROM. Two parameters are needed
+to call this function. The first is an <code>int</code> containing the address that is
+to be written, and the second is the object you would like to write.</p>
+<p>This function uses the <em>update</em> method to write its data, and therefore only
+rewrites changed cells.</p>
+<p>This function is implemented as a macro using <code>&amp;object</code> and <code>sizeof(object)</code>
+to reference the actual data to be written. This means that:</p>
+<ul>
+<li>integer constants can't be directly written, <code>EEPROM_put(0,42)</code> will fail.</li>
+<li>The expression for <code>object</code> will be evaluated twice. This will break
+  sketches using pre- or postincrement operators.</li>
+</ul>
+<p>This macro evaluates to a pointer to the <code>object</code> passed in. It does not
+need to be used and is only returned for convience.</p>
+<h4 id="eeprom_length"><strong><code>EEPROM_length()</code></strong></h4>
+<p>This function returns an <code>unsigned int</code> containing the number of cells in
+the EEPROM.</p>
+<h4 id="eeprom_begin"><strong><code>EEPROM_begin()</code></strong></h4>
+<p>This function returns the number of the first cell in the EEPROM. This is
+similar to the semantics of the original libray, where this method is ment
+for use with STL objects, custom iteration and C++11 style ranged for loops.</p>
+<h4 id="eeprom_end"><strong><code>EEPROM_end()</code></strong></h4>
+<p>This function returns the number just behind the last EEPROM cell. Since the
+EEPROM cells always start at zero this is the number of EEPROM cells. Used
+with <code>EEPROM_begin()</code> to provide custom iteration.</p>
+<h4 id="subscript-operator-eeprom_celladdress"><strong>Subscript operator: <code>EEPROM_cell[address]</code></strong></h4>
+<p>Use the syntax <code>EEPROM_cell[address]</code> instead. This allows acessing the
+EEPROM like an array. EEPROM cells can be read <em>and</em> <strong><em>written</em></strong> directly
+using this method.</p>
+<p><strong>Note:</strong> For write access, the EEPROM has to be unlocked by calling
+<code>eeprom_unlock()</code> first. Trying to write the EEPROM without unlocking will
+permanently lock the EEPROM after three failed write accesses. Only a
+hardware reset can re-enable the EEPROM.</p>
+<p>Please keep in mind that every call of <code>EEPROM_write()</code> or <code>EEPROM_update()</code>
+re-locks the EEPROM after the access.</p>
+<h2 id="avr-api">AVR-API</h2>
+<p>In addition to the common Arduino-methods it defines some functions for
+low-level access. These functions behave similar to the built-in AVR
+functions.</p>
+<p>For the sake of compatibility to the Arduino world all EEPROM addresses
+start at zero at the needed offset calculation is handled internally.</p>
+<table>
+<thead>
+<tr>
+<th>AVR/Arduino syntax</th>
+<th>sduino syntax</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>N/A</td>
+<td><code>eeprom_unlock()</code></td>
+<td></td>
+</tr>
+<tr>
+<td>N/A</td>
+<td><code>eeprom_lock()</code></td>
+<td></td>
+</tr>
+<tr>
+<td>N/A</td>
+<td><code>s = eeprom_is_unlocked()</code></td>
+<td>returns true if EEPROM is unlocked</td>
+</tr>
+<tr>
+<td><code>s = eeprom_is_ready()</code></td>
+<td><code>s = eeprom_is_ready()</code></td>
+<td>returns true if EEPROM is ready (no write in progress)</td>
+</tr>
+<tr>
+<td><code>eeprom_write_block(idx, *src, len)</code></td>
+<td><code>eeprom_write_block(idx, *src, len)</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>eeprom_update_block(idx, *src, len)</code></td>
+<td><code>eeprom_update_block(idx, *src, len)</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>eeprom_read_block(idx, *dest, len)</code></td>
+<td><code>eeprom_read_block(idx, *dest, len)</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="access-control-eeprom_lockeeprom_unlock"><strong>Access control: <code>eeprom_lock()</code>/<code>eeprom_unlock()</code></strong></h4>
+<p>To prevent accidental modifications of the EEPROM contents, write access is blocked by default. For write access, the EEPROM has to be unlocked first. This can be done by calling <code>eeprom_unlock()</code>.</p>
+<p>After accessing the EEPROM it can be re-locked by calling <code>eeprom_lock()</code>. Please keep in mind that every call of <code>EEPROM_write()</code> or <code>EEPROM_update()</code> re-locks the EEPROM after the access.</p>
+<p><strong>Note:</strong> Without unlocking, the EEPROM will be permanently locked until the next hardware reset after three failed write accesses.</p>
+<h4 id="status-check-eeprom_is_ready"><strong>Status check: <code>eeprom_is_ready()</code></strong></h4>
+<p>A write access is slow. To avoid stalling the MCU for a longer time by busy waiting it is possible to check the current write status. This can be used to spread out single byte writes over time and use the waiting time in a more productive way.</p>
+<p>This macro returns a non-zero value if the EEPROM is ready for a new write access.</p>
 <h2 id="example">Example</h2>
-<h2 id="implementation-details">Implementation details</h2>
-<h2 id="possible-impovements">Possible impovements</h2></div>
+<p>Stores values read from analog input 0 into the EEPROM. These values will
+stay in the EEPROM when the board is turned off and may be retrieved later
+by another sketch.</p>
+<pre><code class="c">#include &lt;EEPROM.h&gt;
+
+int addr = 0;
+
+void setup()
+{
+}
+
+void loop()
+{
+    int val = analogRead(0) / 4;
+
+    EEPROM_write(addr, val);
+
+    addr = addr + 1;
+    if (addr == EEPROM_length()) {
+        addr = 0;
+    }
+
+    delay(100);
+}
+</code></pre>
+
+<h2 id="accessing-the-eeprom-using-stm8flash">Accessing the EEPROM using <code>stm8flash</code></h2>
+<p>Write simple test data:</p>
+<pre><code class="bash">$ echo -n &quot;abcdefgh&quot; &gt; testdata.bin
+$ hd testdata.bin
+00000000  61 62 63 64 65 66 67 68                           |abcdefgh|
+00000008
+$ stm8flash -c stlinkv2 -p &quot;stm8s103?3&quot; -s eeprom -w testdata.bin
+Determine EEPROM area
+Due to its file extension (or lack thereof), &quot;testdata.bin&quot; is considered as RAW BINARY format!
+8 bytes at 0x4000... OK
+Bytes written: 8
+</code></pre>
+
+<p>read the current EEPROM content:</p>
+<pre><code class="bash">$ stm8flash -c stlinkv2 -p &quot;stm8s103?3&quot; -s eeprom -r e2.img
+Determine EEPROM area
+Due to its file extension (or lack thereof), &quot;e2.img&quot; is considered as RAW BINARY format!
+Reading 640 bytes at 0x4000... OK
+Bytes received: 640
+$ hd e2.img 
+00000000  61 62 63 64 65 66 67 68  00 00 00 00 00 00 00 00  |abcdefgh........|
+00000010  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+*
+00000280
+</code></pre></div>
         </div>
 
         <footer class="col-md-12">
