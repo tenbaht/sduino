@@ -199,3 +199,36 @@ void loop()
 	delay(100);
 }
 ```
+
+
+## Accessing the EEPROM using `stm8flash`
+
+
+Write simple test data:
+
+```bash
+$ echo -n "abcdefgh" > testdata.bin
+$ hd testdata.bin
+00000000  61 62 63 64 65 66 67 68                           |abcdefgh|
+00000008
+$ stm8flash -c stlinkv2 -p "stm8s103?3" -s eeprom -w testdata.bin
+Determine EEPROM area
+Due to its file extension (or lack thereof), "testdata.bin" is considered as RAW BINARY format!
+8 bytes at 0x4000... OK
+Bytes written: 8
+```
+
+read the current EEPROM content:
+
+```bash
+$ stm8flash -c stlinkv2 -p "stm8s103?3" -s eeprom -r e2.img
+Determine EEPROM area
+Due to its file extension (or lack thereof), "e2.img" is considered as RAW BINARY format!
+Reading 640 bytes at 0x4000... OK
+Bytes received: 640
+$ hd e2.img 
+00000000  61 62 63 64 65 66 67 68  00 00 00 00 00 00 00 00  |abcdefgh........|
+00000010  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+*
+00000280
+```
