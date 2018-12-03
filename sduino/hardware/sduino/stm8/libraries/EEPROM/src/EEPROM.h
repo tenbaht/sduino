@@ -27,6 +27,7 @@
 #ifndef EEPROM_h
 #define EEPROM_h
 
+#include <stddef.h>     /* size_t */
 #include <stdint.h>
 #include <stm8s.h>
 
@@ -39,150 +40,34 @@
 typedef uint16_t EEPtr;
 //#define EEPtr uint16_t
 
-inline uint8_t EEPROM_read( int idx )              { return EERef( idx ); }
-void EEPROM_write( int idx, uint8_t val );
-//void EEPROM_update( int idx, uint8_t val )  { EERef( idx ).update( val ); }
+#define EEPROM_cell	((uint8_t*)((uint16_t)FLASH_DATA_START_PHYSICAL_ADDRESS))
 
-inline EEPtr EEPROM_begin()                        { return 0x00; }
-inline EEPtr EEPROM_end()                          { return E2END + 1; }
-inline uint16_t EEPROM_length()                    { return E2END + 1; }
+inline uint8_t EEPROM_read( int idx )		{ return EERef( idx ); }
+void EEPROM_write( int idx, uint8_t val );
+void EEPROM_update( int idx, uint8_t val );
+
+inline EEPtr EEPROM_begin()			{ return 0x00; }
+inline EEPtr EEPROM_end()			{ return E2END + 1; }
+inline uint16_t EEPROM_length()			{ return E2END + 1; }
 
 //Functionality to 'get' and 'put' objects to and from EEPROM.
-#define EEPROM_put(idx,T)	eeprom_write(idx,(uint8_t*)(&T),sizeof(T))
-#define EEPROM_get(idx,T)	eeprom_read(idx,(uint8_t*)(&T),sizeof(T))
+#define EEPROM_put(idx,T)	eeprom_update_block(idx,(uint8_t*)(&(T)),sizeof(T));&(T)
+#define EEPROM_get(idx,T)	eeprom_read_block(idx,(uint8_t*)(&(T)),sizeof(T));&(T)
 
 
-/* --- more flexible interface ------------------------------------------- */
+/* --- a more AVR-like interface ----------------------------------------- */
 
 void eeprom_unlock(void);
 void eeprom_lock(void);
-inline uint8_t eeprom_unlocked(void) {return (FLASH->IAPSR & FLASH_FLAG_DUL);}
-uint16_t eeprom_write(uint16_t idx, uint8_t *ptr, uint16_t len);
-uint16_t eeprom_read(uint16_t idx, uint8_t *ptr, uint16_t len);
 
+// returns true if EEPROM is unlocked
+inline uint8_t eeprom_is_unlocked(void) {return (FLASH->IAPSR & FLASH_FLAG_DUL);}
 
-#if 0
-//#include <inttypes.h>
-//#include <avr/eeprom.h>
-//#include <avr/io.h>
+// returns true if EEPROM is ready (no write in progress)
+inline uint8_t eeprom_is_ready(void) {return (FLASH->IAPSR & FLASH_IAPSR_EOP);}
 
-/***
-    EERef class.
+void eeprom_write_block(uint16_t idx, const uint8_t *ptr, size_t len);
+void eeprom_update_block(uint16_t idx, uint8_t *ptr, size_t len);
+void eeprom_read_block(const uint16_t idx, uint8_t *ptr, size_t len);
 
-    This object references an EEPROM cell.
-    Its purpose is to mimic a typical byte of RAM, however its storage is the EEPROM.
-    This class has an overhead of two bytes, similar to storing a pointer to an EEPROM cell.
-***/
-
-struct EERef{
-
-    EERef( const int index )
-        : index( index )                 {}
-
-    //Access/read members.
-    uint8_t operator*() const            { return eeprom_read_byte( (uint8_t*) index ); }
-    operator uint8_t() const             { return **this; }
-
-    //Assignment/write members.
-    EERef &operator=( const EERef &ref ) { return *this = *ref; }
-    EERef &operator=( uint8_t in )       { return eeprom_write_byte( (uint8_t*) index, in ), *this;  }
-    EERef &operator +=( uint8_t in )     { return *this = **this + in; }
-    EERef &operator -=( uint8_t in )     { return *this = **this - in; }
-    EERef &operator *=( uint8_t in )     { return *this = **this * in; }
-    EERef &operator /=( uint8_t in )     { return *this = **this / in; }
-    EERef &operator ^=( uint8_t in )     { return *this = **this ^ in; }
-    EERef &operator %=( uint8_t in )     { return *this = **this % in; }
-    EERef &operator &=( uint8_t in )     { return *this = **this & in; }
-    EERef &operator |=( uint8_t in )     { return *this = **this | in; }
-    EERef &operator <<=( uint8_t in )    { return *this = **this << in; }
-    EERef &operator >>=( uint8_t in )    { return *this = **this >> in; }
-
-    EERef &update( uint8_t in )          { return  in != *this ? *this = in : *this; }
-
-    /** Prefix increment/decrement **/
-    EERef& operator++()                  { return *this += 1; }
-    EERef& operator--()                  { return *this -= 1; }
-
-    /** Postfix increment/decrement **/
-    uint8_t operator++ (int){
-        uint8_t ret = **this;
-        return ++(*this), ret;
-    }
-
-    uint8_t operator-- (int){
-        uint8_t ret = **this;
-        return --(*this), ret;
-    }
-
-    int index; //Index of current EEPROM cell.
-};
-
-/***
-    EEPtr class.
-
-    This object is a bidirectional pointer to EEPROM cells represented by EERef objects.
-    Just like a normal pointer type, this can be dereferenced and repositioned using
-    increment/decrement operators.
-***/
-
-struct EEPtr{
-
-    EEPtr( const int index )
-        : index( index )                {}
-
-    operator int() const                { return index; }
-    EEPtr &operator=( int in )          { return index = in, *this; }
-
-    //Iterator functionality.
-    bool operator!=( const EEPtr &ptr ) { return index != ptr.index; }
-    EERef operator*()                   { return index; }
-
-    /** Prefix & Postfix increment/decrement **/
-    EEPtr& operator++()                 { return ++index, *this; }
-    EEPtr& operator--()                 { return --index, *this; }
-    EEPtr operator++ (int)              { return index++; }
-    EEPtr operator-- (int)              { return index--; }
-
-    int index; //Index of current EEPROM cell.
-};
-
-/***
-    EEPROMClass class.
-
-    This object represents the entire EEPROM space.
-    It wraps the functionality of EEPtr and EERef into a basic interface.
-    This class is also 100% backwards compatible with earlier Arduino core releases.
-***/
-
-struct EEPROMClass{
-
-    //Basic user access methods.
-    EERef operator[]( const int idx )    { return idx; }
-    uint8_t read( int idx )              { return EERef( idx ); }
-    void write( int idx, uint8_t val )   { (EERef( idx )) = val; }
-    void update( int idx, uint8_t val )  { EERef( idx ).update( val ); }
-
-    //STL and C++11 iteration capability.
-    EEPtr begin()                        { return 0x00; }
-    EEPtr end()                          { return length(); } //Standards requires this to be the item after the last valid entry. The returned pointer is invalid.
-    uint16_t length()                    { return E2END + 1; }
-
-    //Functionality to 'get' and 'put' objects to and from EEPROM.
-    template< typename T > T &get( int idx, T &t ){
-        EEPtr e = idx;
-        uint8_t *ptr = (uint8_t*) &t;
-        for( int count = sizeof(T) ; count ; --count, ++e )  *ptr++ = *e;
-        return t;
-    }
-
-    template< typename T > const T &put( int idx, const T &t ){
-        EEPtr e = idx;
-        const uint8_t *ptr = (const uint8_t*) &t;
-        for( int count = sizeof(T) ; count ; --count, ++e )  (*e).update( *ptr++ );
-        return t;
-    }
-};
-
-static EEPROMClass EEPROM;
-#endif
-#endif
+#endif /* EEPROM_h */
