@@ -1,7 +1,7 @@
 # the required versions for the new build
-COREVERSION=0.4.0-pre1
-SDCCVERSION=10088
-TOOLSVERSION=2017.11.13
+COREVERSION=0.4.0-pre3
+SDCCVERSION=10738
+TOOLSVERSION=2018.12.06
 
 BASEURL=https://github.com/tenbaht/sduino/releases/download/v$(COREVERSION)
 
