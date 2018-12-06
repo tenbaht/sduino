@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Unlocking a MCU by using Tools->Burn Bootloader in the Arduino IDE
 - new library LiquidCrystal_pcf2119 for I2C text LCD based on the PCF2119
 - new library Wire for I2C communication
+- new library EEPROM
 
 ### Changed
 - completed I2C library, master transmit and master receive modes work
@@ -20,7 +21,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   adapter found on STM8 Nucleo boards (and espstlink for Linux
   and OSX)
 - updated SDCC to version 3.8.0
-- Arduino.h is automatically included now, now need for #include "Arduino.h"
+- Arduino.h is automatically included now, no need for #include "Arduino.h"
   anymore
 
 ### Fixed
