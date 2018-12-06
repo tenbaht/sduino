@@ -65,7 +65,7 @@ complicated.
 
 Required packages:
 
-	apt install libusb-1.0-0-dev`
+	apt install libusb-1.0-0-dev
 
 Compiling stm8flash:
 
