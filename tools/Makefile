@@ -40,11 +40,17 @@ windows: stm8gal-windows stm8flash-windows
 
 
 # stm8gal for all platforms
-stm8gal: stm8gal-windows stm8gal-linux32 stm8gal-linux64 stm8gal-osx
+stm8gal: stm8gal-linux32 stm8gal-linux64 stm8gal-osx stm8gal-windows
 
 # stm8flash for all platforms
 stm8flash: stm8flash-windows stm8flash-linux32 stm8flash-linux64 stm8flash-osx
 
+# copy the already compiled binaries into sduino/.../tools
+install:
+	echo "This rule intentionally does not trigger a re-compile."
+	echo "Run 'make all', 'make stm8gal' or 'make stm8flash' if you really"
+	echo "want fresh binaries."
+	cp -avn bin/* ../sduino/hardware/sduino/tools/
 
 # rules for compiling stm8gal
 stm8gal-linux32:
@@ -84,7 +90,7 @@ stm8flash-osx:
 
 stm8flash-windows:
 	make -C stm8flash CC=i686-w64-mingw32-gcc \
-		CFLAGS="-Iwindows/include -I../lib/windows -Lwindows/MinGW32/dll -L../lib/windows" \
+		CFLAGS="-I../lib/windows -L../lib/windows" \
 		PLATFORM=w7 \
 		RELEASE=yes clean all
 	install -s -D stm8flash/stm8flash.exe $(BINDIR)/win/stm8flash.exe
