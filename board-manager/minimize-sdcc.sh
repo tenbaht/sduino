@@ -30,6 +30,10 @@ VERBOSE=
 NAME=$(basename "$FILE")
 NAME=${NAME/snapshot/stm8}
 
+# remove all suffixes
+NAME=${NAME%%.t*}
+NAME=${NAME%%.z*}
+
 # patterns to exclude all unneeded files from unpacking
 TAR_EXCLUDE='--exclude=doc	--exclude=src 	--exclude=non-free
 --exclude=stlcs		--exclude=ds80c390.h	--exclude=pic*
@@ -54,8 +58,9 @@ else
 	tar x${VERBOSE}${TARFLAG}f "$FILE" -C "$TMP" $TAR_EXCLUDE
 fi
 
+# always repack into a tar.bz2 file, even if was a zip before.
 echo "Repacking into file $NAME"
-tar c${VERBOSE}${TARFLAG}f "$NAME" -C "$TMP" sdcc
+tar c${VERBOSE}jf "$NAME.tar.bz2" -C "$TMP" sdcc
 
 echo "cleaning up temporary files"
 rm -rf "$TMP"

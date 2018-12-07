@@ -1,7 +1,10 @@
 # the required versions for the new build
-COREVERSION=0.4.0-pre3
+COREVERSION=0.4.0
 SDCCVERSION=10738
-TOOLSVERSION=2018.12.06
+TOOLSVERSION=2018.12.07
+
+# default the tool version to be the current date as YYYY.MM.DD
+#TOOLSVERSION?=$(shell date '+%Y.%m.%d')
 
 BASEURL=https://github.com/tenbaht/sduino/releases/download/v$(COREVERSION)
 
@@ -44,7 +47,7 @@ release:
 	# update the version number in the changelog if not already done:
 	grep -q "$(COREVERSION)" ../CHANGELOG.md || \
 	sed "/^## \[Unreleased\]/ a\\\n\n## [$(COREVERSION) - $(DATE)]" ../CHANGELOG.md
-	git add ../CHANGELOG.md
+	git add ../CHANGELOG.md ../$(PACKAGEFILE)
 	git add parts/tools-*-$(SDCCVERSION).txt parts/tools-*-$(TOOLSVERSION).txt parts/platform-*-$(COREVERSION).txt
 	git commit
 	git tag v$(COREVERSION)

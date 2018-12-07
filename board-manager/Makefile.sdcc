@@ -1,6 +1,25 @@
 NAME=sdcc
-COREVERSION?=0.3.0
-SDCCVERSION?=10088
+ifndef COREVERSION
+$(error COREVERSION is not set)
+endif
+
+ifndef SDCCVERSION
+$(error SDCCVERSION is not set)
+endif
+
+# Makefile.sdcc
+#
+# Build the sdcc archive files.
+#
+# Targets:
+#
+# - (default):
+#	build a new tools entry in the parts directory.
+# - repack SDCCVERSION=10738 COREVERSION=xx
+#	repack the snapshot files in the Downloads directory into stipped
+#	down SDunino minimal packages.
+#	COREVERSION doesn't matter, but needs to be present.
+
 
 # where to look for the original SDCC snapshot files
 #SNAPSHOTDIR=sdcc-snapshots
@@ -10,6 +29,8 @@ SDCCDIR=release/v$(COREVERSION)
 PARTSDIR=parts
 
 VERSION=$(SDCCVERSION)
+
+.PHONY: repack
 
 #
 ### No user serviceable part below here. Only generated content. ########
@@ -28,3 +49,8 @@ TOOLS_ENTRY=$(PARTSDIR)/tools-entry-$(NAME)-$(VERSION).txt
 
 $(TOOLS_ENTRY) : $(SDCC_TARS)
 	./gen_tools_entry.sh "$(TOOLS_STEM)" "$(VERSION)" "$(COREVERSION)" > $@
+
+repack:
+	for i in ~/Downloads/sdcc*$(SDCCVERSION)*; do \
+		./minimize-sdcc.sh $$i; \
+	done
