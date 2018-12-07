@@ -1,0 +1,31 @@
+                {
+                    "name": "sdcc",
+                    "version": "build.10738",
+                    "systems": [
+                        {
+                            "host": "x86_64-pc-linux-gnu",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.4.0/sdcc-stm8-amd64-unknown-linux2.5-20181206-10738.tar.bz2",
+                            "archiveFileName": "sdcc-stm8-amd64-unknown-linux2.5-20181206-10738.tar.bz2",
+                            "checksum": "SHA-256:d5f3d1d1699c6edeb1db6b9a38f0b0c4c28d1ef1cd267dedb9b3f5a65e07a60e",
+                            "size": "2637159"
+                        },{
+                            "host": "i686-pc-linux-gnu",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.4.0/sdcc-stm8-i386-unknown-linux2.5-20181205-10738.tar.bz2",
+                            "archiveFileName": "sdcc-stm8-i386-unknown-linux2.5-20181205-10738.tar.bz2",
+                            "checksum": "SHA-256:d25344d392707773712f71d6c3dd63b4b80ce92e7999664e78a7b186ae4485d6",
+                            "size": "2701297"
+                        },{
+                            "host": "i686-mingw32",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.4.0/sdcc-stm8-i586-mingw32msvc-20181205-10738.tar.bz2",
+                            "archiveFileName": "sdcc-stm8-i586-mingw32msvc-20181205-10738.tar.bz2",
+                            "checksum": "SHA-256:eecfb34f085f0adc1b9544a5e32168907a88145a469f4733551b79b5ba91ad75",
+                            "size": "3063721"
+                        },{
+                            "host": "x86_64-apple-darwin",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.4.0/sdcc-stm8-x86_64-apple-macosx-20181205-10738.tar.bz2",
+                            "archiveFileName": "sdcc-stm8-x86_64-apple-macosx-20181205-10738.tar.bz2",
+                            "checksum": "SHA-256:c0ece00b5f20411307b7a5e5bd527c127421e7df5b10946c45ad3305c46732c2",
+                            "size": "2877491"
+                        }
+                    ]
+                },

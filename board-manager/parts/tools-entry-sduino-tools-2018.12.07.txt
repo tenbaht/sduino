@@ -1,0 +1,31 @@
+                {
+                    "name": "STM8Tools",
+                    "version": "2018.12.07",
+                    "systems": [
+                        {
+                            "host": "i686-pc-linux-gnu",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.4.0/sduino-tools_linux32-2018.12.07.tar.bz2",
+                            "archiveFileName": "sduino-tools_linux32-2018.12.07.tar.bz2",
+                            "checksum": "SHA-256:3e7b2eded467e29f99024b639dbe7fff444ee5b43e98bae2ba7c9c32d7c15bb8",
+                            "size": "42628"
+                        },{
+                            "host": "x86_64-pc-linux-gnu",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.4.0/sduino-tools_linux64-2018.12.07.tar.bz2",
+                            "archiveFileName": "sduino-tools_linux64-2018.12.07.tar.bz2",
+                            "checksum": "SHA-256:342243c369e7aaa363dcef3048d973a4e90072ffe68a9eeda1f6e679d9cc8b28",
+                            "size": "43223"
+                        },{
+                            "host": "x86_64-apple-darwin",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.4.0/sduino-tools_macosx-2018.12.07.tar.bz2",
+                            "archiveFileName": "sduino-tools_macosx-2018.12.07.tar.bz2",
+                            "checksum": "SHA-256:2a3680070638e9af8dd5a5af9f52d1643bf29e765b9caa3c996349ccc24f1945",
+                            "size": "45664"
+                        },{
+                            "host": "i686-mingw32",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.4.0/sduino-tools_mingw32-2018.12.07.tar.bz2",
+                            "archiveFileName": "sduino-tools_mingw32-2018.12.07.tar.bz2",
+                            "checksum": "SHA-256:9d68ff3deb35d840aec8a8f3a92465869990c900e36880cc1298e6fd9d8a7097",
+                            "size": "5485803"
+                        }
+                    ]
+                },
