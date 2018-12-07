@@ -11,16 +11,23 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Support for Sduino-UNO board (s8uno)
 - Support for Sduino MB board (mb208)
 - Unlocking a MCU by using Tools->Burn Bootloader in the Arduino IDE
+- new library LiquidCrystal_pcf2119 for I2C text LCD based on the PCF2119
+- new library Wire for I2C communication
+- new library EEPROM
 
 ### Changed
 - completed I2C library, master transmit and master receive modes work
 - updated stm8flash to support more STM8 devices and the ST-Link/V2.1
   adapter found on STM8 Nucleo boards (and espstlink for Linux
   and OSX)
-- updated SDCC to version 3.8.0
+- updated SDCC to version 3.8.1
+- Arduino.h is automatically included now, no need for #include "Arduino.h"
+  anymore
 
 ### Fixed
 - Serial_serial_print_sn()
+- object dependencies are calculated correctly for *.obj suffix
+- Include path for sduino.mk in all example Makefiles
 
 
 

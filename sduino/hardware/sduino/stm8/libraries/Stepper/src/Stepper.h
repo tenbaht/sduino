@@ -193,8 +193,8 @@ void Stepper_stepMotor(struct Stepper_s *this, int this_step);
  * -------------
  *
  * Typically as a global declaration, but a local declaration would be
- * possible as well. Has to be at the placed in the source file before any
- * of the "methods" can be used. Supports polymorphism.
+ * possible as well. Has to be placed in the source file before any of the
+ * "methods" can be used. Supports polymorphism.
  *
  * Variants are
  *	2 phase (bipolar) motor
@@ -212,7 +212,7 @@ void Stepper_stepMotor(struct Stepper_s *this, int this_step);
  *
  * There is no explicit constructor method. The output mode is set
  * automatically right before the very first motor step.
-[A *
+ *
  * This means that the driver pins stay in input mode and are left floating
  * until the first step is requested. This won't be a problem in most cases
  * as most motor drivers are using pull-up or pull-down resistors to ensure

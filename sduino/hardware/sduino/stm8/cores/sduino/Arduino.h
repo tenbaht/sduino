@@ -24,7 +24,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <math.h>
-//#include <stdint.h>
+#include <stdint.h>
 
 //#include <avr/pgmspace.h>
 //#include <avr/io.h>
@@ -128,6 +128,7 @@ void yield(void);
 #define clockCyclesToMicroseconds(a) ( (a) / clockCyclesPerMicrosecond() )
 #define microsecondsToClockCycles(a) ( (a) * clockCyclesPerMicrosecond() )
 
+#define byte(w) ((uint8_t)(w))
 #define lowByte(w) ((uint8_t) ((w) & 0xff))
 #define highByte(w) ((uint8_t) ((w) >> 8))
 

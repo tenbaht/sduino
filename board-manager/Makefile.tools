@@ -1,7 +1,17 @@
 NAME=sduino-tools
-COREVERSION?=0.3.2
-# default the tool version to be the current date as YYYY.MM.DD
-TOOLSVERSION?=$(shell date '+%Y.%m.%d')
+
+ifndef COREVERSION
+$(error COREVERSION is not set)
+endif
+
+ifndef SDCCVERSION
+$(error SDCCVERSION is not set)
+endif
+
+ifndef TOOLSVERSION
+$(error TOOLSVERSION is not set)
+endif
+
 
 # Where to find the tools directory
 BASEDIR=../sduino/hardware/sduino
@@ -59,7 +69,7 @@ $(TOOLS_MACOSX): | $(ARCHIVEDIR)
 
 $(TOOLS_WINDOWS): | $(ARCHIVEDIR)
 	@echo "Generating the tools archive file for Windows."
-	tar cjf $@ $(EXCLUDES) -C $(BASEDIR) tools/wrapper tools/win
+	tar cjhf $@ $(EXCLUDES) -C $(BASEDIR) tools/wrapper tools/win
 
 
 # make a new release directory if not present

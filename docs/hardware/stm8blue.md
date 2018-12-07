@@ -14,11 +14,11 @@ internal oscillator, 8kB flash, 1kB RAM, and 640 byte EEPROM. The CPU
 includes a UART, SPI, I2C, PWM, 10 bit ADC, 3 timer, and up to 14 I/O pins -
 quite similar to an Atmel ATmega8.
 
-One (red) LED is connected to GPIO PB5 (CPU pin 11). Please keep in mind
-that this is one of the I2C signals and **using the LED blocks the I2C
-bus**. The push button is for reset. The CPU runs on 3.3V, a linear
-regulator is integrated on the board. The micro USB connector is only for
-(5V) power supply, the data lines are not connected.
+One (red) LED is connected to GPIO PB5 (CPU pin 11). This LED is low active.
+Please keep in mind that this is one of the I2C signals and **using the LED
+blocks the I2C bus**. The push button is for reset. The CPU runs on 3.3V, a
+linear regulator is integrated on the board. The micro USB connector is only
+for (5V) power supply, the data lines are not connected.
 
 All CPU pins are easily accessible on (optional) pin headers (pitch 2.54mm,
 perfect for breadboards).

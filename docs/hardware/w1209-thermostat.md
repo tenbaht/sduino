@@ -11,7 +11,7 @@ STM8S000F3P6 microcontroller, 8 KB Flash, 1 KB RAM, 128 bytes EEPROM
 - three digit 7-segment-display, multiplexed
 - external NTC temperture sensor, 10k
 
-But please be aware that the PCB layouts violates all common safety rules on
+But please be aware that the PCB layout violates all common safety rules on
 the high voltage side. No sufficient creeping distance, the PCB traces are
 way too small to actually carry 15A and the screw terminals are not up to
 that task either.

@@ -1,0 +1,22 @@
+diff --git a/STM8S_StdPeriph_Driver/inc/stm8s.h b/STM8S_StdPeriph_Driver/inc/stm8s.h
+index 8579639..cc5750e 100644
+--- a/STM8S_StdPeriph_Driver/inc/stm8s.h
++++ b/STM8S_StdPeriph_Driver/inc/stm8s.h
+@@ -216,6 +216,9 @@
+ #define     __O     volatile         /*!< defines 'write only' permissions    */
+ #define     __IO    volatile         /*!< defines 'read / write' permissions  */
+ 
++#ifdef USE_STDINT
++#include <stdint.h>
++#else
+ /*!< Signed integer types  */
+ typedef   signed char     int8_t;
+ typedef   signed short    int16_t;
+@@ -225,6 +228,7 @@ typedef   signed long     int32_t;
+ typedef unsigned char     uint8_t;
+ typedef unsigned short    uint16_t;
+ typedef unsigned long     uint32_t;
++#endif
+ 
+ /*!< STM8 Standard Peripheral Library old types (maintained for legacy purpose) */
+ 

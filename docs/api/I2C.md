@@ -19,8 +19,8 @@ mangeling was needed to distinguish the different variant of the `read()`
 and `write()` method. Apart from this replacing the dots in the method names
 for underscores is all it needs.
 
-The pullup setting is missing because this function is supported by the STM8
-hardware.
+The pullup setting is missing because this function is not supported by the
+STM8 hardware.
 
 
 Arduino syntax				|sduino syntax

@@ -87,7 +87,7 @@ OVERRIDE_EXECUTABLES=yes
 ARDUINO_SKETCHBOOK	= /tmp	# temporarly, to prevent usage of the real libs
 ARDMK_VENDOR	= sduino
 ARCHITECTURE	= stm8
-CPPFLAGS	+= -Ddouble=float \
+CPPFLAGS	+= -Ddouble=float -DUSE_STDINT \
 	-I. -I$(ARDUINO_DIR)/hardware/sduino/stm8/STM8S_StdPeriph_Driver/inc \
 	-I/opt/sdcc/share/sdcc/include/
 #CFLAGS		= -I ../STM8S_StdPeriph_Driver/inc

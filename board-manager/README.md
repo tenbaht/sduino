@@ -35,13 +35,23 @@ After testing, check in the newly generated files and update the Changelog:
 	make release
 
 
-For testing purposes only (!!), it is possible to use the simpler systax
+For testing purposes only (!!), it is possible to use the simpler syntax
 using makefile variables on the command line:
 
 	make COREVERSION=0.3.2 core
 
 will generate a fresh archive for the core files and update the package file
 accordingly.
+
+
+## Preparing the parts
+
+### SDCC
+
+First: Update the SDCC version number in Makefile and Makefile.sdcc
+
+- Download snapshot files for all supported systems into ~/Downloads
+- `make repack` minimizes all archives into small SDunio minimal packages
 
 
 ## Supporting tools
@@ -54,9 +64,8 @@ tools field of the json template file to assemble the final package file.
 `gen_tools_entry.sh`: Generate a tools entry for a sdcc or STM8Tools
 archive.
 
-Makefile.core
-Makefile.sdcc
-Makefile.tools
+`Makefile.core`, `Makefile.sdcc`, `Makefile.tools`: Pack the archive for one
+component into release/ and generate the description in the parts/ directory.
 
 `minimize-sdcc.sh`: Repack a [SDCC snapshot
 build](http://sdcc.sourceforge.net/snap.php) into a minimal compiler package

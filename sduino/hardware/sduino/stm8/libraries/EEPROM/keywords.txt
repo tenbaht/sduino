@@ -1,0 +1,40 @@
+#######################################
+# Syntax Coloring Map For EEPROM
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+EEPROM	KEYWORD1
+EERef	KEYWORD1
+EEPtr	KEYWORD2
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+EEPROM_read		KEYWORD2
+EEPROM_write		KEYWORD2
+EEPROM_update		KEYWORD2
+
+EEPROM_put		KEYWORD2
+EEPROM_get		KEYWORD2
+
+EEPROM_begin		KEYWORD2
+EEPROM_end		KEYWORD2
+EEPROM_length		KEYWORD2
+
+eeprom_unlock		KEYWORD2
+eeprom_lock		KEYWORD2
+eeprom_is_unlocked	KEYWORD2
+eeprom_is_ready		KEYWORD2
+
+eeprom_read_block	KEYWORD2
+eeprom_write_block	KEYWORD2
+eeprom_update_block	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+

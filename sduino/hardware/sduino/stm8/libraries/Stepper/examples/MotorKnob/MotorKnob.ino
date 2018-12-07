@@ -13,18 +13,17 @@
 // change this to the number of steps on your motor
 #define STEPS 200
 
-Stepper(myStepper);
+// create an instance of the stepper class, specifying
+// the number of steps of the motor and the pins it's
+// attached to
+Stepper(stepper,STEPS, 8, 9, 10, 11);
 
 // the previous reading from the analog input
 int previous = 0;
 
 void setup() {
-  // create an instance of the stepper class, specifying
-  // the number of steps of the motor and the pins it's
-  // attached to
-  myStepper_4phase(STEPS, 8, 9, 10, 11);
   // set the speed of the motor to 30 RPMs
-  myStepper_setSpeed(30);
+  stepper_setSpeed(30);
 }
 
 void loop() {
@@ -33,7 +32,7 @@ void loop() {
 
   // move a number of steps equal to the change in the
   // sensor reading
-  myStepper_step(val - previous);
+  stepper_step(val - previous);
 
   // remember the previous value of the sensor
   previous = val;

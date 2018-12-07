@@ -1,6 +1,13 @@
 /*
-  main.cpp - Main loop for Arduino sketches
-  Copyright (c) 2005-2013 Arduino Team.  All right reserved.
+  EEPROM.h - EEPROM library
+  Plain-C version for SDuino by Michael Mayer 2018.
+
+  This is a rewrite from scratch. The basic API is inspired by the
+  Arduino EEPROM library, but none of the operator overloading functions
+  can be ported in any sensible way to C.
+
+  Original Copyright (c) 2006 David A. Mellis.  All right reserved.
+  New version by Christopher Andrews 2015.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -17,26 +24,19 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include <Arduino.h>
+#include "EEPROM.h"
 
-// make sure to define prototypes for all used interrupts
-//#include "stm8s_it.h"
 
-unsigned char runSerialEvent;
+/* --- Arduino-like interface -------------------------------------------- */
 
-int main(void)
+void EEPROM_write( int idx, uint8_t val )
 {
-	init();
-
-	initVariant();
-
-	setup();
-    
-	for (;;) {
-		loop();
-		if (runSerialEvent) serialEvent();
+	eeprom_unlock();
+	if (eeprom_is_unlocked())
+	{
+		// write only after a successful unlock.
+		EERef(idx) = val;
+		// re-lock the EEPROM again.
+		FLASH->IAPSR &= FLASH_FLAG_DUL;
 	}
-        
-//	return 0;
 }
-

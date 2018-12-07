@@ -1,0 +1,29 @@
+                {
+                    "name": "Sduino STM8 plain C core (non-C++)",
+                    "architecture": "stm8",
+                    "version": "0.4.0",
+                    "category": "Contributed",
+                    "boards": [
+                        {"name": "STM8S103F3 Breakout Board"},
+                        {"name": "STM8S105C6 Discovery Board"},
+                        {"name": "STM8S105K4T6 Breakout Board"},
+                        {"name": "sduino UNO (STM8S105K6)"},
+                        {"name": "sduino MB (STM8S208MBT6B)"}
+                    ],
+                    "toolsDependencies": [
+                        {
+                            "name": "STM8Tools",
+                            "version": "2018.12.07",
+                            "packager": "sduino"
+                        },
+                        {
+                            "name": "sdcc",
+                            "version": "build.10738",
+                            "packager": "sduino"
+                        }
+                    ],
+                    "url": "https://github.com/tenbaht/sduino/releases/download/v0.4.0/sduino-core-0.4.0.tar.bz2",
+                    "archiveFileName": "sduino-core-0.4.0.tar.bz2",
+                    "checksum": "SHA-256:a71dee029991653577c63c9cebe70095b2c08d5b55a9aa0af836f527daf44d8c",
+                    "size": "6110413"
+                },

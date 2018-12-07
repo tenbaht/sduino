@@ -49,6 +49,7 @@
 * `tone()`
 * `noTone()`
 * `pulseIn()`
+* handling of write error in `Print` (methods `setWriteError` etc.)
 * module WCharacter
 * module WString
 
