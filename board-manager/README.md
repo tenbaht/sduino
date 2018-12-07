@@ -44,6 +44,16 @@ will generate a fresh archive for the core files and update the package file
 accordingly.
 
 
+## Preparing the parts
+
+### SDCC
+
+First: Update the SDCC version number in Makefile and Makefile.sdcc
+
+- Download snapshot files for all supported systems into ~/Downloads
+- `make repack` minimizes all archives into small SDunio minimal packages
+
+
 ## Supporting tools
 
 `assemble.sh`: Insert all objects from parts/ directory in the platform and

@@ -1467,7 +1467,6 @@ pre-build:
 
 $(TARGET_HEX): 	$(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS)
 	$(CC) $(LDFLAGS) $(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS) \
-		$(filter %/core/main.c.$(OBJSUFFIX),$(CORE_OBJS)) \
 		$(OTHER_LIBS) -lstm8 $(LINKER_SCRIPTS) -o $@
 	$(call avr_size,$<,$@)
 ifneq ($(strip $(HEX_MAXIMUM_SIZE)),)
@@ -1483,7 +1482,6 @@ $(TARGET_ELF): 	$(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS)
 
 $(CORE_LIB):	$(CORE_OBJS) $(LIB_OBJS) $(PLATFORM_LIB_OBJS) $(USER_LIB_OBJS)
 		$(AR) rcs $@ \
-			$(filter-out %/core/main.c.$(OBJSUFFIX),$(CORE_OBJS)) \
 			$(LIB_OBJS) $(PLATFORM_LIB_OBJS) $(USER_LIB_OBJS)
 
 error_on_caterina:

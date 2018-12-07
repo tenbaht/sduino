@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - updated stm8flash to support more STM8 devices and the ST-Link/V2.1
   adapter found on STM8 Nucleo boards (and espstlink for Linux
   and OSX)
-- updated SDCC to version 3.8.0
+- updated SDCC to version 3.8.1
 - Arduino.h is automatically included now, no need for #include "Arduino.h"
   anymore
 

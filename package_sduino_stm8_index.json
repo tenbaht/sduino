@@ -12,6 +12,35 @@
                 {
                     "name": "Sduino STM8 plain C core (non-C++)",
                     "architecture": "stm8",
+                    "version": "0.4.0",
+                    "category": "Contributed",
+                    "boards": [
+                        {"name": "STM8S103F3 Breakout Board"},
+                        {"name": "STM8S105C6 Discovery Board"},
+                        {"name": "STM8S105K4T6 Breakout Board"},
+                        {"name": "sduino UNO (STM8S105K6)"},
+                        {"name": "sduino MB (STM8S208MBT6B)"}
+                    ],
+                    "toolsDependencies": [
+                        {
+                            "name": "STM8Tools",
+                            "version": "2018.12.07",
+                            "packager": "sduino"
+                        },
+                        {
+                            "name": "sdcc",
+                            "version": "build.10738",
+                            "packager": "sduino"
+                        }
+                    ],
+                    "url": "https://github.com/tenbaht/sduino/releases/download/v0.4.0/sduino-core-0.4.0.tar.bz2",
+                    "archiveFileName": "sduino-core-0.4.0.tar.bz2",
+                    "checksum": "SHA-256:a71dee029991653577c63c9cebe70095b2c08d5b55a9aa0af836f527daf44d8c",
+                    "size": "6110413"
+                },
+                {
+                    "name": "Sduino STM8 plain C core (non-C++)",
+                    "architecture": "stm8",
                     "version": "0.3.3",
                     "category": "Contributed",
                     "boards": [
@@ -117,6 +146,37 @@
             "tools" : [
                 {
                     "name": "STM8Tools",
+                    "version": "2018.12.07",
+                    "systems": [
+                        {
+                            "host": "i686-pc-linux-gnu",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.4.0/sduino-tools_linux32-2018.12.07.tar.bz2",
+                            "archiveFileName": "sduino-tools_linux32-2018.12.07.tar.bz2",
+                            "checksum": "SHA-256:3e7b2eded467e29f99024b639dbe7fff444ee5b43e98bae2ba7c9c32d7c15bb8",
+                            "size": "42628"
+                        },{
+                            "host": "x86_64-pc-linux-gnu",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.4.0/sduino-tools_linux64-2018.12.07.tar.bz2",
+                            "archiveFileName": "sduino-tools_linux64-2018.12.07.tar.bz2",
+                            "checksum": "SHA-256:342243c369e7aaa363dcef3048d973a4e90072ffe68a9eeda1f6e679d9cc8b28",
+                            "size": "43223"
+                        },{
+                            "host": "x86_64-apple-darwin",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.4.0/sduino-tools_macosx-2018.12.07.tar.bz2",
+                            "archiveFileName": "sduino-tools_macosx-2018.12.07.tar.bz2",
+                            "checksum": "SHA-256:2a3680070638e9af8dd5a5af9f52d1643bf29e765b9caa3c996349ccc24f1945",
+                            "size": "45664"
+                        },{
+                            "host": "i686-mingw32",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.4.0/sduino-tools_mingw32-2018.12.07.tar.bz2",
+                            "archiveFileName": "sduino-tools_mingw32-2018.12.07.tar.bz2",
+                            "checksum": "SHA-256:9d68ff3deb35d840aec8a8f3a92465869990c900e36880cc1298e6fd9d8a7097",
+                            "size": "5485803"
+                        }
+                    ]
+                },
+                {
+                    "name": "STM8Tools",
                     "version": "2017.11.13",
                     "systems": [
                         {
@@ -193,6 +253,37 @@
                             "archiveFileName": "sduino-tools_mingw32-2017.10.21.tar.bz2",
                             "checksum": "SHA-256:dfdc7364a0d6749d3d1693ce5b5311ace4d80425225c98a90c5c527e375d1ecd",
                             "size": "5541472"
+                        }
+                    ]
+                },
+                {
+                    "name": "sdcc",
+                    "version": "build.10738",
+                    "systems": [
+                        {
+                            "host": "x86_64-pc-linux-gnu",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.4.0/sdcc-stm8-amd64-unknown-linux2.5-20181206-10738.tar.bz2",
+                            "archiveFileName": "sdcc-stm8-amd64-unknown-linux2.5-20181206-10738.tar.bz2",
+                            "checksum": "SHA-256:d5f3d1d1699c6edeb1db6b9a38f0b0c4c28d1ef1cd267dedb9b3f5a65e07a60e",
+                            "size": "2637159"
+                        },{
+                            "host": "i686-pc-linux-gnu",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.4.0/sdcc-stm8-i386-unknown-linux2.5-20181205-10738.tar.bz2",
+                            "archiveFileName": "sdcc-stm8-i386-unknown-linux2.5-20181205-10738.tar.bz2",
+                            "checksum": "SHA-256:d25344d392707773712f71d6c3dd63b4b80ce92e7999664e78a7b186ae4485d6",
+                            "size": "2701297"
+                        },{
+                            "host": "i686-mingw32",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.4.0/sdcc-stm8-i586-mingw32msvc-20181205-10738.tar.bz2",
+                            "archiveFileName": "sdcc-stm8-i586-mingw32msvc-20181205-10738.tar.bz2",
+                            "checksum": "SHA-256:eecfb34f085f0adc1b9544a5e32168907a88145a469f4733551b79b5ba91ad75",
+                            "size": "3063721"
+                        },{
+                            "host": "x86_64-apple-darwin",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.4.0/sdcc-stm8-x86_64-apple-macosx-20181205-10738.tar.bz2",
+                            "archiveFileName": "sdcc-stm8-x86_64-apple-macosx-20181205-10738.tar.bz2",
+                            "checksum": "SHA-256:c0ece00b5f20411307b7a5e5bd527c127421e7df5b10946c45ad3305c46732c2",
+                            "size": "2877491"
                         }
                     ]
                 },
