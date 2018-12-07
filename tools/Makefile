@@ -50,7 +50,8 @@ install:
 	echo "This rule intentionally does not trigger a re-compile."
 	echo "Run 'make all', 'make stm8gal' or 'make stm8flash' if you really"
 	echo "want fresh binaries."
-	cp -avn bin/* ../sduino/hardware/sduino/tools/
+	cp -av bin/linux* bin/macosx ../sduino/hardware/sduino/tools/
+	cp -av bin/win/* ../sduino/hardware/sduino/tools/win
 
 # rules for compiling stm8gal
 stm8gal-linux32:
