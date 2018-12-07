@@ -54,11 +54,13 @@ install:
 	cp -av bin/win/* ../sduino/hardware/sduino/tools/win
 
 # rules for compiling stm8gal
+# To pass the extra CFLAGS and LDFLAGS we need a temporary (modified) Makefile
 stm8gal-linux32:
-	sed '/FLAGS/ s/ = / += /' stm8gal/Makefile > stm8gal/Makefile.linux32
-	CFLAGS=-m32 LDFLAGS=-m32 make -C stm8gal -f Makefile.linux32 clean all
+	TMPMF=$$(mktemp); \
+	sed '/FLAGS/ s/ = / += /' stm8gal/Makefile > $$TMPMF; \
+	CFLAGS=-m32 LDFLAGS=-m32 make -C stm8gal -f $$TMPMF clean all; \
+	rm -f $$TMPMF
 	install -s -D stm8gal/stm8gal $(BINDIR)/linux32/stm8gal
-	rm -f stm8gal/Makefile.linux32
 
 stm8gal-linux64:
 	make -C stm8gal clean all
