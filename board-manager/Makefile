@@ -46,7 +46,7 @@ DATE=$(shell date '+%F')
 release:
 	# update the version number in the changelog if not already done:
 	grep -q "$(COREVERSION)" ../CHANGELOG.md || \
-	sed "/^## \[Unreleased\]/ a\\\n\n## [$(COREVERSION) - $(DATE)]" ../CHANGELOG.md
+	sed -i "/^## \[Unreleased\]/ a\\\n\n## [$(COREVERSION) - $(DATE)]" ../CHANGELOG.md
 	git add ../CHANGELOG.md ../$(PACKAGEFILE)
 	git add parts/tools-*-$(SDCCVERSION).txt parts/tools-*-$(TOOLSVERSION).txt parts/platform-*-$(COREVERSION).txt
 	git commit
