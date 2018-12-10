@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- using busybox as command shell for windows to run the wrapper scripts
 
 
 ## [0.4.0 - 2018-12-07]
