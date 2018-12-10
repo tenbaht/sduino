@@ -1481,8 +1481,7 @@ $(TARGET_ELF): 	$(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS)
 		$(CC) $(LDFLAGS) -o $@ $(LOCAL_OBJS) $(CORE_LIB) $(OTHER_OBJS) $(OTHER_LIBS) -lc -lm $(LINKER_SCRIPTS)
 
 $(CORE_LIB):	$(CORE_OBJS) $(LIB_OBJS) $(PLATFORM_LIB_OBJS) $(USER_LIB_OBJS)
-		$(AR) rcs $@ \
-			$(LIB_OBJS) $(PLATFORM_LIB_OBJS) $(USER_LIB_OBJS)
+		$(AR) rcs $@ $^
 
 error_on_caterina:
 		$(ERROR_ON_CATERINA)
