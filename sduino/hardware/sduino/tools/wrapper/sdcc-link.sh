@@ -97,7 +97,8 @@ shift
 vprint 2 "copy *.a to *.lib"
 for FILE; do
 	vprint 2 "- checking parameter '$FILE'"
-	if expr "$FILE" : ".*\.a$"; then	# bash, dash, busybox ash
+	# using expr works for bash, dash, busybox ash
+	if expr "$FILE" : ".*\.a$" > /dev/null; then
 		NEW=${FILE%.a}.lib
 		vprint 1 "copy $FILE to $NEW"
 		cp -a "$FILE" "$NEW"
