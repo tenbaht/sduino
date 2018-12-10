@@ -28,6 +28,11 @@ vprint ()
 }
 
 
+# parse the script options
+#
+# This is very crude. The options are allowed only as the very first argments
+# and they are required to be used in exactly this order.
+
 VERBOSE=0
 USE_COLOR=0
 if [ "$1" == "-v" ]; then
@@ -44,6 +49,8 @@ if [ "$1" == "-c" ]; then
 	shift
 fi
 
+
+# define color codes
 
 if [ $USE_COLOR -gt 0 ]; then
 # ANSI color codes to beautify the output:
@@ -66,27 +73,6 @@ WHITE='\033[1;37m'
 OFF='\033[0m'
 fi
 
-# check if cp is in the path using 'command -v' (a builtin POSIX function)
-if ! command -v cp > /dev/null; then
-	# Ok, this means we are on a Windows system and we have to find a
-	# way to access cp and rm in ../win. A simple 'cd ../win' or
-	# '../win/cp' does't work, as the current working directory is still
-	# the Arduino binary directory.
-	#
-	# This looks ok, but it doesn't work on some Windows systems:
-	# (No idea why)
-	# PATH="${0%/wrapper/*}"/win:$PATH
-	#
-	# This is technically wrong, but surprisingly it works with Windows:
-	# cd $0/../..
-	# PATH=$(pwd)/win:$PATH
-	#
-	# Use cd/pwd as a replacement for 'realpath' using only builtins.
-	# It has the positive side effect of converting from Windows to Unix
-	# path syntax avoiding all these backslash issues.
-	cd "${0%/wrapper/*}"
-	PATH=$(pwd)/win:$PATH
-fi
 
 SDCC="$1"
 shift
@@ -106,25 +92,55 @@ shift
 #
 # bash, dash: if [[ "$FILE" == *.a ]]; then
 # ash uses 'expr': expr "$FILE" : ".*\.a$"; then
-
-declare -a OBJS
-while [ $# -gt 0 ]; do
-	echo $1
-	FILE=$1
-#	if [[ "$FILE" == *.a ]]; then		# easy, but bash and dash only
+#
+# This is all pure POSIX, it works for bash, dash and busybox ash
+vprint 2 "copy *.a to *.lib"
+for FILE; do
+	vprint 2 "- checking parameter '$FILE'"
 	if expr "$FILE" : ".*\.a$"; then	# bash, dash, busybox ash
-		FILE=${FILE%.a}.lib
-		cp -a "$1" "$FILE"
+		NEW=${FILE%.a}.lib
+		vprint 1 "copy $FILE to $NEW"
+		cp -a "$FILE" "$NEW"
 	fi
-	if [[ "$FILE" == *.o ]]; then
-		FILE=${FILE%.o}.rel
-	fi
-	OBJS+=("${FILE}")
-	shift
 done
 
+
+# replace *.o with *.rel and *.a with *.lib
+#
+# On bash this is a simple pattern substituiton:
+# set -- "${@/.o/.rel}"
+# set -- "${@/.a/.lib}"
+#
+# Unfortunatly, this does not work with dash or ash. dash does not support
+# pattern substituition in general. busybox ash does not support arrays and
+# shortens the arg list to the first argument, deleting all the rest.
+#
+# As a workaround we combine the argument list into a single string. By
+# using TAB as a field separator we can even deal with spaces, backspaces
+# and colons in file names.
+
+# use tab as field separator
+IFS=$'\t'
+
+
+# combine all arguments into a single string with field separator and add a
+# TAB at the end. This allows the pattern below to match the last argument
+# as well.
+vprint 2 "Combine all arguments into a single string"
+line="$*	"
+
+# do the filename replacements: (bash and ash, not dash)
+# Needs a double slash to replace all occurencies, not only the first one.
+#line=${line//.o/.rel}
+#line=${line//.a/.lib}
+# replace all the occurencies just before a field separator
+vprint 2 "- before substitution: $line"
+line="${line//.o	/.rel	}"
+line="${line//.a	/.lib	}"
+vprint 2 "- after substitution: $line"
+
 vprint 1 "cmd: ${ORANGE}$SDCC $line${OFF}"
-"$SDCC" "${OBJS[@]}"
+"$SDCC" $line
 
 # propagate the sdcc exit code
 exit $?
