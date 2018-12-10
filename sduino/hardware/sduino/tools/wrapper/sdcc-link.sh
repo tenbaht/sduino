@@ -1,16 +1,46 @@
 #!/bin/bash
 
-# usage: sdcc-link [.lib and .rel files] re5 [other flags and files]
+# usage: sdcc-link [options] [.lib and .rel files] re5 [other flags and files]
+#
+# possible script options (options in this order only):
+# -v:	verbose
+# -d:	debug mode (more verbose), includes coloring the output
+# -c:	color the output
+
+
+### local functions ######################################################
+
+# verbose print
+#
+# usage: vprint min_level msg
+#
+# prints a message if the verbosity level is equal or higher than the required
+# min_level
+#
+vprint ()
+{
+	local level=$1
+
+	shift
+	if [ $VERBOSE -ge $level ]; then
+		echo -e "$@"
+	fi
+}
+
 
 VERBOSE=0
 USE_COLOR=0
 if [ "$1" == "-v" ]; then
 	VERBOSE=1;
 	shift
-elif [ "$1" == "-vv" ]; then
+elif [ "$1" == "-d" ]; then
 	VERBOSE=2
-#	USE_COLOR=1
+	USE_COLOR=1
 	set -x
+	shift
+fi
+if [ "$1" == "-c" ]; then
+	USE_COLOR=1;
 	shift
 fi
 
@@ -61,12 +91,8 @@ fi
 SDCC="$1"
 shift
 
-if [ $VERBOSE ]; then
-	# echo the full command line in cyan:
-	>&2 echo -ne "${CYAN}"
-	>&2 echo -n "${@}"
-	>&2 echo -e "${OFF}"
-fi
+# echo the full command line in cyan on stderr:
+>&2 vprint 1 "${CYAN}${@}${OFF}"
 
 declare -a OBJS
 while [ $# -gt 0 ]; do
@@ -83,11 +109,7 @@ while [ $# -gt 0 ]; do
 	shift
 done
 
-if [ $VERBOSE ]; then
-	echo -ne "cmd: ${ORANGE}"
-	echo -n "$SDCC" "${OBJS[@]}"
-	echo -e "${OFF}"
-fi
+vprint 1 "cmd: ${ORANGE}$SDCC $line${OFF}"
 "$SDCC" "${OBJS[@]}"
 
 # propagate the sdcc exit code
