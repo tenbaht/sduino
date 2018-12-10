@@ -7,7 +7,7 @@
 # https://github.com/arduino/Arduino/wiki/Arduino-IDE-1.5-3rd-party-Hardware-specification
 
 name=STM8S Boards
-version=0.4.0-pre1
+version=0.4.0
 
 # General folder structure variables
 # ----------------------------------
@@ -37,7 +37,8 @@ compiler.warning_flags.all=-Wp-Wall -V
 # Default "compiler.path" is correct, change only if you want to override the initial value
 compiler.path={runtime.tools.sdcc.path}/bin
 compiler.wrapper.path={runtime.tools.STM8Tools.path}/wrapper
-compiler.wrapper.path.windows={runtime.tools.STM8Tools.path}/win/bash" "{runtime.tools.STM8Tools.path}/wrapper
+compiler.wrapper.path.windows={runtime.tools.STM8Tools.path}/win/busybox"
+ash "{runtime.tools.STM8Tools.path}/wrapper
 compiler.tools.path={runtime.tools.avr-gcc.path}/bin
 
 compiler.c.cmd=sdcc
