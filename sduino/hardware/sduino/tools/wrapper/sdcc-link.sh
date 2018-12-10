@@ -94,11 +94,25 @@ shift
 # echo the full command line in cyan on stderr:
 >&2 vprint 1 "${CYAN}${@}${OFF}"
 
+
+# The arduino system insists on a *.a file for a library, but sdar requires
+# them to be named *.lib.
+#
+# Workaround: copy all *.lib files into *.a files.
+#
+# Iterate over all positional parameters with a for loop.
+# The pattern match for filename is easy for bash and dash, but busybox ash
+# requires the use of the 'expr' command:
+#
+# bash, dash: if [[ "$FILE" == *.a ]]; then
+# ash uses 'expr': expr "$FILE" : ".*\.a$"; then
+
 declare -a OBJS
 while [ $# -gt 0 ]; do
 	echo $1
 	FILE=$1
-	if [[ "$FILE" == *.a ]]; then
+#	if [[ "$FILE" == *.a ]]; then		# easy, but bash and dash only
+	if expr "$FILE" : ".*\.a$"; then	# bash, dash, busybox ash
 		FILE=${FILE%.a}.lib
 		cp -a "$1" "$FILE"
 	fi
