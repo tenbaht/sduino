@@ -1,19 +1,56 @@
 #!/bin/bash
 
-# usage: sdcc-link [.lib and .rel files] re5 [other flags and files]
+# usage: sdcc-link [options] [.lib and .rel files] re5 [other flags and files]
+#
+# possible script options (options in this order only):
+# -v:	verbose
+# -d:	debug mode (more verbose), includes coloring the output
+# -c:	color the output
+
+
+### local functions ######################################################
+
+# verbose print
+#
+# usage: vprint min_level msg
+#
+# prints a message if the verbosity level is equal or higher than the required
+# min_level
+#
+vprint ()
+{
+	local level=$1
+
+	shift
+	if [ $VERBOSE -ge $level ]; then
+		echo -e "$@"
+	fi
+}
+
+
+# parse the script options
+#
+# This is very crude. The options are allowed only as the very first argments
+# and they are required to be used in exactly this order.
 
 VERBOSE=0
 USE_COLOR=0
 if [ "$1" == "-v" ]; then
 	VERBOSE=1;
 	shift
-elif [ "$1" == "-vv" ]; then
+elif [ "$1" == "-d" ]; then
 	VERBOSE=2
-#	USE_COLOR=1
+	USE_COLOR=1
 	set -x
 	shift
 fi
+if [ "$1" == "-c" ]; then
+	USE_COLOR=1;
+	shift
+fi
 
+
+# define color codes
 
 if [ $USE_COLOR -gt 0 ]; then
 # ANSI color codes to beautify the output:
@@ -36,59 +73,75 @@ WHITE='\033[1;37m'
 OFF='\033[0m'
 fi
 
-# check if cp is in the path using 'command -v' (a builtin POSIX function)
-if ! command -v cp > /dev/null; then
-	# Ok, this means we are on a Windows system and we have to find a
-	# way to access cp and rm in ../win. A simple 'cd ../win' or
-	# '../win/cp' does't work, as the current working directory is still
-	# the Arduino binary directory.
-	#
-	# This looks ok, but it doesn't work on some Windows systems:
-	# (No idea why)
-	# PATH="${0%/wrapper/*}"/win:$PATH
-	#
-	# This is technically wrong, but surprisingly it works with Windows:
-	# cd $0/../..
-	# PATH=$(pwd)/win:$PATH
-	#
-	# Use cd/pwd as a replacement for 'realpath' using only builtins.
-	# It has the positive side effect of converting from Windows to Unix
-	# path syntax avoiding all these backslash issues.
-	cd "${0%/wrapper/*}"
-	PATH=$(pwd)/win:$PATH
-fi
 
 SDCC="$1"
 shift
 
-if [ $VERBOSE ]; then
-	# echo the full command line in cyan:
-	>&2 echo -ne "${CYAN}"
-	>&2 echo -n "${@}"
-	>&2 echo -e "${OFF}"
-fi
+# echo the full command line in cyan on stderr:
+>&2 vprint 1 "${CYAN}${@}${OFF}"
 
-declare -a OBJS
-while [ $# -gt 0 ]; do
-	echo $1
-	FILE=$1
-	if [[ "$FILE" == *.a ]]; then
-		FILE=${FILE%.a}.lib
-		cp -a "$1" "$FILE"
+
+# The arduino system insists on a *.a file for a library, but sdar requires
+# them to be named *.lib.
+#
+# Workaround: copy all *.lib files into *.a files.
+#
+# Iterate over all positional parameters with a for loop.
+# The pattern match for filename is easy for bash and dash, but busybox ash
+# requires the use of the 'expr' command:
+#
+# bash, dash: if [[ "$FILE" == *.a ]]; then
+# ash uses 'expr': expr "$FILE" : ".*\.a$"; then
+#
+# This is all pure POSIX, it works for bash, dash and busybox ash
+vprint 2 "copy *.a to *.lib"
+for FILE; do
+	vprint 2 "- checking parameter '$FILE'"
+	# using expr works for bash, dash, busybox ash
+	if expr "$FILE" : ".*\.a$" > /dev/null; then
+		NEW=${FILE%.a}.lib
+		vprint 1 "copy $FILE to $NEW"
+		cp -a "$FILE" "$NEW"
 	fi
-	if [[ "$FILE" == *.o ]]; then
-		FILE=${FILE%.o}.rel
-	fi
-	OBJS+=("${FILE}")
-	shift
 done
 
-if [ $VERBOSE ]; then
-	echo -ne "cmd: ${ORANGE}"
-	echo -n "$SDCC" "${OBJS[@]}"
-	echo -e "${OFF}"
-fi
-"$SDCC" "${OBJS[@]}"
+
+# replace *.o with *.rel and *.a with *.lib
+#
+# On bash this is a simple pattern substituiton:
+# set -- "${@/.o/.rel}"
+# set -- "${@/.a/.lib}"
+#
+# Unfortunatly, this does not work with dash or ash. dash does not support
+# pattern substituition in general. busybox ash does not support arrays and
+# shortens the arg list to the first argument, deleting all the rest.
+#
+# As a workaround we combine the argument list into a single string. By
+# using TAB as a field separator we can even deal with spaces, backspaces
+# and colons in file names.
+
+# use tab as field separator
+IFS=$'\t'
+
+
+# combine all arguments into a single string with field separator and add a
+# TAB at the end. This allows the pattern below to match the last argument
+# as well.
+vprint 2 "Combine all arguments into a single string"
+line="$*	"
+
+# do the filename replacements: (bash and ash, not dash)
+# Needs a double slash to replace all occurencies, not only the first one.
+#line=${line//.o/.rel}
+#line=${line//.a/.lib}
+# replace all the occurencies just before a field separator
+vprint 2 "- before substitution: $line"
+line="${line//.o	/.rel	}"
+line="${line//.a	/.lib	}"
+vprint 2 "- after substitution: $line"
+
+vprint 1 "cmd: ${ORANGE}$SDCC $line${OFF}"
+"$SDCC" $line
 
 # propagate the sdcc exit code
 exit $?
