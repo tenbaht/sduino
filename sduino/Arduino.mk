@@ -1136,6 +1136,10 @@ ifneq (,$(findstring AVR,$(shell $(SIZE) --help)))
     # and the elf to get nice output.
     avr_size = $(SIZE) $(SIZEFLAGS) --format=avr $(1)
     $(call show_config_info,Size utility: AVR-aware for enhanced output,[AUTODETECTED])
+else ifneq (,$(findstring map,$(shell $(SIZE) --help)))
+    # We have a script for SDCC. pass it the map file instead of the hex file
+    avr_size = $(SIZE) $(2:ihx=map)
+    $(call show_config_info,Size utility: SDCC compatible script,[AUTODETECTED])
 else
     # We have a plain-old binutils version - just give it the hex.
     avr_size = $(SIZE) $(2)

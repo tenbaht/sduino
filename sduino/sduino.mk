@@ -65,8 +65,9 @@ ifeq ($(OS),Windows_NT)
         # for Windows always assume the tools to be in this dir tree
         SDCC_PATH := $(ARDUINO_DIR)/hardware/sduino/tools/sdcc/bin
     endif
-#    SHELL := $(ARDUINO_DIR)/hardware/sduino/tools/win/dash
-    SHELL := dash
+    SHELL := $(ARDUINO_DIR)/hardware/sduino/tools/win/busybox.exe
+    .SHELLFLAGS=ash -c
+    SIZE := $(ARDUINO_DIR)/hardware/sduino/tools/wrapper/sdsize.sh
 #    PATH  := $(realpath $(ARDUINO_DIR)/hardware/sduino/tools/win):$(PATH)
 else
     # Linux (and Mac): expect SDCC to be in /opt/sdcc
@@ -81,7 +82,7 @@ OVERRIDE_EXECUTABLES=yes
     CC      = $(SDCC_PATH)/sdcc
     AS      = $(SDCC_PATH)/sdasstm8
     AR      = $(SDCC_PATH)/sdar
-    SIZE    = /usr/bin/size
+    SIZE    ?= /usr/bin/size
 
 
 ARDUINO_SKETCHBOOK	= /tmp	# temporarly, to prevent usage of the real libs
