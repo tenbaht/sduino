@@ -1190,8 +1190,7 @@ $(call show_separator)
 # library sources
 $(OBJDIR)/libs/%.c.$(OBJSUFFIX): $(ARDUINO_LIB_PATH)/%.c
 	@$(MKDIR) $(dir $@)
-	$(CC) "-Wp-MMD $(patsubst %.$(OBJSUFFIX),%.d,$@)" -c $(CPPFLAGS) $(CFLAGS) $< -o $@
-#	mv $(patsubst %.o,%.rel,$@) $@
+	$(CC) "-Wp-MMD $(@:.$(OBJSUFFIX)=.d)" -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 #	$(CC) -MMD -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 
 $(OBJDIR)/libs/%.cpp.$(OBJSUFFIX): $(ARDUINO_LIB_PATH)/%.cpp
@@ -1204,8 +1203,7 @@ $(OBJDIR)/libs/%.S.$(OBJSUFFIX): $(ARDUINO_LIB_PATH)/%.S
 
 $(OBJDIR)/platformlibs/%.c.$(OBJSUFFIX): $(ARDUINO_PLATFORM_LIB_PATH)/%.c
 	@$(MKDIR) $(dir $@)
-	$(CC) "-Wp-MMD $(patsubst %.$(OBJSUFFIX),%.d,$@)" -c $(CPPFLAGS) $(CFLAGS) $< -o $@
-#	mv $(patsubst %.o,%.rel,$@) $@
+	$(CC) "-Wp-MMD $(@:.$(OBJSUFFIX)=.d)" -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 #	$(CC) -MMD -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 
 $(OBJDIR)/platformlibs/%.cpp.$(OBJSUFFIX): $(ARDUINO_PLATFORM_LIB_PATH)/%.cpp
@@ -1222,8 +1220,7 @@ $(OBJDIR)/userlibs/%.cpp.$(OBJSUFFIX): $(USER_LIB_PATH)/%.cpp
 
 $(OBJDIR)/userlibs/%.c.$(OBJSUFFIX): $(USER_LIB_PATH)/%.c
 	@$(MKDIR) $(dir $@)
-	$(CC) "-Wp-MMD $(patsubst %.$(OBJSUFFIX),%.d,$@)" -c $(CPPFLAGS) $(CFLAGS) $< -o $@
-#	mv $(patsubst %.o,%.rel,$@) $@
+	$(CC) "-Wp-MMD $(@:.$(OBJSUFFIX)=.d)" -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 #	$(CC) -MMD -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 
 $(OBJDIR)/userlibs/%.S.$(OBJSUFFIX): $(USER_LIB_PATH)/%.S
@@ -1239,8 +1236,7 @@ endif
 # normal local sources
 $(OBJDIR)/%.c.$(OBJSUFFIX): %.c $(COMMON_DEPS) | $(OBJDIR)
 	@$(MKDIR) $(dir $@)
-	$(CC) "-Wp-MMD $(patsubst %.$(OBJSUFFIX),%.d,$@)" -c $(CPPFLAGS) $(CFLAGS) $< -o $@
-#	mv $(patsubst %.o,%.rel,$@) $@
+	$(CC) "-Wp-MMD $(@:.$(OBJSUFFIX)=.d)" -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 #	$(CC) -MMD -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 
 $(OBJDIR)/%.cc.$(OBJSUFFIX): %.cc $(COMMON_DEPS) | $(OBJDIR)
@@ -1261,16 +1257,13 @@ $(OBJDIR)/%.s.$(OBJSUFFIX): %.s $(COMMON_DEPS) | $(OBJDIR)
 
 # the pde -> o file
 $(OBJDIR)/%.pde.$(OBJSUFFIX): %.pde $(COMMON_DEPS) | $(OBJDIR)
-	@$(MKDIR) $(dir $@)
-	(echo '#include <Arduino.h>\n#line 1 "$<"'; cat $<) > "$(patsubst %.$(OBJSUFFIX),%.c,$@)"
-	$(CC) "-Wp-MMD $(patsubst %.$(OBJSUFFIX),%.d,$@)" -c $(CPPFLAGS) $(CFLAGS) "$(patsubst %.$(OBJSUFFIX),%.c,$@)" -o $@
-#	$(CXX) -x c++ -include $(ARDUINO_HEADER) -MMD -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
-
 # the ino -> o file
 $(OBJDIR)/%.ino.$(OBJSUFFIX): %.ino $(COMMON_DEPS) | $(OBJDIR)
 	@$(MKDIR) $(dir $@)
-	(echo '#include <Arduino.h>\n#line 1 "$<"'; cat $<) > "$(patsubst %.$(OBJSUFFIX),%.c,$@)"
-	$(CC) "-Wp-MMD $(patsubst %.$(OBJSUFFIX),%.d,$@)" -c $(CPPFLAGS) $(CFLAGS) "$(patsubst %.$(OBJSUFFIX),%.c,$@)" -o $@
+	(echo '#include <$(ARDUINO_HEADER)>\n#line 1 "$<"'; \
+		echo "void main(void); void (*dummy_variable) () = main;"; \
+		cat $<) > "$(@:.$(OBJSUFFIX)=.c)"
+	$(CC) "-Wp-MMD $(@:.$(OBJSUFFIX)=.d)" -c $(CPPFLAGS) $(CFLAGS) "$(@:.$(OBJSUFFIX)=.c)" -o $@
 #	$(CXX) -x c++ -include $(ARDUINO_HEADER) -MMD -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
 
 # generated assembly
@@ -1289,8 +1282,7 @@ $(OBJDIR)/%.s: %.cpp $(COMMON_DEPS) | $(OBJDIR)
 # core files
 $(OBJDIR)/core/%.c.$(OBJSUFFIX): $(ARDUINO_CORE_PATH)/%.c $(COMMON_DEPS) | $(OBJDIR)
 	@$(MKDIR) $(dir $@)
-	$(CC) "-Wp-MMD $(patsubst %.$(OBJSUFFIX),%.d,$@)" -c $(CPPFLAGS) $(CFLAGS) $< -o $@
-#	mv $(patsubst %.o,%.rel,$@) $@
+	$(CC) "-Wp-MMD $(@:.$(OBJSUFFIX)=.d)" -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 #	$(CC) -MMD -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 
 $(OBJDIR)/core/%.cpp.$(OBJSUFFIX): $(ARDUINO_CORE_PATH)/%.cpp $(COMMON_DEPS) | $(OBJDIR)
