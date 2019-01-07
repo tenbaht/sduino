@@ -1,3 +1,3 @@
-BOARD_TAG	= stm8sblue
+BOARD_TAG	= mb208
 
 include ../../../../../../../sduino.mk
