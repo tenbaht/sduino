@@ -22,7 +22,6 @@
   Modified 28 September 2010 by Mark Sproul
 */
 
-#define ARDUINO_MAIN
 #include "wiring_private.h"
 #include "pins_arduino.h"
 
@@ -35,7 +34,15 @@
  */
 typedef unsigned char *uc_p;
 
-/* timer capture/compare mode register to control PWM mode */
+extern const uc_p ccmrx[NUM_TIMERS];
+extern const uc_p ccerx[NUM_TIMERS];
+extern const unsigned char DISABLE_TIMER_OUTP_MASK[NUM_TIMERS];
+void turnOffPWM(uint8_t timer);
+
+
+/**
+ * timer capture/compare mode register to control PWM mode
+ */
 const uc_p ccmrx[NUM_TIMERS]={
 #ifdef NEED_TIMER_11_12
 	TIM1->CCMR1,	/* for TIMER11 */
@@ -110,6 +117,9 @@ const unsigned char DISABLE_TIMER_OUTP_MASK[NUM_TIMERS]={
 };
 
 
+/**
+ * set the input or output mode of a pin
+ */
 /* arduino-style pinMode
 void pinMode(uint8_t pin, uint8_t mode)
 {
@@ -225,7 +235,11 @@ void pinMode(uint8_t pin, uint8_t mode)
  *
  * SDCC is really, really not good in optimizing its code.
  */
-static void turnOffPWM(uint8_t timer)
+
+/**
+ * handle the PWM pins
+ */
+void turnOffPWM(uint8_t timer)
 {
     // Output compare mode = 000: Frozen - The comparison between the output
     // compare register TIM1_CCR1 and the counter register TIM1_CNT has no
@@ -237,6 +251,9 @@ static void turnOffPWM(uint8_t timer)
 }
 
 
+/**
+ * set an output value for a pin
+ */
 void digitalWrite(uint8_t pin, uint8_t val)
 {
 	uint8_t timer = digitalPinToTimer(pin);
@@ -263,6 +280,9 @@ void digitalWrite(uint8_t pin, uint8_t val)
 	END_CRITICAL
 }
 
+/**
+ * read a pin value
+ */
 int digitalRead(uint8_t pin)
 {
 	uint8_t timer = digitalPinToTimer(pin);
