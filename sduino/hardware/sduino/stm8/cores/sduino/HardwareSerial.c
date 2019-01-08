@@ -107,17 +107,6 @@
 #endif
 
 
-#ifdef NO_SERIAL
-/*
- * empty default IRQ functions to make the linker happy if the
- * respective module is not to linked.
- */
-
-void UARTx_TX_IRQHandler(void) __interrupt(ITC_IRQ_UARTx_TX){}
-void UARTx_RX_IRQHandler(void) __interrupt(ITC_IRQ_UARTx_RX){}
-#else // ifdef NO_SERIAL
-
-
 // private data //////////////////////////////////////////////////////////////
 
 #define SERIAL_BUFFER_SIZE 16
@@ -128,11 +117,47 @@ typedef struct ring_buffer
   volatile unsigned int tail;
 } ring_buffer;
 
-static ring_buffer rx_buffer;// = { { 0 }, 0, 0};
-static ring_buffer tx_buffer;// = { { 0 }, 0, 0};
 
-static volatile char	transmitting;//=0;
-static unsigned char initialized;//=0 internal status. Returned on HardwareSerial()
+extern ring_buffer rx_buffer;// = { { 0 }, 0, 0};
+extern ring_buffer tx_buffer;// = { { 0 }, 0, 0};
+
+extern volatile char	transmitting;//=0;
+extern unsigned char initialized;//=0 internal status. Returned on HardwareSerial()
+
+
+
+/**
+ * This part contains the bare minimum of serial support functions
+ *
+ * The interrupt functions (and the supporting basic data structures) can't
+ * be removed by the linker, even if no serial functions are used in the sketch.
+ *
+ * Add a "-DNO_SERIAL" to the CPPFLAGS or CFLAGS to full remove this code.
+ */
+
+#ifdef NO_SERIAL
+/*
+ * empty default IRQ functions to make the linker happy if the
+ * respective module is not to linked.
+ */
+
+void UARTx_RX_IRQHandler(void) __interrupt(ITC_IRQ_UARTx_RX){}
+void UARTx_TX_IRQHandler(void) __interrupt(ITC_IRQ_UARTx_TX){}
+
+#else // ifdef NO_SERIAL
+
+// private data //////////////////////////////////////////////////////////////
+
+// These variables should be static, but that doesn't go together with
+// splitting the source code into smaller units.
+
+ring_buffer rx_buffer;// = { { 0 }, 0, 0};
+ring_buffer tx_buffer;// = { { 0 }, 0, 0};
+
+volatile char	transmitting;//=0;
+unsigned char initialized;//=0 internal status. Returned on HardwareSerial()
+
+
 
 // private functions  ////////////////////////////////////////////////////////
 
@@ -203,15 +228,19 @@ void UARTx_TX_IRQHandler(void) __interrupt(ITC_IRQ_UARTx_TX) /* UART1/2 TX */
   }
 #endif
 }
+#endif // ifdef NO_SERIAL
 
 // Public Methods //////////////////////////////////////////////////////////////
 
+/**
+ */
 uint8_t HardwareSerial(void)
 {
     return initialized;
 }
 
-
+/**
+ */
 void HardwareSerial_begin(unsigned long baud)
 {
 #ifdef USE_SPL
@@ -242,7 +271,8 @@ void HardwareSerial_begin(unsigned long baud)
   runSerialEvent = 0;
 }
 
-
+/**
+ */
 void HardwareSerial_begin_config(unsigned long baud, uint8_t config)
 {
 #ifdef USE_SPL
@@ -283,7 +313,8 @@ void HardwareSerial_begin_config(unsigned long baud, uint8_t config)
   runSerialEvent = 0;
 }
 
-
+/**
+ */
 void HardwareSerial_end(void)
 {
   // wait for transmission of outgoing data
@@ -298,11 +329,15 @@ void HardwareSerial_end(void)
   runSerialEvent = 0;
 }
 
+/**
+ */
 int HardwareSerial_available(void)
 {
   return (unsigned int)(SERIAL_BUFFER_SIZE + rx_buffer.head - rx_buffer.tail) % SERIAL_BUFFER_SIZE;
 }
 
+/**
+ */
 int HardwareSerial_peek(void)
 {
   if (rx_buffer.head == rx_buffer.tail) {
@@ -313,6 +348,8 @@ int HardwareSerial_peek(void)
   }
 }
 
+/**
+ */
 int HardwareSerial_read(void)
 {
   // if the head isn't ahead of the tail, we don't have any characters
@@ -327,6 +364,8 @@ int HardwareSerial_read(void)
   }
 }
 
+/**
+ */
 void HardwareSerial_flush(void)
 {
   // UDR is kept full while the buffer is not empty, so TXC triggers when
@@ -342,6 +381,8 @@ void HardwareSerial_flush(void)
   transmitting = 0;
 }
 
+/**
+ */
 size_t HardwareSerial_write(uint8_t c)
 {
   int i = (tx_buffer.head + 1) % SERIAL_BUFFER_SIZE;
@@ -368,5 +409,3 @@ size_t HardwareSerial_write(uint8_t c)
   
   return 1;
 }
-
-#endif // ifdef NO_SERIAL
