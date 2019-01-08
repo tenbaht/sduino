@@ -54,6 +54,60 @@ const uc_p ccmrx[NUM_TIMERS]={
 #endif
 };
 
+/**
+ * CCER register for each timer channel.
+ *
+ * Each 8-bit-register can contain the bits for two channels, so in addition to
+ * the register address itself you also need the individual offset(s) of the
+ * bit(s) you want to access.
+ */
+const uc_p ccerx[NUM_TIMERS]={
+#ifdef NEED_TIMER_11_12
+    TIM1->CCER1,    /* for TIMER11 */
+    TIM1->CCER1,    /* for TIMER12 */
+#endif
+    TIM1->CCER2,    /* for TIMER13 */
+    TIM1->CCER2,    /* for TIMER14 */
+    TIM2->CCER1,    /* for TIMER21 */
+    TIM2->CCER1,    /* for TIMER22 */
+#ifdef NEED_TIMER_23
+    TIM2->CCER2,    /* for TIMER23 */
+#endif
+#ifdef NEED_TIMER_31_32
+    TIM3->CCER1,    /* for TIMER31 */
+    TIM3->CCER1     /* for TIMER32 */
+#endif
+};
+
+/**
+ * These Bits have to be set to 0 in the timer channel's CCER
+ * (Capture/compare enable register) to disable the output, so that the
+ * physical pin is not driven by the timer.
+ *
+ * @see
+ * RM0016 Reference Manual
+ * STM8S Series and STM8AF Series 8-bit microcontrollers
+ * DocID14587 Rev 14 (Oct 2017)
+ * Table 38. Output control for complementary OCi and OCiN channels with break
+ * feature
+ */
+const unsigned char DISABLE_TIMER_OUTP_MASK[NUM_TIMERS]={
+#ifdef NEED_TIMER_11_12
+    (1 << 0) | (1 << 2),    /* for TIMER11 */
+    (1 << 4) | (1 << 6),    /* for TIMER12 */
+#endif
+    (1 << 0) | (1 << 2),    /* for TIMER13 */
+    (1 << 4),               /* for TIMER14 */
+    (1 << 0),               /* for TIMER21 */
+    (1 << 4),               /* for TIMER22 */
+#ifdef NEED_TIMER_23
+    (1 << 0),               /* for TIMER23 */
+#endif
+#ifdef NEED_TIMER_31_32
+    (1 << 0),               /* for TIMER31 */
+    (1 << 4)                /* for TIMER32 */
+#endif
+};
 
 
 /* arduino-style pinMode
@@ -173,7 +227,13 @@ void pinMode(uint8_t pin, uint8_t mode)
  */
 static void turnOffPWM(uint8_t timer)
 {
-	*((unsigned char *) ccmrx[timer-1]) &= ~TIM1_CCMR_OCM;
+    // Output compare mode = 000: Frozen - The comparison between the output
+    // compare register TIM1_CCR1 and the counter register TIM1_CNT has no
+    // effect on the outputs.
+    *((unsigned char *) ccmrx[timer-1]) &= ~TIM1_CCMR_OCM;
+
+    // CCiE = CCiNE = 0: Output disabled (not driven by the timer)
+    *((unsigned char *) ccerx[timer-1]) &=~ (DISABLE_TIMER_OUTP_MASK[timer-1]);
 }
 
 
