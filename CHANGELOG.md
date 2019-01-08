@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - using busybox as command shell for windows to run the wrapper scripts
 
+### Fixed
+- building the core library when using make (regression bug in 0.4.0)
+
 
 ## [0.4.0 - 2018-12-07]
 ### Added
