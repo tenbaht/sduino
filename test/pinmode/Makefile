@@ -7,14 +7,17 @@ BINDIR=$(SDCCBASE)/bin
 CC=$(BINDIR)/sdcc
 LD=$(BINDIR)/sdld
 
-LIBBASE=../../STM8S_StdPeriph_Driver
-SDUINO=../../sduino
+SDBASE=../../sduino/hardware/sduino/stm8
+LIBBASE=$(SDBASE)/STM8S_StdPeriph_Driver
+SDUINO=$(SDBASE)/cores/sduino
 
 CFLAGS= --debug -mstm8 -DF_CPU=16000000L -DSTM8S103 \
-	-I. -I$(SDUINO) -I$(LIBBASE)/inc -I/usr/share/sdcc/include/
+	-I. -I$(SDUINO) -I$(SDBASE)/variants/standard \
+	-I$(LIBBASE)/inc -I$(LIBBASE)/src \
+	-I$(SDCCBASE)/share/sdcc/include/
 # -DSUPPORT_ALTERNATE_MAPPINGS 
 
-LDFLAGS=-L$(LIBBASE)/src -L/opt/sdcc/share/sdcc/lib/stm8 -lstm8s103
+LDFLAGS=-L$(LIBBASE)/lib  -L$(SDCCBASE)/share/sdcc/lib/stm8 -lSTM8S103
 
 OBJECTS=$(BASENAME).rel
 SDOBJECTS=main.rel wiring.rel wiring_digital.rel SPI.rel \
@@ -24,8 +27,7 @@ SDOBJECTS=main.rel wiring.rel wiring_digital.rel SPI.rel \
 
 #all: $(OBJECTS)
 
-$(EXECUTABLE): $(OBJECTS) $(SDOBJECTS)
-#test.rel wiring_digital.rel
+$(EXECUTABLE): $(OBJECTS) #$(SDOBJECTS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 
 $(OBJECTS) : %.rel : %.c
