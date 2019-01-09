@@ -4,20 +4,19 @@
 
 #define ARDUINO_MAIN
 #include "Arduino.h"
-#include "wiring_private.h"
 #include "stm8s_it.h"
 
 void pinMode_c(uint8_t pin, uint8_t mode);
 void pinMode_asm(uint8_t pin, uint8_t mode);
 
 
-uint8_t checkresult(uint8_t *adr, uint8_t *data)
+uint8_t checkresult(uint16_t adr, uint8_t *data)
 {
 	uint8_t i,ok;
 
 	ok = 1;
 	for (i=0; i<3; ++i) {
-		if (adr[2+i] != data[i]) ok=0;
+		if (((uint8_t*)adr)[2+i] != data[i]) ok=0;
 	}
 	return ok;
 }

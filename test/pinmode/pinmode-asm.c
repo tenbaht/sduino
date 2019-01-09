@@ -2,9 +2,7 @@
  * test spi functions
  */
 
-#include "Arduino.h"
-#include "wiring_private.h"
-
+#include <stdint.h>
 
 void pinMode_asm(uint8_t pin, uint8_t mode)
 {

@@ -15,19 +15,23 @@ CPPFLAGS=-DF_CPU=16000000L -DSTM8S103 -Ddouble=float \
 	-I. -I$(SDUINO) -I$(SDBASE)/variants/standard \
 	-I$(LIBBASE)/inc -I$(LIBBASE)/src \
 	-I$(SDCCBASE)/share/sdcc/include/
-CFLAGS= -mstm8 --debug
+CFLAGS= -mstm8 #--debug
 LDFLAGS=-L$(LIBBASE)/lib -L$(SDCCBASE)/share/sdcc/lib/stm8 -lSTM8S103
 
-OBJECTS=pinmode-c.rel pinmode-asm.rel main.rel
+SRCS=pinmode-c.c pinmode-asm.c main.c
+
+BUILDDIR=build
+OBJECTS=$(SRCS:%.c=$(BUILDDIR)/%.rel)
 
 .PHONY: all clean flash statistics
 
-#all: $(OBJECTS)
+all: $(EXECUTEABLE) statistics
 
 $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 
-$(OBJECTS) : %.rel : %.c
+$(OBJECTS) : $(BUILDDIR)/%.rel : %.c
+	mkdir -p $(BUILDDIR)
 	$(CC) -c $(CPPFLAGS) $(CFLAGS) $^ -o $@
 
 flash: $(EXECUTABLE)
@@ -39,8 +43,8 @@ readopt:
 
 # lists the length of functions and constants defined in the primary source
 # file
-statistics:
-	awk '/ CODE/ {print FILENAME "\t" strtonum("0x"$$4)}' *.sym
+statistics: $(OBJECTS)
+	cd $(BUILDDIR); awk '/ CODE/ {print FILENAME "\t" strtonum("0x"$$4)}' *.sym
 
 
 #	grep "[0-9] _" $(BASENAME).rst |\
@@ -48,6 +52,6 @@ statistics:
 
 
 clean: 
-	rm -f *.lib *.rst *.rel *.lst *.ihx *.sym *.asm *.lk *.map \
-		*.cdb *.adb *~ *.bak
+	rm -rf *.lib *.rst *.rel *.lst *.ihx *.sym *.asm *.lk *.map \
+		*.cdb *.adb *~ *.bak build
 	rm -f $(EXECUTABLE)

@@ -3,7 +3,6 @@
  */
 
 #include "Arduino.h"
-#include "wiring_private.h"
 
 void pinMode_c(uint8_t pin, uint8_t mode)
 {
