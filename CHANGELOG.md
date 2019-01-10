@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - a simple regression test script test/make-test.sh to compile all examples
 
 ### Changed
+- reduced binary size by splitting some Arduino core files
+- reduced binary size by optimizing the pinMode() implementation
 - using busybox as command shell for windows to run the wrapper scripts
 
 ### Fixed
