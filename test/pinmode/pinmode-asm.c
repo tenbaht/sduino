@@ -39,6 +39,7 @@ __asm
 	clrw	x
 	ld	a, (3, sp)
 	ld	xl, a
+	pushw	x
 	addw	x, #(_digital_pin_to_bit_mask_PGM + 0)
 	ld	a, (x)
 	ld	yl,a		; yl = bit
@@ -51,12 +52,10 @@ __asm
 ;	pinmode-c.c: 10: uint8_t port = digitalPinToPort(pin);
 ;	pinmode-c.c: 13: if (port == NOT_A_PORT) return;
 ; es könnte auch subw x, #(NUM_DIGITAL_PINS) sein
-	clrw	x
-	ld	a, (3, sp)
-	ld	xl, a
+	popw	x
 	addw	x, #(_digital_pin_to_port_PGM + 0)
 	ld	a, (x)		; port-ID. Z-Flag wird gesetzt
-	jreq	010$
+	jreq	032$		; if (port == NOT_A_PORT) return;
 
 
 ;
@@ -119,7 +118,7 @@ __asm
 	BIT_CLEAR(CR2)
 	BIT_SET(DDR)
 	rim
-	ret
+032$:	ret
 
 ;
 ; case INPUT			// 0: input, floating
