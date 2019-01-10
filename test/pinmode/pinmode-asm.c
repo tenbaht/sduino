@@ -56,7 +56,7 @@ __asm
 	ld	xl, a
 	addw	x, #(_digital_pin_to_port_PGM + 0)
 	ld	a, (x)		; port-ID. Z-Flag wird gesetzt
-	jreq	002$
+	jreq	010$
 
 
 ;
@@ -64,7 +64,6 @@ __asm
 ;
 ; x = (GPIO_TypeDef *) portOutputRegister(port)
 ;
-
 00102$:
 	clrw	x
 	sll	a			; 8 bit shift is sufficient
@@ -72,266 +71,112 @@ __asm
 	addw	x, #(_port_to_output_PGM + 0)
 	ldw	x, (x)			; jetzt ist gpio in x
 
+;
+; jump table/switch statement for mode parameter
+;
+	ld	a, (4, sp)
+	jreq	000$
+	dec	a
+	jreq	010$
+	dec	a
+	jreq	020$
+	dec	a
+	jreq	030$
+	dec	a		; there is no case 4
+	dec	a
+	jreq	050$
+	dec	a		; there is no case 6
+	dec	a
+	jreq	070$
+
+; fallthrough into OUTPUT as the default case
 
 ;
-; case INPUT
+; case OUTPUT			// 1: output, push-pull, slow
+;	gpio->CR1 |=  bit;
+;	gpio->CR2 &= ~bit;
+;	gpio->DDR |=  bit;
+;
+010$:
+	sim
+//	BIT_SET(CR1)
+	ld	a,yl
+	or	a,(CR1,x)
+	jra 031$
+
+;
+; case OUTPUT_OD		// 3: output open drain, slow
+;	gpio->CR1 &= ~bit;
+;	gpio->CR2 &= ~bit;
+;	gpio->DDR |=  bit;
+;
+030$:
+	sim
+//	BIT_CLEAR(CR1)
+	ld	a,yh
+	and	a,(CR1,x)
+031$:	ld	(CR1,x),a
+	BIT_CLEAR(CR2)
+	BIT_SET(DDR)
+	rim
+	ret
+
+;
+; case INPUT			// 0: input, floating
 ;	gpio->CR2 &= ~bit;	// first: deactivate interrupt
 ;	gpio->CR1 &= ~bit;	// release top side
 ;	gpio->DDR &= ~bit;	// now set direction
 ;
-	ld	a, (4, sp)
-	jrne	00116$
-
+000$:
 	sim
-	BIT_CLEAR(CR2)
-	BIT_CLEAR(CR1)
-	BIT_CLEAR(DDR)
+	BIT_CLEAR(CR2)		; first: deactivate interrupt
+	BIT_CLEAR(CR1)		; release top side
+	BIT_CLEAR(DDR)		; now set direction
 	rim
-002$:	ret
+001$:	ret
 
 ;
-; case INPUT_PULLUP
+; case INPUT_PULLUP		// 2: input, internal pull up active
 ;	gpio->CR2 &= ~bit;	// first: deactivate interrupt
 ;	gpio->DDR &= ~bit;	// set direction before
 ;	gpio->CR1 |=  bit;	// activating the pull up
 ;
-00116$:
-	cp	a, #0x02
-	jrne	00113$
-
+020$:
 	sim
-	BIT_CLEAR(CR2)
-	BIT_CLEAR(DDR)
-	BIT_SET(CR1)
+	BIT_CLEAR(CR2)		; first: deactivate interrupt
+	BIT_CLEAR(DDR)		; set direction before
+	BIT_SET(CR1)		; activating the pull up
 	rim
 	ret
 
 ;
-; case OUTPUT_FAST		// output push-pull, fast
+; case OUTPUT_FAST		// 5: output push-pull, fast
 ;	gpio->CR1 |=  bit;
 ;	gpio->DDR |=  bit;	// direction before setting CR2 to
 ;	gpio->CR2 |=  bit;	// avoid accidental interrupt
 ;
-00113$:
-	cp	a, #0x05
-	jrne	00110$
-
+050$:
 	sim
-	BIT_SET(CR1)
-	jra 010$
+//	BIT_SET(CR1)
+	ld	a,yl
+	or	a,(CR1,x)
+	jra 071$
 
 ;
-; case OUTPUT_OD_FAST		// output open drain, fast
+; case OUTPUT_OD_FAST		// 7: output open drain, fast
 ;	gpio->CR1 &= ~bit;
 ;	gpio->DDR |=  bit;	// direction before setting CR2 to
 ;	gpio->CR2 |=  bit;	// avoid accidental interrupt
 ;
-00110$:
-	cp	a, #0x07
-	jrne	00107$
-
+070$:
 	sim
-	BIT_CLEAR(CR1)
-010$:	BIT_SET(DDR)
+//	BIT_CLEAR(CR1)
+	ld	a,yh\
+	and	a,(CR1,x)\
+071$:	ld	(CR1,x),a
+	BIT_SET(DDR)
 	BIT_SET(CR2)
 	rim
-	ret
-
-;
-; case OUTPUT_OD		// output open drain, slow
-;	gpio->CR1 &= ~bit;
-;	gpio->CR2 &= ~bit;
-;	gpio->DDR |=  bit;
-;
-00107$:
-	cp	a, #0x03
-	jrne	00104$
-
-	sim
-	BIT_CLEAR(CR1)
-	jra 004$
-
-;
-; case default			//
-;	gpio->CR1 |=  bit;
-;	gpio->CR2 &= ~bit;
-;	gpio->DDR |=  bit;
-;
-00104$:
-	sim
-	BIT_SET(CR1)
-004$:	BIT_CLEAR(CR2)
-	BIT_SET(DDR)
-	rim
 
 __endasm;
 }
-
-/*
-void pinMode_asm(uint8_t pin, uint8_t mode)
-{
-	(void)	pin;	// empty code to avoid warning
-	(void)	mode;
-__asm
-	sub	sp, #16
-#if 1
-;	pinmode.c: 10: uint8_t bit = digitalPinToBitMask(pin);
-	clrw	x
-
-	ld	a,(0x03, sp)
-	ld	xl,a
-	addw	x, #_digital_pin_to_bit_mask_PGM+0
-	ld	a, (x)		; bit
-	ld	yl,a		; yl = bit
-	cpl	a
-	ld	yh,a		; yh = ~bit
-
-;	pinmode.c: 11: uint8_t port = digitalPinToPort(pin);
-;;hier	addw	x, #_digital_pin_to_bit_mask_PGM - _digital_pin_to_bit_mask_PGM
-	ld	a, (x)		; port
-	jreq	00018$
-
-	sll	a
-	clrw	x
-	ld	xl,a
-	addw	x, #_port_to_output_PGM+0	; x = gpio
-
-	ld	a,(0x04,sp)	; a = mode, flags are set
-#else
-;	pinmode.c: 10: uint8_t bit = digitalPinToBitMask(pin);
-	ldw	x, #_digital_pin_to_bit_mask_PGM+0
-	ld	a, xl
-	add	a, (0x13, sp)
-	rlwa	x
-	adc	a, #0x00
-	ld	xh, a
-	ld	a, (x)
-	ld	(0x04, sp), a	; bit := 4
-;	pinmode.c: 11: uint8_t port = digitalPinToPort(pin);
-	ldw	x, #_digital_pin_to_port_PGM+0
-	ld	a, xl
-	add	a, (0x13, sp)
-	rlwa	x
-	adc	a, #0x00
-	ld	xh, a
-	ld	a, (x)
-	ld	(0x03, sp), a
-	ld	a, (0x03, sp)
-	ld	(0x07, sp), a	; port := 7
-;	pinmode.c: 14: if (port == NOT_A_PIN) return;
-	tnz	(0x03, sp)
-	jrne	00002$
-	jp	00018$
-00002$:
-;	pinmode.c: 16: gpio = (GPIO_TypeDef *) portOutputRegister(port);
-	ldw	x, #_port_to_output_PGM+0
-	ldw	(0x0e, sp), x
-	ld	a, (0x07, sp)
-	ld	xl, a
-	ld	a, #0x02
-	mul	x, a
-	addw	x, (0x0e, sp)
-	ldw	x, (x)		; jetzt ist gpio in x
-
-	ld	a, (0x04, sp)	; bit
-	ld	yl,a		; yl = bit
-	cpl	a
-	ld	yh,a		; yh = ~bit
-	ld	a, (0x14, sp)	; a=mode, flags are set
-#endif
-
-; gpio->DDR: (2,x) (war an c,SP)
-; gpio->CR1: (3,x) (war an 8,SP)
-; gpio->CR2: (4,x) (war an 5,SP)
-
-	sim
-;	pinmode.c: 18: if (mode == INPUT) {
-	jrne	00016$
-;	pinmode.c: 20: gpio->CR2 &= ~bit;	// first: deactivate interrupt
-	ld	a,yh
-	and	a,(4,x)
-	ld	(4,x),a
-;	pinmode.c: 21: gpio->CR1 &= ~bit;	// release top side
-	ld	a,yh
-	and	a,(3,x)
-	ld	(3,x),a
-;	pinmode.c: 22: gpio->DDR &= ~bit;	// now set direction
-	ld	a,yh
-	and	a,(2,x)
-	jp	00022$
-
-00016$:
-;	pinmode.c: 24: } else if (mode == INPUT_PULLUP) {
-	cp	a, #0x02
-	jrne	00013$
-;	pinmode.c: 26: gpio->CR2 &= ~bit;	// first: deactivate interrupt
-	ld	a,yh
-	and	a,(4,x)
-	ld	(4,x),a
-;	pinmode.c: 27: gpio->DDR &= ~bit;	// set direction before
-	ld	a,yh
-and	a,(2,x)
-	ld	(2,x),a
-;	pinmode.c: 28: gpio->CR1 |=  bit;	// activating the pull up
-	ld	a,yl
-	or	a,(3,x)
-	ld	(3,x),a
-	jp	00018$
-
-00013$:
-;	pinmode.c: 30: } else if (mode == OUTPUT_FAST) {// output push-pull, fast
-	cp	a, #0x05
-	jrne	00010$
-;	pinmode.c: 32: gpio->CR1 |=  bit;
-	ld	a,yl
-	or	a,(3,x)
-	jra	00020$
-;	pinmode.c: 39: gpio->DDR |=  bit;	// direction before setting CR2 to
-;	pinmode.c: 40: gpio->CR2 |=  bit;	// avoid accidental interrupt
-00010$:
-;	pinmode.c: 36: } else if (mode == OUTPUT_OD_FAST) {	// output open drain, fast
-	cp	a, #0x07
-	jrne	00007$
-;	pinmode.c: 38: gpio->CR1 &= ~bit;
-	ld	a,yh
-	and	a,(3,x)
-00020$:	ld	(3,x),a
-;	pinmode.c: 39: gpio->DDR |=  bit;	// direction before setting CR2 to
-	ld	a,yl
-	or	a,(2,x)
-	ld	(2,x),a
-;	pinmode.c: 40: gpio->CR2 |=  bit;	// avoid accidental interrupt
-	ld	a,yl
-	or	a,(4,x)
-	ld	(4,x),a
-	jra	00018$
-
-00007$:
-;	pinmode.c: 42: } else if (mode == OUTPUT_OD) {	// output open drain, slow
-	cp	a, #0x03
-	jrne	00004$
-;	pinmode.c: 44: gpio->CR1 &= ~bit;
-	ld	a,yh
-	and	a,(3,x)
-	jra	00021$
-;	pinmode.c: 45: gpio->CR2 &= ~bit;
-;	pinmode.c: 46: gpio->DDR |=  bit;
-00004$:
-;	pinmode.c: 50: gpio->CR1 |=  bit;
-	ld	a,yl
-	or	a,(3,x)
-00021$:	ld	(3,x),a
-;	pinmode.c: 51: gpio->CR2 &= ~bit;
-	ld	a,yh
-	and	a,(4,x)
-	ld	(4,x),a
-;	pinmode.c: 52: gpio->DDR |=  bit;
-	ld	a,yl
-	or	a,(2,x)
-00022$:	ld	(2,x),a
-00018$:
-	rim
-	addw	sp, #16
-__endasm;
-}
-*/
