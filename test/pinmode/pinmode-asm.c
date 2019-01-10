@@ -4,6 +4,173 @@
 
 #include <stdint.h>
 
+#define DDR	2
+#define CR1	3
+#define CR2	4
+
+#define BIT_CLEAR(REG) \
+	ld	a,yh\
+	and	a,(REG,x)\
+	ld	(REG,x),a
+
+#define BIT_SET(REG) \
+	ld	a,yl\
+	or	a,(REG,x)\
+	ld	(REG,x),a
+
+
+void pinMode_asm(uint8_t pin, uint8_t mode)
+{
+	(void)	pin;	// empty code to avoid warning
+	(void)	mode;
+__asm
+
+; my optimized code
+; nicht mehr benötigte Stack-Variablen:
+; (0x01, sp) war bit
+; (0x07, sp) war port-ID
+; (0x08, sp) war port-ID
+
+	sub	sp, #8
+;	pinmode-c.c: 9: uint8_t bit = digitalPinToBitMask(pin);
+	clrw	x
+	ld	a, (0x0b, sp)
+ld 0x0100,a
+	ld	xl, a
+	addw	x, #(_digital_pin_to_bit_mask_PGM + 0)
+	ld	a, (x)
+ld 0x0101,a
+	ld	yl,a		; yl = bit
+	cpl	a
+	ld	yh,a		; yh = ~bit
+;	pinmode-c.c: 10: uint8_t port = digitalPinToPort(pin);
+; es könnte auch subw x, #(NUM_DIGITAL_PINS) sein
+	clrw	x
+	ld	a, (0x0b, sp)
+	ld	xl, a
+	addw	x, #(_digital_pin_to_port_PGM + 0)
+	ld	a, (x)		; port-ID. Z-Flag wird gesetzt
+;	pinmode-c.c: 13: if (port == NOT_A_PORT) return;
+;	jreq	00118$
+
+
+;
+; Zuordung port-ID => Port-Addresse
+;
+
+00102$:
+;	pinmode-c.c: 15: gpio = (GPIO_TypeDef *) portOutputRegister(port);
+;******
+	clrw	x
+	sll	a			; 8 bit shift is sufficient
+	ld	xl, a
+	addw	x, #(_port_to_output_PGM + 0)
+	ldw	x, (x)			; jetzt ist gpio in x
+ldw 0x0102,x
+
+
+;
+; case INPUT
+;
+;	pinmode-c.c: 17: if (mode == INPUT) {
+	ld	a, (0x0c, sp)
+	jrne	00116$
+
+;	pinmode-c.c: 19: gpio->CR2 &= ~bit;	// first: deactivate interrupt
+;	pinmode-c.c: 20: gpio->CR1 &= ~bit;	// release top side
+;	pinmode-c.c: 21: gpio->DDR &= ~bit;	// now set direction
+	sim
+	BIT_CLEAR(CR2)
+	BIT_CLEAR(CR1)
+	BIT_CLEAR(DDR)
+	rim
+	jp	00118$
+
+;
+; case INPUT_PULLUP
+;
+00116$:
+;	pinmode-c.c: 23: } else if (mode == INPUT_PULLUP) {
+	cp	a, #0x02
+	jrne	00113$
+;	pinmode-c.c: 25: gpio->CR2 &= ~bit;	// first: deactivate interrupt
+;	pinmode-c.c: 26: gpio->DDR &= ~bit;	// set direction before
+;	pinmode-c.c: 27: gpio->CR1 |=  bit;	// activating the pull up
+	sim
+	BIT_CLEAR(CR2)
+	BIT_CLEAR(DDR)
+	BIT_SET(CR1)
+	rim
+	jp	00118$
+
+;
+; case OUTPUT_FAST
+;
+00113$:
+;	pinmode-c.c: 29: } else if (mode == OUTPUT_FAST) {// output push-pull, fast
+	cp	a, #0x05
+	jrne	00110$
+
+;	pinmode-c.c: 31: gpio->CR1 |=  bit;
+;	pinmode-c.c: 32: gpio->DDR |=  bit;	// direction before setting CR2 to
+;	pinmode-c.c: 33: gpio->CR2 |=  bit;	// avoid accidental interrupt
+	sim
+	BIT_SET(CR1)
+	jra 010$
+
+;
+; case OUTPUT_OD_FAST
+;
+00110$:
+;	pinmode-c.c: 35: } else if (mode == OUTPUT_OD_FAST) {	// output open drain, fast
+	cp	a, #0x07
+	jrne	00107$
+
+;	pinmode-c.c: 37: gpio->CR1 &= ~bit;
+;	pinmode-c.c: 38: gpio->DDR |=  bit;	// direction before setting CR2 to
+;	pinmode-c.c: 39: gpio->CR2 |=  bit;	// avoid accidental interrupt
+	sim
+	BIT_CLEAR(CR1)
+010$:	BIT_SET(DDR)
+	BIT_SET(CR2)
+	rim
+	jra	00118$
+
+;
+; case OUTPUT_OD
+;
+00107$:
+;	pinmode-c.c: 41: } else if (mode == OUTPUT_OD) {	// output open drain, slow
+	cp	a, #0x03
+	jrne	00104$
+
+;	pinmode-c.c: 43: gpio->CR1 &= ~bit;
+;	pinmode-c.c: 44: gpio->CR2 &= ~bit;
+;	pinmode-c.c: 45: gpio->DDR |=  bit;
+	sim
+	BIT_CLEAR(CR1)
+	jra 004$
+
+;
+; case default
+;
+00104$:
+;	pinmode-c.c: 49: gpio->CR1 |=  bit;
+;	pinmode-c.c: 50: gpio->CR2 &= ~bit;
+;	pinmode-c.c: 51: gpio->DDR |=  bit;
+	sim
+	BIT_SET(CR1)
+004$:	BIT_CLEAR(CR2)
+	BIT_SET(DDR)
+	rim
+
+00118$:
+;	pinmode-c.c: 54: }
+	addw	sp, #8
+__endasm;
+}
+
+/*
 void pinMode_asm(uint8_t pin, uint8_t mode)
 {
 	(void)	pin;	// empty code to avoid warning
@@ -170,5 +337,4 @@ and	a,(2,x)
 	addw	sp, #16
 __endasm;
 }
-
-
+*/

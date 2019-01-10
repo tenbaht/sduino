@@ -1,5 +1,11 @@
-/*
- * test spi functions
+/**
+ * Test the optimized Versions of pinMode
+ *
+ * After each test the content of the GPIO registers is checked against
+ * the expected values. The table results[] contains the number of mismatched
+ * bytes after each test.
+ *
+ * Expected result: all bytes in results[] == 0x00
  */
 
 #define ARDUINO_MAIN
@@ -9,44 +15,69 @@
 void pinMode_c(uint8_t pin, uint8_t mode);
 void pinMode_asm(uint8_t pin, uint8_t mode);
 
+// select which function should be used for the test
+#define pinMode_test	pinMode_asm
 
+uint8_t results[6];
+
+/**
+ * checks a memory area for an expected content
+ *
+ * @returns: number of mismatched bytes (0=ok)
+ */
 uint8_t checkresult(uint16_t adr, uint8_t *data)
 {
-	uint8_t i,ok;
+	uint8_t i,err;
 
-	ok = 1;
+	err = 0;
 	for (i=0; i<3; ++i) {
-		if (((uint8_t*)adr)[2+i] != data[i]) ok=0;
+		if (((uint8_t*)adr)[2+i] != data[i]) err++;
 	}
-	return ok;
+	return err;
 }
 
+/**
+ * fills a memory area with zeros
+ *
+ * The simulator does not clear the memory and does not properly
+ * initialize the IO registers after reset. Use this instead.
+ */
+void _memset(unsigned char *adr, unsigned int cnt)
+{
+	while (cnt--) *adr++=0;
+}
 
 void main(void)
 {
+	unsigned char *r = results;
+
+	_memset((unsigned char *)GPIOA_BaseAddress, 20);
+
 	// expected result: xx xx 00 00 00
-	pinMode_asm(PA1,INPUT);
-	checkresult(GPIOA_BaseAddress, "\x00\x00\x00");
+	pinMode_test(PA1,INPUT);
+	*r++ = checkresult(GPIOA_BaseAddress, "\x00\x00\x00");
 
 	// expected result: xx xx 20 20 00
-	pinMode_asm(PB5,OUTPUT);
-	checkresult(GPIOB_BaseAddress, "\x20\x20\x00");
+	pinMode_test(PB5,OUTPUT);
+	*r++ = checkresult(GPIOB_BaseAddress, "\x20\x20\x00");
 
 	// expected result: xx xx 00 10 00
-	pinMode_asm(PC4,INPUT_PULLUP);
-	checkresult(GPIOC_BaseAddress, "\x00\x10\x00");
+	pinMode_test(PC4,INPUT_PULLUP);
+	*r++ = checkresult(GPIOC_BaseAddress, "\x00\x10\x00");
 
 	// expected result: xx xx 20 10 00
-	pinMode_asm(PC5,OUTPUT_OD);
-	checkresult(GPIOC_BaseAddress, "\x20\x10\x00");
+	pinMode_test(PC5,OUTPUT_OD);
+	*r++ = checkresult(GPIOC_BaseAddress, "\x20\x10\x00");
 
 	// expected result: xx xx 02 02 02
-	pinMode_asm(PD1,OUTPUT_FAST);
-	checkresult(GPIOD_BaseAddress, "\x02\x02\x02");
+	pinMode_test(PD1,OUTPUT_FAST);
+	*r++ = checkresult(GPIOD_BaseAddress, "\x02\x02\x02");
 
 	// expected result: xx xx 42 02 42
-	pinMode_asm(PD6,OUTPUT_OD_FAST);
-	checkresult(GPIOD_BaseAddress, "\x42\x02\x42");
+	pinMode_test(PD6,OUTPUT_OD_FAST);
+	*r++ = checkresult(GPIOD_BaseAddress, "\x42\x02\x42");
+
+	for(;;);	// endless loop
 }
 
 /*

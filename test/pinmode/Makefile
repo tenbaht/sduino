@@ -1,5 +1,5 @@
 BASENAME=$(shell basename $$(pwd))
-EXECUTABLE=$(BASENAME).ihx
+EXECUTEABLE=$(BASENAME).ihx
 
 #SDCCBASE=/usr/local
 SDCCBASE=/opt/sdcc
@@ -23,11 +23,11 @@ SRCS=pinmode-c.c pinmode-asm.c main.c
 BUILDDIR=build
 OBJECTS=$(SRCS:%.c=$(BUILDDIR)/%.rel)
 
-.PHONY: all clean flash statistics
+.PHONY: all clean flash statistics sim
 
-all: $(EXECUTEABLE) statistics
+all: $(EXECUTEABLE) statistics sim
 
-$(EXECUTABLE): $(OBJECTS)
+$(EXECUTEABLE): $(OBJECTS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 
 $(OBJECTS) : $(BUILDDIR)/%.rel : %.c
@@ -45,6 +45,12 @@ readopt:
 # file
 statistics: $(OBJECTS)
 	cd $(BUILDDIR); awk '/ CODE/ {print FILENAME "\t" strtonum("0x"$$4)}' *.sym
+
+sim: $(EXECUTEABLE)
+	@. ./sim
+
+#	@. ./sim | grep "0x0001 00 00 00 00 00 00"
+#	. ./sim | grep "0x0001 00 00 00 00 00 00" || echo "fail"
 
 
 #	grep "[0-9] _" $(BASENAME).rst |\

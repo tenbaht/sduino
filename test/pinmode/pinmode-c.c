@@ -10,7 +10,7 @@ void pinMode_c(uint8_t pin, uint8_t mode)
 	uint8_t port = digitalPinToPort(pin);
 	volatile GPIO_TypeDef *gpio;
 
-	if (port == NOT_A_PIN) return;
+	if (port == NOT_A_PORT) return;
 
 	gpio = (GPIO_TypeDef *) portOutputRegister(port);
 
