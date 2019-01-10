@@ -71,9 +71,17 @@ void HardwareSerial_flush(void);
 void HardwareSerial_end(void);
 
 
-// Alias Definitions for a more Arduino-like look ////////////////////////////
+// Pseudo-OO interface: Plain C disguised as almost-C++, thanks to X-Macros
+//
+// We want to "inherit" the output functions from Print, so include that
+// header file as well before we start calling any macros.
 
-#define Serial			HardwareSerial()
+#include <xmacro.h>
+#include <Print.h>
+
+
+// Since this is (so far) a singleton class, simple #define statement will work
+
 #define Serial_begin		HardwareSerial_begin
 #define Serial_begin_config	HardwareSerial_begin_config
 #define Serial_available	HardwareSerial_available
@@ -83,33 +91,8 @@ void HardwareSerial_end(void);
 #define Serial_end		HardwareSerial_end
 
 
-// variants of the standard Serial.print() function: Separate implementations
-// for string, char, unsigned, signed int
-#define Serial_print_s(S)	Print_print_s(HardwareSerial_write,S)
-#define Serial_print_sn(S,N)	Print_print_sn(HardwareSerial_write,S,N)
-#define Serial_print_c(C)	HardwareSerial_write(C)
+// "inherit" all print methods from the Print "class"
 
-// print signed/unsigned integer values (char, short, int, long) as decimal values
-#define Serial_print_i(I)	Print_print_i(HardwareSerial_write,I)
-#define Serial_print_u(U)	Print_print_u(HardwareSerial_write,U)
-
-// print signed/unsigned integer values (char, short, int, long) to base B
-#define Serial_print_ib(I,B)	Print_print_ib(HardwareSerial_write,I,B)
-#define Serial_print_ub(U,B)	Print_print_ub(HardwareSerial_write,U,B)
-
-// print float value
-#define Serial_print_f(F)	Print_print_fd(HardwareSerial_write,F,2)
-#define Serial_print_fd(F,D)	Print_print_fd(HardwareSerial_write,F,D)
-
-#define Serial_println()	Print_println(HardwareSerial_write)
-#define Serial_println_s(S)	Print_println_s(HardwareSerial_write,S)
-#define Serial_println_sn(S,N)	Print_println_sn(HardwareSerial_write,S,N)
-#define Serial_println_u(U)	Print_println_u(HardwareSerial_write,U)
-#define Serial_println_i(I)	Print_println_i(HardwareSerial_write,I)
-#define Serial_println_ib(I,B)	Print_println_ib(HardwareSerial_write,I,B)
-#define Serial_println_ub(U,B)	Print_println_ub(HardwareSerial_write,U,B)
-#define Serial_println_f(F)	Print_println_fd(HardwareSerial_write,F,2)
-#define Serial_println_fd(F,D)	Print_println_fd(HardwareSerial_write,F,D)
-
+XPrintMethods   (HardwareSerial,Serial)
 
 #endif
