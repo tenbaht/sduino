@@ -96,6 +96,8 @@ names. The preprocessor does not allow for variable macro names. That means
 `_Generic` would work with fixed name like `Serial`, but it wouldn't work
 for `SoftwareSerial` with no standard instance name.
 
+[This](https://mort.coffee/home/obscure-c-features/) is a good introduction
+into the use of `_Generic`.
 
 
 
