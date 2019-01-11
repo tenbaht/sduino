@@ -1,7 +1,11 @@
 # Compiling the ST Standard Peripheral Library SPL
 
+The actual compiler scripts are now a project on their own:
+[spl-splitter](https://github.com/tenbaht/spl-splitter). The source files in
+src/ are still kept here for reference, but they might be removed later as
+they are not required anymore for compilation.
 
-all of this might be moved to this location at a later stage of the project:
+All of this might be moved to this location at a later stage of the project:
 hardware/tools/stm8/STM8S_StdPeriph_Driver
 
 
@@ -58,9 +62,8 @@ stm8s_wwdg.c|+	|+	|+		|+	|+		|+
 ## STM8S903 and STM8AF622x
 
 The definitions for these two (uncommon) CPUs are flawed in the original
-versions of the SPL. `inc/stm8s.h` needs
-[this patch](correct_stm8s908.patch) if you start from
-scratch with the stock SPL files from the ST website.
+versions of the SPL. The patch for `inc/stm8s.h` is now part of the
+[STM8-SPL_SDCC_patch](https://github.com/gicking/STM8-SPL_SDCC_patch).
 
 
 

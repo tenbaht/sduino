@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - reduced binary size by splitting some Arduino core files
 - reduced binary size by optimizing the pinMode() implementation
 - using busybox as command shell for windows to run the wrapper scripts
+- move the SPL compilation scripts into a separate project spl-splitter
 
 ### Fixed
 - building the core library when using make (regression bug in 0.4.0)
