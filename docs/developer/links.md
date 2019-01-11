@@ -2,6 +2,10 @@
 
 ## Further reading and application notes
 
+A very good and compact primer on
+[STM8S-Programming](https://github.com/TG9541/stm8ef/wiki/STM8S-Programming).
+Does not rely on any external libraries.
+
 [A series of
 articles](https://lujji.github.io/blog/bare-metal-programming-stm8/) on bare
 metal programming of the STM8S CPUs. By far the best introduction I
