@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm8s_tim5.h
   * @author  MCD Application Team
-  * @version V2.2.0
-  * @date    30-September-2014
+  * @version V2.3.0
+  * @date    16-June-2017
   * @brief   This file contains all functions prototype and macros for the TIM5 peripheral.
    ******************************************************************************
   * @attention
@@ -469,10 +469,5 @@ void TIM5_EncoderInterfaceConfig(TIM5_EncoderMode_TypeDef TIM5_EncoderMode, TIM5
   */
 
 #endif /* __STM8S_TIM5_H */
-
-/**
-  * @}
-  */
-  
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

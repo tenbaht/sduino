@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm8s_adc2.h
   * @author  MCD Application Team
-  * @version V2.2.0
-  * @date    30-September-2014
+  * @version V2.3.0
+  * @date    16-June-2017
   * @brief   This file contains all the prototypes/macros for the ADC2 peripheral.
    ******************************************************************************
   * @attention

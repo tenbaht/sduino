@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm8s_itc.c
   * @author  MCD Application Team
-  * @version V2.2.0
-  * @date    30-September-2014
+  * @version V2.3.0
+  * @date    16-June-2017
   * @brief   This file contains all the functions for the ITC peripheral.
    ******************************************************************************
   * @attention
@@ -55,12 +55,12 @@ uint8_t ITC_GetCPUCC(void)
   return; /* Ignore compiler warning, the returned value is in A register */
 #elif defined _RAISONANCE_ /* _RAISONANCE_ */
   return _getCC_();
-#elif defined _IAR_ /* _IAR_ */
+#elif defined(_SDCC_)                    /* SDCC patch: do same as IAR */
+  __asm__("push cc");
+  __asm__("pop a");
+#else /* _IAR_ */
   asm("push cc");
   asm("pop a"); /* Ignore compiler warning, the returned value is in A register */
-#else /* _SDCC_ */
-  __asm__("push cc");
-  __asm__("pop a"); /* Ignore compiler warning, the returned value is in A register */
 #endif /* _COSMIC_*/
 }
 
@@ -160,10 +160,10 @@ ITC_PriorityLevel_TypeDef ITC_GetSoftwarePriority(ITC_Irq_TypeDef IrqNum)
 
   case ITC_IRQ_TIM3_CAPCOM:
 #if defined(STM8S208) ||defined(STM8S207) || defined (STM8S007) || defined(STM8S103) || \
-    defined(STM8S003) ||defined(STM8S903) || defined (STM8AF52Ax) || defined (STM8AF62Ax)
+    defined(STM8S003) ||defined(STM8S001) || defined (STM8S903) || defined (STM8AF52Ax) || defined (STM8AF62Ax)
   case ITC_IRQ_UART1_TX:
   case ITC_IRQ_UART1_RX:
-#endif /*STM8S208 or STM8S207 or STM8S007 or STM8S103 or STM8S003 or STM8S903 or STM8AF52Ax or STM8AF62Ax */ 
+#endif /*STM8S208 or STM8S207 or STM8S007 or STM8S103 or STM8S003 or STM8S001 or STM8S903 or STM8AF52Ax or STM8AF62Ax */ 
 #if defined(STM8AF622x)
   case ITC_IRQ_UART4_TX:
   case ITC_IRQ_UART4_RX:
@@ -183,9 +183,9 @@ ITC_PriorityLevel_TypeDef ITC_GetSoftwarePriority(ITC_Irq_TypeDef IrqNum)
   case ITC_IRQ_ADC2:
 #endif /*STM8S208 or STM8S207 or STM8AF52Ax or STM8AF62Ax */
 #if defined(STM8S105) || defined(STM8S005) || defined(STM8S103) || defined(STM8S003) || \
-    defined(STM8S903) || defined(STM8AF626x) || defined(STM8AF622x)
+    defined(STM8S001) || defined(STM8S903) || defined(STM8AF626x) || defined(STM8AF622x)
   case ITC_IRQ_ADC1:
-#endif /*STM8S105, STM8S005, STM8S103 or STM8S003 or STM8S903 or STM8AF626x or STM8AF622x */
+#endif /*STM8S105, STM8S005, STM8S103 or STM8S003 or STM8S001 or STM8S903 or STM8AF626x or STM8AF622x */
 #if defined (STM8S903) || defined (STM8AF622x)
   case ITC_IRQ_TIM6_OVFTRI:
 #else
@@ -285,10 +285,10 @@ void ITC_SetSoftwarePriority(ITC_Irq_TypeDef IrqNum, ITC_PriorityLevel_TypeDef P
     
   case ITC_IRQ_TIM3_CAPCOM:
 #if defined(STM8S208) ||defined(STM8S207) || defined (STM8S007) || defined(STM8S103) || \
-    defined(STM8S003) ||defined(STM8S903) || defined (STM8AF52Ax) || defined (STM8AF62Ax)
+    defined(STM8S001) ||defined(STM8S003) ||defined(STM8S903) || defined (STM8AF52Ax) || defined (STM8AF62Ax)
   case ITC_IRQ_UART1_TX:
   case ITC_IRQ_UART1_RX:
-#endif /*STM8S208 or STM8S207 or STM8S007 or STM8S103 or STM8S003 or STM8S903 or STM8AF52Ax or STM8AF62Ax */ 
+#endif /*STM8S208 or STM8S207 or STM8S007 or STM8S103 or STM8S003 or STM8S001 or STM8S903 or STM8AF52Ax or STM8AF62Ax */ 
 #if defined(STM8AF622x)
   case ITC_IRQ_UART4_TX:
   case ITC_IRQ_UART4_RX:
@@ -311,9 +311,9 @@ void ITC_SetSoftwarePriority(ITC_Irq_TypeDef IrqNum, ITC_PriorityLevel_TypeDef P
 #endif /*STM8S208 or STM8S207 or STM8AF52Ax or STM8AF62Ax */
     
 #if defined(STM8S105) || defined(STM8S005) || defined(STM8S103) || defined(STM8S003) || \
-    defined(STM8S903) || defined(STM8AF626x) || defined (STM8AF622x)
+    defined(STM8S001) || defined(STM8S903) || defined(STM8AF626x) || defined (STM8AF622x)
   case ITC_IRQ_ADC1:
-#endif /*STM8S105, STM8S005, STM8S103 or STM8S003 or STM8S903 or STM8AF626x or STM8AF622x */
+#endif /*STM8S105, STM8S005, STM8S103 or STM8S003 or STM8S001 or STM8S903 or STM8AF626x or STM8AF622x */
     
 #if defined (STM8S903) || defined (STM8AF622x)
   case ITC_IRQ_TIM6_OVFTRI:

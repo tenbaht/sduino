@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm8s_spi.c
   * @author  MCD Application Team
-  * @version V2.2.0
-  * @date    30-September-2014
+  * @version V2.3.0
+  * @date    16-June-2017
   * @brief   This file contains all the functions for the SPI peripheral.
    ******************************************************************************
   * @attention
@@ -303,7 +303,7 @@ void SPI_BiDirectionalLineConfig(SPI_Direction_TypeDef SPI_Direction)
 /**
   * @brief  Checks whether the specified SPI flag is set or not.
   * @param  SPI_FLAG : Specifies the flag to check.
-  *         This parameter can be any of the @ref SPI_FLAG_TypeDef enumeration.
+  *         This parameter can be any of the @ref SPI_Flag_TypeDef enumeration.
   * @retval FlagStatus : Indicates the state of SPI_FLAG.
   *         This parameter can be any of the @ref FlagStatus enumeration.
   */

@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - reduced binary size by optimizing the pinMode() implementation
 - using busybox as command shell for windows to run the wrapper scripts
 - move the SPL compilation scripts into a separate project spl-splitter
+- update SPL files to v2.3.0 (add support for STM8S001)
 
 ### Fixed
 - building the core library when using make (regression bug in 0.4.0)

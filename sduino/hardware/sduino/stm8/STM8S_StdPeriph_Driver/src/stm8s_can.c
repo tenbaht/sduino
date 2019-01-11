@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm8s_can.c
   * @author  MCD Application Team
-  * @version V2.2.0
-  * @date    30-September-2014
+  * @version V2.3.0
+  * @date    16-June-2017
   * @brief   This file contains all the functions for the CAN peripheral.
    ******************************************************************************
   * @attention
@@ -577,7 +577,7 @@ void CAN_TTComModeCmd(FunctionalState NewState)
 
 /**
   * @brief  Initiates the transmission of a message.
-  * @param   CAN_Id the ID number of the message, its size depends on @ref CAN_IDE value.
+  * @param  CAN_Id the ID number of the message, its size depends on CAN_IDE value.
   * @param[in] CAN_IDE the ID type of the message, this parameter can be one of the @ref CAN_Id_TypeDef enumeration.
   * @param[in] CAN_RTR the message type, this parameter can be one of the @ref CAN_RTR_TypeDef enumeration.
   * @param[in] CAN_DLC the number of data in the message type, this parameter can be a value between 0 to 7.
@@ -666,7 +666,7 @@ CAN_TxStatus_TypeDef CAN_Transmit(uint32_t CAN_Id,
 
 /**
   * @brief  Checks the transmission of a message.
-  * @param   TransmitMailbox: the number of the mailbox that is used for transmission, can be on of  @ref CAN_TransmitMailBox_TypeDef.
+  * @param  CAN_TransmitMailbox : the number of the mailbox that is used for transmission, can be on of  @ref CAN_TransmitMailBox_TypeDef.
   * @retval CAN_TxStatus_Ok if the CAN driver transmits the message, CAN_TxStatus_Failed in an other case.
   */
 CAN_TxStatus_TypeDef CAN_TransmitStatus(CAN_TransmitMailBox_TypeDef CAN_TransmitMailbox)
@@ -718,7 +718,7 @@ CAN_TxStatus_TypeDef CAN_TransmitStatus(CAN_TransmitMailBox_TypeDef CAN_Transmit
 
 /**
   * @brief  Cancels a transmit request.
-  * @param   TransmitMailbox : the Transmission mailbox, can be one of CAN_TransmitMailBox_TypeDef
+  * @param  CAN_TransmitMailbox : the Transmission mailbox, can be one of CAN_TransmitMailBox_TypeDef
   * @retval None
   */
 void CAN_CancelTransmit(CAN_TransmitMailBox_TypeDef CAN_TransmitMailbox)
@@ -868,7 +868,7 @@ uint8_t CAN_GetReceivedDLC(void)
 
 /**
   * @brief  Gets the  CAN Data of the received message.
-  * @param   CAN_DataIndexe : number of the received Data, it can
+  * @param  CAN_DataIndex : number of the received Data, it can
   *  be an integer between 0 to 7.
   * @retval the received CAN message ith Data.
   * @par Required preconditions:
@@ -1064,14 +1064,14 @@ CAN_ErrorCode_TypeDef CAN_GetLastErrorCode(void)
 
 /**
   * @brief  Clears the CAN's pending flags.
-  * @param   CAN_FLAG : Flag to be cleared, can be one of the following parameters:
+  * @param   CAN_Flag : Flag to be cleared, can be one of the following parameters:
   *          CAN_FLAG_RQCP0            Request MailBox0  Flag
   *          CAN_FLAG_RQCP1            Request MailBox1  Flag
   *          CAN_FLAG_RQCP2            Request MailBox2  Flag
-  *       CAN_FLAG_FF               FIFO Full  Flag
-  *       CAN_FLAG_FOV              FIFO Overrun  Flag
-  *       CAN_FLAG_WKU              wake up   Flag
-  *          CAN_FLAG_LEC               Last error code Flag
+  *          CAN_FLAG_FF               FIFO Full  Flag
+  *          CAN_FLAG_FOV              FIFO Overrun  Flag
+  *          CAN_FLAG_WKU              wake up  Flag
+  *          CAN_FLAG_LEC              Last error code Flag
   * @retval None
   */
 void CAN_ClearFlag(CAN_FLAG_TypeDef CAN_Flag)
@@ -1113,7 +1113,7 @@ void CAN_ClearFlag(CAN_FLAG_TypeDef CAN_Flag)
 
 /**
   * @brief  Checks whether the specified CAN flag is set or not.
-  * @param   CAN_FLAG: specifies the flag to check, can be one of @ref CAN_FLAG_TypeDef enumeration.
+  * @param  CAN_Flag : specifies the flag to check, can be one of @ref CAN_FLAG_TypeDef enumeration.
   * @retval The new state of CAN_FLAG which can be one of @ref FlagStatus.
   */
 FlagStatus CAN_GetFlagStatus(CAN_FLAG_TypeDef CAN_Flag)
@@ -1411,7 +1411,7 @@ CAN_Page_TypeDef CAN_GetSelectedPage(void)
 
 /**
   * @brief  Sets the registers page to be selected.
-  * @param   the selected page which can be one of the @ref CAN_Page_TypeDef.
+  * @param  CAN_Page: the selected page which can be one of the @ref CAN_Page_TypeDef.
   * @retval None
   */
 void CAN_SelectPage(CAN_Page_TypeDef CAN_Page)
@@ -1441,5 +1441,12 @@ static ITStatus CheckITStatus(uint8_t CAN_Reg, uint8_t It_Bit)
   return (ITStatus)pendingbitstatus;
 }
 
+/**
+  * @}
+  */
+  
+/**
+  * @}
+  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
