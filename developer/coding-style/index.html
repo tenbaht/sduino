@@ -181,7 +181,7 @@
 </li>
                                 </ul>
                             </li>
-                            <li class="dropdown">
+                            <li class="dropdown active">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Developer Guide <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
@@ -191,6 +191,10 @@
                                     
 <li >
     <a href="../compiling-the-tools/">Compiling the tools</a>
+</li>
+                                    
+<li >
+    <a href="../cross-compile-for-osx/">Cross-compiling the tools for OSX</a>
 </li>
                                     
 <li >
@@ -205,6 +209,10 @@
     <a href="../pin_mapping/">Ways to define a pin mapping</a>
 </li>
                                     
+<li class="active">
+    <a href="./">Coding style</a>
+</li>
+                                    
 <li >
     <a href="../sdcc/">Using the SDCC compiler</a>
 </li>
@@ -215,6 +223,10 @@
                                     
 <li >
     <a href="../bare-metal-programming/">Bare metal programming on the STM8</a>
+</li>
+                                    
+<li >
+    <a href="../optimizations/">Optimizations</a>
 </li>
                                     
 <li >
@@ -240,6 +252,16 @@
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
+                            <li >
+                                <a rel="next" href="../pin_mapping/">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../sdcc/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
                             <li>
                                 <a href="https://github.com/tenbaht/sduino/edit/master/docs/developer/coding-style.md"><i class="fa fa-github"></i> Edit on GitHub</a>
                             </li>
@@ -270,10 +292,13 @@ Changelog.md</p>
 <h2 id="code-format">Code format</h2>
 <p>When porting an existing Arduino library I try to preserve the original
 formatting as much as possible to allow for easy comparison to the original
-state. There is a development of a C++ capable compiler environment going
-on. The developer is even targeting Sduino for his project and at one point
-in the (still distant) future we might be able to switch back to the orginal
-library code again. (But don't hold your breath yet)</p>
+state.</p>
+<p>There is a development of a C++ capable compiler environment going on. There
+is no public website for that project yet, but I am in contact with the
+developer. He is even targeting Sduino for his project and at one point in
+the (still distant) future we might be able to switch back to the orginal
+library code again. Preserved code structure would be a big plus then. (But
+don't hold your breath yet)</p>
 <p>Newly written code is mostly formatted using indent according to the linux
 kernel coding style, using Tabs, Tab width 8, line length 80:</p>
 <pre><code class="bash">indent -linux

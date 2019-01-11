@@ -1,0 +1,18 @@
+# Cross-compile for raspberry
+
+This is very easy. There is an [article on hackaday](https://hackaday.com/2016/02/03/code-craft-cross-compiling-for-the-raspberry-pi/)
+to get you started.
+
+Install the compiler:
+
+	apt install g++-arm-linux-gnueabihf pkg-config-arm-linux-gnueabihf
+
+Download the dependencies:
+
+	# libusb-1.0:
+	wget http://ftp.us.debian.org/debian/pool/main/libu/libusb-1.0/libusb-1.0-0_1.0.21-1_armhf.deb
+	dpkg -x --path-exclude=/usr  libusb-1.0-0_1.0.21-1_armhf.deb .
+	ln -s libusb-1.0.so.0.1.0 libusb-1.0.so
+	# libudev:
+	wget http://ftp.us.debian.org/debian/pool/main/s/systemd/libudev1_232-25+deb9u6_armhf.deb
+	dpkg -x --path-exclude=/usr  libudev1_232-25+deb9u6_armhf.deb .

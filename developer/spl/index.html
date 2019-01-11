@@ -194,6 +194,10 @@
 </li>
                                     
 <li >
+    <a href="../cross-compile-for-osx/">Cross-compiling the tools for OSX</a>
+</li>
+                                    
+<li >
     <a href="../update-to-manual/">Update an automatic installation to a manual installation</a>
 </li>
                                     
@@ -206,6 +210,10 @@
 </li>
                                     
 <li >
+    <a href="../coding-style/">Coding style</a>
+</li>
+                                    
+<li >
     <a href="../sdcc/">Using the SDCC compiler</a>
 </li>
                                     
@@ -215,6 +223,10 @@
                                     
 <li >
     <a href="../bare-metal-programming/">Bare metal programming on the STM8</a>
+</li>
+                                    
+<li >
+    <a href="../optimizations/">Optimizations</a>
 </li>
                                     
 <li >
@@ -262,6 +274,7 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
         <li class="main active"><a href="#st-standard-peripherie-library">ST Standard Peripherie Library</a></li>
+            <li><a href="#optimizing-the-code">Optimizing the code</a></li>
             <li><a href="#interrupts">Interrupts</a></li>
     </ul>
 </div></div>
@@ -276,34 +289,17 @@ presentation</a>,</p>
 zip file. This and <a href="https://lujji.github.io/blog/bare-metal-programming-stm8/">Lujji's
 blog</a> is the most
 useful reference on using this library and programming the STM8 in general.</p>
-<p>For use with SDCC the library needs to be patched:</p>
-<pre><code class="bash">git clone https://github.com/g-gabber/STM8S_StdPeriph_Driver.git
-git clone https://github.com/gicking/SPL_2.2.0_SDCC_patch.git
-cp ../STM8S_SPL_2.2.0/Libraries/STM8S_StdPeriph_Driver/inc/stm8s.h .
-patch -p1 &lt; ../SPL_2.2.0_SDCC_patch/STM8_SPL_v2.2.0_SDCC.patch
-cp -av  ../STM8S_StdPeriph_Lib/Project/STM8S_StdPeriph_Template/stm8s_conf.h .
-cp -av  ../STM8S_StdPeriph_Lib/Project/STM8S_StdPeriph_Template/stm8s_it.h .
+<p>For use with SDCC the library needs to be patched with Georg's <a href="https://github.com/gicking/STM8-SPL_SDCC_patch">SPL-SDCC
+patches</a>:</p>
+<pre><code class="bash">unzip en.stsw-stm8069.zip
+wget https://raw.githubusercontent.com/gicking/STM8-SPL_SDCC_patch/master/STM8S_StdPeriph_Lib_V2.3.1_sdcc.patch
+patch -p0 &lt; STM8S_StdPeriph_Lib_V2.3.1_sdcc.patch
 </code></pre>
 
+<p>Check out the test project and the project template in
+<code>STM8S_StdPeriph_Lib/Project/STM8S_StdPeriph_test</code> and
+<code>STM8S_StdPeriph_Lib/Project/STM8S_StdPeriph_Template</code></p>
 <p>SDCC uses .rel as the file extension for its object files.</p>
-<p>Additional patch required for stm8s_itc.c:</p>
-<pre><code class="diff">--- stm8s_itc.c~    2014-10-21 17:32:20.000000000 +0200
-+++ stm8s_itc.c 2016-12-11 21:56:41.786048494 +0100
-@@ -55,9 +55,12 @@
-   return; /* Ignore compiler warning, the returned value is in A register */
- #elif defined _RAISONANCE_ /* _RAISONANCE_ */
-   return _getCC_();
--#else /* _IAR_ */
-+#elif defined _IAR_ /* _IAR_ */
-   asm(&quot;push cc&quot;);
-   asm(&quot;pop a&quot;); /* Ignore compiler warning, the returned value is in A register */
-+#else /* _SDCC_ */
-+  __asm__(&quot;push cc&quot;);
-+  __asm__(&quot;pop a&quot;); /* Ignore compiler warning, the returned value is in A register */
- #endif /* _COSMIC_*/
- }
-</code></pre>
-
 <p>Now the library can be compiled for the STM8S103 using this Makefile:</p>
 <pre><code class="make">CC=sdcc
 AR=sdar
@@ -335,13 +331,12 @@ clean:
 
 <p>This library can now be used for linking with blink_spl or uart_spl. The
 files stm8s_conf.h and stm8s_it.h are still needed for compilation.</p>
+<h3 id="optimizing-the-code">Optimizing the code</h3>
 <p>The linker does not remove individual unused functions from an object file,
 only complete object files can be skipped.<br />
 <strong>=&gt; for building a library it is better to separate all functions into
 individual source files </strong></p>
-<p>The SPL folder in this archive contains a script <code>doit</code> to separate the
-functions before compilation.
-FIXME: description needed</p>
+<p>See <a href="../optimizations/#splitting-files">here</a> for details.</p>
 <p>A suggestion how to move at least the IRQ vectors away from the libray into
 the own source files:
 http://richs-words.blogspot.de/2010/09/stm8s-interrupt-handling.html</p>

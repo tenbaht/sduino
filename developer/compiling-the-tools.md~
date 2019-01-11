@@ -2,7 +2,8 @@
 
 ## stm8gal
 
-Project page: https://github.com/gicking/stm8gal
+Project repository:
+[https://github.com/gicking/stm8gal](https://github.com/gicking/stm8gal)
 
 	git clone git@github.com:gicking/stm8gal.git
 
@@ -53,7 +54,7 @@ Now compile:
 
 ## stm8flash
 
-Project page:
+Project repository:
 [https://github.com/vdudouyt/stm8flash](https://github.com/vdudouyt/stm8flash)
 
 Compiling for Linux and OSX is straight forward, Windows is more
@@ -99,7 +100,7 @@ this is not supported by mingw, only by cygwin. As a workaround apply [this
 patch](../img/no-espstlink-10810e88.patch) to disable the espstlink
 functionality on Windows systems:
 
-	patch -p1 no-espstlink-10810e88.patch
+	patch -p1 < no-espstlink-10810e88.patch
 
 Obviously, a better approach would be the use of a simple intermediate
 cross-platform layer like

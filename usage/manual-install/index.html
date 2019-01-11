@@ -194,6 +194,10 @@
 </li>
                                     
 <li >
+    <a href="../../developer/cross-compile-for-osx/">Cross-compiling the tools for OSX</a>
+</li>
+                                    
+<li >
     <a href="../../developer/update-to-manual/">Update an automatic installation to a manual installation</a>
 </li>
                                     
@@ -206,6 +210,10 @@
 </li>
                                     
 <li >
+    <a href="../../developer/coding-style/">Coding style</a>
+</li>
+                                    
+<li >
     <a href="../../developer/sdcc/">Using the SDCC compiler</a>
 </li>
                                     
@@ -215,6 +223,10 @@
                                     
 <li >
     <a href="../../developer/bare-metal-programming/">Bare metal programming on the STM8</a>
+</li>
+                                    
+<li >
+    <a href="../../developer/optimizations/">Optimizations</a>
 </li>
                                     
 <li >
@@ -301,13 +313,13 @@ the hardware folder, if not already present:</p>
 <h4 id="sdcc">SDCC</h4>
 <p>Extract the downloaded <a href="http://sdcc.sourceforge.net/snap.php">SDCC archive</a>
 under <code>/opt</code>:</p>
-<pre><code class="text">    sudo mkdir /opt
+<pre><code class="bash">    sudo mkdir /opt
     sudo tar xvjf ~/Downloads/sdcc-snapshot* -C /opt
 </code></pre>
 
 <p>Create a link to SDCC from the tools directory of the sduino repository
 (required for IDE builds):</p>
-<pre><code class="text">    cd ~/Arduino/hardware/sduino/tools
+<pre><code class="bash">    cd ~/Arduino/hardware/sduino/tools
     ln -s /opt/sdcc .
 </code></pre>
 
@@ -316,14 +328,14 @@ under <code>/opt</code>:</p>
 tools directory. Create a link <code>linux</code> to the linux tools directory that
 matches your system and copy the binaries to a convient place in your path,
 e.g. <code>/usr/local/bin</code>:</p>
-<pre><code class="text">    ln -s linux64 linux
+<pre><code class="bash">    ln -s linux64 linux
     cp -av linux/* /usr/local/bin
 </code></pre>
 
 <p><code>make</code> and libusb-1.0 (needed by stm8flash) are part of the standard
 repository for any Linux distribution. Example for Debian-type systems (like
 Ubuntu, Mint, Elementary etc.):</p>
-<pre><code class="text">    sudo apt-get install make libusb-1.0-0
+<pre><code class="bash">    sudo apt-get install make libusb-1.0-0
 </code></pre>
 
 <p>Finally, add a udev rule in order to access the USB port for your flash
@@ -332,10 +344,19 @@ tool. Save this as root in in <code>/etc/udev/rules.d/99-stlink.rules</code>:</p
 
     # ST-Link V1, if using a STM8S discovery board
     # important: It needs a special entry in /etc/modprobe.d
-    ATTR{idVendor}==&quot;0483&quot;, ATTR{idProduct}==&quot;3744&quot;, MODE=&quot;0666&quot;, GROUP=&quot;plugdev&quot;
+    SUBSYSTEMS==&quot;usb&quot;, ATTRS{idVendor}==&quot;0483&quot;, ATTRS{idProduct}==&quot;3744&quot;, \
+        MODE:=&quot;0666&quot;, \
+        SYMLINK+=&quot;stlinkv1_%n&quot;
 
     # ST-Link/V2, the china adapter with the green plastic housing
-    ATTR{idVendor}==&quot;0483&quot;, ATTR{idProduct}==&quot;3748&quot;, MODE=&quot;0666&quot;, GROUP=&quot;plugdev&quot;
+    SUBSYSTEMS==&quot;usb&quot;, ATTRS{idVendor}==&quot;0483&quot;, ATTRS{idProduct}==&quot;3748&quot;, \
+        MODE:=&quot;0666&quot;, \
+        SYMLINK+=&quot;stlinkv2_%n&quot;
+
+    # ST-Link/V2.1, the new Nucleo STM8 boards
+    SUBSYSTEMS==&quot;usb&quot;, ATTRS{idVendor}==&quot;0483&quot;, ATTRS{idProduct}==&quot;374b&quot;, \
+        MODE:=&quot;0666&quot;, \
+        SYMLINK+=&quot;stlinkv2-1_%n&quot;
 </code></pre>
 
 <p>Using the STM8S-Discovery board as a flash programmer requires a <a href="../hardware/stm8sdiscovery#usage-with-linux-and-stm8flash">special
@@ -344,7 +365,7 @@ entry</a>.</p>
 <h2 id="macos">MacOS</h2>
 <p>Quite similar to the Linux install. <a href="https://brew.sh/">Install Homebrew</a> if
 you haven't done it yet, than install make and unpack the sdcc snapshot:</p>
-<pre><code class="text">    brew make
+<pre><code class="bash">    brew make
     mkdir /opt
     tar xvjf sdcc-snapshot* -C /opt
 </code></pre>
@@ -353,13 +374,38 @@ you haven't done it yet, than install make and unpack the sdcc snapshot:</p>
 in your Documents folder at <code>/Users/&lt;username&gt;/Documents/Arduino/hardware</code>.</p>
 <p>Not sure about stm8flash, I didn't try it. Have a look at the <a href="https://github.com/vdudouyt/stm8flash">stm8flash
 repository</a>. It would be great if
-someone could summarize the procedure and send it to me together with a
-compiled binary for the repository.</p>
+someone could summarize the procedure and send it to me.</p>
 <h2 id="windows">Windows</h2>
-<p>Same idea again, but additionally we need to install a minimal MinGW command
-line environment with tools needed by make and the Makefile. Let's start
+<p>Same idea again, but additionally we need to install a minimal command line
+environment with all the tools needed by make and the Makefile. Let's start
 with that:</p>
+<h3 id="installing-a-command-line-environment">Installing a command line environment</h3>
+<p>This can be any of these options (in order of complexity):</p>
+<ul>
+<li>busybox and make</li>
+<li>Msys2</li>
+<li>MinGW</li>
+<li>Cygwin</li>
+</ul>
+<p>The makefile <code>sduino.mk</code> uses busybox by default when running on Windows. To
+change that, set these environment variables accordingly:</p>
+<pre><code>SHELL=bash
+.SHELLFLAGS=-c
+</code></pre>
+<p>Alternativly, it is possible to include these lines in the project <code>Makefile</code>
+or edit <code>sduino.mk</code> directly (lines 68, 69).</p>
+<h4 id="install-busybox-and-make">Install busybox and make</h4>
+<p>This is by far the easiest way to get going. busybox already comes with
+sduino in the <code>hardware/sduino/tools/win/</code> folder. A statically linked copy
+of make-4.2 can be found in the
+<a href="https://github.com/tenbaht/sduino-windowstools">windowstools</a> repository.</p>
+<p>Just copy these two binaries into a place somewhere in your <code>%PATH%</code>.</p>
 <h4 id="install-msys2">Install Msys2</h4>
+<p>Msys2/mingw is more capable than busybox and even comes with a proper
+package manager. Install this if you plan on using the command line tools
+for more than just running sdunio compilations.</p>
+<p>mingw is a full (cross-) compilation environment and it uses msys2, which is
+just a collection of basic UNIX tools. msys2 is enough for using sduino.</p>
 <ul>
 <li>Download and run the installer from <a href="http://www.msys2.org">http://www.msys2.org</a></li>
 <li>Install make: <code>pacman -S make</code></li>
@@ -370,6 +416,18 @@ with that:</p>
 <p>Now we can start working. 
 (Or read the excellent and more comprehensive installation guide on https://github.com/orlp/dev-on-windows/wiki/Installing-GCC--&amp;-MSYS2
 )</p>
+<h4 id="cygwin">Cygwin</h4>
+<p>cygwin is similar to msys2, but even more complete in the sense that it
+tries to emulate a full POSIX environment. It is really more like a virtual
+machine than just a set of libraries.</p>
+<p>Almost anything that compiles for UNIX can be compiled for cygwin with
+minimal effort. The downside is that the resulting binaries are linked
+against cygwin specific libraries and that they don't mix very well with
+Windows native applications. It is possible to do it, but it might require
+some extra effort.</p>
+<p>Install this if you need full POSIX compliance. (e.g. compiling
+stm8flash with support for espstlink, that requires the POSIX termios
+library).</p>
 <h4 id="install-the-core-files-and-sdcc">Install the core files and SDCC</h4>
 <p>Thanks to the running bash the remaining steps are the same as for Linux,
 the only difference is your Arduino folder in <code>Documents/Arduino</code>.</p>

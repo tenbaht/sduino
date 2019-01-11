@@ -1,0 +1,14 @@
+# Splitting files
+
+Help the linker by splitting big source files into single-function units.
+
+## Split Arduino core files
+
+Effect on Blink.ino:
+
+   code	 |  data|    RAM|  flash total	|split stage
+   ----  |  ----|   ----|   ----	|------------
+   2400	 |   245|     72|   2645	|before split
+   2343	 |   245|     72|   2588	|after splitting wiring.c
+   2274	 |   245|     72|   2519	|after splitting wiring_digital.c
+   1692	 |   245|     72|   1937	|after splitting HardwareSerial.c
