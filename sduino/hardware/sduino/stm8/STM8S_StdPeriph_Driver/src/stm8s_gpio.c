@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm8s_gpio.c
   * @author  MCD Application Team
-  * @version V2.2.0
-  * @date    30-September-2014
+  * @version V2.3.0
+  * @date    16-June-2017
   * @brief   This file contains all the functions for the GPIO peripheral.
    ******************************************************************************
   * @attention
@@ -64,7 +64,7 @@ void GPIO_DeInit(GPIO_TypeDef* GPIOx)
   * @param  GPIO_Pin : This parameter contains the pin number, it can be any value
   *         of the @ref GPIO_Pin_TypeDef enumeration.
   * @param  GPIO_Mode : This parameter can be a value of the
-  *         @Ref GPIO_Mode_TypeDef enumeration.
+  *         @ref GPIO_Mode_TypeDef enumeration.
   * @retval None
   */
 
@@ -134,7 +134,7 @@ void GPIO_Init(GPIO_TypeDef* GPIOx, GPIO_Pin_TypeDef GPIO_Pin, GPIO_Mode_TypeDef
   * @brief  Writes data to the specified GPIO data port.
   * @note   The port must be configured in output mode.
   * @param  GPIOx : Select the GPIO peripheral number (x = A to I).
-  * @param  GPIO_PortVal : Specifies the value to be written to the port output
+  * @param  PortVal : Specifies the value to be written to the port output
   *         data register.
   * @retval None
   */

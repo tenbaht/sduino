@@ -1,16 +1,12 @@
 # Compiling the ST Standard Peripheral Library SPL
 
+The actual compiler scripts are now a project on their own:
+[spl-splitter](https://github.com/tenbaht/spl-splitter). The source files in
+src/ are still kept here for reference, but they might be removed later as
+they are not required anymore for compilation.
 
-all of this might be moved to this location at a later stage of the project:
+All of this might be moved to this location at a later stage of the project:
 hardware/tools/stm8/STM8S_StdPeriph_Driver
-
-
-## STM8S903 and STM8AF622x
-
-The definitions for these two (uncommon) CPUs are flawed in the original
-versions of the SPL. `inc/stm8s.h` needs
-[this patch](correct_stm8s908.patch) if you start from
-scratch with the stock SPL files from the ST website.
 
 
 ## Supported CPUs
@@ -20,7 +16,7 @@ inc/stm8s.h. Some CPUs use identical libraries:
 
 Product line				| supported CPU types per library
 ----------------------------------	| ---------------------------
-| Low density devices			| STM8S003, STM8S103
+| Low density devices			| STM8S001, STM8S003, STM8S103
 | Medium density devices		| STM8S005, STM8S105, STM8AF626x
 | High density devices without CAN	| STM8S007, STM8S207, STM8AF62Ax
 | High density devices with CAN		| STM8S208, STM8AF52Ax
@@ -30,9 +26,9 @@ Product line				| supported CPU types per library
 
 Supported peripherie for the different CPUs:
 
-CPU	|STM8S003|STM8S005 |STM8S007	|STM8S208  |STM8S903	|
-	|STM8S103|STM8S105 |STM8S207	|	   |		|
-Module	|	|STM8AF626x|STM8AF62Ax	|STM8AF52Ax|		|STM8AF622x
+CPU	|STM8S001|STM8S005 |STM8S007	|STM8S208  |STM8S903	|
+	|STM8S003|STM8S105 |STM8S207	|	   |		|
+Module	|STM8S103|STM8AF626x|STM8AF62Ax	|STM8AF52Ax|		|STM8AF622x
 ------	|:-----:|:------:  |:------:	|:------:  |:------:	|
 stm8s_adc1.c|+	|+	   |		|	   |+		|+
 stm8s_adc2.c|	|	   |+		|+	   |		|
@@ -61,6 +57,14 @@ stm8s_uart4.c|	|	|		|	|		|+
 stm8s_wwdg.c|+	|+	|+		|+	|+		|+
 
 ![Table of supported peripherie per CPU](peripherie.png)
+
+
+## STM8S903 and STM8AF622x
+
+The definitions for these two (uncommon) CPUs are flawed in the original
+versions of the SPL. The patch for `inc/stm8s.h` is now part of the
+[STM8-SPL_SDCC_patch](https://github.com/gicking/STM8-SPL_SDCC_patch).
+
 
 
 ## Recycle bin

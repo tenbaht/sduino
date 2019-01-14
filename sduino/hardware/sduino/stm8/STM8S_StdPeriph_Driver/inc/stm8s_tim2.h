@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm8s_tim2.h
   * @author  MCD Application Team
-  * @version V2.2.0
-  * @date    30-September-2014
+  * @version V2.3.0
+  * @date    16-June-2017
   * @brief   This file contains all functions prototype and macros for the TIM2 peripheral.
    ******************************************************************************
   * @attention
@@ -333,10 +333,5 @@ void TIM2_ClearITPendingBit(TIM2_IT_TypeDef TIM2_IT);
   */
 
 #endif /* __STM8S_TIM2_H */
-
-/**
-  * @}
-  */
-  
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

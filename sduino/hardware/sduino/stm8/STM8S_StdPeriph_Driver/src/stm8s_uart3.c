@@ -2,8 +2,8 @@
   ********************************************************************************
   * @file    stm8s_uart3.c
   * @author  MCD Application Team
-  * @version V2.2.0
-  * @date    30-September-2014
+  * @version V2.3.0
+  * @date    16-June-2017
   * @brief   This file contains all the functions for the uart3 peripheral.
    ******************************************************************************
   * @attention
@@ -40,7 +40,7 @@
 /* Private functions ---------------------------------------------------------*/
 /* Public functions ----------------------------------------------------------*/
 
-/** @}
+/**
   * @addtogroup UART3_Public_Functions
   * @{
   */

@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm8s_clk.c
   * @author  MCD Application Team
-  * @version V2.2.0
-  * @date    30-September-2014
+  * @version V2.3.0
+  * @date    16-June-2017
   * @brief   This file contains all the functions for the CLK peripheral.
    ******************************************************************************
   * @attention
@@ -300,7 +300,7 @@ void CLK_PeripheralClockConfig(CLK_Peripheral_TypeDef CLK_Peripheral, Functional
   * It can be set of the values of @ref CLK_SwitchMode_TypeDef
   * @param   CLK_NewClock choice of the future clock.
   * It can be set of the values of @ref CLK_Source_TypeDef
-  * @param   NewState Enable or Disable the Clock Switch interrupt.
+  * @param   ITState Enable or Disable the Clock Switch interrupt.
   * @param   CLK_CurrentClockState current clock to switch OFF or to keep ON.
   * It can be set of the values of @ref CLK_CurrentClockState_TypeDef
   * @note LSI selected as master clock source only if LSI_EN option bit is set.
@@ -494,7 +494,7 @@ void CLK_ITConfig(CLK_IT_TypeDef CLK_IT, FunctionalState NewState)
 
 /**
   * @brief  Configures the HSI and CPU clock dividers.
-  * @param   ClockPrescaler Specifies the HSI or CPU clock divider to apply.
+  * @param  CLK_Prescaler Specifies the HSI or CPU clock divider to apply.
   * @retval None
   */
 void CLK_SYSCLKConfig(CLK_Prescaler_TypeDef CLK_Prescaler)

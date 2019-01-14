@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm8s_i2c.c
   * @author  MCD Application Team
-  * @version V2.2.0
-  * @date    30-September-2014
+  * @version V2.3.0
+  * @date    16-June-2017
   * @brief   This file contains all the functions for the I2C peripheral.
    ******************************************************************************
   * @attention
@@ -33,7 +33,7 @@
   */
 /* Private typedef -----------------------------------------------------------*/
 
-/** @defgroup I2C_Private_Defines
+/** @addtogroup I2C_Private_Defines
   * @{
   */
 /* I2C register mask */
@@ -372,7 +372,7 @@ void I2C_AcknowledgeConfig(I2C_Ack_TypeDef Ack)
 
 /**
   * @brief  Enables or disables the specified I2C interrupt.
-  * @param  ITName : Name of the interrupt to enable or disable.
+  * @param  I2C_IT : Name of the interrupt to enable or disable.
   *         This parameter can be any of the  @ref I2C_IT_TypeDef enumeration.
   * @param  NewState : State of the interrupt to apply.
   *         This parameter can be any of the @ref FunctionalState enumeration.
@@ -549,7 +549,7 @@ void I2C_SendData(uint8_t Data)
 /**
   * @brief  Checks whether the last I2C Event is equal to the one passed
   *   as parameter.
-  * @param  I2C_EVENT: specifies the event to be checked.
+  * @param  I2C_Event: specifies the event to be checked.
   *   This parameter can be one of the following values:
   *     @arg I2C_EVENT_SLAVE_TRANSMITTER_ADDRESS_MATCHED           : EV1
   *     @arg I2C_EVENT_SLAVE_RECEIVER_ADDRESS_MATCHED              : EV1
@@ -655,7 +655,7 @@ I2C_Event_TypeDef I2C_GetLastEvent(void)
  */
 /**
   * @brief  Checks whether the specified I2C flag is set or not.
-  * @param  I2C_FLAG: specifies the flag to check.
+  * @param  I2C_Flag: specifies the flag to check.
   *   This parameter can be one of the following values:
   *     @arg I2C_FLAG_GENERALCALL: General call header flag (Slave mode)
   *     @arg I2C_FLAG_TRANSMITTERRECEIVER: Transmitter/Receiver flag
@@ -671,8 +671,8 @@ I2C_Event_TypeDef I2C_GetLastEvent(void)
   *     @arg I2C_FLAG_STOPDETECTION: Stop detection flag (Slave mode)
   *     @arg I2C_FLAG_HEADERSENT: 10-bit header sent flag (Master mode)
   *     @arg I2C_FLAG_TRANSFERFINISHED: Byte transfer finished flag
-  *     @arg I2C_FLAG_ADDRESSSENTMATCHED: Address sent flag (Master mode) “ADSL”
-  *   Address matched flag (Slave mode)”ENDAD”
+  *     @arg I2C_FLAG_ADDRESSSENTMATCHED: Address sent flag (Master mode) ADSL
+  *   Address matched flag (Slave mode) ENDAD
   *     @arg I2C_FLAG_STARTDETECTION: Start bit flag (Master mode)
   * @retval The new state of I2C_FLAG (SET or RESET).
   */
@@ -726,7 +726,7 @@ FlagStatus I2C_GetFlagStatus(I2C_Flag_TypeDef I2C_Flag)
 
 /**
   * @brief  Clear flags
-  * @param  I2C_Flag : Specifies the flag to clear
+  * @param  I2C_FLAG : Specifies the flag to clear
   *   This parameter can be any combination of the following values:
   *                       - I2C_FLAG_WAKEUPFROMHALT: Wakeup from Halt
   *                       - I2C_FLAG_OVERRUNUNDERRUN: Overrun/Underrun flag (Slave mode)
@@ -782,8 +782,8 @@ void I2C_ClearFlag(I2C_Flag_TypeDef I2C_FLAG)
   *               - I2C_ITPENDINGBIT_STOPDETECTION: Stop detection flag (Slave mode)
   *               - I2C_ITPENDINGBIT_HEADERSENT: 10-bit header sent flag (Master mode)
   *               - I2C_ITPENDINGBIT_TRANSFERFINISHED: Byte transfer finished flag
-  *               - I2C_ITPENDINGBIT_ADDRESSSENTMATCHED: Address sent flag (Master mode) “ADSL”
-  *                              Address matched flag (Slave mode)“ENDAD”
+  *               - I2C_ITPENDINGBIT_ADDRESSSENTMATCHED: Address sent flag (Master mode) ADSL
+  *                              Address matched flag (Slave mode) ENDAD
   *               - I2C_ITPENDINGBIT_STARTDETECTION: Start bit flag (Master mode)
   * @retval The new state of I2C_ITPendingBit
   *   This parameter can be any of the @ref ITStatus enumeration.
@@ -836,7 +836,7 @@ ITStatus I2C_GetITStatus(I2C_ITPendingBit_TypeDef I2C_ITPendingBit)
 
 /**
   * @brief  Clear IT pending bit
-  * @param  I2C_IT: specifies the interrupt pending bit to clear.
+  * @param  I2C_ITPendingBit : specifies the interrupt pending bit to clear.
   *            This parameter can be any combination of the following values:
   *                 - I2C_ITPENDINGBIT_WAKEUPFROMHALT: Wakeup from Halt
   *                 - I2C_ITPENDINGBIT_OVERRUNUNDERRUN: Overrun/Underrun interrupt (Slave mode)

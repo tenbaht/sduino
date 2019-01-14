@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm8s_itc.h
   * @author  MCD Application Team
-  * @version V2.2.0
-  * @date    30-September-2014
+  * @version V2.3.0
+  * @date    16-June-2017
   * @brief   This file contains all functions prototype and macros for the ITC peripheral.
    ******************************************************************************
   * @attention
@@ -78,10 +78,10 @@ typedef enum {
   ITC_IRQ_TIM3_CAPCOM    = (uint8_t)16,  /*!< TIM3 update /overflow interrupt */
 
 #if defined(STM8S208) ||defined(STM8S207) || defined (STM8S007) || defined(STM8S103) || \
-    defined(STM8S003) ||defined(STM8S903) || defined (STM8AF52Ax) || defined (STM8AF62Ax) 
+    defined(STM8S003) || defined(STM8S001) ||defined(STM8S903) || defined (STM8AF52Ax) || defined (STM8AF62Ax) 
   ITC_IRQ_UART1_TX       = (uint8_t)17,  /*!< UART1 TX interrupt */
   ITC_IRQ_UART1_RX       = (uint8_t)18,  /*!< UART1 RX interrupt */
-#endif /*STM8S208 or STM8S207 or STM8S007 or STM8S103 or STM8S003 or STM8S903 or STM8AF52Ax or STM8AF62Ax */ 
+#endif /*STM8S208 or STM8S207 or STM8S007 or STM8S103 or STM8S003 or STM8S001 or STM8S903 or STM8AF52Ax or STM8AF62Ax */ 
 #if defined(STM8AF622x)
   ITC_IRQ_UART4_TX       = (uint8_t)17,  /*!< UART4 TX interrupt */
   ITC_IRQ_UART4_RX       = (uint8_t)18,  /*!< UART4 RX interrupt */
@@ -100,9 +100,9 @@ typedef enum {
   ITC_IRQ_ADC2           = (uint8_t)22,  /*!< ADC2 interrupt */
 #endif /*STM8S208 or STM8S207 or STM8AF52Ax or STM8AF62Ax */
 
-#if defined(STM8S105) || defined(STM8S005) || defined(STM8S103) || defined(STM8S003) ||  defined(STM8S903) || defined(STM8AF626x) || defined(STM8AF622x)  
-  ITC_IRQ_ADC1           = (uint8_t)22,  /*!< ADC2 interrupt */
-#endif /*STM8S105 or STM8S005 or STM8S003 or STM8S103 or STM8S903 or STM8AF626x or STM8AF622x */
+#if defined(STM8S105) || defined(STM8S005) || defined(STM8S103) || defined(STM8S003) || defined(STM8S001) || defined(STM8S903) || defined(STM8AF626x) || defined(STM8AF622x)  
+  ITC_IRQ_ADC1           = (uint8_t)22,  /*!< ADC1 interrupt */
+#endif /*STM8S105 or STM8S005 or STM8S003 or STM8S103 or STM8S001 or STM8S903 or STM8AF626x or STM8AF622x */
 
 #if defined(STM8S903) || defined(STM8AF622x)
   ITC_IRQ_TIM6_OVFTRI    = (uint8_t)23,  /*!< TIM6 update/overflow/underflow/trigger/

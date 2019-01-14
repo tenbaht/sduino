@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm8s_rst.c
   * @author  MCD Application Team
-  * @version V2.2.0
-  * @date    30-September-2014
+  * @version V2.3.0
+  * @date    16-June-2017
   * @brief   This file contains all the functions for the RST peripheral.
    ******************************************************************************
   * @attention
@@ -48,7 +48,7 @@
 /**
   * @brief   Checks whether the specified RST flag is set or not.
   * @param   RST_Flag : specify the reset flag to check.
-  *          This parameter can be a value of @ref RST_FLAG_TypeDef.
+  *          This parameter can be a value of @ref RST_Flag_TypeDef.
   * @retval  FlagStatus: status of the given RST flag.
   */
 FlagStatus RST_GetFlagStatus(RST_Flag_TypeDef RST_Flag)
@@ -63,7 +63,7 @@ FlagStatus RST_GetFlagStatus(RST_Flag_TypeDef RST_Flag)
 /**
   * @brief  Clears the specified RST flag.
   * @param  RST_Flag : specify the reset flag to clear.
-  *         This parameter can be a value of @ref RST_FLAG_TypeDef.
+  *         This parameter can be a value of @ref RST_Flag_TypeDef.
   * @retval None
   */
 void RST_ClearFlag(RST_Flag_TypeDef RST_Flag)
