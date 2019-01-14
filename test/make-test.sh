@@ -3,7 +3,7 @@
 CURDIR=$(pwd)
 SRCREV=$(git describe --tags --match="v*" --dirty)
 LOGFILE=${CURDIR}/logs/test-${SRCREV}.log
-BASEDIR=../sduino/hardware/sduino/stm8/libraries/
+BASEDIR=../sduino/stm8/libraries/
 
 # count the number of CPUs and use them for parallel compiling
 THREADS=$(grep processor  /proc/cpuinfo |wc -l)

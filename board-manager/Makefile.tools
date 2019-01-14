@@ -14,7 +14,7 @@ endif
 
 
 # Where to find the tools directory
-BASEDIR=../sduino/hardware/sduino
+BASEDIR=../sduino
 
 # Ignore all files matching one of these shell patterns:
 IGNORE=*~ *bak x build-* *.orig *.rej

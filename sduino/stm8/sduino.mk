@@ -1,10 +1,6 @@
 
 MCU_FLAG_NAME	= mstm8 -D
 
-#ALTERNATE_CORE    = sduino
-#ARDUINO_VAR_PATH  = ../../sduino
-#ARDUINO_CORE_PATH = ../../sduino
-
 
 all:
 
@@ -63,17 +59,19 @@ endif
 ifeq ($(OS),Windows_NT)
     ifndef SDCC_PATH
         # for Windows always assume the tools to be in this dir tree
-        SDCC_PATH := $(ARDUINO_DIR)/hardware/sduino/tools/sdcc/bin
+        SDCC_PATH := $(ARDUINO_DIR)/../tools/sdcc/bin
+	AVR_TOOLS_DIR = $(ARDUINO_DIR)/../tools/sdcc
     endif
-    SHELL := $(ARDUINO_DIR)/hardware/sduino/tools/win/busybox.exe
+    SHELL := $(ARDUINO_DIR)/../tools/win/busybox.exe
     .SHELLFLAGS=ash -c
-    SIZE := $(ARDUINO_DIR)/hardware/sduino/tools/wrapper/sdsize.sh
-#    PATH  := $(realpath $(ARDUINO_DIR)/hardware/sduino/tools/win):$(PATH)
+    SIZE := $(ARDUINO_DIR)/../tools/wrapper/sdsize.sh
+#    PATH  := $(realpath $(ARDUINO_DIR)/../tools/win):$(PATH)
 else
     # Linux (and Mac): expect SDCC to be in /opt/sdcc
     ifndef SDCC_PATH
         # for Windows always assume the tools to be in this dir tree
         SDCC_PATH := /opt/sdcc/bin
+	AVR_TOOLS_DIR = /opt/sdcc
     endif
 endif
 
@@ -85,15 +83,21 @@ OVERRIDE_EXECUTABLES=yes
     SIZE    ?= /usr/bin/size
 
 
+# avoid using the regular paths starting at $(ARDUINO_DIR)/hardware/$(VENDOR)
+# as our makefile is now part of the core archive
+ARDUINO_VERSION = 186
+ALTERNATE_CORE    = sduino
+ALTERNATE_CORE_PATH = $(ARDUINO_DIR)
+
 ARDUINO_SKETCHBOOK	= /tmp	# temporarly, to prevent usage of the real libs
 ARDMK_VENDOR	= sduino
 ARCHITECTURE	= stm8
 CPPFLAGS	+= -Ddouble=float -DUSE_STDINT \
-	-I. -I$(ARDUINO_DIR)/hardware/sduino/stm8/STM8S_StdPeriph_Driver/inc \
+	-I. -I$(ARDUINO_DIR)/STM8S_StdPeriph_Driver/inc \
 	-I/opt/sdcc/share/sdcc/include/
 #CFLAGS		= -I ../STM8S_StdPeriph_Driver/inc
 #LDFLAGS		= --out-fmt-elf 
-LDFLAGS		+= -L $(ARDUINO_DIR)/hardware/sduino/stm8/STM8S_StdPeriph_Driver/lib -L/opt/sdcc/share/sdcc/lib/stm8
+LDFLAGS		+= -L $(ARDUINO_DIR)/STM8S_StdPeriph_Driver/lib -L/opt/sdcc/share/sdcc/lib/stm8
 
 
 
