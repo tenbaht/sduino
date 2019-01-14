@@ -4,7 +4,7 @@
 #
 # Differences:
 # - if a .cpp files is given as input temporarly copy it to .c and compile it
-#   as a c file. This will break the dependency check, as it expects the the
+#   as a c file. This will break the dependency check, as it expects the
 #   full original filename, but as this happens only for the original .ino
 #   file it is not a big loss.
 # - generate .rel files, but copy them as .o files as well to satisfy the
@@ -87,7 +87,12 @@ case "$SRC" in
 		# rename .cpp to .c and compile
 		>&2 echo -e "${RED}cpp gefunden${OFF}";
 		CSRC="${SRC%pp}"
-		cp -a "$SRC" "$CSRC"
+		(
+			# add a reference to main to pull in main.c
+			echo "void main(void); void (*dummy_variable) () = main;"
+                	cat "$SRC"
+                ) > "$CSRC"
+#		cp -a "$SRC" "$CSRC"
 		"$SDCC" "$@" "$CSRC" -o "$OBJ"
 		ERR=$?
 		rm -f "$CSRC"
