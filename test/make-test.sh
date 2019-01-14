@@ -29,6 +29,7 @@ print_status() {
 (
 	echo "compile log for all tests."
 	echo "source revision: $SRCREV"
+	sdcc -v|head -1
 ) | tee "$LOGFILE"
 
 
