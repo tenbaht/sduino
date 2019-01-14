@@ -51,8 +51,7 @@ that are needed all over the module. This block is saved as a `.h` file and
 `#include`'d by all the following blocks.
 
 In most cases this is already sufficient. Only in very rare cases the
-position of a split needs the be edited. This is automatically done by the
-patches in the `patches/` directory.
+position of a split needs the be edited.
 
 **To prevent a split**: Change the `/**` line into something different, `/***`
 is used in the scripts.
@@ -60,6 +59,7 @@ is used in the scripts.
 **To force a split**: Add an empty Doxygen comment block:
 ```c
 /**
+ * This is just a split marker
  */
 ```
 
@@ -72,6 +72,10 @@ Splitting and compiling the SPL libraries is moved into the separate project
 
 
 ### Split Arduino core files
+
+The Arduino files don't have any regular structure. They need to be edited
+to become splitable at all and some of the resulting split files still need
+manual adjustments.
 
 `wiring.c`, `wiring_digital.c` and `HardwareSerial.c` all compile into quite
 large binaries. All of them are linked with almost 
