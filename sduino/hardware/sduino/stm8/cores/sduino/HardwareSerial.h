@@ -95,4 +95,8 @@ void HardwareSerial_end(void);
 
 XPrintMethods   (HardwareSerial,Serial)
 
+// This define has to be at the end because it would interfear with the
+// XPrintMethods macro
+#define Serial			HardwareSerial()
+
 #endif
