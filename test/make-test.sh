@@ -93,5 +93,7 @@ done
 	echo $TOTAL
 
 	echo "Failed tests:"
+	echo "Status	source dir"
+	echo "------	-------------"
 	grep "^[1-9]" "$LOGFILE"
 ) | tee -a "$LOGFILE"
