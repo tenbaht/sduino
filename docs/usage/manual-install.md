@@ -24,14 +24,14 @@ For all systems start with this:
 
 #### Sduino core
 
-Link the hardware/sduino folder of the downloaded repository to your local
-Arduino hardware folder (usually in `~/sketchbook` or `~/Arduino`). Create
-the hardware folder, if not already present:
+Link the sduino folder of the downloaded repository to your local Arduino
+hardware folder (usually in `~/sketchbook` or `~/Arduino`). Create the
+hardware folder, if not already present:
 
-```text
+```bash
 	cd ~/Arduino
 	mkdir hardware	# only if not already present
-	ln -s [the-extracted-repository]/sduino/hardware/sduino hardware
+	ln -s [the-extracted-repository]/sduino hardware
 ```
 
 #### SDCC
@@ -70,7 +70,7 @@ repository for any Linux distribution. Example for Debian-type systems (like
 Ubuntu, Mint, Elementary etc.):
 
 ```bash
-	sudo apt-get install make libusb-1.0-0
+	sudo apt install make libusb-1.0-0
 ```
 
 Finally, add a udev rule in order to access the USB port for your flash
