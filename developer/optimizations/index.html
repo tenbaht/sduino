@@ -359,12 +359,12 @@ a marker for splitting the files.</p>
 that are needed all over the module. This block is saved as a <code>.h</code> file and
 <code>#include</code>'d by all the following blocks.</p>
 <p>In most cases this is already sufficient. Only in very rare cases the
-position of a split needs the be edited. This is automatically done by the
-patches in the <code>patches/</code> directory.</p>
+position of a split needs the be edited.</p>
 <p><strong>To prevent a split</strong>: Change the <code>/**</code> line into something different, <code>/***</code>
 is used in the scripts.</p>
 <p><strong>To force a split</strong>: Add an empty Doxygen comment block:</p>
 <pre><code class="c">/**
+ * This is just a split marker
  */
 </code></pre>
 
@@ -372,6 +372,9 @@ is used in the scripts.</p>
 <p>Splitting and compiling the SPL libraries is moved into the separate project
 <a href="https://github.com/tenbaht/spl-splitter">spl-splitter</a> now.</p>
 <h3 id="split-arduino-core-files">Split Arduino core files</h3>
+<p>The Arduino files don't have any regular structure. They need to be edited
+to become splitable at all and some of the resulting split files still need
+manual adjustments.</p>
 <p><code>wiring.c</code>, <code>wiring_digital.c</code> and <code>HardwareSerial.c</code> all compile into quite
 large binaries. All of them are linked with almost 
 every project. This is true even if no serial communication is used since

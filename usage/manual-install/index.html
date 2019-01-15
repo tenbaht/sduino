@@ -302,12 +302,12 @@ with the development of Sduino.</p>
 </ul>
 <h2 id="linux">Linux</h2>
 <h4 id="sduino-core">Sduino core</h4>
-<p>Link the hardware/sduino folder of the downloaded repository to your local
-Arduino hardware folder (usually in <code>~/sketchbook</code> or <code>~/Arduino</code>). Create
-the hardware folder, if not already present:</p>
-<pre><code class="text">    cd ~/Arduino
+<p>Link the sduino folder of the downloaded repository to your local Arduino
+hardware folder (usually in <code>~/sketchbook</code> or <code>~/Arduino</code>). Create the
+hardware folder, if not already present:</p>
+<pre><code class="bash">    cd ~/Arduino
     mkdir hardware  # only if not already present
-    ln -s [the-extracted-repository]/sduino/hardware/sduino hardware
+    ln -s [the-extracted-repository]/sduino hardware
 </code></pre>
 
 <h4 id="sdcc">SDCC</h4>
@@ -335,7 +335,7 @@ e.g. <code>/usr/local/bin</code>:</p>
 <p><code>make</code> and libusb-1.0 (needed by stm8flash) are part of the standard
 repository for any Linux distribution. Example for Debian-type systems (like
 Ubuntu, Mint, Elementary etc.):</p>
-<pre><code class="bash">    sudo apt-get install make libusb-1.0-0
+<pre><code class="bash">    sudo apt install make libusb-1.0-0
 </code></pre>
 
 <p>Finally, add a udev rule in order to access the USB port for your flash

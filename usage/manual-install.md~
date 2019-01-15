@@ -143,14 +143,36 @@ This can be any of these options (in order of complexity):
 - MinGW
 - Cygwin
 
+The makefile `sduino.mk` uses busybox by default when running on Windows. To
+change that, set these environment variables accordingly:
+
+	SHELL=bash
+	.SHELLFLAGS=-c
+
+Alternativly, it is possible to include these lines in the project `Makefile`
+or edit `sduino.mk` directly (lines 68, 69).
+
+
 
 #### Install busybox and make
 
-busybox already comes with sduino in the `hardware/sduino/tools/win/`
-folder. A statically linked copy of make-4.2 can be found
+This is by far the easiest way to get going. busybox already comes with
+sduino in the `hardware/sduino/tools/win/` folder. A statically linked copy
+of make-4.2 can be found in the
+[windowstools](https://github.com/tenbaht/sduino-windowstools) repository.
+
+Just copy these two binaries into a place somewhere in your `%PATH%`.
+
 
 
 #### Install Msys2
+
+Msys2/mingw is more capable than busybox and even comes with a proper
+package manager. Install this if you plan on using the command line tools
+for more than just running sdunio compilations.
+
+mingw is a full (cross-) compilation environment and it uses msys2, which is
+just a collection of basic UNIX tools. msys2 is enough for using sduino.
 
 - Download and run the installer from [http://www.msys2.org](http://www.msys2.org)
 - Install make: `pacman -S make`
@@ -161,6 +183,24 @@ folder. A statically linked copy of make-4.2 can be found
 Now we can start working. 
 (Or read the excellent and more comprehensive installation guide on https://github.com/orlp/dev-on-windows/wiki/Installing-GCC--&-MSYS2
 )
+
+
+#### Cygwin
+
+cygwin is similar to msys2, but even more complete in the sense that it
+tries to emulate a full POSIX environment. It is really more like a virtual
+machine than just a set of libraries.
+
+Almost anything that compiles for UNIX can be compiled for cygwin with
+minimal effort. The downside is that the resulting binaries are linked
+against cygwin specific libraries and that they don't mix very well with
+Windows native applications. It is possible to do it, but it might require
+some extra effort.
+
+Install this if you need full POSIX compliance. (e.g. compiling
+stm8flash with support for espstlink, that requires the POSIX termios
+library).
+
 
 
 #### Install the core files and SDCC
