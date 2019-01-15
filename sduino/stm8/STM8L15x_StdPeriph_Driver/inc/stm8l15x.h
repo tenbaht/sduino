@@ -258,7 +258,13 @@ typedef uint16_t u16;
 typedef uint8_t  u8;
 
 
-typedef enum {FALSE = 0, TRUE = !FALSE} bool;
+/* SDCC patch: SDCC defines a special Bool type, use that if available */
+#ifdef __bool_true_false_are_defined
+ #define TRUE true
+ #define FALSE false
+#else
+ typedef enum {FALSE = 0, TRUE = !FALSE} bool;
+#endif
 
 typedef enum {RESET = 0, SET = !RESET} FlagStatus, ITStatus, BitStatus, BitAction;
 
