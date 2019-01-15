@@ -18,7 +18,7 @@ COREDIR?=release/v$(COREVERSION)
 PARTSDIR?=parts
 
 # subtree of the repository to be included in the archive
-SUBTREE=sduino/hardware/sduino/stm8
+SUBTREE=sduino/stm8
 
 #
 ### No user serviceable part below here. ################################
