@@ -94,10 +94,13 @@ ARDMK_VENDOR	= sduino
 ARCHITECTURE	= stm8
 CPPFLAGS	+= -Ddouble=float -DUSE_STDINT \
 	-I. -I$(ARDUINO_DIR)/STM8S_StdPeriph_Driver/inc \
+	-I$(ARDUINO_DIR)/STM8L15x_StdPeriph_Driver/inc \
 	-I/opt/sdcc/share/sdcc/include/
 #CFLAGS		= -I ../STM8S_StdPeriph_Driver/inc
 #LDFLAGS		= --out-fmt-elf 
-LDFLAGS		+= -L $(ARDUINO_DIR)/STM8S_StdPeriph_Driver/lib -L/opt/sdcc/share/sdcc/lib/stm8
+LDFLAGS		+= -L $(ARDUINO_DIR)/STM8S_StdPeriph_Driver/lib \
+		   -L $(ARDUINO_DIR)/STM8L15x_StdPeriph_Driver/lib \
+		   -L/opt/sdcc/share/sdcc/lib/stm8
 
 
 

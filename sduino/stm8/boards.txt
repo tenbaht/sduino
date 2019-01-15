@@ -140,3 +140,31 @@ mb208.build.f_cpu=16000000L
 mb208.build.board=STM8S_MB
 mb208.build.core=sduino
 mb208.build.variant=mb208
+
+
+##############################################################
+
+nuc-l152a.name=STM Nucleo 8L152R8 (STM8L152R8)
+
+# First upload method is the default method
+nuc-l152.menu.upload_method.stm8flashMethod=ST-Link/V2-1 (using stm8flash)
+nuc-l152.menu.upload_method.stm8flashMethod.upload.tool=stm8flash
+nuc-l152.menu.upload_method.stm8flashMethod.upload.protocol=stlinkv21
+nuc-l152.menu.upload_method.stm8flashMethod.upload.mcu=stm8l152?8
+
+nuc-l152.menu.upload_method.stm8galMethod=Serial (using stm8gal with builtin bootloader)
+nuc-l152.menu.upload_method.stm8galMethod.upload.tool=stm8gal
+nuc-l152.menu.upload_method.stm8galMethod.upload.protocol=serial
+
+# a global definition of upload speed is required to keep the makefile happy
+nuc-l152.upload.speed=230400
+nuc-l152.upload.maximum_size=65536
+nuc-l152.upload.maximum_data_size=4096
+
+nuc-l152.bootloader.tool=stm8flash
+
+nuc-l152.build.mcu=STM8L15X_HD
+nuc-l152.build.f_cpu=16000000L
+nuc-l152.build.board=NUCLEO_L152
+nuc-l152.build.core=sduino
+nuc-l152.build.variant=nuc-l152

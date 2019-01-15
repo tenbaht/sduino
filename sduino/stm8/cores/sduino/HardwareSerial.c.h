@@ -26,7 +26,7 @@
 */
 
 
-#include"stm8s.h"
+#include"stm8.h"
 
 #include "Arduino.h"
 #include "HardwareSerial.h"

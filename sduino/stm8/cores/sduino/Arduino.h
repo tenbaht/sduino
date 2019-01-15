@@ -29,7 +29,7 @@
 //#include <avr/pgmspace.h>
 //#include <avr/io.h>
 //#include <avr/interrupt.h>
-#include <stm8s.h>
+#include <stm8.h>
 
 #include "binary.h"
 
