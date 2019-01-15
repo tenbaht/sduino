@@ -53,15 +53,22 @@ Now you should find a new entry *STM8S Boards* in the list at
 
 ## Known issues
 
-**select upload port first**: The Arduino IDE version 1.8.7 suffers from a
-known regression bug. If you see this error message update to Arduino IDE
-version 1.8.8 or apply this
+**The Arduino IDE version 1.8.7 is buggy, use 1.8.8 instead.**
+
+IDE error message **select upload port first** (IDE v1.8.7 only): Update to
+IDE 1.8.8 or apply this
 [workaround](https://github.com/tenbaht/sduino/issues/68#issuecomment-441425529).
+
+Very slow compilation after using "save as" (IDE v1.8.7 only): After saving
+a file under a different name the CPU load maxes out for one CPU core and
+the IDE reacts extremly slow. Exit the Arduino IDE and re-open it. Update to
+IDE 1.8.8.
 
 **bash.exe: warning: could not find /tmp, please create!**: Shows up on windows
 systems. Annoying, but harmless.
 [Workaround](https://github.com/tenbaht/sduino/issues/61#issuecomment-443551180)
-
+This whole issue will be fixed in the upcoming 0.5 release by using busybox
+for all scripts on windows.
 
 
 ## Included libraries
