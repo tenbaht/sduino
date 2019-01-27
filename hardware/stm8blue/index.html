@@ -274,6 +274,7 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
         <li class="main active"><a href="#generic-stm8s103-breakout-board">Generic STM8S103 breakout board</a></li>
+            <li><a href="#unlocking-a-write-protected-mcu">Unlocking a write protected MCU</a></li>
             <li><a href="#connection-to-the-flash-tool">Connection to the flash tool</a></li>
             <li><a href="#pin-number-mappings">Pin number mappings</a></li>
             <li><a href="#special-pins">Special pins</a></li>
@@ -300,6 +301,7 @@ for (5V) power supply, the data lines are not connected.</p>
 <p>All CPU pins are easily accessible on (optional) pin headers (pitch 2.54mm,
 perfect for breadboards).</p>
 <p><img alt="Schematic of the STMS103 board" src="../stm8blue-schematic.png" /></p>
+<h2 id="unlocking-a-write-protected-mcu">Unlocking a write protected MCU</h2>
 <p>My breakout boards came preprogrammed with a blink program and with active
 write protection bits. For unlocking before first use:</p>
 <pre><code class="bash">stm8flash -cstlinkv2 -pstm8s103?3 -u
@@ -447,14 +449,14 @@ paratheses):</p>
 <tr>
 <td align="right">5</td>
 <td>PA1</td>
-<td>(OscIn, kein HS)</td>
+<td>(OscIn, no HS)</td>
 <td>0</td>
 <td></td>
 </tr>
 <tr>
 <td align="right">6</td>
 <td>PA2</td>
-<td>(OscIn, kein HS)</td>
+<td>(OscIn, no HS)</td>
 <td>1</td>
 <td></td>
 </tr>
@@ -540,9 +542,9 @@ paratheses):</p>
 <h2 id="special-pins">Special pins</h2>
 <p>The pins D3/D4 (SDA/SCL, PB5/PB4) are different from the others as they are
 true open drain pins. That means, they only can drive the output low or
-open. To drive it high, they require an external pull-up resistor.
-This is the reason why the LED on this breakout board is connected between +3.3V
-and the pins and not between the pin GND as usual. This way it is possible
+open. To drive it high, they require an external pull-up resistor. This is
+the reason why the LED on this breakout board is connected between +3.3V and
+the pins and not between the pin and GND as usual. This way it is possible
 to drive the LED by writing a zero to the output register.</p>
 <p>D5/D6 (PA1/PA2, OscIn/OscOut) are weaker than the other pins. Try avoiding
 these pins for LEDs and other higher current applications.</p></div>

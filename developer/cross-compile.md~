@@ -1,0 +1,3 @@
+The compiler environments for Linux 32 bit and ARM (Raspberry) conflict with
+each other on Debian/Ubuntu/Mint and uninstall eachother:
+https://bugs.launchpad.net/ubuntu/+source/gcc-defaults/+bug/1300211/comments/29
