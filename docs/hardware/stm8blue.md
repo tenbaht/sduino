@@ -25,6 +25,9 @@ perfect for breadboards).
 
 ![Schematic of the STMS103 board](stm8blue-schematic.png)
 
+
+## Unlocking a write protected MCU
+
 My breakout boards came preprogrammed with a blink program and with active
 write protection bits. For unlocking before first use:
 
@@ -111,8 +114,8 @@ paratheses):
 |1	|PD4	|UART_CLK/T2-1/beep	|13	|PWM
 |2	|PD5	|TX/Ain5		|14	|Analog A3
 |3	|PD6	|RX/Ain6		|15	|Analog A4
-|5	|PA1	|(OscIn, kein HS)	|0	|
-|6	|PA2	|(OscIn, kein HS)	|1	|
+|5	|PA1	|(OscIn, no HS)		|0	|
+|6	|PA2	|(OscIn, no HS)		|1	|
 |10	|PA3	|SS/T2-3		|2	|PWM
 |11	|PB5	|SDA	LED		|3	|
 |12	|PB4	|SCL			|4	|
@@ -130,9 +133,9 @@ paratheses):
 
 The pins D3/D4 (SDA/SCL, PB5/PB4) are different from the others as they are
 true open drain pins. That means, they only can drive the output low or
-open. To drive it high, they require an external pull-up resistor.
-This is the reason why the LED on this breakout board is connected between +3.3V
-and the pins and not between the pin GND as usual. This way it is possible
+open. To drive it high, they require an external pull-up resistor. This is
+the reason why the LED on this breakout board is connected between +3.3V and
+the pins and not between the pin and GND as usual. This way it is possible
 to drive the LED by writing a zero to the output register.
 
 
