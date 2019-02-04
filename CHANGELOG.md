@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - move the SPL compilation scripts into a separate project spl-splitter
 - update SPL files to v2.3.0 (add support for STM8S001)
 - flatten the repository structure
+- update stm8gal to version 1.3.0
 
 ### Fixed
 - make sure main.c is pulled in for IDE builds as well
