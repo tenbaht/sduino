@@ -167,28 +167,25 @@ tools.stm8gal.path.windows={runtime.tools.STM8Tools.path}/win
 tools.stm8gal.path.macosx={runtime.tools.STM8Tools.path}/macosx
 
 tools.stm8gal.params.port=-p "{serial.port}"
-tools.stm8gal.params.baudrate=-b 230400
-tools.stm8gal.params.reset=-R 1
-tools.stm8gal.params.method=-u 2
 tools.stm8gal.params.background=-B
 
 tools.stm8gal.upload.command=-w "{build.path}/{build.project_name}.hex"
-tools.stm8gal.upload.params.quiet=-V 0
-tools.stm8gal.upload.params.verbose=-V 2
+tools.stm8gal.upload.params.quiet=-v 0
+tools.stm8gal.upload.params.verbose=-v 2
 tools.stm8gal.upload.verify=
-tools.stm8gal.upload.params.noverify=-v
-tools.stm8gal.upload.pattern="{path}/{cmd}" {params.port} {params.baudrate} {params.reset} {params.method} {params.background} {upload.verbose} {upload.verify} {upload.command}
+tools.stm8gal.upload.params.noverify=-V
+tools.stm8gal.upload.pattern="{path}/{cmd}" {params.port} {params.reset} {params.background} {upload.verbose} {upload.verify} {upload.command}
 
 # The program pattern is used for Sketch->upload using a Programmer
 # Same as the upload pattern.
 tools.stm8gal.program.command=-w "{build.path}/{build.project_name}.hex"
-tools.stm8gal.program.params.quiet=-V 0
-tools.stm8gal.program.params.verbose=-V 2
+tools.stm8gal.program.params.quiet=-v 0
+tools.stm8gal.program.params.verbose=-v 2
 tools.stm8gal.program.verify=
-tools.stm8gal.program.params.noverify=-v
-tools.stm8gal.program.pattern="{path}/{cmd}" {params.port} {params.baudrate} {params.reset} {params.method} {params.background} {program.verbose} {program.verify} {program.command}
+tools.stm8gal.program.params.noverify=-V
+tools.stm8gal.program.pattern="{path}/{cmd}" {params.port} {params.reset} {params.background} {program.verbose} {program.verify} {program.command}
 
 tools.stm8gal.erase.command=-e
-tools.stm8gal.erase.params.quiet=-V 0
-tools.stm8gal.erase.params.verbose=-V 2
-tools.stm8gal.erase.pattern="{path}/{cmd}" {params.port} {params.baudrate} {params.reset} {params.method} {params.background} {erase.verbose} {erase.command}
+tools.stm8gal.erase.params.quiet=-v 0
+tools.stm8gal.erase.params.verbose=-v 2
+tools.stm8gal.erase.pattern="{path}/{cmd}" {params.port} {params.reset} {params.background} {erase.verbose} {erase.command}

@@ -40,9 +40,10 @@ stm8sdisco.menu.upload_method.stm8flashMethod.upload.protocol=stlinkv2
 stm8sdisco.menu.upload_method.stm8galMethod=Serial (using stm8gal with builtin bootloader)
 stm8sdisco.menu.upload_method.stm8galMethod.upload.tool=stm8gal
 stm8sdisco.menu.upload_method.stm8galMethod.upload.protocol=serial
+stm8sdisco.menu.upload_method.stm8galMethod.params.reset=-R 1
 
 # a global definition of upload speed is required to keep the makefile happy
-stm8sdisco.upload.speed=230400
+stm8sdisco.upload.speed=115200
 stm8sdisco.upload.mcu=stm8s105?6
 stm8sdisco.upload.maximum_size=32768
 stm8sdisco.upload.maximum_data_size=2048
@@ -64,6 +65,7 @@ stm8sblack.name=STM8S105K4T6 Breakout Board
 stm8sblack.menu.upload_method.stm8galMethod=Serial (using stm8gal with builtin bootloader)
 stm8sblack.menu.upload_method.stm8galMethod.upload.tool=stm8gal
 stm8sblack.menu.upload_method.stm8galMethod.upload.protocol=serial
+stm8sblack.menu.upload_method.stm8galMethod.params.reset=-R 1
 
 stm8sblack.menu.upload_method.stm8flashMethod=ST-Link/V2 (using stm8flash)
 stm8sblack.menu.upload_method.stm8flashMethod.upload.tool=stm8flash
@@ -71,7 +73,7 @@ stm8sblack.menu.upload_method.stm8flashMethod.upload.protocol=stlinkv2
 stm8sblack.menu.upload_method.stm8flashMethod.upload.mcu=stm8s105?4
 
 # a global definition of upload speed is required to keep the makefile happy
-stm8sblack.upload.speed=230400
+stm8sblack.upload.speed=115200
 stm8sblack.upload.maximum_size=16384
 stm8sblack.upload.maximum_data_size=2048
 
@@ -92,6 +94,7 @@ s8uno.name=sduino UNO (STM8S105K6)
 s8uno.menu.upload_method.stm8galMethod=Serial (using stm8gal with builtin bootloader)
 s8uno.menu.upload_method.stm8galMethod.upload.tool=stm8gal
 s8uno.menu.upload_method.stm8galMethod.upload.protocol=serial
+s8uno.menu.upload_method.stm8galMethod.params.reset=-R 2
 
 s8uno.menu.upload_method.stm8flashMethod=ST-Link/V2 (using stm8flash)
 s8uno.menu.upload_method.stm8flashMethod.upload.tool=stm8flash
@@ -100,7 +103,7 @@ s8uno.menu.upload_method.stm8flashMethod.upload.mcu=stm8s105?6
 
 
 # a global definition of upload speed is required to keep the makefile happy
-s8uno.upload.speed=230400
+s8uno.upload.speed=115200
 s8uno.upload.maximum_size=32768
 s8uno.upload.maximum_data_size=2048
 
@@ -121,6 +124,7 @@ mb208.name=sduino MB (STM8S208MBT6B)
 mb208.menu.upload_method.stm8galMethod=Serial (using stm8gal with builtin bootloader)
 mb208.menu.upload_method.stm8galMethod.upload.tool=stm8gal
 mb208.menu.upload_method.stm8galMethod.upload.protocol=serial
+mb208.menu.upload_method.stm8galMethod.params.reset=-R 1
 
 mb208.menu.upload_method.stm8flashMethod=ST-Link/V2 (using stm8flash)
 mb208.menu.upload_method.stm8flashMethod.upload.tool=stm8flash
@@ -129,7 +133,7 @@ mb208.menu.upload_method.stm8flashMethod.upload.mcu=stm8s208?b
 
 
 # a global definition of upload speed is required to keep the makefile happy
-mb208.upload.speed=230400
+mb208.upload.speed=115200
 mb208.upload.maximum_size=131072
 mb208.upload.maximum_data_size=6144
 
