@@ -133,9 +133,11 @@ recipe.preproc.macros="{compiler.wrapper.path}/{compiler.cpp.cmd}.sh" "{compiler
 # -------------------------------------
 
 tools.stm8flash.cmd=stm8flash
-tools.stm8flash.path={runtime.tools.STM8Tools.path}/linux
-tools.stm8flash.path.windows={runtime.tools.STM8Tools.path}/win
-tools.stm8flash.path.macosx={runtime.tools.STM8Tools.path}/macosx
+# these lines are for manual install. For board manager installs they get converted to use
+# {runtime.tools.STM8Tools.path} instead of {runtime.hardware.path}/tools
+tools.stm8flash.path={runtime.hardware.path}/tools/linux
+tools.stm8flash.path.windows={runtime.hardware.path}/tools/win
+tools.stm8flash.path.macosx={runtime.hardware.path}/tools/macosx
 
 #tools.stm8flash.upload.params.verify=
 tools.stm8flash.upload.params.verbose=
@@ -162,9 +164,11 @@ tools.stm8flash.bootloader.pattern=echo "no bootloader available"
 # - *.params.verbose/*.params.quiet: referenced as {*.verbose}
 
 tools.stm8gal.cmd=stm8gal
-tools.stm8gal.path={runtime.tools.STM8Tools.path}/linux
-tools.stm8gal.path.windows={runtime.tools.STM8Tools.path}/win
-tools.stm8gal.path.macosx={runtime.tools.STM8Tools.path}/macosx
+# these lines are for manual install. For board manager installs they get converted to use
+# {runtime.tools.STM8Tools.path} instead of {runtime.hardware.path}/tools
+tools.stm8gal.path={runtime.hardware.path}/tools/linux
+tools.stm8gal.path.windows={runtime.hardware.path}/tools/win
+tools.stm8gal.path.macosx={runtime.hardware.path}/tools/macosx
 
 tools.stm8gal.params.port=-p "{serial.port}"
 tools.stm8gal.params.background=-B
