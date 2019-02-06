@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+
+## [0.5-pre2 - 2019-02-06]
 ### Added
 - a simple regression test script test/make-test.sh to compile all examples
 

@@ -12,6 +12,35 @@
                 {
                     "name": "Sduino STM8 plain C core (non-C++)",
                     "architecture": "stm8",
+                    "version": "0.5-pre2",
+                    "category": "Contributed",
+                    "boards": [
+                        {"name": "STM8S103F3 Breakout Board"},
+                        {"name": "STM8S105C6 Discovery Board"},
+                        {"name": "STM8S105K4T6 Breakout Board"},
+                        {"name": "sduino UNO (STM8S105K6)"},
+                        {"name": "sduino MB (STM8S208MBT6B)"}
+                    ],
+                    "toolsDependencies": [
+                        {
+                            "name": "STM8Tools",
+                            "version": "2019.02.05",
+                            "packager": "sduino"
+                        },
+                        {
+                            "name": "sdcc",
+                            "version": "build.10738",
+                            "packager": "sduino"
+                        }
+                    ],
+                    "url": "https://github.com/tenbaht/sduino/releases/download/v0.5-pre2/sduino-core-0.5-pre2.tar.bz2",
+                    "archiveFileName": "sduino-core-0.5-pre2.tar.bz2",
+                    "checksum": "SHA-256:13f039942368fdc2fea5470c2d3d58d9fb377cc7ca9502b1177f11ae8c75a7d8",
+                    "size": "2263319"
+                },
+                {
+                    "name": "Sduino STM8 plain C core (non-C++)",
+                    "architecture": "stm8",
                     "version": "0.4.0",
                     "category": "Contributed",
                     "boards": [
@@ -144,6 +173,68 @@
                 }
             ],
             "tools" : [
+                {
+                    "name": "STM8Tools",
+                    "version": "2019.02.05",
+                    "systems": [
+                        {
+                            "host": "i686-pc-linux-gnu",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.5-pre2/sduino-tools_linux32-2019.02.05.tar.bz2",
+                            "archiveFileName": "sduino-tools_linux32-2019.02.05.tar.bz2",
+                            "checksum": "SHA-256:86c816ce31fc37d8437ac9a1eb88f0c58444b9abbb9bc16934f0977dec474cc3",
+                            "size": "49540"
+                        },{
+                            "host": "x86_64-pc-linux-gnu",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.5-pre2/sduino-tools_linux64-2019.02.05.tar.bz2",
+                            "archiveFileName": "sduino-tools_linux64-2019.02.05.tar.bz2",
+                            "checksum": "SHA-256:e417e67551c6d34b6f9a8b8635eb1eb69342fd021b2962e52e495b2dd333d6c7",
+                            "size": "49362"
+                        },{
+                            "host": "x86_64-apple-darwin",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.5-pre2/sduino-tools_macosx-2019.02.05.tar.bz2",
+                            "archiveFileName": "sduino-tools_macosx-2019.02.05.tar.bz2",
+                            "checksum": "SHA-256:5711e486ff060f1a3941a49884bec061110ec33f4865afb1359bfd9e15280766",
+                            "size": "52357"
+                        },{
+                            "host": "i686-mingw32",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.5-pre2/sduino-tools_mingw32-2019.02.05.tar.bz2",
+                            "archiveFileName": "sduino-tools_mingw32-2019.02.05.tar.bz2",
+                            "checksum": "SHA-256:35d76fb968ac7998ec798502be597d7b234ceddb5c2bcb439d8f24711bd34064",
+                            "size": "418464"
+                        }
+                    ]
+                },
+                {
+                    "name": "STM8Tools",
+                    "version": "2019.01.15",
+                    "systems": [
+                        {
+                            "host": "i686-pc-linux-gnu",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.5.0-pre1/sduino-tools_linux32-2019.01.15.tar.bz2",
+                            "archiveFileName": "sduino-tools_linux32-2019.01.15.tar.bz2",
+                            "checksum": "SHA-256:25a652b1319ff711c2c47af065aa2786a38b71151e0b3e839a81d1084509afaf",
+                            "size": "45038"
+                        },{
+                            "host": "x86_64-pc-linux-gnu",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.5.0-pre1/sduino-tools_linux64-2019.01.15.tar.bz2",
+                            "archiveFileName": "sduino-tools_linux64-2019.01.15.tar.bz2",
+                            "checksum": "SHA-256:12917e22acccc882a2b777e7883163c1938da3e21f68433dd1f9157f865950cf",
+                            "size": "45664"
+                        },{
+                            "host": "x86_64-apple-darwin",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.5.0-pre1/sduino-tools_macosx-2019.01.15.tar.bz2",
+                            "archiveFileName": "sduino-tools_macosx-2019.01.15.tar.bz2",
+                            "checksum": "SHA-256:786267e3ee2aea3b4b50a00bfdc49244727e95f1f05a44b135139744ffe24a5e",
+                            "size": "48036"
+                        },{
+                            "host": "i686-mingw32",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.5.0-pre1/sduino-tools_mingw32-2019.01.15.tar.bz2",
+                            "archiveFileName": "sduino-tools_mingw32-2019.01.15.tar.bz2",
+                            "checksum": "SHA-256:36979e642e75ecf6ea26e4a15e263ddb4ee9b1b4eaec4756514c6062bdface6a",
+                            "size": "414118"
+                        }
+                    ]
+                },
                 {
                     "name": "STM8Tools",
                     "version": "2018.12.07",
