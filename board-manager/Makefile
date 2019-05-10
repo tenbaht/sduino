@@ -1,7 +1,7 @@
 # the required versions for the new build
-COREVERSION=0.4.0
-SDCCVERSION=10738
-TOOLSVERSION=2018.12.07
+COREVERSION=0.5
+SDCCVERSION=11242
+TOOLSVERSION=2019.02.05
 
 # default the tool version to be the current date as YYYY.MM.DD
 #TOOLSVERSION?=$(shell date '+%Y.%m.%d')

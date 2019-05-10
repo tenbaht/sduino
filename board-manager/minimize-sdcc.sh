@@ -40,11 +40,12 @@ TAR_EXCLUDE='--exclude=doc	--exclude=src 	--exclude=non-free
 --exclude=*00		--exclude=*08		--exclude=*2k
 --exclude=*51		--exclude=*80		--exclude=*90
 --exclude=*gb		--exclude=*ka		--exclude=*.info
+--exclude=*pdk*		--exclude=*rab		--exclude=huge
 --exclude=large*	--exclude=medium	--exclude=small*'
 
 ZIP_EXCLUDE='-x */non-free/* */src/* *stlcs* */pic*
-*00* *08* *80* *90* *51* *2k* *gb* *ka* */info/*
-*/large* */medium/* */small*'
+*00* *08* *80* *90* *51* *2k* *gb* *ka* */info/* *pdk* *rab*
+*/huge/* */large* */medium/* */small*'
 
 TMP=$(mktemp -d sdcc-repack-XXXXXX --tmpdir)
 
