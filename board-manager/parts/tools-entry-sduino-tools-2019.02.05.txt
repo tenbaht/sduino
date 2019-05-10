@@ -4,25 +4,25 @@
                     "systems": [
                         {
                             "host": "i686-pc-linux-gnu",
-                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.5-pre2/sduino-tools_linux32-2019.02.05.tar.bz2",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.5/sduino-tools_linux32-2019.02.05.tar.bz2",
                             "archiveFileName": "sduino-tools_linux32-2019.02.05.tar.bz2",
                             "checksum": "SHA-256:86c816ce31fc37d8437ac9a1eb88f0c58444b9abbb9bc16934f0977dec474cc3",
                             "size": "49540"
                         },{
                             "host": "x86_64-pc-linux-gnu",
-                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.5-pre2/sduino-tools_linux64-2019.02.05.tar.bz2",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.5/sduino-tools_linux64-2019.02.05.tar.bz2",
                             "archiveFileName": "sduino-tools_linux64-2019.02.05.tar.bz2",
                             "checksum": "SHA-256:e417e67551c6d34b6f9a8b8635eb1eb69342fd021b2962e52e495b2dd333d6c7",
                             "size": "49362"
                         },{
                             "host": "x86_64-apple-darwin",
-                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.5-pre2/sduino-tools_macosx-2019.02.05.tar.bz2",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.5/sduino-tools_macosx-2019.02.05.tar.bz2",
                             "archiveFileName": "sduino-tools_macosx-2019.02.05.tar.bz2",
                             "checksum": "SHA-256:5711e486ff060f1a3941a49884bec061110ec33f4865afb1359bfd9e15280766",
                             "size": "52357"
                         },{
                             "host": "i686-mingw32",
-                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.5-pre2/sduino-tools_mingw32-2019.02.05.tar.bz2",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.5/sduino-tools_mingw32-2019.02.05.tar.bz2",
                             "archiveFileName": "sduino-tools_mingw32-2019.02.05.tar.bz2",
                             "checksum": "SHA-256:35d76fb968ac7998ec798502be597d7b234ceddb5c2bcb439d8f24711bd34064",
                             "size": "418464"
