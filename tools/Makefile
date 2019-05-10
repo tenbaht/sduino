@@ -13,7 +13,7 @@ OSXSTRIP=/opt/osxcross/bin/x86_64-apple-darwin15-strip
 
 
 BINDIR=bin
-#BINDIR=../sduino/hardware/sduino/tools
+#BINDIR=../sduino/tools
 
 .PHONY: all linux32 linux64 osx windows \
 	stm8gal stm8gal-windows stm8gal-linux32 stm8gal-linux64 stm8gal-osx \
@@ -45,13 +45,13 @@ stm8gal: stm8gal-linux32 stm8gal-linux64 stm8gal-osx stm8gal-windows
 # stm8flash for all platforms
 stm8flash: stm8flash-windows stm8flash-linux32 stm8flash-linux64 stm8flash-osx
 
-# copy the already compiled binaries into sduino/.../tools
+# copy the already compiled binaries into ../sduino/tools
 install:
-	echo "This rule intentionally does not trigger a re-compile."
-	echo "Run 'make all', 'make stm8gal' or 'make stm8flash' if you really"
-	echo "want fresh binaries."
-	cp -av bin/linux* bin/macosx ../sduino/hardware/sduino/tools/
-	cp -av bin/win/* ../sduino/hardware/sduino/tools/win
+	@echo "This rule intentionally does not trigger a re-compile."
+	@echo "Run 'make all', 'make stm8gal' or 'make stm8flash' if you really"
+	@echo "want fresh binaries."
+	cp -av bin/linux* bin/macosx ../sduino/tools/
+	cp -av bin/win/* ../sduino/tools/win
 
 # rules for compiling stm8gal
 # To pass the extra CFLAGS and LDFLAGS we need a temporary (modified) Makefile

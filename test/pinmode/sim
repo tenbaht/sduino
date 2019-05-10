@@ -1,0 +1,14 @@
+#!/bin/bash
+
+sstm8 -t S103 pinmode.ihx << EOF
+fill ram_chip 0 1023 0
+fill io_chip 0 44 0
+s 10000
+du io_chip  0 4
+du io_chip  5 9
+du io_chip 10 14
+du io_chip 15 19
+du ram_chip 1 6
+du ram_chip 0x0100
+quit
+EOF

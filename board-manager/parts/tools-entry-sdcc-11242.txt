@@ -1,0 +1,37 @@
+                {
+                    "name": "sdcc",
+                    "version": "build.11242",
+                    "systems": [
+                        {
+                            "host": "x86_64-pc-linux-gnu",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.5/sdcc-stm8-amd64-unknown-linux2.5-20190502-11242.tar.bz2",
+                            "archiveFileName": "sdcc-stm8-amd64-unknown-linux2.5-20190502-11242.tar.bz2",
+                            "checksum": "SHA-256:f69122faf38e72cccb7acc9b4d215e6e74901c053e04295c7ec8f4c29c5bad65",
+                            "size": "2604557"
+                        },{
+                            "host": "x86_64-pc-linux-gnu",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.5/sdcc-stm8-armv6l-unknown-linux-gnueabihf-20190502-11242.tar.bz2",
+                            "archiveFileName": "sdcc-stm8-armv6l-unknown-linux-gnueabihf-20190502-11242.tar.bz2",
+                            "checksum": "SHA-256:e079f964d7b74a8744681dfb53047aecdd0b563dee02c3724dd83a9d4b1e577c",
+                            "size": "2388318"
+                        },{
+                            "host": "i686-pc-linux-gnu",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.5/sdcc-stm8-i386-unknown-linux2.5-20190502-11242.tar.bz2",
+                            "archiveFileName": "sdcc-stm8-i386-unknown-linux2.5-20190502-11242.tar.bz2",
+                            "checksum": "SHA-256:86d3c21aa49199a0ffcf201148c261d5a391d9365b472ab434c3d3acf864de29",
+                            "size": "2649974"
+                        },{
+                            "host": "i686-mingw32",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.5/sdcc-stm8-i586-mingw32msvc-20190502-11242.tar.bz2",
+                            "archiveFileName": "sdcc-stm8-i586-mingw32msvc-20190502-11242.tar.bz2",
+                            "checksum": "SHA-256:1acdd54d62207bced3abb51fc401b0af85ef4711525033764b089fa0db7cb868",
+                            "size": "3034472"
+                        },{
+                            "host": "x86_64-apple-darwin",
+                            "url": "https://github.com/tenbaht/sduino/releases/download/v0.5/sdcc-stm8-x86_64-apple-macosx-20190502-11242.tar.bz2",
+                            "archiveFileName": "sdcc-stm8-x86_64-apple-macosx-20190502-11242.tar.bz2",
+                            "checksum": "SHA-256:b34b236bef7a2c87db601995e95e928cca1af56c8fd7018cf5612a8314afb559",
+                            "size": "2803984"
+                        }
+                    ]
+                },

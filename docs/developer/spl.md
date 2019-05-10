@@ -10,38 +10,20 @@ zip file. This and [Lujji's
 blog](https://lujji.github.io/blog/bare-metal-programming-stm8/) is the most
 useful reference on using this library and programming the STM8 in general.
 
-For use with SDCC the library needs to be patched:
+For use with SDCC the library needs to be patched with Georg's [SPL-SDCC
+patches](https://github.com/gicking/STM8-SPL_SDCC_patch):
 
 ```bash
-git clone https://github.com/g-gabber/STM8S_StdPeriph_Driver.git
-git clone https://github.com/gicking/SPL_2.2.0_SDCC_patch.git
-cp ../STM8S_SPL_2.2.0/Libraries/STM8S_StdPeriph_Driver/inc/stm8s.h .
-patch -p1 < ../SPL_2.2.0_SDCC_patch/STM8_SPL_v2.2.0_SDCC.patch
-cp -av  ../STM8S_StdPeriph_Lib/Project/STM8S_StdPeriph_Template/stm8s_conf.h .
-cp -av  ../STM8S_StdPeriph_Lib/Project/STM8S_StdPeriph_Template/stm8s_it.h .
+unzip en.stsw-stm8069.zip
+wget https://raw.githubusercontent.com/gicking/STM8-SPL_SDCC_patch/master/STM8S_StdPeriph_Lib_V2.3.1_sdcc.patch
+patch -p0 < STM8S_StdPeriph_Lib_V2.3.1_sdcc.patch
 ```
+
+Check out the test project and the project template in
+`STM8S_StdPeriph_Lib/Project/STM8S_StdPeriph_test` and
+`STM8S_StdPeriph_Lib/Project/STM8S_StdPeriph_Template`
 
 SDCC uses .rel as the file extension for its object files.
-
-Additional patch required for stm8s_itc.c:
-
-```diff
---- stm8s_itc.c~	2014-10-21 17:32:20.000000000 +0200
-+++ stm8s_itc.c	2016-12-11 21:56:41.786048494 +0100
-@@ -55,9 +55,12 @@
-   return; /* Ignore compiler warning, the returned value is in A register */
- #elif defined _RAISONANCE_ /* _RAISONANCE_ */
-   return _getCC_();
--#else /* _IAR_ */
-+#elif defined _IAR_ /* _IAR_ */
-   asm("push cc");
-   asm("pop a"); /* Ignore compiler warning, the returned value is in A register */
-+#else /* _SDCC_ */
-+  __asm__("push cc");
-+  __asm__("pop a"); /* Ignore compiler warning, the returned value is in A register */
- #endif /* _COSMIC_*/
- }
-```
 
 
 
@@ -79,14 +61,15 @@ clean:
 This library can now be used for linking with blink_spl or uart_spl. The
 files stm8s_conf.h and stm8s_it.h are still needed for compilation.
 
+
+### Optimizing the code
+
 The linker does not remove individual unused functions from an object file,
 only complete object files can be skipped.  
 **=> for building a library it is better to separate all functions into
 individual source files **
 
-The SPL folder in this archive contains a script `doit` to separate the
-functions before compilation.
-FIXME: description needed
+See [here](../optimizations/#splitting-files) for details.
 
 A suggestion how to move at least the IRQ vectors away from the libray into
 the own source files:

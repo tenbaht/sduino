@@ -1,7 +1,7 @@
 # the required versions for the new build
-COREVERSION=0.4.0
-SDCCVERSION=10738
-TOOLSVERSION=2018.12.07
+COREVERSION=0.5
+SDCCVERSION=11242
+TOOLSVERSION=2019.02.05
 
 # default the tool version to be the current date as YYYY.MM.DD
 #TOOLSVERSION?=$(shell date '+%Y.%m.%d')
@@ -46,7 +46,7 @@ DATE=$(shell date '+%F')
 release:
 	# update the version number in the changelog if not already done:
 	grep -q "$(COREVERSION)" ../CHANGELOG.md || \
-	sed "/^## \[Unreleased\]/ a\\\n\n## [$(COREVERSION) - $(DATE)]" ../CHANGELOG.md
+	sed -i "/^## \[Unreleased\]/ a\\\n\n## [$(COREVERSION) - $(DATE)]" ../CHANGELOG.md
 	git add ../CHANGELOG.md ../$(PACKAGEFILE)
 	git add parts/tools-*-$(SDCCVERSION).txt parts/tools-*-$(TOOLSVERSION).txt parts/platform-*-$(COREVERSION).txt
 	git commit

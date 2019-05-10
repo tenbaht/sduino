@@ -18,7 +18,7 @@ COREDIR?=release/v$(COREVERSION)
 PARTSDIR?=parts
 
 # subtree of the repository to be included in the archive
-SUBTREE=sduino/hardware/sduino/stm8
+SUBTREE=sduino/stm8
 
 #
 ### No user serviceable part below here. ################################
@@ -43,8 +43,12 @@ $(PLATFORM_ENTRY): $(COREFILE)
 
 $(COREFILE): | $(COREDIR)
 	echo "Generating the core archive file."
-	(cd ..;	git archive -v --prefix=./ --format=tar HEAD:$(SUBTREE))|\
-	bzip2 > $(COREFILE)
+	$(eval TMPDIR := $(shell mktemp -d))
+	cd ..; git archive -v HEAD:sduino/stm8|tar -x -C $(TMPDIR)
+	sed -i '/^tools\.stm8/ s#{runtime.hardware.path}/tools#{runtime.tools.STM8Tools.path}#' \
+		$(TMPDIR)/platform.txt
+	tar cvjf $(COREFILE) -C $(TMPDIR) .
+	rm -rf $(TMPDIR)
 
 # make a new release directory if not present
 #

@@ -53,9 +53,22 @@ Now you should find a new entry *STM8S Boards* in the list at
 
 ## Known issues
 
-The Arduino IDE Version 1.8.7 suffers from a known regression bug. If you
-see the error message "select upload port first" apply this
+**The Arduino IDE version 1.8.7 is buggy, use 1.8.8 instead.**
+
+IDE error message **select upload port first** (IDE v1.8.7 only): Update to
+IDE 1.8.8 or apply this
 [workaround](https://github.com/tenbaht/sduino/issues/68#issuecomment-441425529).
+
+Very slow compilation after using "save as" (IDE v1.8.7 only): After saving
+a file under a different name the CPU load maxes out for one CPU core and
+the IDE reacts extremly slow. Exit the Arduino IDE and re-open it. Update to
+IDE 1.8.8.
+
+**bash.exe: warning: could not find /tmp, please create!**: Shows up on windows
+systems. Annoying, but harmless.
+[Workaround](https://github.com/tenbaht/sduino/issues/61#issuecomment-443551180)
+This whole issue will be fixed in the upcoming 0.5 release by using busybox
+for all scripts on windows.
 
 
 ## Included libraries
@@ -69,22 +82,29 @@ guide](https://tenbaht.github.io/sduino/api/migration/) for details.
 #### Communication
 
 * SPI: Real hardware-SPI up to 10MHz.
+* Wire: Port of the stock Wire library for I2C communication (with
+  improvements)
 * I2C: Port of the I2C master library by Wayne Truchsess
 * HardwareSerial: The standard serial interface.
 
 #### Displays
 
 * LiquidCrystal: HD44780 based text LCDs
+* LiquidCrystal_I2C: HD44780 based text LCDs with I2C converter backpack
+* LiquidCrystal_pcf2119: PCF2119 based text LCDs with I2C connection
 * PCD8544: Monochrome graphical LCD based on the PCD8544 controller like the
   Nokia 5110 display. SPI mode only.
 * Mini_SSD1306: SSD1306-based monochrome OLED displays with 128x64 pixels.
   I2C support only.
 
+#### Storage
+
+* EEPROM: Port of the stock EEPROM library for accessing the buildin EEPROM
+
 #### Motor control
 
 * Stepper: Stepper motors with 2, 4 or 5 phases.
 * Servo: Up to 12 servos using only 1 timer.
-
 
 
 ## Compatibility with the Arduino world
@@ -104,15 +124,15 @@ guide](https://tenbaht.github.io/sduino/api/migration/) for an overview.
 
 ## Supported Systems:
 
-Arduino IDE versions 1.8.7, 1.8.5 and 1.6.13 are tested, but any version >=1.6.6
-should work.
+Arduino IDE versions 1.8.8, 1.8.7, 1.8.5 and 1.6.13 are tested, but any
+version >=1.6.6 should work.
 
 Version 1.8.7 might require a
 [workaround](https://github.com/tenbaht/sduino/issues/68#issuecomment-441425529)
 if you see an error message "select upload port first".
 
-* Linux 64 bit: Tested on Ubuntu 16.04
-* Linux 32 bit: Tested on Ubuntu 16.04
+* Linux 64 bit: Tested on Mint 19/Ubuntu 18.04
+* Linux 32 bit: Tested on Mint 19/Ubuntu 18.04
 * Windows: Tested on Windows 7. Sduino might work on XP (not tested), but
   the ST-Link/V2 driver is not available anymore for XP.
 * MacOS: tested on 10.13.

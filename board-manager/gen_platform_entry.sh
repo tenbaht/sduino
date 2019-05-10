@@ -49,7 +49,7 @@ list_boards()
 {
 	echo -n "    \"boards\": ["
 	n=0
-	sed -n "s/.*\.name=//p" ../sduino/hardware/sduino/stm8/boards.txt |\
+	sed -n "s/.*\.name=//p" ../sduino/stm8/boards.txt |\
 	while read line; do
 		if [ $n -ne 0 ]; then echo -n ","; fi
 		echo

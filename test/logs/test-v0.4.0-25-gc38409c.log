@@ -1,0 +1,138 @@
+compile log for all tests.
+source revision: v0.4.0-25-gc38409c
+0	EEPROM/examples/eeprom_clear
+   2081	    245	     72	   2326	    916	build-stm8sblue/eeprom_clear.map
+0	EEPROM/examples/eeprom_crc
+   2526	    240	     72	   2766	    ace	build-stm8sblue/eeprom_crc.map
+0	EEPROM/examples/eeprom_get
+   5402	    197	     72	   5599	   15df	build-stm8sblue/eeprom_get.map
+0	EEPROM/examples/eeprom_iteration
+   1622	    127	     72	   1749	    6d5	build-stm8sblue/eeprom_iteration.map
+0	EEPROM/examples/eeprom_put
+   2497	    255	     72	   2752	    ac0	build-stm8sblue/eeprom_put.map
+0	EEPROM/examples/eeprom_read
+   2636	    131	     75	   2767	    acf	build-stm8sblue/eeprom_read.map
+0	EEPROM/examples/eeprom_update
+   2729	    247	     74	   2976	    ba0	build-stm8sblue/eeprom_update.map
+0	EEPROM/examples/eeprom_write
+   2713	    247	     74	   2960	    b90	build-stm8sblue/eeprom_write.map
+0	EEPROM/examples/test
+   2758	    136	     76	   2894	    b4e	build-stm8sblue/test.map
+0	Generic_Examples/examples/01.Basics/AnalogReadSerial
+   3319	    245	     72	   3564	    dec	build-stm8sblue/AnalogReadSerial.map
+0	Generic_Examples/examples/01.Basics/BareMinimum
+   1539	    127	     72	   1666	    682	build-stm8sblue/BareMinimum.map
+0	Generic_Examples/examples/01.Basics/Blink
+   2343	    245	     72	   2588	    a1c	build-stm8sblue/Blink.map
+0	Generic_Examples/examples/01.Basics/DigitalReadSerial
+   3034	    247	     74	   3281	    cd1	build-stm8sblue/DigitalReadSerial.map
+0	Generic_Examples/examples/01.Basics/Fade
+   2659	    251	     78	   2910	    b5e	build-stm8sblue/Fade.map
+0	Generic_Examples/examples/01.Basics/ReadAnalogVoltage
+   5975	    257	     72	   6232	   1858	build-stm8sblue/ReadAnalogVoltage.map
+0	Generic_Examples/examples/02.Digital/BlinkWithoutDelay
+   2106	    257	     78	   2363	    93b	build-stm8sblue/BlinkWithoutDelay.map
+0	Generic_Examples/examples/02.Digital/Button
+   2059	    251	     74	   2310	    906	build-stm8sblue/Button.map
+0	Generic_Examples/examples/02.Digital/Debounce
+   2150	    261	     86	   2411	    96b	build-stm8sblue/Debounce.map
+0	Generic_Examples/examples/02.Digital/DigitalInputPullup
+   2762	    245	     72	   3007	    bbf	build-stm8sblue/DigitalInputPullup.map
+0	Generic_Examples/examples/02.Digital/StateChangeDetection
+   3185	    289	     78	   3474	    d92	build-stm8sblue/StateChangeDetection.map
+0	Generic_Examples/examples/03.Analog/AnalogInOutSerial
+   3908	    279	     80	   4187	   105b	build-stm8sblue/AnalogInOutSerial.map
+0	Generic_Examples/examples/03.Analog/AnalogInput
+   2672	    251	     78	   2923	    b6b	build-stm8sblue/AnalogInput.map
+0	Generic_Examples/examples/03.Analog/Calibration
+   3222	    259	     82	   3481	    d99	build-stm8sblue/Calibration.map
+0	Generic_Examples/examples/03.Analog/Fading
+   2665	    247	     74	   2912	    b60	build-stm8sblue/Fading.map
+0	Generic_Examples/examples/03.Analog/Smoothing
+   3435	    253	    100	   3688	    e68	build-stm8sblue/Smoothing.map
+0	Generic_Examples/examples/04.Communication/ASCIITable
+   2420	    189	     74	   2609	    a31	build-stm8sblue/ASCIITable.map
+0	Generic_Examples/examples/04.Communication/Dimmer
+   2342	    247	     72	   2589	    a1d	build-stm8sblue/Dimmer.map
+0	Generic_Examples/examples/04.Communication/Graph
+   3319	    245	     72	   3564	    dec	build-stm8sblue/Graph.map
+0	Generic_Examples/examples/04.Communication/SerialCallResponseASCII
+   3987	    265	     84	   4252	   109c	build-stm8sblue/SerialCallResponseASCII.map
+0	Generic_Examples/examples/04.Communication/SerialCallResponse
+   3395	    257	     84	   3652	    e44	build-stm8sblue/SerialCallResponse.map
+0	Generic_Examples/examples/06.Sensors/Ping
+   3611	    255	     72	   3866	    f1a	build-stm8sblue/Ping.map
+0	Generic_Examples/examples/07.Display/barGraph
+   3174	    273	     96	   3447	    d77	build-stm8sblue/barGraph.map
+0	I2C/examples/busscan
+   4294	    355	    110	   4649	   1229	build-stm8sblue/busscan.map
+0	I2C/examples/pcf8574
+   4484	    324	    113	   4808	   12c8	build-stm8sblue/pcf8574.map
+0	LiquidCrystal/examples/Autoscroll
+   4173	    245	     93	   4418	   1142	build-stm8sblue/Autoscroll.map
+0	LiquidCrystal/examples/Blink
+   4085	    259	     93	   4344	   10f8	build-stm8sblue/Blink.map
+0	LiquidCrystal/examples/Cursor
+   4085	    259	     93	   4344	   10f8	build-stm8sblue/Cursor.map
+0	LiquidCrystal/examples/CustomCharacter
+   5020	    303	    137	   5323	   14cb	build-stm8sblue/CustomCharacter.map
+0	LiquidCrystal/examples/Display
+   4085	    259	     93	   4344	   10f8	build-stm8sblue/Display.map
+0	LiquidCrystal/examples/HelloWorld
+   4005	    259	     93	   4264	   10a8	build-stm8sblue/HelloWorld.map
+0	LiquidCrystal/examples/Scroll
+   4160	    259	     93	   4419	   1143	build-stm8sblue/Scroll.map
+0	LiquidCrystal/examples/SerialDisplay
+   3416	    245	     93	   3661	    e4d	build-stm8sblue/SerialDisplay.map
+0	LiquidCrystal/examples/setCursor
+   3470	    249	     93	   3719	    e87	build-stm8sblue/setCursor.map
+0	LiquidCrystal/examples/TextDirection
+   3431	    247	     95	   3678	    e5e	build-stm8sblue/TextDirection.map
+0	LiquidCrystal_I2C/examples/BlinkingCursor
+   5279	    318	    123	   5597	   15dd	build-stm8sblue/BlinkingCursor.map
+0	LiquidCrystal_I2C/examples/CustomChars
+   5502	    396	    187	   5898	   170a	build-stm8sblue/CustomChars.map
+0	LiquidCrystal_I2C/examples/HelloWorld
+   5264	    303	    123	   5567	   15bf	build-stm8sblue/HelloWorld.map
+0	LiquidCrystal_I2C/examples/SerialDisplay
+   5263	    289	    123	   5552	   15b0	build-stm8sblue/SerialDisplay.map
+0	LiquidCrystal_pcf2119/examples/BlinkingCursor
+   5815	    633	    124	   6448	   1930	build-mb208/BlinkingCursor.map
+0	LiquidCrystal_pcf2119/examples/CustomChars
+   6034	    711	    188	   6745	   1a59	build-mb208/CustomChars.map
+0	LiquidCrystal_pcf2119/examples/HelloWorld
+   5756	    618	    124	   6374	   18e6	build-mb208/HelloWorld.map
+0	LiquidCrystal_pcf2119/examples/SerialDisplay
+   5863	    604	    124	   6467	   1943	build-mb208/SerialDisplay.map
+0	Mini_SSD1306/examples/oled-mini
+   5787	   1431	   1142	   7218	   1c32	build-stm8sblue/oled-mini.map
+0	PCD8544/examples/HelloWorld
+   4795	    744	    148	   5539	   15a3	build-stm8sblue/HelloWorld.map
+0	PCD8544/examples/Thermometer
+   5839	    768	    151	   6607	   19cf	build-stm8sblue/Thermometer.map
+0	Servo/examples/Knob
+   4634	    252	    145	   4886	   1316	build-stm8sblue/Knob.map
+0	Servo/examples/Sweep
+   4341	    252	    143	   4593	   11f1	build-stm8sblue/Sweep.map
+0	Stepper/examples/MotorKnob
+   4220	    265	     92	   4485	   1185	build-stm8sblue/MotorKnob.map
+0	Stepper/examples/stepper_oneRevolution
+   4751	    290	     90	   5041	   13b1	build-stm8sblue/stepper_oneRevolution.map
+0	Stepper/examples/stepper_oneStepAtATime
+   4728	    272	     92	   5000	   1388	build-stm8sblue/stepper_oneStepAtATime.map
+0	Stepper/examples/stepper_speedControl
+   4799	    269	     96	   5068	   13cc	build-stm8sblue/stepper_speedControl.map
+0	Wire/examples/digital_potentiometer
+   3424	    134	    259	   3558	    de6	build-stm8sblue/digital_potentiometer.map
+0	Wire/examples/i2c_scanner
+   4320	    251	    258	   4571	   11db	build-stm8sblue/i2c_scanner.map
+0	Wire/examples/master_reader
+   3422	    133	    258	   3555	    de3	build-stm8sblue/master_reader.map
+0	Wire/examples/master_writer
+   3416	    140	    259	   3556	    de4	build-stm8sblue/master_writer.map
+0	Wire/examples/pcf8574
+   4188	    168	    261	   4356	   1104	build-stm8sblue/pcf8574.map
+0	Wire/examples/SFRRanger_reader
+   4195	    135	    260	   4330	   10ea	build-stm8sblue/SFRRanger_reader.map
+total text/data/bss/flash (text+data): 254588 20159 8424 274747
+Failed tests:

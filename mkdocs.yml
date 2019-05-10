@@ -41,12 +41,15 @@ nav:
     - Developer Guide:
         - IDE integration: 'developer/ide-integration.md'
         - Compiling the tools: 'developer/compiling-the-tools.md'
+        - Cross-compiling the tools for OSX: 'developer/cross-compile-for-osx.md'
         - Update an automatic installation to a manual installation: 'developer/update-to-manual.md'
         - C preprocessor macro magic: 'developer/macro.md'
         - Ways to define a pin mapping: 'developer/pin_mapping.md'
+        - Coding style: 'developer/coding-style.md'
         - Using the SDCC compiler: 'developer/sdcc.md'
         - Using the SPL with SDCC and sduino: 'developer/spl.md'
         - Bare metal programming on the STM8: 'developer/bare-metal-programming.md'
+        - Optimizations: 'developer/optimizations.md'
         - Performance comparison and benchmarking: 'developer/performance.md'
         - Links and further reading: 'developer/links.md'
     - Contact: contact.md

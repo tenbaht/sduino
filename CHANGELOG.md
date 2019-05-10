@@ -5,12 +5,32 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+
+## [0.5 - 2019-05-10]
+### Changed
+- reduced binary size by splitting some Arduino core files
+- reduced binary size by optimizing the pinMode() implementation
+- using busybox as command shell for windows to run the wrapper scripts
+- move the SPL compilation scripts into a separate project spl-splitter
+- update SPL files to v2.3.0 (add support for STM8S001)
+- flatten the repository structure
+- update stm8gal to version 1.3.0
+- updated SDCC to version 3.9/build 11242
+
+### Fixed
+- make sure main.c is pulled in for IDE builds as well
+- building the core library when using make (regression bug in 0.4.0)
+
+
+## [0.4.0 - 2018-12-07]
 ### Added
 - using stm8gal to upload using the builtin bootloader of larger STM8 devices
 - Support for STM8S105K4 breakout board (stm8sblack)
 - Support for Sduino-UNO board (s8uno)
 - Support for Sduino MB board (mb208)
 - Unlocking a MCU by using Tools->Burn Bootloader in the Arduino IDE
+- new library LiquidCrystal_I2C for text LCD with I2C converter backpack
 - new library LiquidCrystal_pcf2119 for I2C text LCD based on the PCF2119
 - new library Wire for I2C communication
 - new library EEPROM
