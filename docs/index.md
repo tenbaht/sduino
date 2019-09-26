@@ -98,10 +98,9 @@ STM32. See [Limitations](usage/limitations.md) and the
 
 ### Supported Systems
 
-* Linux 64 bit: Tested on Ubuntu 16.04
-* Linux 32 bit: Tested on Ubuntu 16.04
+* Linux 64 bit: Tested on Ubuntu 18.04, 16.04
+* Linux 32 bit: Tested on Ubuntu 18.04, 16.04
 * Windows: Tested on Windows 7. Sduino might work on XP (not tested), but
   the ST-Link/V2 driver is not available anymore for XP.
-* MacOS: Not tested, but should be very close to working. Will need a manual
-  install, but IDE integration should be easy now. Any volunteers?
+* MacOS: Tested on 10.12 (Sierra)
 * Raspian/Raspberry Pi: Untested. Will require a manual install.
