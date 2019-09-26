@@ -324,7 +324,7 @@ details.</p>
 <ul>
 <li><a href="api/SPI/">SPI</a>: Real hardware-SPI up to 10MHz.</li>
 <li><a href="api/I2C/">I2C</a>: Port of the I2C master library by Wayne Truchsess</li>
-<li>HardwareSerial: The standard serial interface.</li>
+<li><a href="api/HardwareSerial/">HardwareSerial</a>: The standard serial interface.</li>
 </ul>
 <h4 id="displays">Displays</h4>
 <ul>
@@ -358,6 +358,12 @@ details.</p>
   to an Arduino Uno with an ATmega328 CPU. The support for the used STM8S105
   CPU is still quite fresh but it should work now.</p>
 </li>
+<li>
+<p>The <a href="https://github.com/roybaer/sduino_uno">sduino Uno</a> is similar to the
+  STM8S105Discovery board, but build to the same form factor as the Arduino
+  Uno and using a very similar pin mapping. These boards are not (yet?)
+  commercially available, but all the design files are free to use.</p>
+</li>
 </ul>
 <h3 id="limitations">Limitations</h3>
 <p>SDCC doesn't support C++. Some preprocessor magic is applied to close the
@@ -367,12 +373,11 @@ STM32. See <a href="usage/limitations/">Limitations</a> and the
 <a href="api/migration/">migration guidelines</a> for details.</p>
 <h3 id="supported-systems">Supported Systems</h3>
 <ul>
-<li>Linux 64 bit: Tested on Ubuntu 16.04</li>
-<li>Linux 32 bit: Tested on Ubuntu 16.04</li>
+<li>Linux 64 bit: Tested on Ubuntu 18.04, 16.04</li>
+<li>Linux 32 bit: Tested on Ubuntu 18.04, 16.04</li>
 <li>Windows: Tested on Windows 7. Sduino might work on XP (not tested), but
   the ST-Link/V2 driver is not available anymore for XP.</li>
-<li>MacOS: Not tested, but should be very close to working. Will need a manual
-  install, but IDE integration should be easy now. Any volunteers?</li>
+<li>MacOS: Tested on 10.12 (Sierra)</li>
 <li>Raspian/Raspberry Pi: Untested. Will require a manual install.</li>
 </ul></div>
         </div>
