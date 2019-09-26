@@ -53,7 +53,7 @@ details.
 
 * [SPI](api/SPI.md): Real hardware-SPI up to 10MHz.
 * [I2C](api/I2C.md): Port of the I2C master library by Wayne Truchsess
-* HardwareSerial: The standard serial interface.
+* [HardwareSerial](api/HardwareSerial.md): The standard serial interface.
 
 #### Displays
 
