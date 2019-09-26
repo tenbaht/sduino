@@ -85,6 +85,10 @@ details.
   to an Arduino Uno with an ATmega328 CPU. The support for the used STM8S105
   CPU is still quite fresh but it should work now.
 
+* The [sduino Uno](https://github.com/roybaer/sduino_uno) is similar to the
+  STM8S105Discovery board, but build to the same form factor as the Arduino
+  Uno and using a very similar pin mapping. These boards are not (yet?)
+  commercially available, but all the design files are free to use.
 
 
 ### Limitations
