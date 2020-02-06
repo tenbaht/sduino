@@ -53,7 +53,7 @@ details.
 
 * [SPI](api/SPI.md): Real hardware-SPI up to 10MHz.
 * [I2C](api/I2C.md): Port of the I2C master library by Wayne Truchsess
-* HardwareSerial: The standard serial interface.
+* [HardwareSerial](api/HardwareSerial.md): The standard serial interface.
 
 #### Displays
 
@@ -85,6 +85,15 @@ details.
   to an Arduino Uno with an ATmega328 CPU. The support for the used STM8S105
   CPU is still quite fresh but it should work now.
 
+* The [sduino Uno](https://github.com/roybaer/sduino_uno) is similar to the
+  STM8S105Discovery board, but build to the same form factor as the Arduino
+  Uno and using a very similar pin mapping. These boards are not (yet?)
+  commercially available, but all the design files are free to use.
+
+* China-gagets based on the [STM8S003](hardware/stm8s003.md) like the [ESP14
+  Wifi-board](hardware/esp14.md), the [W1209 thermostat
+  controller](hardware/w1209-thermostat.md), the HC12 wireless tranceiver
+  module and many others.
 
 
 ### Limitations
@@ -98,10 +107,9 @@ STM32. See [Limitations](usage/limitations.md) and the
 
 ### Supported Systems
 
-* Linux 64 bit: Tested on Ubuntu 16.04
-* Linux 32 bit: Tested on Ubuntu 16.04
+* Linux 64 bit: Tested on Ubuntu 18.04, 16.04
+* Linux 32 bit: Tested on Ubuntu 18.04, 16.04
 * Windows: Tested on Windows 7. Sduino might work on XP (not tested), but
   the ST-Link/V2 driver is not available anymore for XP.
-* MacOS: Not tested, but should be very close to working. Will need a manual
-  install, but IDE integration should be easy now. Any volunteers?
+* MacOS: Tested on 10.12 (Sierra)
 * Raspian/Raspberry Pi: Untested. Will require a manual install.

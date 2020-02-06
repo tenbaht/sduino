@@ -8,7 +8,7 @@
         <meta name="author" content="Michael Mayer">
         
         <link rel="shortcut icon" href="../../img/favicon.ico">
-        <title>When to use an STM8S - and when not - Sduino</title>
+        <title>Generic STM8S003 support - Sduino</title>
     <link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
     <link href="../../css/font-awesome.min.css" rel="stylesheet">
     <link href="../../css/base.css" rel="stylesheet">
@@ -46,7 +46,7 @@
                 <div class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li class="dropdown active">
+                            <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
@@ -55,31 +55,31 @@
 </li>
                                     
 <li >
-    <a href="../board-manager-install/">Automatic Installation</a>
+    <a href="../../usage/board-manager-install/">Automatic Installation</a>
 </li>
                                     
 <li >
-    <a href="../build-ide/">Building with the IDE</a>
-</li>
-                                    
-<li class="active">
-    <a href="./">When to use an STM8S - and when not</a>
+    <a href="../../usage/build-ide/">Building with the IDE</a>
 </li>
                                     
 <li >
-    <a href="../manual-install/">Manual Installation</a>
+    <a href="../../usage/why-stm8/">When to use an STM8S - and when not</a>
 </li>
                                     
 <li >
-    <a href="../build-cli/">Building with a Makefile</a>
+    <a href="../../usage/manual-install/">Manual Installation</a>
 </li>
                                     
 <li >
-    <a href="../limitations/">Limitations</a>
+    <a href="../../usage/build-cli/">Building with a Makefile</a>
 </li>
                                     
 <li >
-    <a href="../status-todo/">Status and todo</a>
+    <a href="../../usage/limitations/">Limitations</a>
+</li>
+                                    
+<li >
+    <a href="../../usage/status-todo/">Status and todo</a>
 </li>
                                 </ul>
                             </li>
@@ -144,36 +144,36 @@
 </li>
                                 </ul>
                             </li>
-                            <li class="dropdown">
+                            <li class="dropdown active">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hardware <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
 <li >
-    <a href="../../hardware/flashtool/">Flash tool</a>
+    <a href="../flashtool/">Flash tool</a>
 </li>
                                     
 <li >
-    <a href="../../hardware/stm8blue/">Generic STM8S103F3 breakout board (stm8blue)</a>
+    <a href="../stm8blue/">Generic STM8S103F3 breakout board (stm8blue)</a>
+</li>
+                                    
+<li class="active">
+    <a href="./">Generic STM8S003 support</a>
 </li>
                                     
 <li >
-    <a href="../../hardware/stm8s003/">Generic STM8S003 support</a>
+    <a href="../esp14/">ESP14 Wifi board (STM8S003F3P6)</a>
 </li>
                                     
 <li >
-    <a href="../../hardware/esp14/">ESP14 Wifi board (STM8S003F3P6)</a>
+    <a href="../w1209-thermostat/">W1209 thermostat board (STM8S003F3P6)</a>
 </li>
                                     
 <li >
-    <a href="../../hardware/w1209-thermostat/">W1209 thermostat board (STM8S003F3P6)</a>
+    <a href="../stm8sblack/">Generic STM8S105K4 breakout board (stm8sblack)</a>
 </li>
                                     
 <li >
-    <a href="../../hardware/stm8sblack/">Generic STM8S105K4 breakout board (stm8sblack)</a>
-</li>
-                                    
-<li >
-    <a href="../../hardware/stm8sdiscovery/">STM8S105Discovery evaluation board made by ST (STM8S105C6)</a>
+    <a href="../stm8sdiscovery/">STM8S105Discovery evaluation board made by ST (STM8S105C6)</a>
 </li>
                                     
 <li >
@@ -257,17 +257,17 @@
                             </a>
                         </li>
                             <li >
-                                <a rel="next" href="../build-ide/">
+                                <a rel="next" href="../stm8blue/">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li >
-                                <a rel="prev" href="../manual-install/">
+                                <a rel="prev" href="../esp14/">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
                             <li>
-                                <a href="https://github.com/tenbaht/sduino/edit/master/docs/usage/why-stm8.md"><i class="fa fa-github"></i> Edit on GitHub</a>
+                                <a href="https://github.com/tenbaht/sduino/edit/master/docs/hardware/stm8s003.md"><i class="fa fa-github"></i> Edit on GitHub</a>
                             </li>
                     </ul>
                 </div>
@@ -277,68 +277,49 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#why">Why?</a></li>
-            <li><a href="#when-to-use-an-stm8-and-when-not">When to use an STM8 - and when not</a></li>
+        <li class="main active"><a href="#stm8s003">STM8S003</a></li>
+            <li><a href="#known-development-boards">Known development boards</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<p>Let's ask the forbidden question:</p>
-<h1 id="why">Why?</h1>
-<p>The fine line between sense and nonsense.</p>
-<h2 id="when-to-use-an-stm8-and-when-not">When to use an STM8 - and when not</h2>
-<h3 id="hobby-applications">Hobby applications</h3>
-<p>The fairly new ESP-14 module includes a STM8S003F3P6: Wifi and a
-programmable I/O-CPU for just over two dollars - that might be the most
-compelling reason to get started on the STM8S series. Apart from pure
-curiosity and eagerness to learn something new, of course.</p>
-<p>The simple STM8S103F breakout boards are powerful and dirt cheap. They cost
-well under one dollar. You can get three boards and one flash programmer
-together for well under five dollars on
-<a href="https://www.aliexpress.com/wholesale?SearchText=stm8s103f3p6">aliexpress</a>,
-including shipping from China.</p>
-<p><em>That is an extremely good opportunity to learn something new.</em></p>
-<p>The major downside of this CPU series is the lack of information and
-community support for the STM8. The community support and the sheer number
-of existing libraries for all kinds of sensors and hardware is outstanding
-in the Arduino world. </p>
-<p>Don't let the tempting price tag be your only guide. An Arduino Nano
-compatible board is not <em>that</em> much more expensive: They start at $1.90 on
-<a href="https://www.aliexpress.com/wholesale?SearchText=arduino+nano">aliexpress</a>.
-That is only $1.20 more than an STM8S. I am sure you can afford that.</p>
-<p><em>If you just want to get something done, go for an
-Arduino board. Nothing will give you faster and easier results.</em></p>
-<p>(Or an STM32F103 bluepill for the same price if you need more computing
-power).</p>
-<h3 id="tinkering-and-repurposing">Tinkering and Repurposing</h3>
-<p>The STM8 series by ST might be the cheapest CPUs on the market while still
-being as powerful as the ATmega series. That makes them every Chinese
-engineer's darling and chances are pretty good that you will find an '003 if
-you crack open any cheap appliance like an irrigation, temperature, or
-charging controller.</p>
-<p>Things like the <a href="https://www.aliexpress.com/wholesale?SearchText=w1209">W1209 thermostat boards</a>
-could be useful for almost every kind of sensor application. There is plenty
-of cheap stuff around that only needs a different firmware to be used for
-something.</p>
-<p>And Sduino might be just the right tool to help you doing this.</p>
-<h3 id="commercial-applications">Commercial applications</h3>
-<p>For commercial use the STM8S offers some interesting advantages:</p>
-<p><strong>Motor control</strong>: The STM8 has a strong focus on motor and position control
-systems. Things you need to handle yourself on an ATmega are implemented in
-hardware and work independently of the state of the software. There is even
-hardware support for quadrature encoders as used in position sensors and
-rotary encoders.</p>
-<p><strong>Low power modes</strong>: The numbers in the datasheets don't look that different,
-but in real life the STM8 can be powered two or three times longer using the
-same battery capacity due to the finer control on the power modes (very,
-very careful programming required).</p>
-<p><strong>Value for the money</strong>: 40 to 60 cents for a STM8 with 14 I/O pins compared to
-$1.60-$3.00 for an ATmega8.</p>
-<p><strong>Upgrade path</strong>: The peripheral units of the STM8 are identical or at least
-very, very similar to the ones used with the STM32 family of 32 bit
-ARM-Cortex CPUs. This makes it is relatively easy to migrate existing
-software between the 8- and the 32-bit world. This is quite unique among the
-other CPUs.</p></div>
+<h1 id="stm8s003">STM8S003</h1>
+<p>The STM8S003 is almost identical to the STM8S103. The only difference I am
+aware of is the size of the EEPROM: 128 bytes vs. 640 bytes.</p>
+<p>I am not sure why the '003 is sold for half the price, or, to put it the
+other way around, why anybody should choose the '103 at all. Did I miss an
+important difference?</p>
+<p>All you have to do in order to develop for the STM8S003 is setting the board
+manager for '<a href="../stm8blue/">Generic STM8S103 breakout board</a>'. Just keep in
+mind not to use EEPROM locations above 127/0x7f.</p>
+<p>All differences between the CPUs:</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>STM8S003</th>
+<th>STM8S103</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EEPROM size</td>
+<td>128 Bytes</td>
+<td>640 Bytes</td>
+</tr>
+</tbody>
+</table>
+<h2 id="known-development-boards">Known development boards</h2>
+<p>I am not aware of any dedicated STM8S003 breakout board, but this CPU is
+used in many other low-cost boards:</p>
+<ul>
+<li><a href="../esp14/">ESP-14</a> Wifi-Module</li>
+<li><a href="../w1209-thermostat/">W1209</a> Temperature controller</li>
+<li>HC-12 Wireless serial remote module</li>
+</ul>
+<p>The <a href="https://github.com/TG9541/stm8ef/wiki/STM8S-Value-Line-Gadgets">stm8ef
+wiki</a> lists
+more.</p></div>
         </div>
 
         <footer class="col-md-12">
