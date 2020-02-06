@@ -11,9 +11,6 @@ or for Makefile-controlled builds.
  * [github issue tracker](https://github.com/tenbaht/sduino/issues) for bug
    reports and other issues tightly related to the repository content
 
- * The [STM8 board](http://stm32duino.com/viewforum.php?f=52) of the
-   stm32duino forum: For general discussions and suggestions
-
 Since this project is based on the SDCC Small Devices C compiler, I called
 it "Small Devices -uino" or "Small-duino". It is entirely based on free
 tools that are available for Linux, MacOS, and Windows: SDCC, make, and
