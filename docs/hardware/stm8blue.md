@@ -29,12 +29,26 @@ perfect for breadboards).
 ## Unlocking a write protected MCU
 
 My breakout boards came preprogrammed with a blink program and with active
-write protection bits. For unlocking before first use:
+write protection bits. For unlocking before first use using the command
+line:
 
 ```bash
 stm8flash -cstlinkv2 -pstm8s103?3 -u
 ```
 
+The same can be done from the Arduino IDE by clicking on Tools->Burn
+Bootloader after selecting an STM8 based board and choosing the correct
+programmer type (ST-Link V2). The name of this menu entry is not
+self-explanatory, but I couldn't find any way to change it or to add another
+entry with a better name. (If you know how, please open an issue)
+
+The required binary for `stm8flash` is included in the download of the
+automatic install. On Windows systems it can be found in the directory
+`AppData\Local\Arduino15\packages\sduino\tools\STM8Tools\2019.02.05\win`.
+
+A GUI alternative is the STVP tool by ST, but this involves installing
+another software package (see
+[issue#85](https://github.com/tenbaht/sduino/issues/85)).
 
 
 ## Connection to the flash tool
