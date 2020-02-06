@@ -90,6 +90,11 @@ details.
   Uno and using a very similar pin mapping. These boards are not (yet?)
   commercially available, but all the design files are free to use.
 
+* China-gagets based on the [STM8S003](hardware/stm8s003.md) like the [ESP14
+  Wifi-board](hardware/esp14.md), the [W1209 thermostat
+  controller](hardware/w1209-thermostat.md), the HC12 wireless transceiver
+  module and many others.
+
 
 ### Limitations
 
