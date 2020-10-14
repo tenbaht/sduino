@@ -3,7 +3,7 @@
 /**
  * using the UART1 without any SPL functions.
  *
- * simple testbed to test the simplyfied initialization function.
+ * simple testbed to test the simplified initialization function.
  *
  */
 

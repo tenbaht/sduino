@@ -7,13 +7,13 @@ BINDIR=$(SDCCBASE)/bin
 CC=$(BINDIR)/sdcc
 LD=$(BINDIR)/sdld
 
-LIBBASE=../../STM8S_StdPeriph_Driver
+LIBBASE=../../sduino/stm8/STM8S_StdPeriph_Driver
 SDUINO=../../sduino
 
 CFLAGS= --debug -mstm8 -DF_CPU=16000000L -DSTM8S103 -DSUPPORT_ALTERNATE_MAPPINGS \
 	-I. -I$(SDUINO) -I$(LIBBASE)/inc -I/usr/share/sdcc/include/
 
-LDFLAGS=-L$(LIBBASE)/src -L/opt/sdcc/share/sdcc/lib/stm8 -lstm8s103
+LDFLAGS=-L$(LIBBASE)/lib -L$(SDCCBASE)/share/sdcc/lib/stm8 -lSTM8S103
 
 OBJECTS=$(BASENAME).rel
 SDOBJECTS=

@@ -7,7 +7,7 @@ BINDIR=$(SDCCBASE)/bin
 CC=$(BINDIR)/sdcc
 LD=$(BINDIR)/sdld
 
-SDBASE=../../sduino/hardware/sduino/stm8
+SDBASE=../../sduino/stm8
 LIBBASE=$(SDBASE)/STM8S_StdPeriph_Driver
 SDUINO=$(SDBASE)/cores/sduino
 

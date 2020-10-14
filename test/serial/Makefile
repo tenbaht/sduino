@@ -7,17 +7,17 @@ BINDIR=$(SDCCBASE)/bin
 CC=$(BINDIR)/sdcc
 LD=$(BINDIR)/sdld
 
-LIBBASE=../../STM8S_StdPeriph_Driver
-SDUINO=../../sduino/hardware/sduino/stm8/cores/sduino
-PINS=../../sduino/hardware/sduino/stm8/variants/standard
+LIBBASE=../../sduino/stm8/STM8S_StdPeriph_Driver
+SDUINO=../../sduino/stm8/cores/sduino
+PINS=../../sduino/stm8/variants/standard
 
 CFLAGS= --debug -mstm8 -DF_CPU=2000000L -DSTM8S103 \
 	-I. -I$(SDUINO) -I$(LIBBASE)/inc -I$(PINS) -I/usr/share/sdcc/include/
 
-LDFLAGS=-L$(LIBBASE)/src -L/opt/sdcc/share/sdcc/lib/stm8 -lstm8s
+LDFLAGS=-L$(LIBBASE)/src -L$(SDCCBASE)/share/sdcc/lib/stm8 -lstm8s
 
-OBJECTS=$(BASENAME).rel
-SDOBJECTS=HardwareSerial.rel
+OBJECTS=$(BASENAME).rel HardwareSerial.rel
+#SDOBJECTS=HardwareSerial.rel
 
 .PHONY: all clean flash
 
@@ -36,6 +36,11 @@ $(SDOBJECTS) : %.rel : $(SDUINO)/%.c
 flash: $(EXECUTABLE)
 	stm8flash -cstlinkv2 -pstm8s103?3 -w $^
 
+# Re-build HardwareSerial.c from the little parts in the core directory
+HardwareSerial.c:
+	grep -hv '#include "HardwareSerial.c.h"' \
+		$(SDUINO)/HardwareSerial.c.h \
+		$(SDUINO)/HardwareSerial.c-*.c > $@
 
 clean: 
 	rm -f *.lib *.rst *.rel *.lst *.ihx *.sym *.asm *.lk *.map \

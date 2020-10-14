@@ -7,7 +7,7 @@ BINDIR=$(SDCCBASE)/bin
 CC=$(BINDIR)/sdcc
 LD=$(BINDIR)/sdld
 
-LIBBASE=../../STM8S_StdPeriph_Driver
+LIBBASE=../../sduino/stm8/STM8S_StdPeriph_Driver
 SDUINO=../../sduino
 
 CFLAGS= --debug -mstm8 -DF_CPU=2000000L -DSTM8S103 \

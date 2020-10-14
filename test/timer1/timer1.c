@@ -3,13 +3,12 @@
  */
 
 #include "Arduino.h"
-#include "HardwareSerial.h"
-#include "Print.h"
+#include "Serial.h"
 
 
 void setup(void)
 {
-    HardwareSerial_begin(115200);
+    Serial_begin(115200);
 }
 
 
@@ -17,10 +16,10 @@ void loop (void)
 {
 	uint32_t i;
 
-	Print_print_s("millis()=");
-	Print_print_u(millis());
-	Print_print_s("\tTIM4_CNTR=");
-	Print_println_u(TIM4->CNTR);
+	Serial_print_s("millis()=");
+	Serial_print_u(millis());
+	Serial_print_s("\tTIM4_CNTR=");
+	Serial_println_u(TIM4->CNTR);
 
 	for (i=40000; i; i--);
 }

@@ -33,9 +33,9 @@ void loop (void)
 		// skip channel 3 (used as TX), use dummy value 1234 instead
 		val = (i==3) ? 1234 : analogRead(i);
 		Serial_print_u(val);
-		printChr('\t');
+		Serial_write('\t');
 	};
-	println();
+	Serial_println();
 
 	delay(200);
 }
