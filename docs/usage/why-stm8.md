@@ -76,7 +76,7 @@ $1.60-$3.00 for an ATmega8.
 
 **Upgrade path**: The peripheral units of the STM8 are identical or at least
 very, very similar to the ones used with the STM32 family of 32 bit
-ARM-Cortex CPUs. This makes it is relatively easy to migrate existing
-software between the 8- and the 32-bit world. This is quite unique among the
-other CPUs.
+ARM-Cortex CPUs. This makes it relatively easy to migrate existing software
+between the 8- and the 32-bit world. This is quite unique among the other
+CPUs.
 

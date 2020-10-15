@@ -6,13 +6,25 @@ boards are my main development platform.
 
 ![Image of the STM8S103 board](stm8blue.jpg)
 
-They are very similar to the [ESP14 Wifi-boards](esp14.md) and
-most programs will work fine on those chinese gems as well.
+## Features
 
-The STM8S103 breakout boards are build around a CPU STM8S103F3P6 with 16MHz
-internal oscillator, 8kB flash, 1kB RAM, and 640 byte EEPROM. The CPU
-includes a UART, SPI, I2C, PWM, 10 bit ADC, 3 timer, and up to 14 I/O pins -
-quite similar to an Atmel ATmega8.
+The hardware features are quite similar to an ATmega8:
+
+Boardname		|stm8blue
+-----			|-------
+CPU			|STM8S103F3P6
+Clock			|16MHz, internal oscillator
+Flash			|8kB
+RAM			|1kB
+EEPROM			|640 byte
+I/O voltage		|3.3V
+GPIO			|14
+serial connections	|UART, SPI, I2C
+PWM			|4 (up to 7 via alternate mapping)
+ADC			|5 channel, 10 bit
+LED			|PB5 (Arduino D3), active low, shared with I2C, red
+programming interface	|SWIM, no serial bootloader
+USB connector		|mini, power only (data lines not connected)
 
 One (red) LED is connected to GPIO PB5 (CPU pin 11). This LED is low active.
 Please keep in mind that this is one of the I2C signals and **using the LED
@@ -20,11 +32,13 @@ blocks the I2C bus**. The push button is for reset. The CPU runs on 3.3V, a
 linear regulator is integrated on the board. The micro USB connector is only
 for (5V) power supply, the data lines are not connected.
 
+![Schematic of the STMS103 board](stm8blue-schematic.png)
+
 All CPU pins are easily accessible on (optional) pin headers (pitch 2.54mm,
 perfect for breadboards).
 
-![Schematic of the STMS103 board](stm8blue-schematic.png)
-
+They are very similar to the [ESP14 Wifi-boards](esp14.md) and
+most programs will work fine on those chinese gems as well.
 
 ## Unlocking a write protected MCU
 
@@ -65,6 +79,13 @@ SWIM   		|2      		|5      	| 5
 GND    		|3      		|7      	| 3
 NRST   		|4      		|9      	| 1
 
+***Crap alert:*** Some lots of the stm8blue boards seem to have no working
+connection to GND on the SWIM connector!
+
+If the board does not respond to the flash tool when only powered from the
+SWIM connector, try powering it from the the USB connector or the power pin
+instead.
+
 
 
 ## Pin number mappings
@@ -76,7 +97,7 @@ Ideally, all these numbers would be the same and all programs could be
 compiled without changes.
 
 [Here](../developer/pin_mapping.md) I discuss some possible pin mapping
-schemes and check how close we could get the the ideal mapping.
+schemes and check how close we could get to the ideal mapping.
 Unfortunatly, it turns out that a perfect mapping is not possible.
 
 In the end I chose a simple geometric numbering for the square UFQFPN20
@@ -88,7 +109,7 @@ this mapping:
 
 
 sduino pin	| STM8S103 CPU port pin
-----------	| ---------------------
+---------:	| ---------------------
  0-2		| PA1-PA3 (PA1 and PA2 only weak output drivers)
  3-4		| PB5-PB4 (reverse order)
  5-9		| PC3-PC7

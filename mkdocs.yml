@@ -8,6 +8,7 @@ nav:
         - Introduction: 'index.md'
         - Automatic Installation: 'usage/board-manager-install.md'
         - Building with the IDE: 'usage/build-ide.md'
+        - 'usage/faq.md'
         - When to use an STM8S - and when not: 'usage/why-stm8.md'
         - Manual Installation: 'usage/manual-install.md'
         - Building with a Makefile: 'usage/build-cli.md'
@@ -29,7 +30,7 @@ nav:
         - Stepper library: api/Stepper.md
         - Servo library: api/Servo.md
     - Hardware:
-        - Flash tool: hardware/flashtool.md
+        - Flash tool: 'hardware/flashtool.md'
 #        - List of supported boards: hardware.md
         - 'Generic STM8S103F3 breakout board (stm8blue)': hardware/stm8blue.md
         - 'Generic STM8S003 support': hardware/stm8s003.md
@@ -74,5 +75,5 @@ nav:
 # best: flatly, yeti (light typeface), cosmo, united, spacelab
 # with search: mkdocs
 #theme: flatly
-theme: bootstrap
-#theme: mkdocs
+#theme: bootstrap
+theme: mkdocs

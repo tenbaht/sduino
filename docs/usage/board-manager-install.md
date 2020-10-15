@@ -23,7 +23,8 @@ Wait for the download to finsh and you are ready to blink:
 Easy, isn't it?
 
 In order to upload the compiled sketch to a connected board you need to
-[install your flash tool](../hardware/flashtool/#installation-for-windows).
+[install your flash tool](../hardware/flashtool/#installation-for-windows)
+first.
 
 
 
