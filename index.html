@@ -9,20 +9,15 @@
         
         <link rel="shortcut icon" href="img/favicon.ico">
         <title>Introduction - Sduino</title>
-    <link href="css/bootstrap-3.3.7.min.css" rel="stylesheet">
-    <link href="css/font-awesome.min.css" rel="stylesheet">
-    <link href="css/base.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+        <link href="css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="css/font-awesome.min.css" rel="stylesheet">
+        <link href="css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
 
-    <script src="js/jquery-1.10.2.min.js" defer></script>
-    <script src="js/bootstrap-3.3.7.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script> 
+        <script src="js/jquery-1.10.2.min.js" defer></script>
+        <script src="js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
     <body>
@@ -60,6 +55,10 @@
                                     
 <li >
     <a href="usage/build-ide/">Building with the IDE</a>
+</li>
+                                    
+<li >
+    <a href="usage/faq/">FAQ/common problems</a>
 </li>
                                     
 <li >
@@ -318,11 +317,11 @@ including shipping on
 </ul>
 <p>Easy, isn't it?</p>
 <p>In order to upload the compiled sketch to a connected board you need to
-<a href="../hardware/flashtool/#installation-for-windows">install your flash tool</a>.</p>
+<a href="hardware/flashtool/#installation-for-windows">install your flash tool</a>.</p>
 <h3 id="included-libraries">Included libraries</h3>
 <p>Some Arduino libraries are already ported to C-syntax. The resulting API is
 still very close to the C++ version and porting an existing application is
-not hard. Check out the <a href="api/migration/">API migration guidelines</a> for
+not hard. Check out the <a href="api/migration">API migration guidelines</a> for
 details.</p>
 <h4 id="communication">Communication</h4>
 <ul>
@@ -383,7 +382,7 @@ STM32. See <a href="usage/limitations/">Limitations</a> and the
 <a href="api/migration/">migration guidelines</a> for details.</p>
 <h3 id="supported-systems">Supported Systems</h3>
 <ul>
-<li>Linux 64 bit: Tested on Ubuntu 18.04, 16.04</li>
+<li>Linux 64 bit: Tested on Ubuntu 20.04, 18.04, 16.04</li>
 <li>Linux 32 bit: Tested on Ubuntu 18.04, 16.04</li>
 <li>Windows: Tested on Windows 7. Sduino might work on XP (not tested), but
   the ST-Link/V2 driver is not available anymore for XP.</li>

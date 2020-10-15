@@ -37,7 +37,7 @@ Wait for the download to finsh and you are ready to blink:
 Easy, isn't it?
 
 In order to upload the compiled sketch to a connected board you need to
-[install your flash tool](../hardware/flashtool/#installation-for-windows).
+[install your flash tool](hardware/flashtool/#installation-for-windows).
 
 
 
@@ -46,7 +46,7 @@ In order to upload the compiled sketch to a connected board you need to
 
 Some Arduino libraries are already ported to C-syntax. The resulting API is
 still very close to the C++ version and porting an existing application is
-not hard. Check out the [API migration guidelines](api/migration.md) for
+not hard. Check out the [API migration guidelines](api/migration) for
 details.
 
 #### Communication
@@ -92,7 +92,7 @@ details.
 
 * China-gagets based on the [STM8S003](hardware/stm8s003.md) like the [ESP14
   Wifi-board](hardware/esp14.md), the [W1209 thermostat
-  controller](hardware/w1209-thermostat.md), the HC12 wireless tranceiver
+  controller](hardware/w1209-thermostat.md), the HC12 wireless transceiver
   module and many others.
 
 

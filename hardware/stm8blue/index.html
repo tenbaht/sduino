@@ -9,20 +9,15 @@
         
         <link rel="shortcut icon" href="../../img/favicon.ico">
         <title>Generic STM8S103F3 breakout board (stm8blue) - Sduino</title>
-    <link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
-    <link href="../../css/font-awesome.min.css" rel="stylesheet">
-    <link href="../../css/base.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
 
-    <script src="../../js/jquery-1.10.2.min.js" defer></script>
-    <script src="../../js/bootstrap-3.3.7.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script> 
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
     <body>
@@ -60,6 +55,10 @@
                                     
 <li >
     <a href="../../usage/build-ide/">Building with the IDE</a>
+</li>
+                                    
+<li >
+    <a href="../../usage/faq/">FAQ/common problems</a>
 </li>
                                     
 <li >
@@ -278,10 +277,13 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
         <li class="main active"><a href="#generic-stm8s103-breakout-board">Generic STM8S103 breakout board</a></li>
-            <li><a href="#unlocking-a-write-protected-mcu">Unlocking a write protected MCU</a></li>
+            <li><a href="#features">Features</a></li>
             <li><a href="#connection-to-the-flash-tool">Connection to the flash tool</a></li>
+            <li><a href="#crap-alert">Crap alert</a></li>
+            <li><a href="#unlocking-a-write-protected-mcu">Unlocking a write protected MCU</a></li>
             <li><a href="#pin-number-mappings">Pin number mappings</a></li>
             <li><a href="#special-pins">Special pins</a></li>
+            <li><a href="#schematic">Schematic</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -291,12 +293,70 @@
 Dollar (I got mine for 67 cent each, including shipping from China). These
 boards are my main development platform.</p>
 <p><img alt="Image of the STM8S103 board" src="../stm8blue.jpg" /></p>
-<p>They are very similar to the <a href="../esp14/">ESP14 Wifi-boards</a> and
-most programs will work fine on those chinese gems as well.</p>
-<p>The STM8S103 breakout boards are build around a CPU STM8S103F3P6 with 16MHz
-internal oscillator, 8kB flash, 1kB RAM, and 640 byte EEPROM. The CPU
-includes a UART, SPI, I2C, PWM, 10 bit ADC, 3 timer, and up to 14 I/O pins -
-quite similar to an Atmel ATmega8.</p>
+<h2 id="features">Features</h2>
+<p>The hardware features are quite similar to an ATmega8:</p>
+<table>
+<thead>
+<tr>
+<th>Boardname</th>
+<th>stm8blue</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CPU</td>
+<td>STM8S103F3P6</td>
+</tr>
+<tr>
+<td>Clock</td>
+<td>16MHz, internal oscillator</td>
+</tr>
+<tr>
+<td>Flash</td>
+<td>8kB</td>
+</tr>
+<tr>
+<td>RAM</td>
+<td>1kB</td>
+</tr>
+<tr>
+<td>EEPROM</td>
+<td>640 byte</td>
+</tr>
+<tr>
+<td>I/O voltage</td>
+<td>3.3V</td>
+</tr>
+<tr>
+<td>GPIO</td>
+<td>14</td>
+</tr>
+<tr>
+<td>serial connections</td>
+<td>UART, SPI, I2C</td>
+</tr>
+<tr>
+<td>PWM</td>
+<td>4 (up to 7 via alternate mapping)</td>
+</tr>
+<tr>
+<td>ADC</td>
+<td>5 channel, 10 bit</td>
+</tr>
+<tr>
+<td>LED</td>
+<td>PB5 (Arduino D3), active low, shared with I2C, red</td>
+</tr>
+<tr>
+<td>programming interface</td>
+<td>SWIM, no serial bootloader</td>
+</tr>
+<tr>
+<td>USB connector</td>
+<td>mini, power only (data lines not connected)</td>
+</tr>
+</tbody>
+</table>
 <p>One (red) LED is connected to GPIO PB5 (CPU pin 11). This LED is low active.
 Please keep in mind that this is one of the I2C signals and <strong>using the LED
 blocks the I2C bus</strong>. The push button is for reset. The CPU runs on 3.3V, a
@@ -304,25 +364,8 @@ linear regulator is integrated on the board. The micro USB connector is only
 for (5V) power supply, the data lines are not connected.</p>
 <p>All CPU pins are easily accessible on (optional) pin headers (pitch 2.54mm,
 perfect for breadboards).</p>
-<p><img alt="Schematic of the STMS103 board" src="../stm8blue-schematic.png" /></p>
-<h2 id="unlocking-a-write-protected-mcu">Unlocking a write protected MCU</h2>
-<p>My breakout boards came preprogrammed with a blink program and with active
-write protection bits. For unlocking before first use using the command
-line:</p>
-<pre><code class="bash">stm8flash -cstlinkv2 -pstm8s103?3 -u
-</code></pre>
-
-<p>The same can be done from the Arduino IDE by clicking on Tools-&gt;Burn
-Bootloader after selecting an STM8 based board and choosing the correct
-programmer type (ST-Link V2). The name of this menu entry is not
-self-explanatory, but I couldn't find any way to change it or to add another
-entry with a better name. (If you know how, please open an issue)</p>
-<p>The required binary for <code>stm8flash</code> is included in the download of the
-automatic install. On Windows systems it can be found in the directory
-<code>AppData\Local\Arduino15\packages\sduino\tools\STM8Tools\2019.02.05\win</code>.</p>
-<p>A GUI alternative is the STVP tool by ST, but this involves installing
-another software package (see
-<a href="https://github.com/tenbaht/sduino/issues/85">issue#85</a>).</p>
+<p>They are very similar to the <a href="../esp14/">ESP14 Wifi-boards</a> and
+most programs will work fine on those chinese gems as well.</p>
 <h2 id="connection-to-the-flash-tool">Connection to the flash tool</h2>
 <p>I am using the ST-Link V2 compatible flash tool in the green plastic
 housing. The one in the metal housing uses a different pinout.</p>
@@ -363,6 +406,33 @@ housing. The one in the metal housing uses a different pinout.</p>
 </tr>
 </tbody>
 </table>
+<h2 id="crap-alert">Crap alert</h2>
+<p>Due to bad PCB production quality, some more recent lots (as of 2020) of the
+stm8blue boards seem to have either no working connection to GND on the SWIM
+connector or a short circuit from the SWIM pin to GND.</p>
+<p><img alt="A nasty short to GND" src="../bad-etching.jpg" /> The SWIM pin is shortend to GND</p>
+<p>Try connecting GND to the other GND board pin or power the board via USB.</p>
+<p>Most boards ship with a pre-programmed blinky. If the LED blinks when the
+board is powered via USB but doesn't when it is only connected to the flash
+tool, your board is probably missing the GND connection.</p>
+<h2 id="unlocking-a-write-protected-mcu">Unlocking a write protected MCU</h2>
+<p>My breakout boards came preprogrammed with a blink program and with active
+write protection bits. For unlocking before first use using the command
+line:</p>
+<pre><code class="bash">stm8flash -cstlinkv2 -pstm8s103?3 -u
+</code></pre>
+
+<p>The same can be done from the Arduino IDE by clicking on Tools-&gt;Burn
+Bootloader after selecting an STM8 based board and choosing the correct
+programmer type (ST-Link V2). The name of this menu entry is not
+self-explanatory, but I couldn't find any way to change it or to add another
+entry with a better name. (If you know how, please open an issue)</p>
+<p>The required binary for <code>stm8flash</code> is included in the download of the
+automatic install. On Windows systems it can be found in the directory
+<code>AppData\Local\Arduino15\packages\sduino\tools\STM8Tools\2019.02.05\win</code>.</p>
+<p>A GUI alternative is the STVP tool by ST, but this involves installing
+another software package (see
+<a href="https://github.com/tenbaht/sduino/issues/85">issue#85</a>).</p>
 <h2 id="pin-number-mappings">Pin number mappings</h2>
 <p>The Arduino environment uses its own pin numbering scheme independent from
 the physical CPU pin numbers. Many Arduino sketches and libraries contain
@@ -370,7 +440,7 @@ hard-coded assumptions about the number of pins with special functions.
 Ideally, all these numbers would be the same and all programs could be
 compiled without changes.</p>
 <p><a href="../../developer/pin_mapping/">Here</a> I discuss some possible pin mapping
-schemes and check how close we could get the the ideal mapping.
+schemes and check how close we could get to the ideal mapping.
 Unfortunatly, it turns out that a perfect mapping is not possible.</p>
 <p>In the end I chose a simple geometric numbering for the square UFQFPN20
 package starting with port pin PA1 and counting up from 0. This results in
@@ -379,25 +449,25 @@ this mapping:</p>
 <table>
 <thead>
 <tr>
-<th>sduino pin</th>
+<th align="right">sduino pin</th>
 <th>STM8S103 CPU port pin</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>0-2</td>
+<td align="right">0-2</td>
 <td>PA1-PA3 (PA1 and PA2 only weak output drivers)</td>
 </tr>
 <tr>
-<td>3-4</td>
+<td align="right">3-4</td>
 <td>PB5-PB4 (reverse order)</td>
 </tr>
 <tr>
-<td>5-9</td>
+<td align="right">5-9</td>
 <td>PC3-PC7</td>
 </tr>
 <tr>
-<td>10-15</td>
+<td align="right">10-15</td>
 <td>PD1-PD6</td>
 </tr>
 </tbody>
@@ -563,7 +633,9 @@ the reason why the LED on this breakout board is connected between +3.3V and
 the pins and not between the pin and GND as usual. This way it is possible
 to drive the LED by writing a zero to the output register.</p>
 <p>D5/D6 (PA1/PA2, OscIn/OscOut) are weaker than the other pins. Try avoiding
-these pins for LEDs and other higher current applications.</p></div>
+these pins for LEDs and other higher current applications.</p>
+<h2 id="schematic">Schematic</h2>
+<p><img alt="Schematic of the STMS103 board" src="../stm8blue-schematic.png" /></p></div>
         </div>
 
         <footer class="col-md-12">
