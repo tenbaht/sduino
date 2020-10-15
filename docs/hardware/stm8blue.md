@@ -32,13 +32,43 @@ blocks the I2C bus**. The push button is for reset. The CPU runs on 3.3V, a
 linear regulator is integrated on the board. The micro USB connector is only
 for (5V) power supply, the data lines are not connected.
 
-![Schematic of the STMS103 board](stm8blue-schematic.png)
-
 All CPU pins are easily accessible on (optional) pin headers (pitch 2.54mm,
 perfect for breadboards).
 
 They are very similar to the [ESP14 Wifi-boards](esp14.md) and
 most programs will work fine on those chinese gems as well.
+
+## Connection to the flash tool
+
+I am using the ST-Link V2 compatible flash tool in the green plastic
+housing. The one in the metal housing uses a different pinout.
+
+Connection to the flashtool:
+
+Signal name	|P3 on CPU board	|Green flash tool|Metal flash tool
+------ 		|:-----:		|:-----: 	|:-----:
+3V3    		|1      		|2      	| 7
+SWIM   		|2      		|5      	| 5
+GND    		|3      		|7      	| 3
+NRST   		|4      		|9      	| 1
+
+
+
+## Crap alert
+
+Due to bad PCB production quality, some more recent lots (as of 2020) of the
+stm8blue boards seem to have either no working connection to GND on the SWIM
+connector or a short circuit from the SWIM pin to GND.
+
+![A nasty short to GND](bad-etching.jpg) The SWIM pin is shortend to GND
+
+Try connecting GND to the other GND board pin or power the board via USB.
+
+Most boards ship with a pre-programmed blinky. If the LED blinks when the
+board is powered via USB but doesn't when it is only connected to the flash
+tool, your board is probably missing the GND connection.
+
+
 
 ## Unlocking a write protected MCU
 
@@ -63,28 +93,6 @@ automatic install. On Windows systems it can be found in the directory
 A GUI alternative is the STVP tool by ST, but this involves installing
 another software package (see
 [issue#85](https://github.com/tenbaht/sduino/issues/85)).
-
-
-## Connection to the flash tool
-
-I am using the ST-Link V2 compatible flash tool in the green plastic
-housing. The one in the metal housing uses a different pinout.
-
-Connection to the flashtool:
-
-Signal name	|P3 on CPU board	|Green flash tool|Metal flash tool
------- 		|:-----:		|:-----: 	|:-----:
-3V3    		|1      		|2      	| 7
-SWIM   		|2      		|5      	| 5
-GND    		|3      		|7      	| 3
-NRST   		|4      		|9      	| 1
-
-***Crap alert:*** Some lots of the stm8blue boards seem to have no working
-connection to GND on the SWIM connector!
-
-If the board does not respond to the flash tool when only powered from the
-SWIM connector, try powering it from the the USB connector or the power pin
-instead.
 
 
 
@@ -176,3 +184,9 @@ to drive the LED by writing a zero to the output register.
 
 D5/D6 (PA1/PA2, OscIn/OscOut) are weaker than the other pins. Try avoiding
 these pins for LEDs and other higher current applications.
+
+
+## Schematic
+
+![Schematic of the STMS103 board](stm8blue-schematic.png)
+

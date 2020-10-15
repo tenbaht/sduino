@@ -40,13 +40,6 @@ this](../../hardware/stm8blue/#unlocking-a-write-protected-mcu)
 
 ### My new stm8blue board seems dead and does not respond to the flash tool
 
-***Crap alert:*** Some more recent lots of the stm8blue boards seem to have
-no working connection to GND on the SWIM connector.
-
-Try connecting GND to the other GND board pin or power the board via USB.
-
-Most freshly shipped boards come with a pre-programmed blinky. If the LED
-blinks when the board is powered via USB but doesn't when it is only
-connected to the flash tool, your board is probably missing the GND
-connection.
-
+***Crap alert:*** There are [known quality
+issues](../../hardware/stm8blue/#crap-alert) with some more recent PCB
+production lots of the stm8blue boards.

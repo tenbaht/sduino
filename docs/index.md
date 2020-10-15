@@ -46,7 +46,7 @@ In order to upload the compiled sketch to a connected board you need to
 
 Some Arduino libraries are already ported to C-syntax. The resulting API is
 still very close to the C++ version and porting an existing application is
-not hard. Check out the [API migration guidelines](api/migration.md) for
+not hard. Check out the [API migration guidelines](api/migration) for
 details.
 
 #### Communication
@@ -107,7 +107,7 @@ STM32. See [Limitations](usage/limitations.md) and the
 
 ### Supported Systems
 
-* Linux 64 bit: Tested on Ubuntu 18.04, 16.04
+* Linux 64 bit: Tested on Ubuntu 20.04, 18.04, 16.04
 * Linux 32 bit: Tested on Ubuntu 18.04, 16.04
 * Windows: Tested on Windows 7. Sduino might work on XP (not tested), but
   the ST-Link/V2 driver is not available anymore for XP.
