@@ -77,9 +77,9 @@ void yield(void);
 #define LSBFIRST 0
 #define MSBFIRST 1
 
-#define CHANGE 1
+#define CHANGE 3
 #define FALLING 2
-#define RISING 3
+#define RISING 1
 
 /*
 #if defined(__AVR_ATtiny24__) || defined(__AVR_ATtiny44__) || defined(__AVR_ATtiny84__)
@@ -238,7 +238,6 @@ void alternateFunction(uint8_t val);
 
 #define NOT_AN_INTERRUPT -1
 
-#ifdef ARDUINO_MAIN
 #define PA 1
 #define PB 2
 #define PC 3
@@ -250,7 +249,6 @@ void alternateFunction(uint8_t val);
 #define PJ 10
 #define PK 11
 #define PL 12
-#endif
 
 #include "pins_arduino.h"
 

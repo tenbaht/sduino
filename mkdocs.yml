@@ -10,6 +10,7 @@ nav:
         - Building with the IDE: 'usage/build-ide.md'
         - 'usage/faq.md'
         - When to use an STM8S - and when not: 'usage/why-stm8.md'
+        - usage/interrupts.md
         - Manual Installation: 'usage/manual-install.md'
         - Building with a Makefile: 'usage/build-cli.md'
         - Limitations: 'usage/limitations.md'

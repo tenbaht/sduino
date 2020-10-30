@@ -8,14 +8,14 @@
 
 ### More general topics and suggestions
 
-There is a [new STM8 board](https://www.stm32duino.com/viewforum.php?f=76)
-in the stm32duino forum. So far, there is not much going on there, but it is
-still the place to go to.
+During the transfer of the STM32duinoforum from Roger Clark to STM the old
+STM8 board got lost somehow, but the old postings are archived and still
+[readable](https://stm32duinoforum.com/forum/viewforum_f_52.html). There is a
+[new STM8 board](https://www.stm32duino.com/viewforum.php?f=76) in the
+stm32duino forum. I was re-started on Oktober 2020, so there aren't many
+messages there yet. is not much going on there, but it is still the place to
+go to.
 
-Please note that after registering on that forum, you are
-**required** to post an introduction in the new user board first in order to
-aquire the right to post or reply in any other board. Roger is strict on
-that.
 
 
 ### email
