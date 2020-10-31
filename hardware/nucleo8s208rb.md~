@@ -1,0 +1,34 @@
+# STM8S208MB Nucleo
+
+- CPU: STM8S208RBT6
+- Crystal: 8MHz
+- button: PE4
+- LED: PC5/D13, active high, buffered
+- UART3 as main serial connection
+
+
+Arduino pin	|GPIO pin|Usage
+-----		|------	|----
+D0		|PD6	|RX (UART3)
+D1		|PD5	|TX (UART3)
+D2		|PE0	|
+D3		|PC1	|PWM
+D4		|PG0	|
+D5		|PC2	|PWM
+D6		|PC3	|PWM
+D7		|PD1	|
+D8		|PD3	|
+D9		|PC4	|PWM
+D10		|PE5	|PWM, SPI_SS
+D11		|PC6	|PWM, SPI_MOSI
+D12		|PC7	|SPI_MISO
+D13		|PC5	|SPI_SCK, LED
+D14		|PE2	|I2C_SDA
+D15		|PE1	|I2C_SCL
+A0		|PB5	|
+A1		|PB4	|
+A2		|PB3	|
+A3		|PB2	|
+A4		|PB1	|
+A5		|PB0	|
+

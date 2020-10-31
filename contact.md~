@@ -8,9 +8,9 @@
 
 ### More general topics and suggestions
 
-The [STM8 board](http://stm32duino.com/viewforum.php?f=52) of the
-stm32duino forum. It will help to catch my attention to prefix your topic
-with "[sduino]".
+There is a [new STM8 board](https://www.stm32duino.com/viewforum.php?f=76)
+in the stm32duino forum. So far, there is not much going on there, but it is
+still the place to go to.
 
 Please note that after registering on that forum, you are
 **required** to post an introduction in the new user board first in order to
