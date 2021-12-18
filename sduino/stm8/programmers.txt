@@ -21,3 +21,10 @@ serialboot.communication=serial
 serialboot.protocol=stlinkv1
 serialboot.program.tool=stm8gal
 serialboot.program.extra_params=
+
+### for the ST Visual Programmer
+stvp.name=ST-VisualProgrammer
+stvp.communication=usb
+stvp.protocol=SWIM
+stvp.program.tool="C:\Program Files (x86)\STMicroelectronics\st_toolset\stvp\STVP_CmdLine.exe"
+stvp.program.extra_params=

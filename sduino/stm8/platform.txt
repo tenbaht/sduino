@@ -135,9 +135,9 @@ recipe.preproc.macros="{compiler.wrapper.path}/{compiler.cpp.cmd}.sh" "{compiler
 tools.stm8flash.cmd=stm8flash
 # these lines are for manual install. For board manager installs they get converted to use
 # {runtime.tools.STM8Tools.path} instead of {runtime.hardware.path}/tools
-tools.stm8flash.path={runtime.hardware.path}/tools/linux
-tools.stm8flash.path.windows={runtime.hardware.path}/tools/win
-tools.stm8flash.path.macosx={runtime.hardware.path}/tools/macosx
+tools.stm8flash.path={runtime.tools.STM8Tools.path}/linux
+tools.stm8flash.path.windows={runtime.tools.STM8Tools.path}/win
+tools.stm8flash.path.macosx={runtime.tools.STM8Tools.path}/macosx
 
 #tools.stm8flash.upload.params.verify=
 tools.stm8flash.upload.params.verbose=
@@ -156,6 +156,23 @@ tools.stm8flash.bootloader.params.quiet=
 tools.stm8flash.bootloader.pattern=echo "no bootloader available"
 
 
+# stm8flash for ST Visual Programmer
+# -------------------------------------
+
+tools.stvp.cmd=stvp
+# these lines are for manual install. For board manager installs they get converted to use
+# {runtime.tools.STM8Tools.path} instead of {runtime.hardware.path}/tools
+tools.stvp.path={runtime.tools.STM8Tools.path}/linux
+tools.stvp.path.windows={runtime.tools.STM8Tools.path}/win
+tools.stvp.path.macosx={runtime.tools.STM8Tools.path}/macosx
+
+#tools.stvp.upload.params.verify=
+tools.stvp.upload.params.verbose=
+tools.stvp.upload.params.quiet=
+#tools.stvp.upload.pattern="C:\Program Files (x86)\STMicroelectronics\st_toolset\stvp\STVP_CmdLine.exe" -BoardName=ST-LINK -Port=USB -ProgMode={upload.protocol} -Device={upload.mcu} -FileProg="{build.path}/{build.project_name}.hex"
+tools.stvp.upload.pattern="{path}/FlashSTVP.bat" "{build.path}/{build.project_name}.hex"
+
+
 # Serial upload using the builtin bootloader
 # ------------------------------------------
 
@@ -166,9 +183,9 @@ tools.stm8flash.bootloader.pattern=echo "no bootloader available"
 tools.stm8gal.cmd=stm8gal
 # these lines are for manual install. For board manager installs they get converted to use
 # {runtime.tools.STM8Tools.path} instead of {runtime.hardware.path}/tools
-tools.stm8gal.path={runtime.hardware.path}/tools/linux
-tools.stm8gal.path.windows={runtime.hardware.path}/tools/win
-tools.stm8gal.path.macosx={runtime.hardware.path}/tools/macosx
+tools.stm8gal.path={runtime.tools.STM8Tools.path}/linux
+tools.stm8gal.path.windows={runtime.tools.STM8Tools.path}/win
+tools.stm8gal.path.macosx={runtime.tools.STM8Tools.path}/macosx
 
 tools.stm8gal.params.port=-p "{serial.port}"
 tools.stm8gal.params.background=-B
