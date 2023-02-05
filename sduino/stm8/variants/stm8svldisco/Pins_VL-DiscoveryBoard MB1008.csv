@@ -1,0 +1,50 @@
+
+				Pins_VL-DiscoveryBoard MB1008
+
+	CN1	Pin		Pin		Pin 		Type Main function / Alternate function
+	pin	(chip)	Arduino	name	
+	1	1				NRST		I/O	Reset 
+	2	2		0		OSCIN/PA1	I/O	Port A1  
+	3	3		1		OSCOUT/PA2	I/O	Port A2  
+	4	4				GND			S	Digital ground 
+	5	4				GND			S	Digital ground 
+	6	5				VCAP		S	1.8 V regulator capacitor 
+	NC	6				VDD			S	Digital power supply
+	7	7		2		PA3			I/O	Port A3 Timer 2 - channel 3 / SPI master slave
+	8	8		3		PF4			I/O	Port F4  
+									
+									
+	CN2	Pin		Pin		Pin 		Type Main function / Alternate function
+	pin	(chip)	Arduino	name	
+	1	17		12		PE5			I/O	Port E5 SPI master slave 
+	2	18		13		PC1			I/O	Port C1 Timer 1 - channel 1 / UART2 synchronous clock
+	3	19		14		PC2			I/O	Port C2 Timer 1 - channel 2 
+	4	20		15		PC3			I/O	Port C3 Timer 1 - channel 3 
+	5	21		16		PC4			I/O	Port C4 Timer 1 - channel 4 
+	6	22		17		PC5			I/O	Port C5 SPI clock 
+	7	23		18		PC6			I/O	Port C6 SPI master out / slave in 
+	8	24		19		PC7			I/O	Port C7 SPI master in / slave out
+									
+									
+	CN3	Pin		Pin		Pin 		Type Main function / Alternate function
+	pin	(chip)	Arduino	name	
+	1	9		4 		PB7/B1		IO	Port B7 BUTTON
+	2	10		5 		PB6			IO	Port B6
+	3	11		6 		PB5			I/O	Port B5 I2C data
+	4	12		7 		PB4			I/O	Port B4 I2C clock
+	5	13		8 		PB3			I/O	Port B3 Analog input 3 / Timer 1 external trigger	
+	6	14		9 		PB2			I/O	Port B2 Analog input 2 / Timer 1 inverted channel 3	
+	7	15		10		PB1			I/O	Port B1 Analog input 1 / Timer 1 inverted channel 2	
+	8	16		11		PB0			I/O	Port B0 Analog input 0 / Timer 1 inverted channel 1	
+									
+									
+	CN4	Pin		Pin		Pin 		Type Main function / Alternate function
+	pin	(chip)	Arduino	name	
+	1	25		20		PD0/LD1		I/O Port D0 Timer 1 - break input / conf. clock output LED_BUILTIN
+	2	26		21		PD1/SWIM	I/O Port D1 SWIM data interface 	
+	3	27		22		PD2			I/O	Port D2 Timer 2 - channel 3	
+	4	28		23		PD3			I/O	Port D3 Timer 2 - channel 2 / ADC external trigger	
+	5	29		24		PD4			I/O	Port D4 Timer 2 - channel 1 / BEEP output	
+	6	30		25		PD5			I/O	Port D5 UART1 data transmit 
+	7	31		26		PD6			I/O	Port D6 UART1 data receive 	
+	8	32		27		PD7			I/O	Port D7 Top level interrupt / Timer 1 - channel 4

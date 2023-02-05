@@ -144,3 +144,27 @@ mb208.build.f_cpu=16000000L
 mb208.build.board=STM8S_MB
 mb208.build.core=sduino
 mb208.build.variant=mb208
+
+##############################################################
+
+stm8svldisco.name=STM8S003 ValueLine Discovery Board MB1008a (STM8S003K3T6)
+
+# First upload method is the default method
+stm8svldisco.menu.upload_method.stm8flash_onboardMethod=Onboard ST-Link/V1 programmer
+stm8svldisco.menu.upload_method.stm8flash_onboardMethod.upload.tool=stvp
+stm8svldisco.menu.upload_method.stm8flash_onboardMethod.upload.protocol=SWIM
+
+# a global definition of upload speed is required to keep the makefile happy
+stm8svldisco.upload.speed=115200
+stm8svldisco.upload.mcu=STM8S003K3
+stm8svldisco.upload.maximum_size=16384
+stm8svldisco.upload.maximum_data_size=1024
+
+stm8svldisco.bootloader.tool=stm8flash
+
+stm8svldisco.build.mcu=STM8S003
+stm8svldisco.build.f_cpu=16000000L
+stm8svldisco.build.board=STM8S_VL_DISCOVERY
+stm8svldisco.build.core=sduino
+stm8svldisco.build.variant=stm8svldisco
+
